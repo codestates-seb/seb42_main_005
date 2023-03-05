@@ -1,0 +1,7 @@
+#    변경 필요
+spring:
+  datasource:
+    url: ${DATABASEURL2}
+    password: ${DATABASE_PASSWORD2}
+    username: ${DATABASE_ID2}
+    driver-class-name: com.mysql.cj.jdbc.Driver
