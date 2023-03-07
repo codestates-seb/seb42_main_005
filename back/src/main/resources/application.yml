@@ -29,18 +29,18 @@ jwt:
 
 mail:
   address:
-    admin: ${AMDIN}
+    admin: ${ADMIN}
   smtp:
     host: smtp.gmail.com
     port: 587
-    username: ${MALL_ID}
-    password: ${MALL_PASSWORD}
+    username: ${MAIL_ID}
+    password: ${MAIL_PASSWORD}
     auth: true
     starttls:
       enable: true
   subject:
     member:
-      registration: ?? ???? ?????
+      registration: 가입 환영한다 얼간이들아
   template:
     name:
       member:
