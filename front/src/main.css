@@ -25,6 +25,7 @@
   --black-800: hsl(210, 8%, 15%);
   --black-900: hsl(210, 8%, 5%);
 
+  /* blue-500,600 => main-color */
   --blue-100: hsl(242, 81%, 92%);
   --blue-200: hsl(241, 75%, 86%);
   --blue-300: hsl(241, 80%, 80%);
@@ -41,7 +42,7 @@
   --red-hover: hsl(358, 62%, 47%);
 
   --naver: #03cf5c;
-  --kakao-hover: #00bc51;
+  --naver-hover: #00bc51;
   --kakao: #fee500;
   --kakao-hover: #ffd900;
   --google: #f03f31;
