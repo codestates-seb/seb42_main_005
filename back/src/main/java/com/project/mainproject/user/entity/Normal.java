@@ -1,11 +1,11 @@
 package com.project.mainproject.user.entity;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +14,13 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @Entity
+@Table(name = "USER_NORMAL")
 @NoArgsConstructor(access = PROTECTED)
 public class Normal extends User {
     @OneToMany
     private List<PickedStore> pickedStores = new ArrayList<>();
 
-    @Builder
+//    @Builder
     public Normal(String userID,
                   String password,
                   String email,

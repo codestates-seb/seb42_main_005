@@ -34,13 +34,9 @@ public class User extends Auditable {
     private String email;
     @Column(name = "USER_NAME")
     private String name;
-
     private LocalDateTime DOB;
-
     private String profileImage;
-
     private UserStatus userStatus;
-
     private LocalDateTime lastConnectedDate;
 
     @ElementCollection(fetch = EAGER)
@@ -54,7 +50,6 @@ public class User extends Auditable {
         this.name = name;
         this.DOB = DOB;
     }
-
     public User(User user) {
         this.userId = user.getUserId();
         this.password = user.getPassword();
