@@ -1,7 +1,6 @@
 package com.project.mainproject.user.entity;
 
 import com.project.mainproject.user.enums.PharmacyStatus;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,7 +22,7 @@ public class Pharmacy extends User {
     @Enumerated(value = STRING)
     private PharmacyStatus pharmacyStatus;
 
-    @Builder
+//    @Builder
     public Pharmacy(String userId,
                     String password,
                     String email,

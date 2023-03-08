@@ -1,5 +1,6 @@
 package com.project.mainproject.user.entity;
 
+import com.project.mainproject.store.entity.Store;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,14 +15,16 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "PICKED_STORE")
 @NoArgsConstructor(access = PROTECTED)
 public class PickedStore {
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long pickedStoreId;
 
     private String storeId;
 
+    //연관관계 매핑
     @ManyToOne(fetch = LAZY)
     private Normal normal;
 
+    @ManyToOne(fetch =LAZY)
+    private Store store;
 }
