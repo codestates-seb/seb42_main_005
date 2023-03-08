@@ -1,4 +1,5 @@
-export default function PharmInfo() {
+
+export default function PharmList() {
     return (
       <div>
       </div>

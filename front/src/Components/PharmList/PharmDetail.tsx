@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function PharmDetail() {
   return (
     <div>
@@ -7,4 +5,3 @@ export default function PharmDetail() {
     </div>
   );
 }
-

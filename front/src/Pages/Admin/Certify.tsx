@@ -1,4 +1,4 @@
-export default function PharmInfo() {
+export default function Certify() {
     return (
       <div>
       </div>
