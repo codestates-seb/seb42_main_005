@@ -18,7 +18,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "REPORT")
 @NoArgsConstructor(access = PROTECTED)
 public class Report extends AuditableWithBy {
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long reportIdx;
@@ -30,7 +29,6 @@ public class Report extends AuditableWithBy {
 
     @ManyToOne(fetch = LAZY)
     private User user;
-
     @ManyToOne(fetch = LAZY)
     private Review review;
 
