@@ -1,5 +1,6 @@
 package com.project.mainproject.user.entity;
 
+import com.project.mainproject.store.entity.Store;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +22,10 @@ public class PickedStore {
 
     private String storeId;
 
+    //연관관계 매핑
     @ManyToOne(fetch = LAZY)
     private Normal normal;
 
+    @ManyToOne(fetch =LAZY)
+    private Store store;
 }
