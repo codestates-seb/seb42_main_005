@@ -15,7 +15,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "PICKED_STORE")
 @NoArgsConstructor(access = PROTECTED)
 public class PickedStore {
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long pickedStoreId;

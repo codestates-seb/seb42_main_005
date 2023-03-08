@@ -66,8 +66,8 @@ public class Store {
     private OperatingTime saturdayOperating;
     @Enumerated
     @AttributeOverrides({
-            @AttributeOverride(name="startTime",column = @Column(name = "HOLIDAY_OPERATING_START")),
-            @AttributeOverride(name ="endTime",column = @Column(name = "HOLIDAY_OPERATING_END")),
+            @AttributeOverride(name = "startTime", column = @Column(name = "SUNDAY_OPERATING_START")),
+            @AttributeOverride(name = "endTime", column = @Column(name = "SUNDAY_OPERATING_END")),
     })
     private OperatingTime sundayOperating;
     @Enumerated

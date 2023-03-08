@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Getter
 public class ReviewTag {
@@ -18,6 +20,6 @@ public class ReviewTag {
     @ManyToOne
     private Tag tag;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     private Review review;
 }
