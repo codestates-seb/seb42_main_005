@@ -15,17 +15,17 @@ public class Store {
     @Id
     @GeneratedValue
     private Long storeIdx;
-
+    @Column(name = "STORE_HPID")
     private String hpid;
-
+    @Column(name = "STORE_NAME")
     private String name;
-
+    @Column(name = "STORE_ADDRESS")
     private String address;
-
+    @Column(name = "STORE_LONGITUDE")
     private Double longitude;
-
+    @Column(name = "STORE_LATITUDE")
     private Double latitude;
-
+    @Column(name = "STORE_TEL")
     private String tel;
 
     @Enumerated

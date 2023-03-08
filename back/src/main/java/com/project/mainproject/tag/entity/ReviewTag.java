@@ -17,7 +17,7 @@ public class ReviewTag {
     @GeneratedValue
     private Long tagIdx;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     private Tag tag;
 
     @ManyToOne(fetch = LAZY)
