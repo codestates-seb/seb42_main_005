@@ -3,8 +3,10 @@ package com.project.mainproject.store.entity;
 import com.project.mainproject.VO.OperatingTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import java.util.List;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -72,7 +74,7 @@ public class Store {
     private OperatingTime sundayOperating;
     @Enumerated
     @AttributeOverrides({
-            @AttributeOverride(name="startTime",column = @Column(name = "HOLIDAY_OPERATING_START")),
+            @AttributeOverride(name = "startTime", column = @Column(name = "HOLIDAY_OPERATING_START")),
             @AttributeOverride(name = "endTime", column = @Column(name = "HOLIDAY_OPERATING_END"))
     })
     private OperatingTime holidayOperating;
@@ -82,5 +84,10 @@ public class Store {
     private Boolean isOperatingHoliday;
 
     private String etc;
+    @Formula("SELECT round(AVG(rating), 2) AS rating FROM review GROUP BY store_idx")
+    private Double rating;
 
+    //연관관계 매핑
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StoreImage> storeImages;
 }

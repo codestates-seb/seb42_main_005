@@ -12,4 +12,11 @@ public class UriCreator {
                 .buildAndExpand(resourceId)
                 .toUri();
     }
+
+    public static URI createUri(String defaultUrl) {
+        return UriComponentsBuilder
+                .newInstance()
+                .build()
+                .toUri();
+    }
 }
