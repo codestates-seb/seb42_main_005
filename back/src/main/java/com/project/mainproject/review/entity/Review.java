@@ -2,6 +2,7 @@ package com.project.mainproject.review.entity;
 
 import com.project.mainproject.audit.Auditable;
 import com.project.mainproject.review.enums.ReviewStatus;
+import com.project.mainproject.store.entity.Store;
 import com.project.mainproject.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,8 @@ public class Review extends Auditable {
     @ManyToOne(fetch = LAZY)
     private User user;
 
+    @ManyToOne(fetch = LAZY)
+    private Store store;
     //### 간단한 동작메서드 ###//
 
     // ###연관관계  편의 메서드 ###//
