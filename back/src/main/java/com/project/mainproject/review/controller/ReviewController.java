@@ -50,7 +50,6 @@ public class ReviewController {
         return ResponseEntity.ok().body(build);
     }
 
-
     /*
      *  리뷰 작성
      * */
@@ -68,7 +67,7 @@ public class ReviewController {
     }
 
     /*
-     *  리뷰 작성
+     *  리뷰 수정
      * */
     @PatchMapping("/store/{storeIdx}/review/{reviewIdx}")
     public ResponseEntity updateReview(@PathVariable Long storeIdx, @PathVariable Long reviewIdx, @RequestBody PostCreateReviewDto postDto) {
@@ -85,7 +84,7 @@ public class ReviewController {
     }
 
     /*
-     *  리뷰 수정
+     *  리뷰 삭제
      * */
     @DeleteMapping("/store/{storeIdx}/review/{reviewIdx}")
     public ResponseEntity deleteReview(@PathVariable Long storeIdx, @PathVariable Long reviewIdx) {
@@ -117,7 +116,7 @@ public class ReviewController {
     }
 
     /*
-     *  리뷰 수정
+     *  리뷰 싫어요
      * */
     @PostMapping("/store/{storeIdx}/review/{reviewIdx}/hate")
     public ResponseEntity reviewHate(@PathVariable Long storeIdx, @PathVariable Long reviewIdx) {

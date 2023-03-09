@@ -4,6 +4,7 @@ import com.project.mainproject.dto.PageInfo;
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.review.dto.GetReportedReviewDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ public class AdminReviewController {
      *  신고된 리뷰들 조회
      * */
     @GetMapping("/reports")
-    public ResponseEntity getReportedReview() {
+    public ResponseEntity getReportedReview(Pageable pageable) {
         //TODO: 서비스단 구현
 
         PageInfo pageInfo = PageInfo.builder()
