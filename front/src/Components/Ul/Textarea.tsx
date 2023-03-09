@@ -1,15 +1,17 @@
 import styled from "styled-components";
 import { FaPencilAlt } from "react-icons/fa";
+
 interface InputProps {
   id?: string;
   placeholder?: string;
   value?: string;
+  rows: number;
   isValid?: boolean;
   icon?: boolean;
   onChange?: () => void;
 }
 
-export default function Input({ id, placeholder, value, icon, isValid, onChange }: InputProps) {
+export default function Textarea({ id, placeholder, value, rows, icon, isValid, onChange }: InputProps) {
   return (
     <StyledInput>
       {icon && (
@@ -17,11 +19,11 @@ export default function Input({ id, placeholder, value, icon, isValid, onChange 
           <FaPencilAlt />
         </div>
       )}
-      <input
+      <textarea
         id={id}
-        type="text"
         placeholder={placeholder}
         value={value}
+        rows={rows}
         className={`${isValid ? null : "error"}`}
         onChange={onChange}
       />
@@ -46,25 +48,25 @@ const StyledInput = styled.div`
     left: 0;
     margin-left: calc(1.6rem - 0.75rem);
   }
-  input {
+  textarea {
     flex: 1 1 0;
     padding: 0.6rem 0.7rem;
     border: 1.2px solid var(--black-100);
     border-radius: 4px;
     outline: none;
     font-size: 0.9rem;
-    height: 2.4rem;
+    resize: none;
     transition: 0.2s;
   }
-  input::placeholder {
+  textarea::placeholder {
     color: var(--black-300);
   }
-  input:focus {
+  textarea:focus {
     border-color: var(--blue-300);
     box-shadow: var(--wrapped-shadow);
     transition: 0.2s;
   }
-  .left + input {
+  .left + textarea {
     padding-left: 2.6rem;
   }
   .error {
