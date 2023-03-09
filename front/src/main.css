@@ -36,8 +36,6 @@
 
   --mint: hsl(173, 66%, 45%);
   --mint-hover: hsl(173, 75%, 39%);
-  --orange: hsl(27, 90%, 50%);
-  --orange-hover: hsl(27, 90%, 45%);
   --red: hsl(358, 62%, 52%);
   --red-hover: hsl(358, 62%, 47%);
 
@@ -56,26 +54,24 @@
   /* button */
   --button-blue: var(--blue-500);
   --button-blue-hover: var(--blue-600);
+  --l_button-blue: hsl(224, 58%, 75%);
+  --l_button-blue-hover: hsl(224, 58%, 65%);
 
   --button-mint: var(--mint);
   --button-mint-hover: var(--mint-hover);
-
-  --button-orange: var(--orange);
-  --button-orange-hover: var(--orange-hover);
+  --l_button-mint: hsl(162, 32%, 63%);
+  --l_button-mint-hover: hsl(162, 32%, 53%);
 
   --button-red: var(--red);
   --button-red-hover: var(--red-hover);
-
-  --button-border: var(--blue-600);
-  --button-border-bg: var(--blue-100);
-  --button-border-hover: var(--blue-200);
-  --button-border-text: var(--blue-700);
+  --l_button-red: hsl(359, 46%, 76%);
+  --l_button-red-hover: hsl(359, 46%, 66%);
 
   /* tag */
   --tag-text: var(--blue-500);
   --tag-text-hover: var(--blue-700);
   --tag-stroke: var(--blue-300);
-  --tag-stroke-hover: var(--blue-700);
+  --tag-stroke-hover: var(--blue-600);
 
   /* box-shadow */
   --wrapped-shadow: 0 0 0 4px hsla(241, 54%, 88%, 0.65);
@@ -84,6 +80,10 @@
   --bs-md: 0 1px 3px hsla(0, 0%, 0%, 0.06), 0 2px 6px hsla(0, 0%, 0%, 0.08), 0 3px 8px hsla(0, 55%, 21%, 0.09);
   --bs-lg: 0 1px 4px hsla(0, 0%, 0%, 0.09), 0 3px 8px hsla(0, 0%, 0%, 0.1), 0 4px 13px hsla(0, 0%, 0%, 0.13);
   --bs-xl: 0 10px 24px hsla(0, 0%, 0%, 0.05), 0 20px 48px hsla(0, 0%, 0%, 0.06), 0 1px 4px hsla(0, 0%, 0%, 0.1);
+  --bs-btn: rgba(0, 0, 0, 0.07) 0px -2px 2px 0px inset, rgba(0, 0, 0, 0.07) 0px -3px 3px 0px inset,
+    rgba(0, 0, 0, 0.07) 0px -2px 3px 0px inset;
+  --bs-btn-click: rgba(0, 0, 0, 0.02) 0px 2px 2px 0px inset, rgba(0, 0, 0, 0.02) 0px 3px 3px 0px inset,
+    rgba(0, 0, 0, 0.02) 0px 2px 3px 0px inset;
 }
 
 /* SCROLL BAR */
@@ -95,10 +95,10 @@
 }
 ::-webkit-scrollbar-thumb {
   border-radius: 0.3rem;
-  background-color: var(--blue-400);
+  background-color: var(--blue-300);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--blue-500);
+  background-color: var(--blue-400);
 }
 
 body {
