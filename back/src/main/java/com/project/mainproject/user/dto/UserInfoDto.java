@@ -11,7 +11,7 @@ public class UserInfoDto {
 
     private Long userIdx;
     private LocalDateTime dob;
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
     private String name;
     private String email;
     private String address;
