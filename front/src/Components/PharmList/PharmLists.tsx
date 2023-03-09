@@ -49,7 +49,10 @@ export default function PharmLists() {
             <PharmRank />
           </PharmTitleBox>
           <TagContainer>
-            <Tag />
+            <Tag idx={0} />
+            <Tag idx={1} />
+            <Tag idx={2} />
+            <Tag idx={3} />
           </TagContainer>
         </PharmCard>
         <PharmCard>
@@ -59,7 +62,10 @@ export default function PharmLists() {
             <PharmRank />
           </PharmTitleBox>
           <TagContainer>
-            <Tag />
+            <Tag idx={0} />
+            <Tag idx={1} />
+            <Tag idx={2} />
+            <Tag idx={3} />
           </TagContainer>
         </PharmCard>
       </ContainerWrap>
