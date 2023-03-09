@@ -1,30 +1,30 @@
-//태그들 => 영재님이 함!! 쓰지마!!!
-import React from "react";
 import styled from "styled-components";
 
-export default function Header() {
-  return (
-    <Tags>
-      <Tag>친절해요</Tag>
-      <Tag>주차가능</Tag>
-      <Tag>꼼꼼해요</Tag>
-    </Tags>
-  );
+interface TagProps {
+  idx: number;
+  list?: string[];
 }
 
-const Tags = styled.ul`
-  display: flex;
-  justify-content: flex-start;
-`;
-const Tag = styled.li`
-  list-style: none;
-  border: 4px solid var(--blue-400);
-  border-radius: 30px;
-  margin-right: 20px;
-  padding: 4px;
-  font-size: 15px;
-  color: var(--blue-400);
+export default function Tag({ idx, list }: TagProps) {
+  list = ["친절한 서비스", "꼼꼼한 복약지도", "주차가능", "접근성이 좋음"];
+
+  return <StyledTag>{list[idx]}</StyledTag>;
+}
+
+const StyledTag = styled.button`
+  text-decoration: none;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.5rem 0.2rem 0.5rem;
+  border-radius: 20px;
+  display: inline-block;
+  border: 1.6px solid var(--tag-stroke);
+  background-color: var(--white);
+  color: var(--tag-text);
+  white-space: nowrap;
+  transition: 0.2s;
   :hover {
-    background-color: var(--blue-100);
+    border: 1.6px solid var(--tag-stroke-hover);
+    color: var(--tag-text-hover);
+    transition: 0.2s;
   }
 `;
