@@ -22,4 +22,8 @@ public enum ResultStatus {
 
     private final HttpStatus httpStatus;
     private final String message;
+
+    public int getHttpCode() {
+        return this.httpStatus.value();
+    }
 }
