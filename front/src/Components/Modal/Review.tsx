@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Button from "../Ul/Button";
 import Tag from "../Ul/Tag";
 import Textarea from "../Ul/Textarea";
+import Input from "../Ul/Input";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BsArrowReturnRight } from "react-icons/bs";
 import { BiPhotoAlbum } from "react-icons/bi";
@@ -39,7 +40,12 @@ export default function Review() {
               </UserInfo>
               <ButtonContainer>
                 {/* 약사계정이면 댓글 버튼이 보이고, 아닌경우에는 안보이는 로직 작성 필요 */}
-                <Button color="l_mint" size="sm" text="댓 글" />
+                <Button
+                  color="l_mint"
+                  size="sm"
+                  text="댓 글"
+                  onClick={() => setIsCommentFormShown(!isCommentFormShown)}
+                />
                 <Button color="l_black" size="sm" text="신 고" />
               </ButtonContainer>
             </Upper>
@@ -67,14 +73,21 @@ export default function Review() {
                 </UserInfo>
                 <ButtonContainer>
                   {/* 약사계정이면 댓글 버튼이 보이고, 아닌경우에는 안보이는 로직 작성 필요 */}
-                  <Button color="l_blue" size="sm" text="수 정" />
+                  <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsCommentFormShown(!isCommentFormShown)}/>
                   <Button color="l_red" size="sm" text="삭 제 " />
                 </ButtonContainer>
               </Upper>
               <Comment>누가우리약국 오라고 칼들고 협박함? 다신 오지마ㅇㅇ</Comment>
             </CommentContainer>
           </div>
-          <div></div>
+          {isCommentFormShown ? (
+            <WriteCommentForm>
+              <Instruction>
+                <p>댓글을 작성해주세요. 작성 완료 시 'Enter'를 눌러주세요.</p>
+              </Instruction>
+              <Input placeholder="감사합니다 :)" isValid={true} icon={true} />
+            </WriteCommentForm>
+          ) : null}
         </ReviewUnit>
       </Reviews>
       <WriteReviewBtnContainer>
@@ -162,8 +175,9 @@ const ReviewTitle = styled.div`
   border-bottom: 1px solid var(--black-100);
 `;
 const ReviewUnit = styled.div`
+  position: relative;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   padding: 15px 0px 10px 10px;
   border-bottom: 1px solid var(--black-100);
 `;
@@ -231,6 +245,9 @@ const ReviewImg = styled.img`
   border-radius: 5px;
 `;
 const CommentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
   margin-top: 10px;
   padding: 10px 0px 0px 6px;
   border-top: 1px solid var(--black-075);
@@ -251,7 +268,7 @@ const WriteReviewBtnContainer = styled.div`
 `;
 const WriteReviewForm = styled.div`
   position: absolute;
-  z-index: 3;
+  z-index: 2;
   bottom: 0px;
   display: flex;
   flex-direction: column;
@@ -344,4 +361,26 @@ const Reviews = styled.div`
   flex-grow: 1;
   overflow-y: scroll;
   border-bottom: 1px solid var(--black-100);
+  ::-webkit-scrollbar-track {
+    visibility: hidden;
+  }
+  :active::-webkit-scrollbar-track {
+    width: 0.6rem;
+    visibility: visible;
+  }
+`;
+const WriteCommentForm = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 10px 2px 0px 6px;
+  padding: 10px;
+  gap: 5px;
+  height: 80px;
+  background-color: var(--white);
+  border: 0.5px solid var(--blue-300);
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px var(--black-200);
+`;
+const Instruction = styled.div`
+  font-size: 12px;
 `;
