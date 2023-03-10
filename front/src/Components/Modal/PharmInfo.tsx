@@ -1,25 +1,21 @@
 //! 모달 컴포넌트 오른편 약국 정보 부분입니다
-//* border : blue 로 되어 있는 부분은 컴포넌트 재사용 예정인 임시 부분입니다
+import { useState } from "react";
 import styled from "styled-components";
 import Tag from "../Ul/Tag";
-import PharmRank from "./PharmRank";
-import TagContainer from "./TagContainer";
+import PharmRank from "../Ul/PharmRank";
 
 export default function PharmInfo() {
+  const [like, setLike] = useState(false);
+
   return (
     <InfoContainer>
       <InfoHeader>
         <InfoTitle>킹갓약국</InfoTitle>
-        {/* <PharmRank /> */}
-        <Temporary>
-          <span>4.6/5</span>
-          <span>찜콩 45</span>
-          <span>리뷰 113</span>
-        </Temporary>
+        <PharmRank />
       </InfoHeader>
       <InfoImgContainer>
         <Img src="/Images/pharm.png"></Img>
-        <LikeButton>💙</LikeButton>
+        <LikeButton onClick={()=>setLike(!like)}>{like ? <img src="./Images/Heart.png"/> : <img src="./Images/UnHeart.png"/>}</LikeButton>
       </InfoImgContainer>
       <InfoInfo>
         <InfoUnit>
@@ -38,13 +34,10 @@ export default function PharmInfo() {
       <InfoTagContainer>
         <InfoTagTitle>사람들이 많이 선택한 태그!</InfoTagTitle>
         <InfoTagBox>
-          {/* <TagContainer /> */}
-          <div>
-            <Tag idx={0} />
-            <Tag idx={1} />
-            <Tag idx={2} />
-            <Tag idx={3} />
-          </div>
+          <Tag idx={0} />
+          <Tag idx={1} />
+          <Tag idx={2} />
+          <Tag idx={3} />
         </InfoTagBox>
       </InfoTagContainer>
     </InfoContainer>
@@ -58,16 +51,15 @@ const InfoContainer = styled.div`
   padding: 10px 20px 0px 0px;
   height: 500px;
   width: 280px;
-  border-right: 1px solid var(--black-200);
+  border-right: 1px solid var(--black-100);
 `;
 const InfoHeader = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
+  padding-bottom: 7px;
   gap: 10px;
-  border-bottom: 1px solid var(--black-200);
+  border-bottom: 1px solid var(--black-100);
 `;
 const InfoTitle = styled.div`
   font-weight: bold;
@@ -76,15 +68,14 @@ const InfoTitle = styled.div`
 const InfoImgContainer = styled.div`
   display: inline-block;
   position: relative;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--black-200);
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--black-100);
 `;
-const LikeButton = styled.button`
+const LikeButton = styled.span`
   position: absolute;
-  right: 0px;
-  top: 0px;
+  right: 26px;
+  top: 3px;
   width: 20px;
-  border: 1px solid blue;
 `;
 const Img = styled.img`
   width: 260px;
@@ -96,9 +87,10 @@ const InfoInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 20px 5px;
-  gap: 10px;
-  border-bottom: 1px solid var(--black-200);
+  padding-left: 5px;
+  padding-bottom: 7px;
+  gap: 5px;
+  border-bottom: 1px solid var(--black-100);
 `;
 const InfoUnit = styled.div`
   display: flex;
@@ -108,7 +100,7 @@ const InfoUnit = styled.div`
   gap: 20px;
 `;
 const InfoInfoTitle = styled.span`
-  color: var(--black-400);
+  color: var(--black-350);
   font-size: 17px;
   font-weight: bold;
 `;
@@ -118,18 +110,19 @@ const InfoInfoContent = styled.span`
 const InfoTagContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 15px 5px;
-  gap: 10px;
-  border-bottom: 1px solid var(--black-200);
+  padding: 7px 5px;
+  gap: 5px;
+  border-bottom: 1px solid var(--black-100);
 `;
 const InfoTagTitle = styled.div`
   font-size: 14px;
   color: var(--black-500);
 `;
 const InfoTagBox = styled.div`
-  border: 1px solid blue;
-`;
-const Temporary = styled.div`
   display: flex;
-  border: 1px solid blue;
+  flex-wrap: wrap;
+  padding: 10px;
+  gap: 5px;
+  box-shadow: 0px 0px 5px 0.5px var(--black-100) inset;
+  border-radius: 5px;
 `;

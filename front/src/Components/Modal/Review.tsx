@@ -1,17 +1,16 @@
 //! 모달 컴포넌트 왼편 리뷰 부분입니다
-//* border : blue 로 되어 있는 부분은 컴포넌트 재사용 예정인 임시 부분입니다
 import { useState } from "react";
 import styled from "styled-components";
 import Button from "../Ul/Button";
 import Tag from "../Ul/Tag";
 import Textarea from "../Ul/Textarea";
-import TagContainer from "./TagContainer";
 import { MdOutlineAddAPhoto } from "react-icons/md";
-import { BsStar } from "react-icons/bs";
+import { BsArrowReturnRight } from "react-icons/bs";
 import { BiPhotoAlbum } from "react-icons/bi";
 
 export default function Review() {
-  const [isShown, setIsShown] = useState(false);
+  const [isReviewFormShown, setIsReviewFormShown] = useState(false);
+  const [isCommentFormShown, setIsCommentFormShown] = useState(false);
   const [imageSrc, setImageSrc]: any = useState(null);
   const onUpload = (e: any) => {
     const file = e.target.files[0];
@@ -29,36 +28,63 @@ export default function Review() {
   return (
     <ReviewContainer>
       <ReviewTitle>리뷰</ReviewTitle>
-      <ReviewUnit>
-        <Upper>
-          <UserInfo>
-            <UserIcon src="/Images/user.png" />
-            <UserName>caffeine</UserName>
-            <Created>2023.03.05</Created>
-          </UserInfo>
-          <ButtonContainer>
-            <Button color="l_mint" size="sm" text="댓 글" />
-            <Button color="l_black" size="sm" text="신 고" />
-          </ButtonContainer>
-        </Upper>
-        <Lower>
-          <Rest>
-            <ReviewText>쌍화탕은 하나씩 주시는데 약사선생님은 바쁘신지 불친절합니다.</ReviewText>
-            <ReviewTagContainer>
-              <Tag idx={0} />
-              <Tag idx={1} />
-              <Tag idx={2} />
-              <Tag idx={3} />
-            </ReviewTagContainer>
-          </Rest>
-          <ReviewImg src="./Images/쌍화탕.jpg" />
-        </Lower>
-      </ReviewUnit>
-      <Button onClick={() => setIsShown(!isShown)} color="mint" size="md" text="리뷰쓰기" />
-      {isShown ? (
+      <Reviews>
+        <ReviewUnit>
+          <div>
+            <Upper>
+              <UserInfo>
+                <UserIcon src="/Images/user.png" />
+                <UserName>caffeine</UserName>
+                <Created>2023.03.05</Created>
+              </UserInfo>
+              <ButtonContainer>
+                {/* 약사계정이면 댓글 버튼이 보이고, 아닌경우에는 안보이는 로직 작성 필요 */}
+                <Button color="l_mint" size="sm" text="댓 글" />
+                <Button color="l_black" size="sm" text="신 고" />
+              </ButtonContainer>
+            </Upper>
+            <Lower>
+              <Rest>
+                <ReviewText>쌍화탕은 하나씩 주시는데 약사선생님은 바쁘신지 불친절합니다.</ReviewText>
+                <ReviewTagContainer>
+                  <Tag idx={0} />
+                  <Tag idx={1} />
+                  <Tag idx={2} />
+                  <Tag idx={3} />
+                </ReviewTagContainer>
+              </Rest>
+              <ReviewImg src="./Images/쌍화탕.jpg" />
+            </Lower>
+            <CommentContainer>
+              <Upper>
+                <UserInfo>
+                  <span id="reply">
+                    <BsArrowReturnRight />
+                  </span>
+                  <UserIcon src="/Images/user.png" />
+                  <UserName>킹갓 약사</UserName>
+                  <Created>2023.03.05</Created>
+                </UserInfo>
+                <ButtonContainer>
+                  {/* 약사계정이면 댓글 버튼이 보이고, 아닌경우에는 안보이는 로직 작성 필요 */}
+                  <Button color="l_blue" size="sm" text="수 정" />
+                  <Button color="l_red" size="sm" text="삭 제 " />
+                </ButtonContainer>
+              </Upper>
+              <Comment>누가우리약국 오라고 칼들고 협박함? 다신 오지마ㅇㅇ</Comment>
+            </CommentContainer>
+          </div>
+          <div></div>
+        </ReviewUnit>
+      </Reviews>
+      <WriteReviewBtnContainer>
+        <Button onClick={() => setIsReviewFormShown(!isReviewFormShown)} color="mint" size="md" text="리뷰쓰기" />
+      </WriteReviewBtnContainer>
+      {/* 리뷰쓰기 버튼을 누르면 떠오르는 리뷰작성란입니다 */}
+      {isReviewFormShown ? (
         <WriteReviewForm>
           <InputTop>
-            <Textarea placeholder="쿠르루삥뽕~!" isValid={true} rows={5} icon={true} />
+            <Textarea placeholder="무분별한 비방, 비하, 욕설은 지양해주세요 :)" isValid={true} rows={3} icon={true} />
             <ReviewImgContainer>
               <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
               {imageSrc ? (
@@ -105,7 +131,13 @@ export default function Review() {
               </StarContainer>
               <RateNum>{rate} / 5</RateNum>
             </Rating>
-            <Button onClick={() => setIsShown(!isShown)} color="blue" size="md" text="작성완료" icon={true} />
+            <Button
+              onClick={() => setIsReviewFormShown(!isReviewFormShown)}
+              color="blue"
+              size="md"
+              text="작성완료"
+              icon={true}
+            />
           </InputBot>
         </WriteReviewForm>
       ) : null}
@@ -118,7 +150,7 @@ const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 10px 0px 10px 20px;
+  padding: 10px 0px 0px 20px;
   height: 500px;
   width: 450px;
 `;
@@ -127,29 +159,33 @@ const ReviewTitle = styled.div`
   color: var(--black-500);
   font-weight: bold;
   font-size: 25px;
-  border-bottom: 1px solid var(--black-200);
+  border-bottom: 1px solid var(--black-100);
 `;
 const ReviewUnit = styled.div`
   display: flex;
-  flex-direction: column;
-  padding: 15px;
-  border-bottom: 1px solid var(--black-200);
+  flex-direction: row;
+  padding: 15px 0px 10px 10px;
+  border-bottom: 1px solid var(--black-100);
 `;
 const Upper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 5px;
 `;
 const UserInfo = styled.span`
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
+  #reply {
+    color: var(--black-300);
+  }
 `;
 const UserIcon = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
   object-fit: cover;
   border-radius: 50%;
 `;
@@ -161,6 +197,8 @@ const Created = styled.span`
   font-size: 12px;
 `;
 const ButtonContainer = styled.span`
+  display: flex;
+  gap: 5px;
   font-size: 10px;
 `;
 const Lower = styled.div`
@@ -176,13 +214,15 @@ const Rest = styled.span`
 const ReviewText = styled.span`
   padding-top: 10px;
   width: 280px;
-  height: 60px;
+  height: 0px;
   font-size: 14px;
 `;
 const ReviewTagContainer = styled.div`
-  border: 1px solid blue;
+  overflow: hidden;
   width: 280px;
-  font-size: 14px;
+  height: 27px;
+  display: flex;
+  gap: 10px;
 `;
 const ReviewImg = styled.img`
   height: 80px;
@@ -190,13 +230,24 @@ const ReviewImg = styled.img`
   object-fit: cover;
   border-radius: 5px;
 `;
-const WriteReviewBtn = styled.button`
+const CommentContainer = styled.div`
+  margin-top: 10px;
+  padding: 10px 0px 0px 6px;
+  border-top: 1px solid var(--black-075);
+`;
+const Comment = styled.div`
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  background-color: var(--black-025);
+  box-shadow: 0px 0px 5px 0.5px var(--black-100) inset;
+`;
+const WriteReviewBtnContainer = styled.div`
   position: absolute;
   z-index: 2;
-  right: 0px;
-  bottom: 0px;
+  right: 40px;
+  bottom: 10px;
   width: 50px;
-  border: 1px solid blue;
 `;
 const WriteReviewForm = styled.div`
   position: absolute;
@@ -205,22 +256,18 @@ const WriteReviewForm = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 200px;
+  height: 210px;
   width: 430px;
   padding: 15px;
   background-color: var(--white);
-  border: 1px solid var(--blue-300);
+  border: 0.5px solid var(--blue-300);
   border-radius: 10px;
-  box-shadow: 0px 0px 5px var(--black-300);
+  box-shadow: 0px 0px 5px var(--black-200);
 `;
 const InputTop = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-`;
-const ReviewTextarea = styled.textarea`
-  width: 280px;
-  height: 80px;
 `;
 const ReviewImgInput = styled.input`
   position: absolute;
@@ -259,13 +306,10 @@ const TagSelection = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 5px 10px;
-  height: 35px;
+  padding: 10px;
+  height: 46px;
   border-radius: 5px;
-  box-shadow: 0px 0px 5px 0.5px var(--black-200) inset;
-`;
-const SelectTag = styled.button`
-  font-size: 0.8rem;
+  box-shadow: 0px 0px 5px 0.5px var(--black-100) inset;
 `;
 const InputBot = styled.div`
   display: flex;
@@ -277,11 +321,11 @@ const Rating = styled.span`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 15px;
+  padding: 10px;
   width: 280px;
   height: 35px;
   border-radius: 5px;
-  box-shadow: 0px 0px 5px 0.5px var(--black-200) inset;
+  box-shadow: 0px 0px 5px 0.5px var(--black-100) inset;
 `;
 const StarContainer = styled.span`
   display: flex;
@@ -294,4 +338,10 @@ const RateNum = styled.span`
   font-weight: bold;
   color: var(--black-300);
 `;
-const ReviewDone = styled.button``;
+const Reviews = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow-y: scroll;
+  border-bottom: 1px solid var(--black-100);
+`;

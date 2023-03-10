@@ -30,7 +30,7 @@ const ModalContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 550px;
-  width: 800px;
+  width: 780px;
   background-color: var(--white);
   border-radius: 10px;
 `;
