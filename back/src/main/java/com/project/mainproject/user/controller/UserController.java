@@ -1,11 +1,10 @@
 package com.project.mainproject.user.controller;
 
-import com.project.mainproject.dto.PageInfo;
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
-import com.project.mainproject.enums.ResultStatus;
+import com.project.mainproject.dummy.CommonStub;
 import com.project.mainproject.user.dto.*;
-import com.project.mainproject.user.dummy.UserData;
+import com.project.mainproject.user.dummy.UserStub;
 import com.project.mainproject.utils.UriCreator;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +24,9 @@ public class UserController {
     @PostMapping("/normal")
     public ResponseEntity normalSignUp(@RequestBody PostUserSignUpDto signUpDto) {
         // TODO: Save Normal User
+
         URI location = UriCreator.createUri(USERS_DEFAULT_URL, 1);
-        SingleResponseDto response = SingleResponseDto.builder()
-                .httpCode(ResultStatus.CREATE_COMPLETED.getHttpCode())
-                .message(ResultStatus.CREATE_COMPLETED.getMessage())
-                .build();
+        SingleResponseDto response = CommonStub.getSingleResponseStub();
         return ResponseEntity.created(location).body(response);
     }
 
@@ -42,11 +39,9 @@ public class UserController {
                                 // , @RequestPart MultipartFile pharmacistCertificate
     ) {
         // TODO: Save Pharmacy User
+
         URI location = UriCreator.createUri(USERS_DEFAULT_URL, 1);
-        SingleResponseDto response = SingleResponseDto.builder()
-                .httpCode(ResultStatus.CREATE_COMPLETED.getHttpCode())
-                .message(ResultStatus.CREATE_COMPLETED.getMessage())
-                .build();
+        SingleResponseDto response = CommonStub.getSingleResponseStub();
         return ResponseEntity.created(location).body(response);
     }
 
@@ -56,10 +51,8 @@ public class UserController {
     @PostMapping("/password")
     public ResponseEntity findPassword(@RequestBody UserFindPasswordDto findPasswordDto) {
         // TODO: Send Password Init Email
-        SingleResponseDto response = SingleResponseDto.builder()
-                .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
-                .message(ResultStatus.PROCESS_COMPLETED.getMessage())
-                .build();
+
+        SingleResponseDto response = CommonStub.getSingleResponseStub();
         return ResponseEntity.ok().body(response);
     }
 
@@ -69,12 +62,10 @@ public class UserController {
     @GetMapping("/{userIdx}")
     public ResponseEntity getUserInfo(@PathVariable("userIdx") Long userIdx) {
         // TODO: Find User Information
-        UserInfoDto dummyUser = UserData.getUser();
-        SingleResponseDto response = SingleResponseDto.builder()
-                .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
-                .message(ResultStatus.PROCESS_COMPLETED.getMessage())
-                .response(dummyUser)
-                .build();
+
+        UserInfoDto dummyUser = UserStub.getUser();
+        SingleResponseDto response = CommonStub.getSingleResponseStub();
+        response.setResponse(dummyUser);
         return ResponseEntity.ok().body(response);
     }
 
@@ -84,21 +75,10 @@ public class UserController {
     @GetMapping
     public ResponseEntity getUsers(Pageable pageable) {
         // TODO: Find All User Information
-        PageInfo pageInfo = PageInfo.builder()
-                .page(0)
-                .size(10)
-                .totalPage(100)
-                .totalElement(1000)
-                .isFinish(false)
-                .isFirst(true)
-                .build();
-        UsersDto dummyUsers = UsersDto.builder().users(UserData.getUsers()).build();
-        PageResponseDto response = PageResponseDto.builder()
-                .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
-                .message(ResultStatus.PROCESS_COMPLETED.getMessage())
-                .response(dummyUsers)
-                .pageInfo(pageInfo)
-                .build();
+
+        UsersDto dummyUsers = UsersDto.builder().users(UserStub.getUsers()).build();
+        PageResponseDto<UsersDto> response = CommonStub.getPageResponseStub();
+        response.setResponse(dummyUsers);
         return ResponseEntity.ok().body(response);
     }
 
@@ -108,21 +88,10 @@ public class UserController {
     @GetMapping("{userIdx}/review")
     public ResponseEntity getUserReviews(Pageable pageable, @PathVariable("userIdx") Long userIdx) {
         // TODO: Find Reviews User Wrote
-        PageInfo pageInfo = PageInfo.builder()
-                .page(0)
-                .size(10)
-                .totalPage(100)
-                .totalElement(1000)
-                .isFinish(false)
-                .isFirst(true)
-                .build();
-        UserReviewDto dummyReviews = UserReviewDto.builder().reviews(UserData.getReviews()).build();
-        PageResponseDto response = PageResponseDto.builder()
-                .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
-                .message(ResultStatus.PROCESS_COMPLETED.getMessage())
-                .response(dummyReviews)
-                .pageInfo(pageInfo)
-                .build();
+
+        UserReviewDto dummyReviews = UserReviewDto.builder().reviews(UserStub.getReviews()).build();
+        PageResponseDto<UserReviewDto> response = CommonStub.getPageResponseStub();
+        response.setResponse(dummyReviews);
         return ResponseEntity.ok().body(response);
     }
 
@@ -132,21 +101,10 @@ public class UserController {
     @GetMapping("{userIdx}/store")
     public ResponseEntity getUserPickedStore(Pageable pageable, @PathVariable("userIdx") Long userIdx) {
         // TODO: Find Stores User Picked
-        PageInfo pageInfo = PageInfo.builder()
-                .page(0)
-                .size(10)
-                .totalPage(100)
-                .totalElement(1000)
-                .isFinish(false)
-                .isFirst(true)
-                .build();
-        UserPickedStoreDto dummyStores = UserPickedStoreDto.builder().stores(UserData.getPickedStores()).build();
-        PageResponseDto response = PageResponseDto.builder()
-                .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
-                .message(ResultStatus.PROCESS_COMPLETED.getMessage())
-                .response(dummyStores)
-                .pageInfo(pageInfo)
-                .build();
+
+        UserPickedStoreDto dummyStores = UserPickedStoreDto.builder().stores(UserStub.getPickedStores()).build();
+        PageResponseDto<UserPickedStoreDto> response = CommonStub.getPageResponseStub();
+        response.setResponse(dummyStores);
         return ResponseEntity.ok().body(response);
     }
 
@@ -157,11 +115,9 @@ public class UserController {
     public ResponseEntity patchUserInfo(@PathVariable("userIdx") Long userIdx,
                                         @RequestBody PostUserPatchDto patchDto) {
         // TODO: Change User Profile
+
         URI location = UriCreator.createUri(USERS_DEFAULT_URL, 1);
-        SingleResponseDto response = SingleResponseDto.builder()
-                .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
-                .message(ResultStatus.PROCESS_COMPLETED.getMessage())
-                .build();
+        SingleResponseDto response = CommonStub.getSingleResponseStub();
         return ResponseEntity.ok().header("Location", location.toString()).body(response);
     }
 
@@ -173,11 +129,9 @@ public class UserController {
                                                 // ,MultipartFile profileImage
     ) {
         // TODO: Chane User Profile Image
+
         URI location = UriCreator.createUri(USERS_DEFAULT_URL, 1);
-        SingleResponseDto response = SingleResponseDto.builder()
-                .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
-                .message(ResultStatus.PROCESS_COMPLETED.getMessage())
-                .build();
+        SingleResponseDto response = CommonStub.getSingleResponseStub();
         return ResponseEntity.ok().header("Location", location.toString()).body(response);
     }
 
@@ -187,10 +141,8 @@ public class UserController {
     @DeleteMapping("{userIdx}")
     public ResponseEntity deleteUser(@PathVariable("userIdx") Long userIdx) {
         // TODO: User Withdraw
-        SingleResponseDto response = SingleResponseDto.builder()
-                .httpCode(ResultStatus.DELETE_COMPLETED.getHttpCode())
-                .message(ResultStatus.DELETE_COMPLETED.getMessage())
-                .build();
+
+        SingleResponseDto response = CommonStub.getSingleResponseStub();
         return ResponseEntity.noContent().build();
     }
 
