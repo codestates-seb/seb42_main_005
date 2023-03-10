@@ -1,6 +1,7 @@
 //! 모달 컴포넌트 오른편 약국 정보 부분입니다
 //* border : blue 로 되어 있는 부분은 컴포넌트 재사용 예정인 임시 부분입니다
 import styled from "styled-components";
+import Tag from "../Ul/Tag";
 import PharmRank from "./PharmRank";
 import TagContainer from "./TagContainer";
 
@@ -39,9 +40,10 @@ export default function PharmInfo() {
         <InfoTagBox>
           {/* <TagContainer /> */}
           <div>
-            <span>친절해요</span>
-            <span>깨끗해요</span>
-            <span>주차가능</span>
+            <Tag idx={0} />
+            <Tag idx={1} />
+            <Tag idx={2} />
+            <Tag idx={3} />
           </div>
         </InfoTagBox>
       </InfoTagContainer>

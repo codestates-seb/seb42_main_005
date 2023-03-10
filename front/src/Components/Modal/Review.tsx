@@ -2,6 +2,9 @@
 //* border : blue 로 되어 있는 부분은 컴포넌트 재사용 예정인 임시 부분입니다
 import { useState } from "react";
 import styled from "styled-components";
+import Button from "../Ul/Button";
+import Tag from "../Ul/Tag";
+import Textarea from "../Ul/Textarea";
 import TagContainer from "./TagContainer";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BsStar } from "react-icons/bs";
@@ -34,27 +37,28 @@ export default function Review() {
             <Created>2023.03.05</Created>
           </UserInfo>
           <ButtonContainer>
-            <button>댓글</button>
-            <button>신고</button>
+            <Button color="l_mint" size="sm" text="댓 글" />
+            <Button color="l_black" size="sm" text="신 고" />
           </ButtonContainer>
         </Upper>
         <Lower>
           <Rest>
             <ReviewText>쌍화탕은 하나씩 주시는데 약사선생님은 바쁘신지 불친절합니다.</ReviewText>
             <ReviewTagContainer>
-              <span>친절해요</span>
-              <span>깨끗해요</span>
-              <span>주차가능</span>
+              <Tag idx={0} />
+              <Tag idx={1} />
+              <Tag idx={2} />
+              <Tag idx={3} />
             </ReviewTagContainer>
           </Rest>
           <ReviewImg src="./Images/쌍화탕.jpg" />
         </Lower>
       </ReviewUnit>
-      <WriteReviewBtn onClick={() => setIsShown(!isShown)}>리뷰쓰기</WriteReviewBtn>
+      <Button onClick={() => setIsShown(!isShown)} color="mint" size="md" text="리뷰쓰기" />
       {isShown ? (
         <WriteReviewForm>
           <InputTop>
-            <ReviewTextarea></ReviewTextarea>
+            <Textarea placeholder="쿠르루삥뽕~!" isValid={true} rows={5} icon={true} />
             <ReviewImgContainer>
               <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
               {imageSrc ? (
@@ -70,10 +74,10 @@ export default function Review() {
             </ReviewImgContainer>
           </InputTop>
           <TagSelection>
-            <SelectTag>친절한 서비스</SelectTag>
-            <SelectTag>꼼꼼한 복약지도</SelectTag>
-            <SelectTag>주차가능</SelectTag>
-            <SelectTag>접근성이 좋음</SelectTag>
+            <Tag idx={0} />
+            <Tag idx={1} />
+            <Tag idx={2} />
+            <Tag idx={3} />
           </TagSelection>
           <InputBot>
             <Rating>
@@ -101,7 +105,7 @@ export default function Review() {
               </StarContainer>
               <RateNum>{rate} / 5</RateNum>
             </Rating>
-            <ReviewDone onClick={() => setIsShown(!isShown)}>작성완료</ReviewDone>
+            <Button onClick={() => setIsShown(!isShown)} color="blue" size="md" text="작성완료" icon={true} />
           </InputBot>
         </WriteReviewForm>
       ) : null}
@@ -157,7 +161,6 @@ const Created = styled.span`
   font-size: 12px;
 `;
 const ButtonContainer = styled.span`
-  border: 1px solid blue;
   font-size: 10px;
 `;
 const Lower = styled.div`
