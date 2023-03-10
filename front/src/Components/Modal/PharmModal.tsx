@@ -29,8 +29,8 @@ const ModalContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  height: 550px;
-  width: 780px;
+  height: 600px;
+  width: 940px;
   background-color: var(--white);
   border-radius: 10px;
 `;

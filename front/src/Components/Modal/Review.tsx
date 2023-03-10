@@ -31,7 +31,7 @@ export default function Review() {
       <ReviewTitle>리뷰</ReviewTitle>
       <Reviews>
         <ReviewUnit>
-          <div>
+          <section>
             <Upper>
               <UserInfo>
                 <UserIcon src="/Images/user.png" />
@@ -79,7 +79,7 @@ export default function Review() {
               </Upper>
               <Comment>누가우리약국 오라고 칼들고 협박함? 다신 오지마ㅇㅇ</Comment>
             </CommentContainer>
-          </div>
+          </section>
           {isCommentFormShown ? (
             <WriteCommentForm>
               <Instruction>
@@ -90,6 +90,7 @@ export default function Review() {
           ) : null}
         </ReviewUnit>
       </Reviews>
+      {/* 약사계정이면 보이지 않게 작업이 필요한 부분입니다 */}
       <WriteReviewBtnContainer>
         <Button onClick={() => setIsReviewFormShown(!isReviewFormShown)} color="mint" size="md" text="리뷰쓰기" />
       </WriteReviewBtnContainer>
@@ -158,23 +159,23 @@ export default function Review() {
   );
 }
 
-const ReviewContainer = styled.div`
+const ReviewContainer = styled.main`
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding: 10px 0px 0px 20px;
-  height: 500px;
+  height: 550px;
   width: 450px;
 `;
-const ReviewTitle = styled.div`
+const ReviewTitle = styled.header`
   padding-bottom: 10px;
   color: var(--black-500);
   font-weight: bold;
   font-size: 25px;
   border-bottom: 1px solid var(--black-100);
 `;
-const ReviewUnit = styled.div`
+const ReviewUnit = styled.article`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -266,7 +267,7 @@ const WriteReviewBtnContainer = styled.div`
   bottom: 10px;
   width: 50px;
 `;
-const WriteReviewForm = styled.div`
+const WriteReviewForm = styled.section`
   position: absolute;
   z-index: 2;
   bottom: 0px;
@@ -369,7 +370,7 @@ const Reviews = styled.div`
     visibility: visible;
   }
 `;
-const WriteCommentForm = styled.div`
+const WriteCommentForm = styled.section`
   display: flex;
   flex-direction: column;
   margin: 10px 2px 0px 6px;

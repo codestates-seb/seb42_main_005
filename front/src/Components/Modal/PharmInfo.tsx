@@ -44,20 +44,20 @@ export default function PharmInfo() {
   );
 }
 
-const InfoContainer = styled.div`
+const InfoContainer = styled.aside`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 10px 20px 0px 0px;
-  height: 500px;
-  width: 280px;
+  height: 550px;
+  width: 450px;
   border-right: 1px solid var(--black-100);
 `;
-const InfoHeader = styled.div`
+const InfoHeader = styled.header`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-bottom: 7px;
+  padding: 0px 10px 7px 10px;
   gap: 10px;
   border-bottom: 1px solid var(--black-100);
 `;
@@ -66,20 +66,22 @@ const InfoTitle = styled.div`
   font-size: 30px;
 `;
 const InfoImgContainer = styled.div`
-  display: inline-block;
+  display: flex;
   position: relative;
-  padding-bottom: 7px;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 5px;
   border-bottom: 1px solid var(--black-100);
 `;
 const LikeButton = styled.span`
   position: absolute;
-  right: 26px;
-  top: 3px;
+  right: 51px;
+  top: 12px;
   width: 20px;
 `;
 const Img = styled.img`
-  width: 260px;
-  height: 171.2px;
+  width: 23.75rem; //! pharmList 같은 사이즈
+  height: 15.625rem;
   object-fit: cover;
   border-radius: 5px;
 `;
@@ -87,8 +89,7 @@ const InfoInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 5px;
-  padding-bottom: 7px;
+  padding: 10px;
   gap: 5px;
   border-bottom: 1px solid var(--black-100);
 `;
@@ -109,8 +110,8 @@ const InfoInfoContent = styled.span`
 `;
 const InfoTagContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  padding: 7px 5px;
+  flex-direction: column;//! 여기
+  padding: 10px;
   gap: 5px;
   border-bottom: 1px solid var(--black-100);
 `;
@@ -125,4 +126,5 @@ const InfoTagBox = styled.div`
   gap: 5px;
   box-shadow: 0px 0px 5px 0.5px var(--black-100) inset;
   border-radius: 5px;
+  margin-bottom: 5px;
 `;
