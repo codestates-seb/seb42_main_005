@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Header from "./Components/Header/Header";
 import Home from "./Pages/Home";
 import SignUp from "./Pages/SignUp";
 import Login from "./Pages/Login";
@@ -15,16 +16,18 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/sign_up" element={<SignUp />}></Route>
-          <Route path="/sign_out" element={<SignOut />}></Route>
-          <Route path="/login" element={<Login />}></Route>
-          <Route path="/find_pw" element={<FindPW />}></Route>
-          <Route path="/user-my_info" element={<MyInfo />}></Route>
-          <Route path="/pharm-my_pharmacy" element={<MyPharmacy />}></Route>
-          <Route path="/admin-reports" element={<Reports />}></Route>
-          <Route path="/admin-users" element={<Users />}></Route>
-          <Route path="/admin-certify" element={<Certify />}></Route>
+          <Route path="/" element={<Header />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/sign_up" element={<SignUp />} />
+            <Route path="/sign_out" element={<SignOut />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/find_pw" element={<FindPW />} />
+            <Route path="/user-my_info" element={<MyInfo />} />
+            <Route path="/pharm-my_pharmacy" element={<MyPharmacy />} />
+            <Route path="/admin-reports" element={<Reports />} />
+            <Route path="/admin-users" element={<Users />} />
+            <Route path="/admin-certify" element={<Certify />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>
