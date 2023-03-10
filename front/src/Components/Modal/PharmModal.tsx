@@ -33,4 +33,24 @@ const ModalContainer = styled.div`
   width: 940px;
   background-color: var(--white);
   border-radius: 10px;
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 700px;
+    width: 500px;
+    overflow-y: scroll;
+    background-color: var(--white);
+    border-radius: 10px;
+    ::-webkit-scrollbar-track {
+      visibility: hidden;
+    }
+    ::-webkit-scrollbar-thumb {
+      visibility: hidden;
+    }
+    :active::-webkit-scrollbar-track {
+      width: 0.6rem;
+      visibility: visible;
+    }
+  }
 `;

@@ -15,7 +15,9 @@ export default function PharmInfo() {
       </InfoHeader>
       <InfoImgContainer>
         <Img src="/Images/pharm.png"></Img>
-        <LikeButton onClick={()=>setLike(!like)}>{like ? <img src="./Images/Heart.png"/> : <img src="./Images/UnHeart.png"/>}</LikeButton>
+        <LikeButton onClick={() => setLike(!like)}>
+          {like ? <img src="./Images/Heart.png" /> : <img src="./Images/UnHeart.png" />}
+        </LikeButton>
       </InfoImgContainer>
       <InfoInfo>
         <InfoUnit>
@@ -48,10 +50,17 @@ const InfoContainer = styled.aside`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 10px 20px 0px 0px;
   height: 550px;
   width: 450px;
+  padding: 10px 20px 0px 0px;
   border-right: 1px solid var(--black-100);
+  @media (max-width: 768px) {
+    height: auto;
+    margin: 0px 0 30px 0;
+    padding: 300px 0px 0px 0px;
+    border-right: none;
+    border-bottom: 1px solid var(--black-100);
+  }
 `;
 const InfoHeader = styled.header`
   display: flex;
@@ -60,6 +69,13 @@ const InfoHeader = styled.header`
   padding: 0px 10px 7px 10px;
   gap: 10px;
   border-bottom: 1px solid var(--black-100);
+  @media (max-width: 768px) {
+    position: sticky;
+    top: 0px;
+    padding: 40px 10px 10px 10px;
+    background-color: var(--white);
+    z-index: 2;
+  }
 `;
 const InfoTitle = styled.div`
   font-weight: bold;
@@ -72,18 +88,25 @@ const InfoImgContainer = styled.div`
   align-items: center;
   padding: 10px 5px;
   border-bottom: 1px solid var(--black-100);
+  @media (max-width: 768px) {
+    padding: 50px 20px 20px 20px;
+  }
+`;
+const Img = styled.img`
+  object-fit: cover;
+  width: 23.75rem;
+  height: 15.625rem;
+  border-radius: 5px;
 `;
 const LikeButton = styled.span`
   position: absolute;
   right: 51px;
   top: 12px;
   width: 20px;
-`;
-const Img = styled.img`
-  width: 23.75rem; //! pharmList 같은 사이즈
-  height: 15.625rem;
-  object-fit: cover;
-  border-radius: 5px;
+  @media (max-width: 768px) {
+    right: 60px;
+    top: 51px;
+  }
 `;
 const InfoInfo = styled.div`
   display: flex;
@@ -92,6 +115,9 @@ const InfoInfo = styled.div`
   padding: 10px;
   gap: 5px;
   border-bottom: 1px solid var(--black-100);
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
 `;
 const InfoUnit = styled.div`
   display: flex;
@@ -110,10 +136,15 @@ const InfoInfoContent = styled.span`
 `;
 const InfoTagContainer = styled.div`
   display: flex;
-  flex-direction: column;//! 여기
+  flex-direction: column;
   padding: 10px;
   gap: 5px;
   border-bottom: 1px solid var(--black-100);
+  @media (max-width: 768px) {
+    gap: 10px;
+    padding: 20px;
+    border: none;
+  }
 `;
 const InfoTagTitle = styled.div`
   font-size: 14px;
@@ -122,9 +153,9 @@ const InfoTagTitle = styled.div`
 const InfoTagBox = styled.div`
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 5px;
   padding: 10px;
   gap: 5px;
-  box-shadow: 0px 0px 5px 0.5px var(--black-100) inset;
   border-radius: 5px;
-  margin-bottom: 5px;
+  box-shadow: 0px 0px 5px 0.5px var(--black-100) inset;
 `;
