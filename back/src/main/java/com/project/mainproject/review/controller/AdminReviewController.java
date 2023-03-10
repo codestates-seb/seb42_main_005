@@ -3,13 +3,12 @@ package com.project.mainproject.review.controller;
 import com.project.mainproject.dto.PageInfo;
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.review.dto.GetReportedReviewDto;
+import com.project.mainproject.user.dto.BannedReviewsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -52,4 +51,17 @@ public class AdminReviewController {
         return ResponseEntity.ok().body(build);
     }
 
+    @DeleteMapping("/banned")
+    public ResponseEntity deleteReviews(BannedReviewsDto bannedReviewsDto) {
+        //TODO
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/banned")
+    public ResponseEntity restoreReviews(BannedReviewsDto bannedReviewsDto) {
+        //TODO
+
+        return ResponseEntity.ok().build();
+    }
 }

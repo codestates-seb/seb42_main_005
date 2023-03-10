@@ -16,7 +16,7 @@ public class UserData {
                 .userIdx(1L)
                 .name("강호동")
                 .dob(LocalDateTime.now()) // 수정 필요할 듯
-                .createdDate(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .email("zzanghd@gmail.com")
                 .address("서울특별시 강남구 청담동")
                 .build();

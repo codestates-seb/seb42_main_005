@@ -1,9 +1,11 @@
 package com.project.mainproject.user.controller;
 
 import com.project.mainproject.user.dto.AdminUsersDto;
-import com.project.mainproject.user.dto.BannedReviewsDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -35,19 +37,5 @@ public class AdminController {
         //TODO
 
         return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/banned")
-    public ResponseEntity deleteReviews(BannedReviewsDto bannedReviewsDto) {
-        //TODO
-
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/banned")
-    public ResponseEntity restoreReviews(BannedReviewsDto bannedReviewsDto) {
-        //TODO
-
-        return ResponseEntity.ok().build();
     }
 }
