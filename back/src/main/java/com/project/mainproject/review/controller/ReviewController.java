@@ -1,12 +1,11 @@
 package com.project.mainproject.review.controller;
 
-import com.project.mainproject.dto.PageInfo;
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
-import com.project.mainproject.enums.ResultStatus;
+import com.project.mainproject.dummy.CommonStub;
 import com.project.mainproject.review.dto.PostCreateReviewDto;
 import com.project.mainproject.review.dto.SimpleReviewDto;
-import com.project.mainproject.review.dto.StoreReviewPageDto;
+import com.project.mainproject.review.dummy.ReviewStub;
 import com.project.mainproject.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.awt.print.Pageable;
 import java.net.URI;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,22 +27,8 @@ public class ReviewController {
     public ResponseEntity getStoreReview(Pageable pageable, @PathVariable Long storeIdx) {
         //TODO : Service 구현
 
-        PageInfo pageInfo = PageInfo.builder().page(0).size(10).totalPage(2).totalElement(20).isFirst(true).isFinish(false).build();
-        List<StoreReviewPageDto> result = new ArrayList<>();
-        for (Long i = 1L; i < 20; i++) {
-            StoreReviewPageDto build = StoreReviewPageDto.builder()
-                    .reviewIdx(i)
-                    .rating(4)
-                    .content("내공 얌얌" + i)
-                    .tags(List.of("신선함", "주차장이 넓어요", "친절함"))
-                    .modifiedAt(LocalDateTime.now())
-                    .createdAt(LocalDateTime.now())
-                    .build();
-            result.add(build);
-        }
-
-        PageResponseDto<List<StoreReviewPageDto>> build = PageResponseDto.<List<StoreReviewPageDto>>builder().response(result).pageInfo(pageInfo).httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode()).message(ResultStatus.PROCESS_COMPLETED.getMessage()).build();
-
+        PageResponseDto build = CommonStub.getPageResponseStub();
+        build.setResponse(ReviewStub.getStoreReviewPageListStub());
         return ResponseEntity.ok().body(build);
     }
 
@@ -58,10 +40,8 @@ public class ReviewController {
         //TODO : Service 구현
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
-        SingleResponseDto<Long> build = SingleResponseDto.<Long>builder().message(ResultStatus.PROCESS_COMPLETED.getMessage())
-                .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
-                .response(storeIdx)
-                .build();
+        SingleResponseDto build = CommonStub.getSingleResponseStub();
+        build.setResponse(storeIdx);
 
         return ResponseEntity.created(location).body(build);
     }
@@ -74,10 +54,9 @@ public class ReviewController {
         //TODO : Service 구현
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
-        SingleResponseDto<SimpleReviewDto> build = SingleResponseDto.<SimpleReviewDto>builder().message(ResultStatus.PROCESS_COMPLETED.getMessage())
-                .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
-                .response(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).build())
-                .build();
+
+        SingleResponseDto build = CommonStub.getSingleResponseStub();
+        build.setResponse(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).build());
 
         return ResponseEntity.ok().header("Location", location.toString())
                 .body(build);
@@ -91,12 +70,9 @@ public class ReviewController {
         //TODO : Service 구현
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
-        SingleResponseDto<SimpleReviewDto> build = SingleResponseDto.<SimpleReviewDto>builder().message(ResultStatus.PROCESS_COMPLETED.getMessage())
-                .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
-                .response(SimpleReviewDto.builder().storeIdx(storeIdx).build())
+
+        return ResponseEntity.noContent().header("Location", location.toString())
                 .build();
-        return ResponseEntity.ok().header("Location", location.toString())
-                .body(build);
     }
 
     /*
@@ -107,12 +83,11 @@ public class ReviewController {
         //TODO : Service 구현
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review/" + reviewIdx);
-        SingleResponseDto<SimpleReviewDto> build = SingleResponseDto.<SimpleReviewDto>builder().message(ResultStatus.PROCESS_COMPLETED.getMessage())
-                .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
-                .response(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).build())
-                .build();
-        return ResponseEntity.ok().header("Location", location.toString())
-                .body(build);
+
+        SingleResponseDto build = CommonStub.getSingleResponseStub();
+        build.setResponse(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).build());
+
+        return ResponseEntity.ok().header("Location", location.toString()).body(build);
     }
 
     /*
@@ -123,10 +98,10 @@ public class ReviewController {
         //TODO : Service 구현
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review/" + reviewIdx);
-        SingleResponseDto<SimpleReviewDto> build = SingleResponseDto.<SimpleReviewDto>builder().message(ResultStatus.PROCESS_COMPLETED.getMessage())
-                .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
-                .response(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).build())
-                .build();
+
+        SingleResponseDto build = CommonStub.getSingleResponseStub();
+        build.setResponse(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).build());
+
         return ResponseEntity.created(location).body(build);
     }
 
@@ -139,10 +114,9 @@ public class ReviewController {
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review/" + reviewIdx);
 
-        SingleResponseDto<SimpleReviewDto> build = SingleResponseDto.<SimpleReviewDto>builder().message(ResultStatus.PROCESS_COMPLETED.getMessage())
-                .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
-                .response(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).build())
-                .build();
+        SingleResponseDto build = CommonStub.getSingleResponseStub();
+        build.setResponse(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).build());
+
         return ResponseEntity.ok().header("Location", location.toString())
                 .body(build);
     }
@@ -156,10 +130,9 @@ public class ReviewController {
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review/" + reviewIdx);
 
-        SingleResponseDto<SimpleReviewDto> build = SingleResponseDto.<SimpleReviewDto>builder().message(ResultStatus.PROCESS_COMPLETED.getMessage())
-                .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
-                .response(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).build())
-                .build();
+        SingleResponseDto build = CommonStub.getSingleResponseStub();
+        build.setResponse(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).build());
+
         return ResponseEntity.created(location).body(build);
     }
 }

@@ -11,8 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.project.mainproject.enums.ResultStatus.PROCESS_COMPLETED;
-
 @RequiredArgsConstructor
 @RequestMapping("/api/admin")
 @RestController
@@ -24,15 +22,11 @@ public class AdminReviewController {
     public ResponseEntity getReportedReview(Pageable pageable) {
         //TODO: 서비스단 구현
 
-        PageResponseDto<ListGetReportedReviewDto> build = PageResponseDto.<ListGetReportedReviewDto>builder()
-                .response(ListGetReportedReviewDto.builder()
-                        .reportedReview(ReviewStub
-                                .getReportedReviewDtoList())
-                        .build())
-                .pageInfo(CommonStub.pageInfoStub())
-                .message(PROCESS_COMPLETED.getMessage())
-                .httpCode(PROCESS_COMPLETED.getHttpCode())
-                .build();
+        PageResponseDto build = CommonStub.getPageResponseStub();
+        build.setResponse(ListGetReportedReviewDto.builder()
+                .reportedReview(ReviewStub
+                        .getReportedReviewDtoListStub())
+                .build());
 
         return ResponseEntity.ok().body(build);
     }
@@ -48,10 +42,7 @@ public class AdminReviewController {
     public ResponseEntity restoreReviews(BannedReviewsDto bannedReviewsDto) {
         //TODO
 
-        SingleResponseDto<Object> build = SingleResponseDto.builder()
-                .message(PROCESS_COMPLETED.getMessage())
-                .httpCode(PROCESS_COMPLETED.getHttpCode())
-                .build();
+        SingleResponseDto build = CommonStub.getSingleResponseStub();
         return ResponseEntity.ok().body(build);
     }
 }
