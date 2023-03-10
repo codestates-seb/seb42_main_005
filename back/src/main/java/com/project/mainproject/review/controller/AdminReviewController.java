@@ -1,18 +1,17 @@
 package com.project.mainproject.review.controller;
 
-import com.project.mainproject.dto.PageInfo;
 import com.project.mainproject.dto.PageResponseDto;
-import com.project.mainproject.review.dto.GetReportedReviewDto;
+import com.project.mainproject.dto.SingleResponseDto;
+import com.project.mainproject.dummy.CommonStub;
+import com.project.mainproject.review.dto.ListGetReportedReviewDto;
+import com.project.mainproject.review.dummy.ReviewStub;
 import com.project.mainproject.user.dto.BannedReviewsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import static com.project.mainproject.enums.ResultStatus.PROCESS_COMPLETED;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/admin")
@@ -25,29 +24,16 @@ public class AdminReviewController {
     public ResponseEntity getReportedReview(Pageable pageable) {
         //TODO: 서비스단 구현
 
-        PageInfo pageInfo = PageInfo.builder()
-                .page(0)
-                .size(10)
-                .totalPage(100)
-                .totalElement(1000)
-                .isFinish(false)
-                .isFirst(true)
+        PageResponseDto<ListGetReportedReviewDto> build = PageResponseDto.<ListGetReportedReviewDto>builder()
+                .response(ListGetReportedReviewDto.builder()
+                        .reportedReview(ReviewStub
+                                .getReportedReviewDtoList())
+                        .build())
+                .pageInfo(CommonStub.pageInfoStub())
+                .message(PROCESS_COMPLETED.getMessage())
+                .httpCode(PROCESS_COMPLETED.getHttpCode())
                 .build();
-        List<GetReportedReviewDto> result = new ArrayList<>();
-        for (long i = 1L; i < 16; i++) {
-            GetReportedReviewDto build = GetReportedReviewDto.builder()
-                    .reviewContent("신고 사유 " + i)
-                    .reviewIdx(i)
-                    .reportedCount((int) i)
-                    .reviewCreatedAt(LocalDateTime.now())
-                    .build();
-            result.add(build);
-        }
-        PageResponseDto<List<GetReportedReviewDto>> build = PageResponseDto.<List<GetReportedReviewDto>>builder()
-                .response(result)
-                .pageInfo(pageInfo)
-                .message("success !!")
-                .httpCode(HttpStatus.OK.value()).build();
+
         return ResponseEntity.ok().body(build);
     }
 
@@ -62,6 +48,10 @@ public class AdminReviewController {
     public ResponseEntity restoreReviews(BannedReviewsDto bannedReviewsDto) {
         //TODO
 
-        return ResponseEntity.ok().build();
+        SingleResponseDto<Object> build = SingleResponseDto.builder()
+                .message(PROCESS_COMPLETED.getMessage())
+                .httpCode(PROCESS_COMPLETED.getHttpCode())
+                .build();
+        return ResponseEntity.ok().body(build);
     }
 }
