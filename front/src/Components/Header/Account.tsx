@@ -190,8 +190,8 @@ const Content = styled.div`
   width: 110px;
   border-radius: 3px;
   background: white;
-  /* box-shadow: rgba(50, 50, 93, 0.45) 0px 6px 12px -2px, rgba(0, 0, 0, 0.45) 0px 3px 7px -3px; */
   box-shadow: var(--bs-lg);
+  transition: 0.2s;
   ul {
     list-style-type: none;
     position: relative;
@@ -212,6 +212,10 @@ const Content = styled.div`
     background: var(--black-050);
     transition: 0.2s;
   }
+  @media (max-width: 768px) {
+    transition: 0.2s;
+    right: 45px;
+  }
 `;
 const DropdownBackdrop = styled.div`
   position: absolute;
@@ -227,11 +231,15 @@ const LinkButton = styled(Link)`
   border: none;
   color: var(--white);
   text-decoration-line: none;
-  font-size: 0.9rem;
+  font-size: 1rem;
   transition: 0.2s;
   &:hover {
     font-weight: 700;
     transition: 0.2s;
+  }
+  @media (max-width: 768px) {
+    transition: 0.2s;
+    font-size: 0.9rem;
   }
 `;
 
@@ -241,4 +249,9 @@ const Partition = styled.span`
   height: 14px;
   margin: 0 30px;
   border-radius: 0.7px;
+  transition: 0.2s;
+  @media (max-width: 768px) {
+    transition: 0.2s;
+    margin: 0 10px;
+  }
 `;
