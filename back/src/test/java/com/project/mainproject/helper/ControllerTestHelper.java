@@ -73,7 +73,7 @@ public interface ControllerTestHelper<T> {
     }
 
     default String getDataParentPath(DataResponseType dataResponseType) {
-        return "response";
+        return "response.";
 //        return dataResponseType == DataResponseType.SINGLE ? "response." : "response[].";
     }
 
