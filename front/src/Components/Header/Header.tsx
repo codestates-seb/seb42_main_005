@@ -1,26 +1,34 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Account from "./Account";
 
-export default function Header() {
+interface AccountProps {
+  isLogin: boolean;
+  account?: string;
+}
+
+export default function Header({ isLogin, account }: AccountProps) {
   return (
     <HeaderContainer>
       <div className="logo_container">
-        {/* LOGO */}
         <LogoContainer to="/">
           <img className="logo_img" alt="logo" src="Images/Logo.png" />
           <span className="logo_text">Pharmacy</span>
         </LogoContainer>
       </div>
-      <div className="account_container"></div>
+      <div className="account_container">
+        <Account isLogin={isLogin} account={account} />
+      </div>
     </HeaderContainer>
   );
 }
 
 const HeaderContainer = styled.header`
   display: flex;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 0 1rem;
+  padding: 0 8rem 0 6rem;
   background-color: var(--blue-600);
   position: fixed;
   z-index: 10;
