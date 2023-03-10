@@ -84,7 +84,7 @@ public class UserController {
 
     /*
         회원 정보 조회_작성 리뷰
-  뷰  */
+    */
     @GetMapping("{userIdx}/review")
     public ResponseEntity getUserReviews(Pageable pageable, @PathVariable("userIdx") Long userIdx) {
         // TODO: Find Reviews User Wrote

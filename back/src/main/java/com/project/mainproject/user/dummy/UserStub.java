@@ -10,7 +10,7 @@ import java.util.List;
 
 import static com.project.mainproject.user.dto.UsersDto.UserDto;
 
-public class UserData {
+public class UserStub {
     public static UserInfoDto getUser() {
         return UserInfoDto.builder()
                 .userIdx(1L)
