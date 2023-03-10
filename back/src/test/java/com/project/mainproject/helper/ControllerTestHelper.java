@@ -97,7 +97,7 @@ public interface ControllerTestHelper<T> {
 
     default List<FieldDescriptor> getDefaultResponseDescriptors(JsonFieldType jsonFieldTypeForData) {
         return Arrays.asList(
-                fieldWithPath("data").type(jsonFieldTypeForData).description("결과 데이터").optional()
+                fieldWithPath("response").type(jsonFieldTypeForData).description("결과 데이터").optional()
         );
     }
 
@@ -110,6 +110,13 @@ public interface ControllerTestHelper<T> {
                 fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수").optional(),
                 fieldWithPath("pageInfo.isFirst").type(JsonFieldType.BOOLEAN).description("첫 페이지 여부").optional(),
                 fieldWithPath("pageInfo.isFinish").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부").optional()
+        );
+    }
+
+    default List<FieldDescriptor> getResultResponseDescriptors() {
+        return Arrays.asList(
+                fieldWithPath("httpCode").type(JsonFieldType.OBJECT).description("결과 코드").optional(),
+                fieldWithPath("message").type(JsonFieldType.NUMBER).description("결과 메세지").optional()
         );
     }
 
