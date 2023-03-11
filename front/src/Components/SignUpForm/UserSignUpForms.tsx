@@ -58,7 +58,8 @@ export default function UserSignUpForms() {
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  /* height: 39rem; */
+  padding-top: 3rem;
+  padding-bottom: 3rem;
   width: 40rem;
   border: 1px solid var(--black-200);
   border-top: none;
@@ -72,12 +73,6 @@ const SignUpForm = styled.form`
   flex-direction: column;
   justify-content: center;
 
-  .inputimage {
-    width: 2rem;
-    height: 2rem;
-    margin-top: 0.3rem;
-    margin-left: 0.3rem;
-  }
   .find_button {
     width: 4.3rem;
     height: 1.6rem;
@@ -94,9 +89,6 @@ const SignUpForm = styled.form`
     }
   }
   .signup_button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background-color: var(--blue-500);
     border: none;
     width: 15rem;
@@ -104,7 +96,7 @@ const SignUpForm = styled.form`
     font-size: 1.1rem;
     color: var(--white);
     margin: auto;
-    margin-top: 2rem;
+    margin-top: 1rem;
     border-radius: 7px;
     box-shadow: var(--bs-md);
     &:hover {
@@ -119,14 +111,21 @@ const InputContainer = styled.div`
   margin-bottom: 1rem;
   border-radius: 10px;
   box-shadow: var(--bs-sm);
+  .inputimage {
+    display: flex;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding-top: 0.2rem;
+    margin-top: 0.2rem;
+  }
 `;
 const SignUpInInput = styled.input`
   width: 27rem;
   height: 2.7rem;
   outline: none;
   font-size: 1.1rem;
-  margin-left: 1rem;
-  margin-right: 0.4rem;
+  padding-left: 0.5rem;
   border: none;
   &:focus {
     box-shadow: 0 3px 3px -2px var(--blue-700);
@@ -148,7 +147,7 @@ const Check = styled.input`
   border: 1px solid var(--black-100);
   box-shadow: var(--bs-btn);
   margin-right: 0.6rem;
-  margin-left: 1rem;
+  padding-left: 1rem;
   border-radius: 3.5px;
   transition: 0.1s;
   :active {

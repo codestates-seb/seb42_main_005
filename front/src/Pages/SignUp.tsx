@@ -11,7 +11,7 @@ export default function SignUp() {
     <Total>
       <Container>
         <Title>
-          <img alt="logo" src="Images/PillLogo.png" />
+          <img alt="logo" src="Images/Logo.png" />
           <h1>회원가입</h1>
         </Title>
         <SignUpFormTab tab={tab} setTab={setTab} />
@@ -30,14 +30,19 @@ const Container = styled.div`
   justify-content: center;
   height: 100%;
   width: 40rem;
+  h1 {
+    font-size: 2.2rem;
+  }
 `;
 
 const Title = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 5rem;
+  padding-top: 5rem;
   img {
-    margin-right: 1rem;
+    padding-right: 1rem;
+    width: 3.5rem;
+    height: 3rem;
   }
   h1 {
     color: var(--blue-600);

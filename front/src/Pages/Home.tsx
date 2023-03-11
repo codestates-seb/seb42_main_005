@@ -1,9 +1,9 @@
-import SignUp from "./SignUp";
+import PharmLists from "../Components/PharmList/PharmLists";
 
 export default function Home() {
   return (
-    <div>
-      <SignUp />
-    </div>
+    <>
+      <PharmLists />
+    </>
   );
 }

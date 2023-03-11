@@ -4,6 +4,9 @@ import { BsSearch } from "react-icons/bs";
 import Tag from "../Ul/Tag";
 import PharmRank from "../Ul/PharmRank";
 
+import Input from "../Ul/Input";
+import Textarea from "../Ul/Textarea";
+
 //데이터 들어오면 map으로 돌리기전에 하드코딩으로 두개해놨음
 export default function PharmLists() {
   /* 조건부로 할려고 임의로 해놓은 것!
@@ -80,7 +83,6 @@ const Container = styled.div`
   position: relative;
   background-color: var(--white);
   box-shadow: var(--bs-lg);
-  height: 100%;
 `;
 
 const ContainerWrap = styled.div`

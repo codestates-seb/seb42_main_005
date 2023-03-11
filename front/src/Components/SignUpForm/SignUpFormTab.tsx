@@ -24,7 +24,7 @@ const TabContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-top: 3rem;
+  padding-top: 3rem;
 `;
 
 const Tab = styled.div<{ title: string; tab: string }>`
@@ -47,8 +47,8 @@ const Tab = styled.div<{ title: string; tab: string }>`
     0 -4px 13px -3px hsla(0, 0%, 0%, 0.13);
   cursor: pointer;
   img {
-    width: 1.3rem;
+    width: 1.5rem;
     height: 1.3rem;
-    margin-right: 0.5rem;
+    padding-right: 0.5rem;
   }
 `;
