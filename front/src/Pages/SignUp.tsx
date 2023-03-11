@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import SignUpForms from "../Components/SignUpForm/SignUpForms";
+import PharmSignForms from "../Components/SignUpForm/PharmSignForms";
 import SignUpFormTab from "../Components/SignUpForm/SignUpFormTab";
+import UserSignUpForms from "../Components/SignUpForm/UserSignUpForms";
 
 export default function SignUp() {
   const [tab, setTab] = useState<"user" | "pharm">("user");
@@ -14,8 +15,7 @@ export default function SignUp() {
           <h1>회원가입</h1>
         </Title>
         <SignUpFormTab tab={tab} setTab={setTab} />
-
-        <SignUpForms tab={tab} />
+        {tab === "user" ? <UserSignUpForms /> : <PharmSignForms />}
       </Container>
     </Total>
   );

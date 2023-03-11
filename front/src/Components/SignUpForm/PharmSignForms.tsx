@@ -1,14 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import CheckBox from "../Ul/CheckBox";
-// import SignUpLoginInput from "./SignUpLoginInput";
 
-interface Props {
-  tab: "user" | "pharm";
-}
-
-//!  name, address, email, password, dob
-export default function SignUpForms({ tab }: Props) {
+export default function PharmSignForms() {
   return (
     <Container>
       <SignUpForm>
@@ -50,20 +43,16 @@ export default function SignUpForms({ tab }: Props) {
           <img alt="cake" src="Images/cake.png" />
           <SignUpInInput />
         </InputContainer>
-        {tab === "pharm" && (
-          <>
-            <InputContainer>
-              <img alt="camera" src="Images/camera.png" />
-              <SignUpInInput placeholder="사업자등록증 사진을 올려주세요" />
-              <button className="find_button">사진업로드</button>
-            </InputContainer>
-            <InputContainer>
-              <img alt="camera" src="Images/camera.png" />
-              <SignUpInInput placeholder="약사면허증 사진을 올려주세요" />
-              <button className="find_button">사진업로드</button>
-            </InputContainer>
-          </>
-        )}
+        <InputContainer>
+          <img alt="camera" src="Images/camera.png" />
+          <SignUpInInput placeholder="사업자등록증 사진을 올려주세요" />
+          <button className="find_button">사진업로드</button>
+        </InputContainer>
+        <InputContainer>
+          <img alt="camera" src="Images/camera.png" />
+          <SignUpInInput placeholder="약사면허증 사진을 올려주세요" />
+          <button className="find_button">사진업로드</button>
+        </InputContainer>
         <CheckContainer>
           <Check type="checkbox" />
           <span className="checkbox_content">
@@ -119,8 +108,8 @@ const SignUpForm = styled.form`
     align-items: center;
     background-color: var(--blue-500);
     border: none;
-    width: 20rem;
-    height: 2.3rem;
+    width: 15rem;
+    height: 2.8rem;
     font-size: 1.1rem;
     color: var(--white);
     margin: auto;
