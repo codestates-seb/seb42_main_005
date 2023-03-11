@@ -56,13 +56,14 @@ const InfoContainer = styled.aside`
   border-right: 1px solid var(--black-100);
   @media (max-width: 768px) {
     height: auto;
-    margin: 0px 0 30px 0;
-    padding: 300px 0px 0px 0px;
+    margin-bottom: 30px;
+    padding: 0px;
     border-right: none;
     border-bottom: 1px solid var(--black-100);
   }
 `;
 const InfoHeader = styled.header`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -70,27 +71,23 @@ const InfoHeader = styled.header`
   gap: 10px;
   border-bottom: 1px solid var(--black-100);
   @media (max-width: 768px) {
-    position: sticky;
-    top: 0px;
-    padding: 40px 10px 10px 10px;
-    background-color: var(--white);
-    z-index: 3;
+    display: none;
   }
 `;
 const InfoTitle = styled.div`
   font-weight: bold;
   font-size: 30px;
+  @media (max-width: 768px) {
+    margin-top: 30px;
+  }
 `;
 const InfoImgContainer = styled.div`
-  display: flex;
   position: relative;
+  display: flex;
   justify-content: center;
   align-items: center;
   padding: 10px 5px;
   border-bottom: 1px solid var(--black-100);
-  @media (max-width: 768px) {
-    padding: 80px 20px 20px 20px;
-  }
 `;
 const Img = styled.img`
   object-fit: cover;
@@ -105,7 +102,7 @@ const LikeButton = styled.span`
   width: 20px;
   @media (max-width: 768px) {
     right: 60px;
-    top: 80px;
+    top: 11px;
   }
 `;
 const InfoInfo = styled.div`
