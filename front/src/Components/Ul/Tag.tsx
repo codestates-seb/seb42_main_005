@@ -13,8 +13,9 @@ export default function Tag({ idx, list }: TagProps) {
 
 const StyledTag = styled.button`
   text-decoration: none;
+  height: 26px;
   font-size: 0.8rem;
-  padding: 0.3rem 0.5rem 0.2rem 0.5rem;
+  padding: 0.1rem 0.5rem 0 0.5rem;
   border-radius: 20px;
   display: inline-block;
   border: 1.6px solid var(--tag-stroke);

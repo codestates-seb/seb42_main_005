@@ -1,3 +1,9 @@
+import PharmLists from "../Components/PharmList/PharmLists";
+
 export default function Home() {
-  return <div></div>;
+  return (
+    <>
+      <PharmLists />
+    </>
+  );
 }

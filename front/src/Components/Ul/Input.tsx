@@ -47,6 +47,7 @@ const StyledInput = styled.div`
     margin-left: calc(1.6rem - 0.75rem);
   }
   input {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Adjusted", "Segoe UI", "Liberation Sans", sans-serif;
     flex: 1 1 0;
     padding: 0.6rem 0.7rem;
     border: 1.2px solid var(--black-100);
@@ -57,6 +58,7 @@ const StyledInput = styled.div`
     transition: 0.2s;
   }
   input::placeholder {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Adjusted", "Segoe UI", "Liberation Sans", sans-serif;
     color: var(--black-300);
   }
   input:focus {
