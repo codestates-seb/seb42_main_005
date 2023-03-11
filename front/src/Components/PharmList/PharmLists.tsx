@@ -12,14 +12,14 @@ import Textarea from "../Ul/Textarea";
 export default function PharmLists() {
   /* 조건부로 할려고 임의로 해놓은 것!
   나중에 데이터 넘어오면 바꿀것*/
-  const [isModalUp, setIsModalUp] = useState(false)
+  const [isModalUp, setIsModalUp] = useState(false);
   const [like, setLike] = useState(false);
 
   return (
     <Container>
-      {isModalUp ? <PharmDetail isModalUp={isModalUp} setIsModalUp={setIsModalUp}
-      like={like} setLike={setLike}
-      /> : null}
+      {isModalUp ? (
+        <PharmDetail isModalUp={isModalUp} setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
+      ) : null}
       <ContainerWrap>
         <SearchContainer>
           <div>
@@ -42,7 +42,7 @@ export default function PharmLists() {
         </PharmHeadContainer>
         <PharmCard>
           <HeartPosition>
-            <HeartButton onClick={()=>setLike(!like)}>
+            <HeartButton onClick={() => setLike(!like)}>
               {like ? (
                 <img className="heart_img" alt="heart" src="Images/Heart.png" />
               ) : (
@@ -50,9 +50,14 @@ export default function PharmLists() {
               )}
             </HeartButton>
           </HeartPosition>
-          <img className="pharm_img" src="./Images/random.png" alt="고심약국" onClick={()=>setIsModalUp(!isModalUp)}/>
+          <img
+            className="pharm_img"
+            src="./Images/random.png"
+            alt="고심약국"
+            onClick={() => setIsModalUp(!isModalUp)}
+          />
           <PharmTitleBox>
-            <PharmName  onClick={()=>setIsModalUp(!isModalUp)}>킹갓 약국</PharmName>
+            <PharmName onClick={() => setIsModalUp(!isModalUp)}>킹갓 약국</PharmName>
             <PharmRank />
           </PharmTitleBox>
           <TagContainer>
@@ -64,7 +69,7 @@ export default function PharmLists() {
         </PharmCard>
         <PharmCard>
           <HeartPosition>
-            <HeartButton onClick={()=>setLike(!like)}>
+            <HeartButton onClick={() => setLike(!like)}>
               {like ? (
                 <img className="heart_img" alt="heart" src="Images/Heart.png" />
               ) : (
@@ -72,9 +77,14 @@ export default function PharmLists() {
               )}
             </HeartButton>
           </HeartPosition>
-          <img className="pharm_img" src="./Images/random.png" alt="고심약국" onClick={()=>setIsModalUp(!isModalUp)}/>
+          <img
+            className="pharm_img"
+            src="./Images/random.png"
+            alt="고심약국"
+            onClick={() => setIsModalUp(!isModalUp)}
+          />
           <PharmTitleBox>
-            <PharmName  onClick={()=>setIsModalUp(!isModalUp)}>킹갓 약국</PharmName>
+            <PharmName onClick={() => setIsModalUp(!isModalUp)}>킹갓 약국</PharmName>
             <PharmRank />
           </PharmTitleBox>
           <TagContainer>
