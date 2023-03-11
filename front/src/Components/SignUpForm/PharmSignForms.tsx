@@ -1,8 +1,23 @@
-import React from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 import Button from "../Ul/Button";
 
 export default function PharmSignForms() {
+  const [businessImg, setBusinessImg]: any = useState(null);
+  const [pharmImg, setPharmImg]: any = useState(null);
+
+  const BusinessImg = useRef<any>();
+  const PharmImg = useRef<any>();
+  const onClickBusinessImg = (e: any) => {
+    e.preventDefault();
+    BusinessImg.current?.click();
+  };
+
+  const onClickPharmImg = (e: any) => {
+    e.preventDefault();
+    PharmImg.current?.click();
+  };
+
   return (
     <Container>
       <SignUpForm>
@@ -48,17 +63,34 @@ export default function PharmSignForms() {
         </InputContainer>
         <InputContainer>
           <img alt="camera" src="Images/camera.png" />
-          <SignUpInInput placeholder="사업자등록증 사진을 올려주세요" />
+          <ImgInput value={businessImg} placeholder="사업자 등록증을 올려주세요" />
           <div className="photo_upload">
-            <Button color="l_blue" size="sm" text="사진업로드" />
+            <Button color="l_blue" size="sm" text="사진업로드" onClick={onClickBusinessImg} />
           </div>
+          <Img
+            type="file"
+            ref={BusinessImg}
+            name="fileName"
+            onChange={(e) => {
+              e.target.files && setBusinessImg(e.target.files[0].name);
+            }}
+          />
         </InputContainer>
+
         <InputContainer>
           <img alt="camera" src="Images/camera.png" />
-          <SignUpInInput placeholder="약사면허증 사진을 올려주세요" />
+          <ImgInput value={pharmImg} placeholder="약사면허증 사진을 올려주세요" />
           <div className="photo_upload">
-            <Button color="l_blue" size="sm" text="사진업로드" />
+            <Button color="l_blue" size="sm" text="사진업로드" onClick={onClickPharmImg} />
           </div>
+          <Img
+            type="file"
+            ref={PharmImg}
+            name="fileName"
+            onChange={(e) => {
+              e.target.files && setPharmImg(e.target.files[0].name);
+            }}
+          />
         </InputContainer>
         <CheckContainer>
           <Check type="checkbox" />
@@ -129,6 +161,7 @@ const InputContainer = styled.div`
     padding-left: 1.2rem;
   }
 `;
+
 const SignUpInInput = styled.input`
   width: 27rem;
   height: 2.7rem;
@@ -139,6 +172,15 @@ const SignUpInInput = styled.input`
   &:focus {
     box-shadow: 0 3px 3px -2px var(--blue-700);
   }
+`;
+const ImgInput = styled.input`
+  width: 27rem;
+  height: 2.7rem;
+  outline: none;
+  font-size: 1.1rem;
+  padding-left: 0.5rem;
+  border: none;
+  color: var(--black-500);
 `;
 const CheckContainer = styled.div`
   display: flex;
@@ -171,4 +213,7 @@ const Check = styled.input`
     background-color: var(--blue-400);
     transition: 0.1s;
   }
+`;
+const Img = styled.input`
+  display: none;
 `;
