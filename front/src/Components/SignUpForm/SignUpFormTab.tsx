@@ -39,8 +39,8 @@ const Tab = styled.div<{ title: string; tab: string }>`
   background-color: ${({ title, tab }) => (title === tab ? "var( --white)" : "var(--black-150)")};
   border: 1px solid var(--black-200);
   border-bottom: none;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
   /* --bs-lg 썼는데 탭 아래 그림자 없앨려고, 
   spread-radius 값을 음수로 함  */
   box-shadow: 0 -1px 4px -3px hsla(0, 0%, 0%, 0.09), 0 -3px 8px -3px hsla(0, 0%, 0%, 0.1),

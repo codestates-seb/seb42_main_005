@@ -14,6 +14,7 @@ export default function SignUp() {
           <h1>회원가입</h1>
         </Title>
         <SignUpFormTab tab={tab} setTab={setTab} />
+
         <SignUpForms tab={tab} />
       </Container>
     </Total>
