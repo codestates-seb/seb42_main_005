@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./Components/Header/Layout";
 import Home from "./Pages/Home";
 import SignUp from "./Pages/SignUp";
 import Login from "./Pages/Login";
@@ -15,16 +16,19 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/sign_up" element={<SignUp />}></Route>
-          <Route path="/sign_out" element={<SignOut />}></Route>
-          <Route path="/login" element={<Login />}></Route>
-          <Route path="/find_pw" element={<FindPW />}></Route>
-          <Route path="/user-my_info" element={<MyInfo />}></Route>
-          <Route path="/pharm-my_pharmacy" element={<MyPharmacy />}></Route>
-          <Route path="/admin-reports" element={<Reports />}></Route>
-          <Route path="/admin-users" element={<Users />}></Route>
-          <Route path="/admin-certify" element={<Certify />}></Route>
+          //? 임시로 로그인 여부와 계정유형 할당 // isLogin= true | false // account=["User", "Pharm", "Admin"]
+          <Route path="/" element={<Layout isLogin={true} account="User" />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/sign_up" element={<SignUp />} />
+            <Route path="/sign_out" element={<SignOut />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/find_pw" element={<FindPW />} />
+            <Route path="/user-my_info" element={<MyInfo />} />
+            <Route path="/pharm-my_pharmacy" element={<MyPharmacy />} />
+            <Route path="/admin-reports" element={<Reports />} />
+            <Route path="/admin-users" element={<Users />} />
+            <Route path="/admin-certify" element={<Certify />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>

@@ -74,7 +74,7 @@ export default function WriteReviewForm({ isReviewFormShown, setIsReviewFormShow
 }
 
 const WriteReviewContainer = styled.section`
-  z-index: 2;
+  z-index: 3;
   position: absolute;
   display: flex;
   flex-direction: column;

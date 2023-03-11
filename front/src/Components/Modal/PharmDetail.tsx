@@ -7,19 +7,26 @@ import WriteReviewForm from "./WriteReviewForm";
 import PharmRank from "../Ul/PharmRank";
 import Button from "../Ul/Button";
 
-export default function PharmDetail() {
+interface Props {
+  isModalUp: boolean;
+  setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
+  like:boolean;
+  setLike:React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function PharmDetail({ isModalUp, setIsModalUp, like, setLike}: Props) {
   const [isReviewFormShown, setIsReviewFormShown] = useState(false);
 
   return (
     <>
-      <ModalBackDrop>
-        <ModalContainer>
+      <ModalBackDrop onClick={() => setIsModalUp(!isModalUp)}>
+        <ModalContainer onClick={(event)=>event.stopPropagation()}>
           <InfoHeader>
             <InfoTitle>킹갓약국</InfoTitle>
             <PharmRank />
           </InfoHeader>
           <Constant>
-            <PharmInfo />
+            <PharmInfo like={like} setLike={setLike}/>
             <ReviewContainer>
               <ReviewTitle>리뷰</ReviewTitle>
               <Reviews>
@@ -47,6 +54,8 @@ export default function PharmDetail() {
 }
 
 const ModalBackDrop = styled.div`
+  z-index: 1;
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -181,19 +190,19 @@ const Reviews = styled.div`
   }
 `;
 const WriteReviewBtnContainer = styled.span`
-  z-index: 1;
+  z-index: 2;
   position: absolute;
   right: 55px;
   bottom: 25px;
   width: 50px;
   @media (max-width: 768px) {
+    z-index: 2;
     position: absolute;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     right: 20px;
     bottom: 20px;
-    z-index: 1;
     width: 490px;
   }
 `;

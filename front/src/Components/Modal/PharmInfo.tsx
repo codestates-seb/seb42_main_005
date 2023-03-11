@@ -4,9 +4,12 @@ import styled from "styled-components";
 import Tag from "../Ul/Tag";
 import PharmRank from "../Ul/PharmRank";
 
-export default function PharmInfo() {
-  const [like, setLike] = useState(false);
+interface Props {
+  like: boolean;
+  setLike: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
+export default function PharmInfo({ like, setLike }: Props) {
   return (
     <InfoContainer>
       <InfoHeader>
@@ -14,7 +17,7 @@ export default function PharmInfo() {
         <PharmRank />
       </InfoHeader>
       <InfoImgContainer>
-        <Img src="/Images/pharm.png"></Img>
+        <Img src="./Images/random.png" alt="고심약국"></Img>
         <LikeButton onClick={() => setLike(!like)}>
           {like ? <img src="./Images/Heart.png" /> : <img src="./Images/UnHeart.png" />}
         </LikeButton>
@@ -47,6 +50,7 @@ export default function PharmInfo() {
 }
 
 const InfoContainer = styled.aside`
+  z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
