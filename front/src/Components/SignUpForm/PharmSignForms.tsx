@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Button from "../Ul/Button";
 
 export default function PharmSignForms() {
   return (
@@ -35,7 +36,9 @@ export default function PharmSignForms() {
         <InputContainer>
           <img alt="live" src="Images/whereyoulive.png" />
           <SignUpInInput placeholder="주소를 입력하세요" />
-          <button className="find_button">주소찾기</button>
+          <div className="adress_find">
+            <Button color="l_blue" size="sm" text="주소 찾기" />
+          </div>
         </InputContainer>
         {/* 생년월일 필요한 페이지를 수정하면서
         가입시 생년월일이 필요없어서 수정할 필요있음! => 백엔드에게 말하기! */}
@@ -46,12 +49,16 @@ export default function PharmSignForms() {
         <InputContainer>
           <img alt="camera" src="Images/camera.png" />
           <SignUpInInput placeholder="사업자등록증 사진을 올려주세요" />
-          <button className="find_button">사진업로드</button>
+          <div className="photo_upload">
+            <Button color="l_blue" size="sm" text="사진업로드" />
+          </div>
         </InputContainer>
         <InputContainer>
           <img alt="camera" src="Images/camera.png" />
           <SignUpInInput placeholder="약사면허증 사진을 올려주세요" />
-          <button className="find_button">사진업로드</button>
+          <div className="photo_upload">
+            <Button color="l_blue" size="sm" text="사진업로드" />
+          </div>
         </InputContainer>
         <CheckContainer>
           <Check type="checkbox" />
@@ -81,21 +88,6 @@ const SignUpForm = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  .find_button {
-    width: 4.3rem;
-    height: 1.6rem;
-    margin-top: 0.6rem;
-    margin-right: 1rem;
-    margin-left: 0.7rem;
-    background-color: var(--blue-500);
-    border-radius: 7px;
-    border: none;
-    color: var(--white);
-    box-shadow: var(--bs-md);
-    &:hover {
-      background-color: var(--blue-400);
-    }
-  }
 
   .signup_button {
     background-color: var(--blue-500);
@@ -127,6 +119,14 @@ const InputContainer = styled.div`
     height: 2rem;
     padding-top: 0.2rem;
     margin-top: 0.2rem;
+    margin-left: 0.4rem;
+  }
+  .photo_upload {
+    padding: 0.7rem 0.8rem;
+  }
+  .adress_find {
+    padding-top: 0.7rem;
+    padding-left: 1.2rem;
   }
 `;
 const SignUpInInput = styled.input`
