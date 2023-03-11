@@ -1,9 +1,10 @@
 //홈화면 옆에 약국 리스트
+import { useState } from "react";
 import styled from "styled-components";
 import { BsSearch } from "react-icons/bs";
 import Tag from "../Ul/Tag";
 import PharmRank from "../Ul/PharmRank";
-
+import PharmDetail from "../Modal/PharmDetail";
 import Input from "../Ul/Input";
 import Textarea from "../Ul/Textarea";
 
@@ -11,11 +12,14 @@ import Textarea from "../Ul/Textarea";
 export default function PharmLists() {
   /* 조건부로 할려고 임의로 해놓은 것!
   나중에 데이터 넘어오면 바꿀것*/
-
-  const heart: boolean = true;
+  const [isModalUp, setIsModalUp] = useState(false)
+  const [like, setLike] = useState(false);
 
   return (
     <Container>
+      {isModalUp ? <PharmDetail isModalUp={isModalUp} setIsModalUp={setIsModalUp}
+      like={like} setLike={setLike}
+      /> : null}
       <ContainerWrap>
         <SearchContainer>
           <div>
@@ -38,17 +42,17 @@ export default function PharmLists() {
         </PharmHeadContainer>
         <PharmCard>
           <HeartPosition>
-            <HeartButton>
-              {heart ? (
+            <HeartButton onClick={()=>setLike(!like)}>
+              {like ? (
                 <img className="heart_img" alt="heart" src="Images/Heart.png" />
               ) : (
                 <img className="unheart_img" alt="unheart" src="Images/UnHeart.png" />
               )}
             </HeartButton>
           </HeartPosition>
-          <img className="pharm_img" />
+          <img className="pharm_img" src="./Images/random.png" alt="고심약국" onClick={()=>setIsModalUp(!isModalUp)}/>
           <PharmTitleBox>
-            <PharmName>킹갓 약국</PharmName>
+            <PharmName  onClick={()=>setIsModalUp(!isModalUp)}>킹갓 약국</PharmName>
             <PharmRank />
           </PharmTitleBox>
           <TagContainer>
@@ -59,9 +63,18 @@ export default function PharmLists() {
           </TagContainer>
         </PharmCard>
         <PharmCard>
-          <img className="pharm_img" />
+          <HeartPosition>
+            <HeartButton onClick={()=>setLike(!like)}>
+              {like ? (
+                <img className="heart_img" alt="heart" src="Images/Heart.png" />
+              ) : (
+                <img className="unheart_img" alt="unheart" src="Images/UnHeart.png" />
+              )}
+            </HeartButton>
+          </HeartPosition>
+          <img className="pharm_img" src="./Images/random.png" alt="고심약국" onClick={()=>setIsModalUp(!isModalUp)}/>
           <PharmTitleBox>
-            <PharmName>킹갓 약국</PharmName>
+            <PharmName  onClick={()=>setIsModalUp(!isModalUp)}>킹갓 약국</PharmName>
             <PharmRank />
           </PharmTitleBox>
           <TagContainer>
@@ -165,6 +178,7 @@ const PharmCard = styled.div`
   border-bottom: 1px solid var(--black-100);
   .pharm_img {
     background-color: var(--black-200);
+    object-fit: cover;
     width: 23.75rem;
     height: 15.625rem;
     display: flex;

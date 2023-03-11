@@ -35,6 +35,8 @@ const StyledInput = styled.div`
   display: flex;
   align-items: center;
   position: relative;
+  height: 80px; // 추가작성한 부분
+  width: 280px; // 추가작성한 부분
   .icon {
     display: flex;
     align-items: center;
