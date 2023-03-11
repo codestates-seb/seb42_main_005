@@ -74,7 +74,7 @@ const InfoHeader = styled.header`
     top: 0px;
     padding: 40px 10px 10px 10px;
     background-color: var(--white);
-    z-index: 2;
+    z-index: 3;
   }
 `;
 const InfoTitle = styled.div`
@@ -89,7 +89,7 @@ const InfoImgContainer = styled.div`
   padding: 10px 5px;
   border-bottom: 1px solid var(--black-100);
   @media (max-width: 768px) {
-    padding: 50px 20px 20px 20px;
+    padding: 80px 20px 20px 20px;
   }
 `;
 const Img = styled.img`
@@ -105,7 +105,7 @@ const LikeButton = styled.span`
   width: 20px;
   @media (max-width: 768px) {
     right: 60px;
-    top: 51px;
+    top: 80px;
   }
 `;
 const InfoInfo = styled.div`

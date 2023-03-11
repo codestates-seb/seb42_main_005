@@ -1,4 +1,5 @@
 //! 모달 컴포넌트 본 창입니다
+import { useState } from "react";
 import styled from "styled-components";
 import PharmInfo from "./PharmInfo";
 import Review from "./Review";
@@ -43,12 +44,11 @@ const ModalContainer = styled.div`
     background-color: var(--white);
     border-radius: 10px;
     ::-webkit-scrollbar-track {
-      visibility: hidden;
+      width: 0.6rem;
+      visibility: visible;
+      border-radius: 0 10px 10px 0;
     }
-    ::-webkit-scrollbar-thumb {
-      visibility: hidden;
-    }
-    :active::-webkit-scrollbar-track {
+    :-webkit-scrollbar-thumb {
       width: 0.6rem;
       visibility: visible;
     }

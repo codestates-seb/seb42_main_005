@@ -19,7 +19,7 @@ export default function Review() {
     reader.readAsDataURL(file);
     return new Promise<void>((resolve) => {
       reader.onload = () => {
-        setImageSrc(reader.result || null); // 파일의 컨텐츠
+        setImageSrc(reader.result || null);
         resolve();
       };
     });
@@ -28,76 +28,13 @@ export default function Review() {
 
   return (
     <ReviewContainer>
-      <WriteReviewBtnContainer className="wide">
-        <Button onClick={() => setIsReviewFormShown(!isReviewFormShown)} color="mint" size="md" text="리뷰쓰기" />
-      </WriteReviewBtnContainer>
-      <ReviewTitle>
-        리뷰
-        <WriteReviewBtnContainer className="narrow">
+      {isReviewFormShown ? null : (
+        <WriteReviewBtnContainer>
           <Button onClick={() => setIsReviewFormShown(!isReviewFormShown)} color="mint" size="md" text="리뷰쓰기" />
         </WriteReviewBtnContainer>
-      </ReviewTitle>
+      )}
+      <ReviewTitle>리뷰</ReviewTitle>
       {/* 리뷰쓰기 버튼을 누르면 떠오르는 리뷰작성란입니다 */}
-      {isReviewFormShown ? (
-        <WriteReviewForm>
-          <InputTop>
-            <Textarea placeholder="무분별한 비방, 비하, 욕설은 지양해주세요 :)" isValid={true} rows={3} icon={true} />
-            <ReviewImgContainer>
-              <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
-              {imageSrc ? (
-                <ReviewImg src={imageSrc} />
-              ) : (
-                <Instead>
-                  <BiPhotoAlbum />
-                </Instead>
-              )}
-              <Label htmlFor="img">
-                <MdOutlineAddAPhoto />
-              </Label>
-            </ReviewImgContainer>
-          </InputTop>
-          <TagSelection>
-            <Tag idx={0} />
-            <Tag idx={1} />
-            <Tag idx={2} />
-            <Tag idx={3} />
-          </TagSelection>
-          <InputBot>
-            <Rating>
-              <StarContainer>
-                <Star
-                  src={`${rate > 0 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
-                  onClick={(e) => setRate(1)}
-                />
-                <Star
-                  src={`${rate > 1 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
-                  onClick={(e) => setRate(2)}
-                />
-                <Star
-                  src={`${rate > 2 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
-                  onClick={(e) => setRate(3)}
-                />
-                <Star
-                  src={`${rate > 3 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
-                  onClick={(e) => setRate(4)}
-                />
-                <Star
-                  src={`${rate > 4 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
-                  onClick={(e) => setRate(5)}
-                />
-              </StarContainer>
-              <RateNum>{rate} / 5</RateNum>
-            </Rating>
-            <Button
-              onClick={() => setIsReviewFormShown(!isReviewFormShown)}
-              color="blue"
-              size="md"
-              text="작성완료"
-              icon={true}
-            />
-          </InputBot>
-        </WriteReviewForm>
-      ) : null}
       <Reviews>
         <ReviewUnit>
           <section>
@@ -163,6 +100,67 @@ export default function Review() {
             </WriteCommentForm>
           ) : null}
         </ReviewUnit>
+
+        {isReviewFormShown ? (
+          <WriteReviewForm>
+            <InputTop>
+              <Textarea placeholder="무분별한 비방, 비하, 욕설은 지양해주세요 :)" isValid={true} rows={3} icon={true} />
+              <ReviewImgContainer>
+                <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
+                {imageSrc ? (
+                  <ReviewImg src={imageSrc} />
+                ) : (
+                  <Instead>
+                    <BiPhotoAlbum />
+                  </Instead>
+                )}
+                <Label htmlFor="img">
+                  <MdOutlineAddAPhoto />
+                </Label>
+              </ReviewImgContainer>
+            </InputTop>
+            <TagSelection>
+              <Tag idx={0} />
+              <Tag idx={1} />
+              <Tag idx={2} />
+              <Tag idx={3} />
+            </TagSelection>
+            <InputBot>
+              <Rating>
+                <StarContainer>
+                  <Star
+                    src={`${rate > 0 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+                    onClick={(e) => setRate(1)}
+                  />
+                  <Star
+                    src={`${rate > 1 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+                    onClick={(e) => setRate(2)}
+                  />
+                  <Star
+                    src={`${rate > 2 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+                    onClick={(e) => setRate(3)}
+                  />
+                  <Star
+                    src={`${rate > 3 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+                    onClick={(e) => setRate(4)}
+                  />
+                  <Star
+                    src={`${rate > 4 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+                    onClick={(e) => setRate(5)}
+                  />
+                </StarContainer>
+                <RateNum>{rate} / 5</RateNum>
+              </Rating>
+              <Button
+                onClick={() => setIsReviewFormShown(!isReviewFormShown)}
+                color="blue"
+                size="md"
+                text="작성완료"
+                icon={true}
+              />
+            </InputBot>
+          </WriteReviewForm>
+        ) : null}
       </Reviews>
     </ReviewContainer>
   );
@@ -192,11 +190,11 @@ const WriteReviewBtnContainer = styled.span`
   bottom: 10px;
   width: 50px;
   z-index: 1;
-  &.wide {
-    display: none;
-  }
   @media (max-width: 768px) {
-    position: static;
+    position: absolute;
+    z-index: auto;
+    right: 15%;
+    bottom: 75px;
     width: 95px;
   }
 `;
