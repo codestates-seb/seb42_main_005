@@ -9,7 +9,8 @@ interface BtnProps {
   url?: string;
   icon?: boolean;
   disabled?: boolean;
-  onClick?: () => void;
+  // onClick?: () => void;
+  onClick?: any;
 }
 
 export default function Button({ text, icon, color, size, url, disabled, onClick }: BtnProps) {
