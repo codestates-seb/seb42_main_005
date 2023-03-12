@@ -12,6 +12,7 @@ public class StoreReviewPageDto {
     private Long reviewIdx;
     private String content;
     private int rating;
+    private String reviewImage;
     private List<String> tags;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
