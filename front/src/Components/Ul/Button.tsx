@@ -9,7 +9,6 @@ interface BtnProps {
   url?: string;
   icon?: boolean;
   disabled?: boolean;
-  // onClick?: () => void;
   onClick?: any;
 }
 
