@@ -1,86 +1,45 @@
+import { useState } from "react";
 import styled from "styled-components";
 import Tag from "../Ul/Tag";
 import PharmRank from "../Ul/PharmRank";
-
-import Input from "../Ul/Input";
-import Textarea from "../Ul/Textarea";
+import PharmDetail from "../Modal/PharmDetail";
 
 export default function PharmItem() {
-  const heart: boolean = true;
-  return (
-    <ItemContainer>
-      <PharmCard>
-        <HeartPosition>
-          <HeartButton>
-            {heart ? (
-              <img className="heart_img" alt="heart" src="Images/Heart.png" />
-            ) : (
-              <img className="unheart_img" alt="unheart" src="Images/UnHeart.png" />
-            )}
-          </HeartButton>
-        </HeartPosition>
-        <img className="pharm_img" />
-        <PharmTitleBox>
-          <PharmName>킹갓 약국</PharmName>
-          <PharmRank />
-        </PharmTitleBox>
-        <TagContainer>
-          <Tag idx={0} />
-          <Tag idx={1} />
-          <Tag idx={2} />
-          <Tag idx={3} />
-        </TagContainer>
-      </PharmCard>
-      <PharmCard>
-        <img className="pharm_img" />
-        <PharmTitleBox>
-          <PharmName>킹갓 약국</PharmName>
-          <PharmRank />
-        </PharmTitleBox>
-        <TagContainer>
-          <Tag idx={0} />
-          <Tag idx={1} />
-          <Tag idx={2} />
-          <Tag idx={3} />
-        </TagContainer>
-      </PharmCard>
-      <PharmCard>
-        <img className="pharm_img" />
-        <PharmTitleBox>
-          <PharmName>킹갓 약국</PharmName>
-          <PharmRank />
-        </PharmTitleBox>
-        <TagContainer>
-          <Tag idx={0} />
-          <Tag idx={1} />
-          <Tag idx={2} />
-          <Tag idx={3} />
-        </TagContainer>
-      </PharmCard>
+  const [isModalUp, setIsModalUp] = useState(false);
+  const [like, setLike] = useState(false);
 
-      <PharmCard>
-        <img className="pharm_img" />
-        <PharmTitleBox>
-          <PharmName>킹갓 약국</PharmName>
-          <PharmRank />
-        </PharmTitleBox>
-        <TagContainer>
-          <Tag idx={0} />
-          <Tag idx={1} />
-          <Tag idx={2} />
-          <Tag idx={3} />
-        </TagContainer>
-      </PharmCard>
-    </ItemContainer>
+  return (
+    <PharmCard>
+      {isModalUp ? (
+        <PharmDetail isModalUp={isModalUp} setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
+      ) : null}
+      <InfoImgContainer>
+        <Img src="./Images/random.png" alt="고심약국" onClick={() => setIsModalUp(!isModalUp)} />
+        <LikeButton onClick={() => setLike(!like)}>
+          {like ? <img src="./Images/Heart.png" /> : <img src="./Images/UnHeart.png" />}
+        </LikeButton>
+      </InfoImgContainer>
+      <PharmTitleBox>
+        <PharmName onClick={() => setIsModalUp(!isModalUp)}>킹갓 약국</PharmName>
+        <PharmRank />
+      </PharmTitleBox>
+      <TagContainer>
+        <Tag idx={0} />
+        <Tag idx={1} />
+        <Tag idx={2} />
+        <Tag idx={3} />
+      </TagContainer>
+    </PharmCard>
   );
 }
-const ItemContainer = styled.div``;
+
 //약국카드
 const PharmCard = styled.div`
   width: 25rem;
   height: 25rem;
   display: flex;
   flex-direction: column;
+  margin-top: 35px;
   border-bottom: 1px solid var(--black-100);
   .pharm_img {
     background-color: var(--black-200);
@@ -92,18 +51,30 @@ const PharmCard = styled.div`
     border-radius: 10px;
   }
 `;
-//하트 버튼!!
-const HeartPosition = styled.div`
-  position: relative;
-`;
-const HeartButton = styled.button`
-  all: unset;
-  cursor: pointer;
 
-  img {
-    position: absolute;
-    right: 1rem;
-    top: 2.5rem;
+const InfoImgContainer = styled.div`
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 5px;
+  border-bottom: 1px solid var(--black-100);
+`;
+const Img = styled.img`
+  object-fit: cover;
+  width: 23.75rem;
+  height: 15.625rem;
+  border-radius: 5px;
+`;
+const LikeButton = styled.span`
+  position: absolute;
+  right: 36px;
+  top: 12px;
+  width: 20px;
+  @media (max-width: 768px) {
+    right: 60px;
+    top: 11px;
   }
 `;
 
@@ -111,10 +82,12 @@ const HeartButton = styled.button`
 const PharmTitleBox = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-top: 15px;
   padding: 0 15px;
 `;
 
 const PharmName = styled.div`
+  cursor: pointer;
   font-size: 1.56rem;
   font-weight: bold;
 `;

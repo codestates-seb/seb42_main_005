@@ -10,23 +10,23 @@ import Button from "../Ul/Button";
 interface Props {
   isModalUp: boolean;
   setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
-  like:boolean;
-  setLike:React.Dispatch<React.SetStateAction<boolean>>;
+  like: boolean;
+  setLike: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function PharmDetail({ isModalUp, setIsModalUp, like, setLike}: Props) {
+export default function PharmDetail({ isModalUp, setIsModalUp, like, setLike }: Props) {
   const [isReviewFormShown, setIsReviewFormShown] = useState(false);
 
   return (
     <>
       <ModalBackDrop onClick={() => setIsModalUp(!isModalUp)}>
-        <ModalContainer onClick={(event)=>event.stopPropagation()}>
+        <ModalContainer onClick={(event) => event.stopPropagation()}>
           <InfoHeader>
             <InfoTitle>킹갓약국</InfoTitle>
             <PharmRank />
           </InfoHeader>
           <Constant>
-            <PharmInfo like={like} setLike={setLike}/>
+            <PharmInfo like={like} setLike={setLike} />
             <ReviewContainer>
               <ReviewTitle>리뷰</ReviewTitle>
               <Reviews>
@@ -61,6 +61,8 @@ const ModalBackDrop = styled.div`
   align-items: center;
   height: 100vh;
   width: 100vw;
+  top: 0;
+  left: 0;
   background-color: var(--modal-backdrop);
 `;
 const ModalContainer = styled.div`
@@ -69,6 +71,7 @@ const ModalContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  top: 30px;
   height: 600px;
   width: 940px;
   background-color: var(--white);

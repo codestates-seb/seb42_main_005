@@ -8,8 +8,6 @@ export default function PharmLists() {
   /* 조건부로 할려고 임의로 해놓은 것!
   나중에 데이터 넘어오면 바꿀것*/
 
-  const heart: boolean = true;
-
   return (
     <ListContainer>
       <ContainerWrap>
@@ -39,7 +37,11 @@ export default function PharmLists() {
             </ButtonContainer>
           </PharmHeadContainer>
           <PharmItemContainer>
-            <PharmItem></PharmItem>
+            <PharmItem />
+            <PharmItem />
+            <PharmItem />
+            <PharmItem />
+            <PharmItem />
           </PharmItemContainer>
         </PharmContainer>
       </ContainerWrap>
