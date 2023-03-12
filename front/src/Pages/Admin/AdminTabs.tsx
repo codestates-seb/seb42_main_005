@@ -8,9 +8,15 @@ interface ThisTab {
 export default function AdminTabs({ current }: ThisTab) {
   return (
     <TabContainer>
-      <Tabs to="/admin-reports" className={current==="reports"?"this":""}>신고리뷰 관리</Tabs>
-      <Tabs to="/admin-users" className={current==="users"?"this":""}>전체회원 관리</Tabs>
-      <Tabs to="/admin-certify" className={current==="certify"?"this":""}>약사인증 관리</Tabs>
+      <Tabs to="/admin-reports" className={current === "reports" ? "this" : ""}>
+        신고리뷰 관리
+      </Tabs>
+      <Tabs to="/admin-users" className={current === "users" ? "this" : ""}>
+        전체회원 관리
+      </Tabs>
+      <Tabs to="/admin-certify" className={current === "certify" ? "this" : ""}>
+        약사인증 관리
+      </Tabs>
     </TabContainer>
   );
 }
@@ -18,15 +24,18 @@ export default function AdminTabs({ current }: ThisTab) {
 const TabContainer = styled.div`
   display: flex;
   justify-content: flex-start;
-  flex-grow: 1;
-  height: 3rem;
+  align-items: flex-end;
+  /* flex-grow: 1; */
+  height: 70px;
+  padding-top: 10px;
 `;
 const Tabs = styled(Link)`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  margin-top: 0.5rem;
-  padding: 0 3rem 0 1.5rem;
+  padding-left: 20px;
+  width: 150px;
+  height: 50px;
   text-decoration: none;
   font-size: 18px;
   font-weight: bold;

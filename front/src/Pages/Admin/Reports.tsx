@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import AdminTabs from "./AdminTabs"
+import AdminTabs from "./AdminTabs";
 import Button from "../../Components/Ul/Button";
 import CheckBox from "../../Components/Ul/CheckBox";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
@@ -66,7 +66,7 @@ export default function Reports() {
   return (
     <WholePage>
       <Wrapper>
-        <AdminTabs current="reports"/>
+        <AdminTabs current="reports" />
         <Page>
           <Header>
             <span>신고리뷰관리</span>
@@ -77,7 +77,9 @@ export default function Reports() {
           </Header>
           <Table>
             <Label>
-              <CheckBox />
+              <Values className="checkBox">
+                <CheckBox />
+              </Values>
               <Values className="content">내용</Values>
               <Values className="email">email</Values>
               <Values className="writtenAt">작성일</Values>
@@ -87,7 +89,9 @@ export default function Reports() {
               <BelowLable>
                 {dummy.map((data) => (
                   <Content>
-                    <CheckBox />
+                    <Values className="checkBox">
+                      <CheckBox />
+                    </Values>
                     <Values className="content">{data.content}</Values>
                     <Values className="email">{data.email}</Values>
                     <Values className="writtenAt">{data.writtenAt}</Values>
@@ -116,10 +120,10 @@ const WholePage = styled.div`
   height: calc(100vh - 52px);
 `;
 const Wrapper = styled.main`
-  /*  */
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin: 0 20px;
   width: 80rem;
   height: 40rem;
   overflow: hidden;
@@ -131,8 +135,8 @@ const Wrapper = styled.main`
 const Page = styled.article`
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  padding: 15px 50px;
+  height: 40rem;
+  padding: 15px 55px;
   border-top: 1.5px solid var(--black-100);
   border-radius: 0 10px 0 0;
   background-color: var(--white);
@@ -141,10 +145,13 @@ const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 20px 5px 20px 20px;
   span {
     font-size: 20px;
     font-weight: bold;
+  }
+  @media (max-width: 768px) {
+    padding: 20px 0px 20px 20px;
   }
 `;
 const ButtonContainer = styled.div`
@@ -154,12 +161,23 @@ const ButtonContainer = styled.div`
 const Table = styled.figure`
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  height: 450px;
+  overflow-x: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  @media (max-width: 768px) {
+    overflow-x: scroll;
+    ::-webkit-scrollbar {
+      display: block;
+    }
+  }
 `;
 const Label = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  width: calc(1150px + 0.6rem);
   padding: 10px calc(20px + 0.6rem) 10px 20px;
   font-size: 1.2rem;
   font-weight: bolder;
@@ -172,6 +190,7 @@ const BelowLable = styled.div`
   display: flex;
   flex-direction: column;
   height: 26rem;
+  width: calc(1150px + 0.6rem);
   overflow-y: scroll;
   background-color: var(--black-050);
 `;
@@ -204,18 +223,21 @@ const Content = styled.div`
 const Values = styled.span`
   display: flex;
   justify-content: center;
+  &.checkBox {
+    padding-left: 7px;
+  }
   &.content {
-    width: 30rem;
+    width: 400px;
     white-space: normal;
     word-break: break-all;
   }
   &.email {
-    width: 20rem;
+    width: 300px;
   }
   &.writtenAt {
-    width: 10rem;
+    width: 150px;
   }
   &.reports {
-    width: 5rem;
+    width: 60px;
   }
 `;
