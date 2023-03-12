@@ -1,16 +1,14 @@
 package com.project.mainproject.review.dto;
 
-import lombok.AllArgsConstructor;
+import com.project.mainproject.review.enums.ToggleStatus;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class SimpleReviewDto {
-    private Long storeIdx;
+public class PostReviewHateDto {
     private Long reviewIdx;
+    private Long storeIdx;
     private Long userIdx;
+    private Boolean hate;
 }
