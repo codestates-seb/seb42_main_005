@@ -25,13 +25,38 @@ public interface ControllerTestHelper<T> {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
     }
+    default RequestBuilder postRequestBuilder(String url) {
+        return  post(url)
+                .accept(MediaType.APPLICATION_JSON);
+    }
+    default RequestBuilder postRequestBuilder(String url, long resourceId) {
+        return post(url, resourceId)
+                .accept(MediaType.APPLICATION_JSON);
+    }
+    default RequestBuilder postRequestBuilder(String url, long resourceId, String content) {
+        return post(url, resourceId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+    }
+    default RequestBuilder postRequestBuilder(String url, long resourceId, long resourceId2, String content) {
+        return post(url, resourceId, resourceId2)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+    }
 
     default RequestBuilder patchRequestBuilder(String url, long resourceId, String content) {
         return patch(url, resourceId)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
-
+    }
+    default RequestBuilder patchRequestBuilder(String url, long resourceId, long resourceId2, String content) {
+        return patch(url, resourceId,resourceId2)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
     }
 
     default RequestBuilder patchRequestBuilder(String uri, String content) {
@@ -58,8 +83,21 @@ public interface ControllerTestHelper<T> {
                 .accept(MediaType.APPLICATION_JSON);
     }
 
+    default RequestBuilder getRequestBuilder(String url, MultiValueMap<String, String> queryParams,long resourceId) {
+        return get(url,resourceId)
+                .params(queryParams)
+                .accept(MediaType.APPLICATION_JSON);
+    }
+    default RequestBuilder getRequestBuilder(String url,long resourceId,long resourceId2) {
+        return get(url,resourceId,resourceId2)
+                .accept(MediaType.APPLICATION_JSON);
+    }
+
     default RequestBuilder deleteRequestBuilder(String url, long resourceId) {
         return delete(url, resourceId);
+    }
+    default RequestBuilder deleteRequestBuilder(String url, long resourceId, long resourceId2) {
+        return delete(url, resourceId,resourceId2);
     }
 
     default RequestBuilder deleteRequestBuilder(String uri) {
@@ -106,10 +144,10 @@ public interface ControllerTestHelper<T> {
                 fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보").optional(),
                 fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("페이지 번호").optional(),
                 fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 사이즈").optional(),
-                fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 건 수").optional(),
-                fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수").optional(),
-                fieldWithPath("pageInfo.isFirst").type(JsonFieldType.BOOLEAN).description("첫 페이지 여부").optional(),
-                fieldWithPath("pageInfo.isFinish").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부").optional()
+                fieldWithPath("pageInfo.totalElement").type(JsonFieldType.NUMBER).description("전체 건 수").optional(),
+                fieldWithPath("pageInfo.totalPage").type(JsonFieldType.NUMBER).description("전체 페이지 수").optional(),
+                fieldWithPath("pageInfo.first").type(JsonFieldType.BOOLEAN).description("첫 페이지 여부").optional(),
+                fieldWithPath("pageInfo.finish").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부").optional()
         );
     }
 
