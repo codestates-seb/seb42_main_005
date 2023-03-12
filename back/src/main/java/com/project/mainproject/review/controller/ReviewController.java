@@ -53,7 +53,7 @@ public class ReviewController {
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
         SingleResponseDto build = CommonStub.getSingleResponseStub();
         build.setResponse(SimpleReviewDto.builder().reviewIdx(1L).storeIdx(storeIdx).userIdx(postDto.getUserIdx()).build());
-
+        System.out.println("location = " + location);
         return ResponseEntity.created(location).body(build);
     }
 

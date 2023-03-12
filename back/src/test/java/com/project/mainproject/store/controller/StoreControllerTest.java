@@ -72,13 +72,17 @@ class StoreControllerTest implements StoreControllerTestHelper {
                 )
                 .andReturn();
     }
+
     @Test
     void getStoreDetailTest() throws Exception {
         Long storeIdx = 1L;
         ResultActions actions = mockMvc.perform(getRequestBuilder(getURI(),storeIdx));
         actions
                 .andExpect(status().isOk())
+                .andDo(print())
                 .andExpect(jsonPath("$.response.storeIdx").value(1L))
+                .andExpect(jsonPath("$.response.name").value("주사랑믿음약국"))
+                .andExpect(jsonPath("$.response.tel").value("010-1234-1234"))
                 .andExpect(jsonPath("$.httpCode").value(200))
                 .andDo(
                         MockMvcRestDocumentation.document(
@@ -97,6 +101,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
                 )
                 .andReturn();
     }
+
     @Test
     void pickedStoreTest() throws Exception {
         Long storeIdx = 1L;
@@ -104,6 +109,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
         actions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response.storeIdx").value(1L))
+                .andExpect(jsonPath("$.httpCode").value(200))
                 .andDo(
                         MockMvcRestDocumentation.document(
                                 "get-pickedStore",

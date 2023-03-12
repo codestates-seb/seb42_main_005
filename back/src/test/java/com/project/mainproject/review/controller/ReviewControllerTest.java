@@ -111,6 +111,7 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
         ResultActions actions = mockMvc.perform(postRequestBuilder(getOneURI(), storeIdx, content));
         actions
                 .andExpect(status().isCreated())
+                .andExpect(header().string("location","/api/store/"+storeIdx +"/review"))
                 .andDo(
                         document(
                                 "post-review",
@@ -286,7 +287,6 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
     @Test
     void createReviewPlus() throws Exception {
 
-
         PostReportReviewPlusDto postDto = new PostReportReviewPlusDto(userIdx,"이곳은 대댓글 본문 입니다. 뿡뿡");
             String content = toJsonContent(postDto);
 
@@ -316,3 +316,8 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
                     .andReturn();
         }
 }
+/*
+* TODO:
+*  1. createReview ,updateReview location 정보 해당 리뷰 상세 페이지로 가게 할 것인가 or 기존의 전체 페이징 리뷰 처리로 가게 할 것인가 체크
+*  2.
+* */
