@@ -7,6 +7,6 @@ import java.util.List;
 
 @Getter
 @Builder
-public class ListStoreReviewPage {
-    List<StoreReviewPageDto> storeReview;
+public class ListGetStoreReviewDto {
+    private List<StoreReviewPageDto> storeReview;
 }
