@@ -12,7 +12,8 @@ export default function PharmRank() {
     <Container>
       <div>{starPoint ? <BsStarFill className="select_star" /> : <BsStar className="unSelect_star" />}</div>
       <Star> {starPoint}/5 </Star>
-      <Selected>찜콩 45 /</Selected>
+      <Selected>찜콩 45</Selected>
+      <span className="partition" />
       <TotalReview> 리뷰 113</TotalReview>
     </Container>
   );
@@ -31,17 +32,23 @@ const Container = styled.div`
     font-size: 1.2rem;
     color: var(--mint);
   }
+  .partition {
+    width: 1.4px;
+    height: 1rem;
+    background-color: var(--black-300);
+    margin: 0 12px;
+  }
 `;
 
 const Star = styled.span`
   font-weight: bold;
   font-size: 1.3rem;
-  margin-right: 1.9rem;
+  margin-right: 1.2rem;
+  padding-bottom: 2px;
 `;
 
 const Selected = styled.span`
   color: var(--black-400);
-  margin-right: 0.7rem;
 `;
 const TotalReview = styled.span`
   color: var(--black-400);
