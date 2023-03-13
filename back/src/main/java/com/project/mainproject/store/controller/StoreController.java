@@ -3,6 +3,7 @@ package com.project.mainproject.store.controller;
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.dummy.CommonStub;
+import com.project.mainproject.store.dto.FilterTagDto;
 import com.project.mainproject.store.dto.GetStoreHomeListDto;
 import com.project.mainproject.store.dto.StoreIdxResponse;
 import com.project.mainproject.store.dummy.StoreStub;
