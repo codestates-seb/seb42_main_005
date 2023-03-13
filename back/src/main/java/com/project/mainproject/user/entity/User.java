@@ -34,7 +34,6 @@ public class User extends Auditable {
     private String email;
     @Column(name = "USER_NAME")
     private String name;
-    private LocalDateTime DOB;
     private String profileImage;
     private UserStatus userStatus;
     private LocalDateTime lastConnectedDate;
@@ -43,19 +42,17 @@ public class User extends Auditable {
     @CollectionTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "USER_IDX"))
     private List<String> role;
     @Builder
-    public User(String userId, String password, String email, String name, LocalDateTime DOB) {
+    public User(String userId, String password, String email, String name) {
         this.userId = userId;
         this.password = password;
         this.email = email;
         this.name = name;
-        this.DOB = DOB;
     }
     public User(User user) {
         this.userId = user.getUserId();
         this.password = user.getPassword();
         this.email = user.getEmail();
         this.name = user.getName();
-        this.DOB = user.getDOB();
     }
 
 
