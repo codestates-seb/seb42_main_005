@@ -25,4 +25,5 @@ public interface UserControllerTestHelper extends ControllerTestHelper {
         return Arrays.asList(parameterWithName("userIdx").description("회원 식별자"));
     }
 
+
 }

@@ -64,7 +64,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
                                         getDefaultRequestParameterDescriptors()
                                 ),
                                 PayloadDocumentation.responseFields(
-                                        getFullPageResponseDescriptor(
+                                        getFullPageResponseDescriptors(
                                                 getStoreHomeResponseDescriptors("storeHome")
                                         )
                                 )
@@ -93,7 +93,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
                                         getStorePathParameterDescriptor()
                                 ),
                                 PayloadDocumentation.responseFields(
-                                        getFullResponseDescriptor(
+                                        getFullResponseDescriptors(
                                                 getStoreHomeResponseDescriptors("")
                                         )
                                 )
@@ -119,7 +119,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
                                         getStorePathParameterDescriptor()
                                 ),
                                 PayloadDocumentation.responseFields(
-                                        getFullResponseDescriptor(
+                                        getFullResponseDescriptors(
                                                 getStoreIdxDescriptors()
                                         )
                                 )

@@ -110,32 +110,29 @@ public interface ControllerTestHelper<T> {
         return content;
     }
 
-    default String getDataParentPath(DataResponseType dataResponseType) {
-        return "response.";
-//        return dataResponseType == DataResponseType.SINGLE ? "response." : "response[].";
-    }
-
     default List<FieldDescriptor> getFullResponseDescriptors(List<FieldDescriptor> dataResponseFieldDescriptors) {
+        Stream<FieldDescriptor> resultResponseDescriptors = getResultResponseDescriptors().stream();
         Stream<FieldDescriptor> defaultResponseDescriptors = getDefaultResponseDescriptors(JsonFieldType.OBJECT).stream();
         Stream<FieldDescriptor> dataResponseDescriptors = dataResponseFieldDescriptors.stream();
-        return Stream.concat(defaultResponseDescriptors, dataResponseDescriptors)
+        return Stream.of(resultResponseDescriptors,defaultResponseDescriptors, dataResponseDescriptors).flatMap(data->data)
                 .collect(Collectors.toList());
     }
 
     default List<FieldDescriptor> getFullPageResponseDescriptors(List<FieldDescriptor> dataResponseFieldDescriptors) {
-        Stream<FieldDescriptor> defaultResponseDescriptors = getDefaultResponseDescriptors(JsonFieldType.ARRAY).stream();
+        Stream<FieldDescriptor> resultResponseDescriptors = getResultResponseDescriptors().stream();
+        Stream<FieldDescriptor> defaultResponseDescriptors = getDefaultResponseDescriptors(JsonFieldType.OBJECT).stream();
         Stream<FieldDescriptor> dataResponseDescriptors = dataResponseFieldDescriptors.stream();
         Stream<FieldDescriptor> pageResponseDescriptors = getPageResponseDescriptors().stream();
 
         Stream<FieldDescriptor> mergedStream =
-                Stream.of(defaultResponseDescriptors, dataResponseDescriptors, pageResponseDescriptors)
+                Stream.of(resultResponseDescriptors, defaultResponseDescriptors, dataResponseDescriptors, pageResponseDescriptors)
                         .flatMap(descriptorStream -> descriptorStream);
         return mergedStream.collect(Collectors.toList());
     }
 
     default List<FieldDescriptor> getDefaultResponseDescriptors(JsonFieldType jsonFieldTypeForData) {
         return Arrays.asList(
-                fieldWithPath("data").type(jsonFieldTypeForData).description("결과 데이터").optional()
+                fieldWithPath("response").type(jsonFieldTypeForData).description("결과 데이터").optional()
         );
     }
 
@@ -146,17 +143,36 @@ public interface ControllerTestHelper<T> {
                 fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 사이즈").optional(),
                 fieldWithPath("pageInfo.totalElement").type(JsonFieldType.NUMBER).description("전체 건 수").optional(),
                 fieldWithPath("pageInfo.totalPage").type(JsonFieldType.NUMBER).description("전체 페이지 수").optional(),
-                fieldWithPath("pageInfo.first").type(JsonFieldType.BOOLEAN).description("첫 페이지 여부").optional(),
-                fieldWithPath("pageInfo.finish").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부").optional()
+                fieldWithPath("pageInfo.isFirst").type(JsonFieldType.BOOLEAN).description("첫 페이지 여부").optional(),
+                fieldWithPath("pageInfo.isFinish").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부").optional()
         );
     }
 
     default List<ParameterDescriptor> getDefaultRequestParameterDescriptors() {
         return List.of(
-                parameterWithName("page").description("조회 페이지"),
-                parameterWithName("size").description("페이지 당 건 수")
+                parameterWithName("page").description("조회 페이지 \n 0부터 시작").optional(),
+                parameterWithName("size").description("페이지 당 건 수 \n 기본 값은 ").optional(),
+                parameterWithName("sort").description("정렬 기준").optional(),
+                parameterWithName("direction").description("정렬 오름차순 ASC / 내림차순 DESC \n 기본 값은 ASC").optional()
         );
     }
+    default List<FieldDescriptor> getResultResponseDescriptors() {
+        return Arrays.asList(
+                fieldWithPath("httpCode").type(JsonFieldType.NUMBER).description("결과 코드").optional(),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지").optional()
+        );
+    }
+
+    default List<FieldDescriptor> getDefaultWrapperDescriptors(String fieldName,JsonFieldType jsonFieldTypeForData,String description) {
+        return Arrays.asList(
+                fieldWithPath(fieldName).type(jsonFieldTypeForData).description(description).optional()
+        );
+    }
+
+    default String getDataParentPath(DataResponseType dataResponseType,String fieldName) {
+        return dataResponseType == DataResponseType.SINGLE ? fieldName.concat(".") : fieldName.concat("[].");
+    }
+
     enum DataResponseType {
         SINGLE, LIST
     }
