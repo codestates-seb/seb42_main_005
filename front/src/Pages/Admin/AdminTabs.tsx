@@ -25,9 +25,6 @@ const TabContainer = styled.header`
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
-  /* flex-grow: 1; */
-  height: 70px;
-  padding-top: 10px;
 `;
 const Tabs = styled(Link)`
   display: flex;
