@@ -112,7 +112,7 @@ export default function Reports() {
   );
 }
 
-const WholePage = styled.div`
+const WholePage = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -132,7 +132,7 @@ const Wrapper = styled.main`
   box-shadow: var(--wrapped-shadow);
   background-color: var(--black-075);
 `;
-const Page = styled.article`
+const Page = styled.section`
   display: flex;
   flex-direction: column;
   height: 40rem;
@@ -154,7 +154,7 @@ const Header = styled.header`
     padding: 20px 0px 20px 20px;
   }
 `;
-const ButtonContainer = styled.div`
+const ButtonContainer = styled.section`
   display: flex;
   gap: 20px;
 `;
@@ -173,7 +173,7 @@ const Table = styled.figure`
     }
   }
 `;
-const Label = styled.div`
+const Label = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -186,7 +186,7 @@ const Label = styled.div`
   border-bottom: 1.5px solid var(--black-100);
   background-color: var(--black-050);
 `;
-const BelowLable = styled.div`
+const BelowLable = styled.section`
   display: flex;
   flex-direction: column;
   height: 26rem;
@@ -194,7 +194,7 @@ const BelowLable = styled.div`
   overflow-y: scroll;
   background-color: var(--black-050);
 `;
-const Instead = styled.div`
+const Instead = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -209,7 +209,7 @@ const Instead = styled.div`
     font-size: 2rem;
   }
 `;
-const Content = styled.div`
+const Content = styled.article`
   display: flex;
   justify-content: space-between;
   align-items: center;

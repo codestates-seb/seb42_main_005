@@ -168,9 +168,7 @@ const Select = styled.select`
   border: 1.2px solid var(--l_button-blue);
   :focus { outline: none}
 `;
-const Option = styled.option`
-
-`;
+const Option = styled.option``;
 const Table = styled.figure`
   display: flex;
   flex-direction: column;
