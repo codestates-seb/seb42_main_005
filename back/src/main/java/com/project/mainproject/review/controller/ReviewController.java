@@ -2,16 +2,17 @@ package com.project.mainproject.review.controller;
 
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
+import com.project.mainproject.dto.UserIdxRequestDto;
 import com.project.mainproject.dummy.CommonStub;
-import com.project.mainproject.review.dto.PostCreateReviewDto;
-import com.project.mainproject.review.dto.SimpleReviewDto;
+import com.project.mainproject.review.dto.*;
 import com.project.mainproject.review.dummy.ReviewStub;
+import com.project.mainproject.review.dto.PostReportReviewPlusDto;
 import com.project.mainproject.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
 import java.net.URI;
 
 @RestController
@@ -28,21 +29,31 @@ public class ReviewController {
         //TODO : Service 구현
 
         PageResponseDto build = CommonStub.getPageResponseStub();
-        build.setResponse(ReviewStub.getStoreReviewPageListStub());
+        build.setResponse(ListGetStoreReviewDto.builder().storeReview(ReviewStub.getStoreReviewPageListStub()).build());
         return ResponseEntity.ok().body(build);
+    }
+
+    /*
+    * 약국 정보 상세
+    * */
+    @GetMapping("store/{storeIdx}/review/{reviewIdx}")
+    public ResponseEntity getStoreReviewDetail(@PathVariable Long storeIdx, @PathVariable Long reviewIdx) {
+        SingleResponseDto build = CommonStub.getSingleResponseStub();
+        build.setResponse(ReviewStub.storeReviewDetailDto());
+        return ResponseEntity.ok(build);
     }
 
     /*
      *  리뷰 작성
      * */
-    @PostMapping("/{storeIdx}/review")
+    @PostMapping("store/{storeIdx}/review")
     public ResponseEntity createReview(@PathVariable Long storeIdx, @RequestBody PostCreateReviewDto postDto) {
         //TODO : Service 구현
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
         SingleResponseDto build = CommonStub.getSingleResponseStub();
-        build.setResponse(storeIdx);
-
+        build.setResponse(SimpleReviewDto.builder().reviewIdx(1L).storeIdx(storeIdx).userIdx(postDto.getUserIdx()).build());
+        System.out.println("location = " + location);
         return ResponseEntity.created(location).body(build);
     }
 
@@ -50,13 +61,13 @@ public class ReviewController {
      *  리뷰 수정
      * */
     @PatchMapping("/store/{storeIdx}/review/{reviewIdx}")
-    public ResponseEntity updateReview(@PathVariable Long storeIdx, @PathVariable Long reviewIdx, @RequestBody PostCreateReviewDto postDto) {
+    public ResponseEntity updateReview(@PathVariable Long storeIdx, @PathVariable Long reviewIdx, @RequestBody PostUpdateReviewDto postDto) {
         //TODO : Service 구현
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
 
         SingleResponseDto build = CommonStub.getSingleResponseStub();
-        build.setResponse(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).build());
+        build.setResponse(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).userIdx(postDto.getUserIdx()).build());
 
         return ResponseEntity.ok().header("Location", location.toString())
                 .body(build);
@@ -79,13 +90,13 @@ public class ReviewController {
      *  리뷰 좋아요
      * */
     @PostMapping("/store/{storeIdx}/review/{reviewIdx}/like")
-    public ResponseEntity reviewLike(@PathVariable Long storeIdx, @PathVariable Long reviewIdx) {
+    public ResponseEntity reviewLike(@PathVariable Long storeIdx, @PathVariable Long reviewIdx, @RequestBody UserIdxRequestDto userIdxRequestDto) {
         //TODO : Service 구현
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review/" + reviewIdx);
 
         SingleResponseDto build = CommonStub.getSingleResponseStub();
-        build.setResponse(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).build());
+        build.setResponse(PostReviewLikeDto.builder().userIdx(userIdxRequestDto.getUserIdx()).like(true).reviewIdx(reviewIdx).storeIdx(storeIdx).build());
 
         return ResponseEntity.ok().header("Location", location.toString()).body(build);
     }
@@ -94,28 +105,28 @@ public class ReviewController {
      *  리뷰 싫어요
      * */
     @PostMapping("/store/{storeIdx}/review/{reviewIdx}/hate")
-    public ResponseEntity reviewHate(@PathVariable Long storeIdx, @PathVariable Long reviewIdx) {
+    public ResponseEntity reviewHate(@PathVariable Long storeIdx, @PathVariable Long reviewIdx,@RequestBody UserIdxRequestDto userIdxRequestDto) {
         //TODO : Service 구현
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review/" + reviewIdx);
 
         SingleResponseDto build = CommonStub.getSingleResponseStub();
-        build.setResponse(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).build());
+        build.setResponse(PostReviewHateDto.builder().hate(true).reviewIdx(reviewIdx).storeIdx(storeIdx).userIdx(userIdxRequestDto.getUserIdx()).build());
 
-        return ResponseEntity.created(location).body(build);
+        return ResponseEntity.ok().header("Location", location.toString()).body(build);
     }
 
     /*
      *  리뷰 신고
      * */
     @PostMapping("/store/{storeIdx}/review/{reviewIdx}/report")
-    public ResponseEntity reportReview(@PathVariable Long storeIdx, @PathVariable Long reviewIdx, @RequestBody String content) {
+    public ResponseEntity reportReview(@PathVariable Long storeIdx, @PathVariable Long reviewIdx, @RequestBody PostReportReviewPlusDto postReportReviewPlusDto) {
         //TODO : 서비스단 구현
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review/" + reviewIdx);
 
         SingleResponseDto build = CommonStub.getSingleResponseStub();
-        build.setResponse(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).build());
+        build.setResponse(ReportReviewResponseDto.builder().userIdx(postReportReviewPlusDto.getUserIdx()).storeIdx(storeIdx).reviewIdx(reviewIdx).content(postReportReviewPlusDto.getContent()).build());
 
         return ResponseEntity.ok().header("Location", location.toString())
                 .body(build);
@@ -125,13 +136,13 @@ public class ReviewController {
      *  대댓글 달기
      * */
     @PostMapping("/store/{storeIdx}/review/{reviewIdx}")
-    public ResponseEntity createReviewPlus(@PathVariable Long storeIdx, @PathVariable Long reviewIdx, @RequestBody String content) {
+    public ResponseEntity createReviewPlus(@PathVariable Long storeIdx, @PathVariable Long reviewIdx, @RequestBody PostReportReviewPlusDto postReportReviewPlusDto) {
         //TODO : 서비스단 구현
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review/" + reviewIdx);
 
         SingleResponseDto build = CommonStub.getSingleResponseStub();
-        build.setResponse(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).build());
+        build.setResponse(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).userIdx(1L).build());
 
         return ResponseEntity.created(location).body(build);
     }

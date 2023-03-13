@@ -66,7 +66,7 @@ class UserControllerTest implements UserControllerTestHelper {
                                 getRequestPreProcessor(),
                                 getResponsePreProcessor(),
                                 responseFields(
-                                        getFullResponseDescriptors(new ArrayList<FieldDescriptor>())
+                                        getSingleResponseDescriptors(new ArrayList<FieldDescriptor>())
                                 ),
                                 requestFields(getDefaultNormalUserSignUpRequestDescriptors()),
                                 responseHeaders(
@@ -91,7 +91,7 @@ class UserControllerTest implements UserControllerTestHelper {
                                 getRequestPreProcessor(),
                                 getResponsePreProcessor(),
                                 responseFields(
-                                        getFullResponseDescriptors(new ArrayList<FieldDescriptor>())
+                                        getSingleResponseDescriptors(new ArrayList<FieldDescriptor>())
                                 ),
 //                                requestParts(List.of(
 //                                        partWithName("businessCertificate").description("사업자 등록증 이미지 파일"),
@@ -123,7 +123,7 @@ class UserControllerTest implements UserControllerTestHelper {
                                 pathParameters(getMemberRequestPathParameterDescriptor()),
                                 requestFields(getDefaultUserFindPasswordRequestDescriptors()),
                                 responseFields(
-                                        getFullResponseDescriptors(new ArrayList<FieldDescriptor>())
+                                        getSingleResponseDescriptors(new ArrayList<FieldDescriptor>())
                                 )
                         ));
     }
@@ -146,7 +146,7 @@ class UserControllerTest implements UserControllerTestHelper {
                                 getResponsePreProcessor(),
                                 pathParameters(getMemberRequestPathParameterDescriptor()),
                                 responseFields(
-                                        getFullResponseDescriptors(
+                                        getSingleResponseDescriptors(
                                                 getDefaultUserResponseDescriptors(DataResponseType.SINGLE))
                                 )
                         ));
@@ -163,7 +163,7 @@ class UserControllerTest implements UserControllerTestHelper {
                                 getRequestPreProcessor(),
                                 getResponsePreProcessor(),
                                 responseFields(
-                                        getFullPageResponseDescriptors(
+                                        getPageResponseDescriptors(
                                                 getDefaultUsersResponseDescriptors(DataResponseType.LIST))
                                 )
                         ))
@@ -185,7 +185,7 @@ class UserControllerTest implements UserControllerTestHelper {
                                 getResponsePreProcessor(),
                                 pathParameters(getMemberRequestPathParameterDescriptor()),
                                 responseFields(
-                                        getFullPageResponseDescriptors(
+                                        getPageResponseDescriptors(
                                                 getDefaultUserReviewsResponseDescriptors(DataResponseType.LIST))
                                 )
                         ))
@@ -207,7 +207,7 @@ class UserControllerTest implements UserControllerTestHelper {
                                 getResponsePreProcessor(),
                                 pathParameters(getMemberRequestPathParameterDescriptor()),
                                 responseFields(
-                                        getFullPageResponseDescriptors(
+                                        getPageResponseDescriptors(
                                                 getDefaultUserStoresResponseDescriptors(DataResponseType.LIST))
                                 )
                         ))
@@ -237,7 +237,7 @@ class UserControllerTest implements UserControllerTestHelper {
                                         getDefaultUserPatchRequestDescriptors()
                                 ),
                                 responseFields(
-                                        getFullResponseDescriptors(new ArrayList<FieldDescriptor>())
+                                        getSingleResponseDescriptors(new ArrayList<FieldDescriptor>())
                                 ),
                                 responseHeaders(
                                         headerWithName(HttpHeaders.LOCATION)
@@ -265,7 +265,7 @@ class UserControllerTest implements UserControllerTestHelper {
                                 pathParameters(getMemberRequestPathParameterDescriptor()),
                                 requestParts(partWithName("profileImage").description("프로필 이미지 파일")),
                                 responseFields(
-                                        getFullResponseDescriptors(new ArrayList<FieldDescriptor>())
+                                        getSingleResponseDescriptors(new ArrayList<FieldDescriptor>())
                                 ),
                                 responseHeaders(
                                         headerWithName(HttpHeaders.LOCATION)

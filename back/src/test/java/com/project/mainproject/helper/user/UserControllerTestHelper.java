@@ -51,7 +51,7 @@ public interface UserControllerTestHelper extends ControllerTestHelper {
         );
     }
     default List<FieldDescriptor> getDefaultUserResponseDescriptors(DataResponseType dataResponseType) {
-        String parentPath = getDataParentPath(dataResponseType, "response.");
+        String parentPath = getDataParentPath(dataResponseType, "response");
         return List.of(
                 fieldWithPath(parentPath.concat("userIdx")).type(JsonFieldType.NUMBER).description("회원 식별자"),
                 fieldWithPath(parentPath.concat("email")).type(JsonFieldType.STRING).description("이메일"),
@@ -62,7 +62,7 @@ public interface UserControllerTestHelper extends ControllerTestHelper {
         );
     }
     default List<FieldDescriptor> getDefaultUsersResponseDescriptors(DataResponseType dataResponseType) {
-        String parentPath = getDataParentPath(dataResponseType, "users[].");
+        String parentPath = getDataParentPath(dataResponseType, "response.users");
         return List.of(
                 fieldWithPath(parentPath.concat("userIdx")).type(JsonFieldType.NUMBER).description("회원 식별자"),
                 fieldWithPath(parentPath.concat("userType")).type(JsonFieldType.STRING).description("회원 유형"),
@@ -74,7 +74,7 @@ public interface UserControllerTestHelper extends ControllerTestHelper {
         );
     }
     default List<FieldDescriptor> getDefaultUserReviewsResponseDescriptors(DataResponseType dataResponseType) {
-        String parentPath = getDataParentPath(dataResponseType, "reviews[].");
+        String parentPath = getDataParentPath(dataResponseType, "response.reviews");
         return List.of(
                 fieldWithPath(parentPath.concat("reviewIdx")).type(JsonFieldType.NUMBER).description("리뷰 식별자"),
                 fieldWithPath(parentPath.concat("storeIdx")).type(JsonFieldType.NUMBER).description("약국 식별자"),
@@ -84,7 +84,7 @@ public interface UserControllerTestHelper extends ControllerTestHelper {
         );
     }
     default List<FieldDescriptor> getDefaultUserStoresResponseDescriptors(DataResponseType dataResponseType) {
-        String parentPath = getDataParentPath(dataResponseType, "stores[].");
+        String parentPath = getDataParentPath(dataResponseType, "response.stores");
         return List.of(
                 fieldWithPath(parentPath.concat("storeIdx")).type(JsonFieldType.NUMBER).description("약국 식별자"),
                 fieldWithPath(parentPath.concat("storeName")).type(JsonFieldType.STRING).description("약국명"),
@@ -92,5 +92,6 @@ public interface UserControllerTestHelper extends ControllerTestHelper {
                 fieldWithPath(parentPath.concat("tel")).type(JsonFieldType.STRING).description("약국 전화번호")
         );
     }
+
 
 }
