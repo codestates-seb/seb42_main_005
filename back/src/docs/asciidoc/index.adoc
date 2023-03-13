@@ -1,0 +1,200 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+= 특수기호호호
+:sectnums:
+:toc: left
+:toclevels: 4
+:toc-title: Table of Contents
+:source-highlighter: prettify
+
+특수기호
+
+v1.0.0, 2023.03.12
+
+***
+API 문서 개요
+
+ 이 문서는 우리들의 약국 서비스~~~~~~~~
+
+CAUTION: 담당자에게 문의 하세요
+
+***
+== UserController
+=== 일반 회원 등록
+.http-request
+include::{snippets}/post-normal-user/http-request.adoc[]
+
+.request-fields
+include::{snippets}/post-normal-user/request-fields.adoc[]
+
+.response-body
+include::{snippets}/post-normal-user/response-body.adoc[]
+
+.response-fields
+include::{snippets}/post-normal-user/response-fields.adoc[]
+
+.response-headers
+include::{snippets}/post-normal-user/response-headers.adoc[]
+
+
+=== 약국 회원 등록
+.http-request
+include::{snippets}/post-store-user/http-request.adoc[]
+
+.request-fields
+include::{snippets}/post-store-user/request-fields.adoc[]
+
+.response-body
+include::{snippets}/post-store-user/response-body.adoc[]
+
+.response-fields
+include::{snippets}/post-store-user/response-fields.adoc[]
+
+.response-headers
+include::{snippets}/post-store-user/response-headers.adoc[]
+
+
+=== 비밀번호 찾기
+.http-request
+include::{snippets}/find-password/http-request.adoc[]
+
+.request-fields
+include::{snippets}/find-password/request-fields.adoc[]
+
+.path-parameters
+include::{snippets}/find-password/path-parameters.adoc[]
+
+.response-body
+include::{snippets}/find-password/response-body.adoc[]
+
+.response-fields
+include::{snippets}/find-password/response-fields.adoc[]
+
+
+=== 회원 정보 조회_기본 정보
+.http-request
+include::{snippets}/get-user/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-user/path-parameters.adoc[]
+
+.response-body
+include::{snippets}/get-user/response-body.adoc[]
+
+.response-fields
+include::{snippets}/get-user/response-fields.adoc[]
+
+
+=== 전체 회원 조회
+.http-request
+include::{snippets}/get-users/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-users/path-parameters.adoc[]
+
+.response-body
+include::{snippets}/get-users/response-body.adoc[]
+
+.response-fields
+include::{snippets}/get-users/response-fields.adoc[]
+
+
+=== 회원 정보 조회_작성한 리뷰
+.http-request
+include::{snippets}/get-user-reviews/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-user-reviews/path-parameters.adoc[]
+
+.response-body
+include::{snippets}/get-user-reviews/response-body.adoc[]
+
+.response-fields
+include::{snippets}/get-user-reviews/response-fields.adoc[]
+
+
+=== 회원 정보 조회_찜한 약국
+.http-request
+include::{snippets}/get-user-stores/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-user-stores/path-parameters.adoc[]
+
+.response-body
+include::{snippets}/get-user-stores/response-body.adoc[]
+
+.response-fields
+include::{snippets}/get-user-stores/response-fields.adoc[]
+
+
+=== 회원 정보 수정_기본 정보
+.http-request
+include::{snippets}/patch-user/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-user/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/patch-user/request-fields.adoc[]
+
+.response-body
+include::{snippets}/patch-user/response-body.adoc[]
+
+.response-fields
+include::{snippets}/patch-user/response-fields.adoc[]
+
+.response-headers
+include::{snippets}/patch-user/response-headers.adoc[]
+
+
+=== 회원 정보 수정_프로필 이미지
+.http-request
+include::{snippets}/patch-user-image/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-user-image/path-parameters.adoc[]
+
+.request-parts
+include::{snippets}/patch-user-image/request-parts.adoc[]
+
+.response-body
+include::{snippets}/patch-user-image/response-body.adoc[]
+
+.response-fields
+include::{snippets}/patch-user-image/response-fields.adoc[]
+
+.response-headers
+include::{snippets}/patch-user-image/response-headers.adoc[]
+
+
+=== 회원 정보 수정_기본 정보
+.http-request
+include::{snippets}/patch-user/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-user/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/patch-user/request-fields.adoc[]
+
+.response-body
+include::{snippets}/patch-user/response-body.adoc[]
+
+.response-fields
+include::{snippets}/patch-user/response-fields.adoc[]
+
+.response-headers
+include::{snippets}/patch-user/response-headers.adoc[]
+
+
+=== 회원 탈퇴
+.http-request
+include::{snippets}/delete-user/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-user/path-parameters.adoc[]
+
+.response-body
+include::{snippets}/delete-user/response-body.adoc[]
