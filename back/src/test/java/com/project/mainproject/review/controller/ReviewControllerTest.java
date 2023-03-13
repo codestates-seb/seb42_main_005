@@ -68,7 +68,7 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
                                         getDefaultRequestParameterDescriptors()
                                 ),
                                 responseFields(
-                                        getFullPageResponseDescriptors(
+                                        getPageResponseDescriptors(
                                                 getStoreReviewPageDtoResponseDescriptors("storeReview")
                                         )
                                 )
@@ -93,7 +93,7 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
                                         getStoreReviewPathParameterDescriptor()
                                 ),
                                 responseFields(
-                                        getFullResponseDescriptors(
+                                        getSingleResponseDescriptors(
                                                 getStoreReviewPageDtoResponseDescriptors("")
                                         )
                                 )
@@ -124,7 +124,7 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
                                         getCreateReviewRequestDescriptors()
                                 ),
                                 responseFields(
-                                        getFullResponseDescriptors(getAllIdxDescriptors())
+                                        getSingleResponseDescriptors(getAllIdxDescriptors())
                                 ),
                                 HeaderDocumentation.responseHeaders(
                                         HeaderDocumentation.headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리소스의 URI")
@@ -155,7 +155,7 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
                                         getUpdateReviewRequestDescriptors()
                                 ),
                                 responseFields(
-                                        getFullResponseDescriptors(getAllIdxDescriptors())
+                                        getSingleResponseDescriptors(getAllIdxDescriptors())
                                 ),
                                 HeaderDocumentation.responseHeaders(
                                         HeaderDocumentation.headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리소스의 URI")
@@ -210,7 +210,7 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
                                         getDefaultWrapperDescriptors("userIdx", JsonFieldType.NUMBER,"사용자 식별 ID")
                                 ),
                                 responseFields(
-                                        getFullResponseDescriptors(getReviewLikeHateRequestDescriptors(ReviewHateLike.LIKE))
+                                        getSingleResponseDescriptors(getReviewLikeHateRequestDescriptors(ReviewHateLike.LIKE))
                                 ),
                                 HeaderDocumentation.responseHeaders(
                                         HeaderDocumentation.headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리소스의 URI")
@@ -243,7 +243,7 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
                                         getDefaultWrapperDescriptors("userIdx", JsonFieldType.NUMBER,"사용자 식별 ID")
                                 ),
                                 responseFields(
-                                        getFullResponseDescriptors(getReviewLikeHateRequestDescriptors(ReviewHateLike.HATE))
+                                        getSingleResponseDescriptors(getReviewLikeHateRequestDescriptors(ReviewHateLike.HATE))
                                 ),
                                 HeaderDocumentation.responseHeaders(
                                         HeaderDocumentation.headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리소스의 URI")
@@ -275,7 +275,7 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
                                         getPostReviewReportRequestDescriptors()
                                 ),
                                 responseFields(
-                                        getFullResponseDescriptors(getPostReviewReportResponseDescriptors())
+                                        getSingleResponseDescriptors(getPostReviewReportResponseDescriptors())
                                 ),
                                 HeaderDocumentation.responseHeaders(
                                         HeaderDocumentation.headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리소스의 URI")
@@ -307,7 +307,7 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
                                             getPostReviewReportRequestDescriptors()
                                     ),
                                     responseFields(
-                                            getFullResponseDescriptors(getAllIdxDescriptors())
+                                            getSingleResponseDescriptors(getAllIdxDescriptors())
                                     ),
                                     HeaderDocumentation.responseHeaders(
                                             HeaderDocumentation.headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리소스의 URI")

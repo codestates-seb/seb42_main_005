@@ -10,4 +10,5 @@ public class GetReviewDto {
     private Long storeIdx;
     private String storeName;
     private String content;
+    private int rating;
 }

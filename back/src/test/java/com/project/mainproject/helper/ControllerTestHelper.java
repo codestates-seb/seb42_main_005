@@ -25,6 +25,7 @@ public interface ControllerTestHelper<T> {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
     }
+
     default RequestBuilder postRequestBuilder(String url) {
         return  post(url)
                 .accept(MediaType.APPLICATION_JSON);
@@ -45,7 +46,6 @@ public interface ControllerTestHelper<T> {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
     }
-
     default RequestBuilder patchRequestBuilder(String url, long resourceId, String content) {
         return patch(url, resourceId)
                 .accept(MediaType.APPLICATION_JSON)
@@ -67,22 +67,25 @@ public interface ControllerTestHelper<T> {
 
     }
 
-    default RequestBuilder getRequestBuilder(String url, long resourceId) {
+    default RequestBuilder patchRequestBuilder(String uri, Long resourceId) {
+        return patch(uri, resourceId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+    }
+    default RequestBuilder getRequestBuilder(String url, Long resourceId) {
         return get(url, resourceId)
                 .accept(MediaType.APPLICATION_JSON);
     }
-
     default RequestBuilder getRequestBuilder(String uri) {
         return get(uri)
                 .accept(MediaType.APPLICATION_JSON);
     }
-
     default RequestBuilder getRequestBuilder(String url, MultiValueMap<String, String> queryParams) {
         return get(url)
                 .params(queryParams)
                 .accept(MediaType.APPLICATION_JSON);
     }
-
     default RequestBuilder getRequestBuilder(String url, MultiValueMap<String, String> queryParams,long resourceId) {
         return get(url,resourceId)
                 .params(queryParams)
@@ -92,7 +95,6 @@ public interface ControllerTestHelper<T> {
         return get(url,resourceId,resourceId2)
                 .accept(MediaType.APPLICATION_JSON);
     }
-
     default RequestBuilder deleteRequestBuilder(String url, long resourceId) {
         return delete(url, resourceId);
     }
@@ -103,22 +105,19 @@ public interface ControllerTestHelper<T> {
     default RequestBuilder deleteRequestBuilder(String uri) {
         return delete(uri);
     }
-
     default String toJsonContent(T t) {
         Gson gson = new Gson();
         String content = gson.toJson(t);
         return content;
     }
-
-    default List<FieldDescriptor> getFullResponseDescriptors(List<FieldDescriptor> dataResponseFieldDescriptors) {
+    default List<FieldDescriptor> getSingleResponseDescriptors(List<FieldDescriptor> dataResponseFieldDescriptors) {
         Stream<FieldDescriptor> resultResponseDescriptors = getResultResponseDescriptors().stream();
         Stream<FieldDescriptor> defaultResponseDescriptors = getDefaultResponseDescriptors(JsonFieldType.OBJECT).stream();
         Stream<FieldDescriptor> dataResponseDescriptors = dataResponseFieldDescriptors.stream();
         return Stream.of(resultResponseDescriptors,defaultResponseDescriptors, dataResponseDescriptors).flatMap(data->data)
                 .collect(Collectors.toList());
     }
-
-    default List<FieldDescriptor> getFullPageResponseDescriptors(List<FieldDescriptor> dataResponseFieldDescriptors) {
+    default List<FieldDescriptor> getPageResponseDescriptors(List<FieldDescriptor> dataResponseFieldDescriptors) {
         Stream<FieldDescriptor> resultResponseDescriptors = getResultResponseDescriptors().stream();
         Stream<FieldDescriptor> defaultResponseDescriptors = getDefaultResponseDescriptors(JsonFieldType.OBJECT).stream();
         Stream<FieldDescriptor> dataResponseDescriptors = dataResponseFieldDescriptors.stream();
@@ -129,13 +128,11 @@ public interface ControllerTestHelper<T> {
                         .flatMap(descriptorStream -> descriptorStream);
         return mergedStream.collect(Collectors.toList());
     }
-
     default List<FieldDescriptor> getDefaultResponseDescriptors(JsonFieldType jsonFieldTypeForData) {
         return Arrays.asList(
                 fieldWithPath("response").type(jsonFieldTypeForData).description("결과 데이터").optional()
         );
     }
-
     default List<FieldDescriptor> getPageResponseDescriptors() {
         return Arrays.asList(
                 fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보").optional(),
@@ -147,14 +144,12 @@ public interface ControllerTestHelper<T> {
                 fieldWithPath("pageInfo.isFinish").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부").optional()
         );
     }
-
     default List<FieldDescriptor> getResultResponseDescriptors() {
         return Arrays.asList(
-                fieldWithPath("httpCode").type(JsonFieldType.OBJECT).description("결과 코드").optional(),
-                fieldWithPath("message").type(JsonFieldType.NUMBER).description("결과 메세지").optional()
+                fieldWithPath("httpCode").type(JsonFieldType.NUMBER).description("결과 코드").optional(),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지").optional()
         );
     }
-
     default List<ParameterDescriptor> getDefaultRequestParameterDescriptors() {
         return List.of(
                 parameterWithName("page").description("조회 페이지 \n 0부터 시작").optional(),
@@ -163,24 +158,16 @@ public interface ControllerTestHelper<T> {
                 parameterWithName("direction").description("정렬 오름차순 ASC / 내림차순 DESC \n 기본 값은 ASC").optional()
         );
     }
-    default List<FieldDescriptor> getResultResponseDescriptors() {
-        return Arrays.asList(
-                fieldWithPath("httpCode").type(JsonFieldType.NUMBER).description("결과 코드").optional(),
-                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지").optional()
-        );
-    }
-
     default List<FieldDescriptor> getDefaultWrapperDescriptors(String fieldName,JsonFieldType jsonFieldTypeForData,String description) {
         return Arrays.asList(
                 fieldWithPath(fieldName).type(jsonFieldTypeForData).description(description).optional()
         );
     }
-
     default String getDataParentPath(DataResponseType dataResponseType,String fieldName) {
         return dataResponseType == DataResponseType.SINGLE ? fieldName.concat(".") : fieldName.concat("[].");
     }
-
     enum DataResponseType {
         SINGLE, LIST
     }
+
 }

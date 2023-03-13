@@ -9,6 +9,7 @@ import com.project.mainproject.utils.UriCreator;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 
@@ -22,7 +23,7 @@ public class UserController {
         일반 회원가입
      */
     @PostMapping("/normal")
-    public ResponseEntity normalSignUp(@RequestBody PostUserSignUpDto signUpDto) {
+    public ResponseEntity normalSignUp(@RequestBody UserSignUpDto signUpDto) {
         // TODO: Save Normal User
 
         URI location = UriCreator.createUri(USERS_DEFAULT_URL, 1);
@@ -34,7 +35,7 @@ public class UserController {
         약국 회원가입
      */
     @PostMapping("/store")
-    public ResponseEntity pharmacySignUp(@RequestBody PostUserSignUpDto signUpDto
+    public ResponseEntity pharmacySignUp(@RequestBody UserSignUpDto signUpDto
                                 // , @RequestPart MultipartFile businessCertificate
                                 // , @RequestPart MultipartFile pharmacistCertificate
     ) {
@@ -48,8 +49,9 @@ public class UserController {
     /*
         비밀번호 찾기
      */
-    @PostMapping("/password")
-    public ResponseEntity findPassword(@RequestBody UserFindPasswordDto findPasswordDto) {
+    @PatchMapping("/password/{userIdx}")
+    public ResponseEntity findPassword(@PathVariable("userIdx") Long userIdx,
+                                       @RequestBody UserFindPasswordDto findPasswordDto) {
         // TODO: Send Password Init Email
 
         SingleResponseDto response = CommonStub.getSingleResponseStub();
@@ -113,7 +115,7 @@ public class UserController {
      */
     @PatchMapping("{userIdx}")
     public ResponseEntity patchUserInfo(@PathVariable("userIdx") Long userIdx,
-                                        @RequestBody PostUserPatchDto patchDto) {
+                                        @RequestBody UserPatchDto patchDto) {
         // TODO: Change User Profile
 
         URI location = UriCreator.createUri(USERS_DEFAULT_URL, 1);
@@ -124,9 +126,9 @@ public class UserController {
     /*
         회원 프로필 이미지 수정
      */
-    @PatchMapping("{userIdx}/image")
-    public ResponseEntity patchUserProfileImage(@PathVariable("userIdx") Long userIdx
-                                                // ,MultipartFile profileImage
+    @PostMapping("{userIdx}/image")
+    public ResponseEntity postUserProfileImage(@PathVariable("userIdx") Long userIdx,
+                                                @RequestPart MultipartFile profileImage
     ) {
         // TODO: Chane User Profile Image
 

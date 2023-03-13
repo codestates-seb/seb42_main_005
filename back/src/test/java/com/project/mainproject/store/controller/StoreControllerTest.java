@@ -1,33 +1,20 @@
 package com.project.mainproject.store.controller;
 
-import com.google.gson.Gson;
 import com.project.mainproject.helper.store.StoreControllerTestHelper;
-import com.project.mainproject.store.dummy.StoreStub;
-import com.project.mainproject.store.entity.Store;
-import com.project.mainproject.utils.ApiDocumentUtils;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.List;
-
 import static com.project.mainproject.utils.ApiDocumentUtils.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -64,7 +51,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
                                         getDefaultRequestParameterDescriptors()
                                 ),
                                 PayloadDocumentation.responseFields(
-                                        getFullPageResponseDescriptors(
+                                        getPageResponseDescriptors(
                                                 getStoreHomeResponseDescriptors("storeHome")
                                         )
                                 )
@@ -93,7 +80,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
                                         getStorePathParameterDescriptor()
                                 ),
                                 PayloadDocumentation.responseFields(
-                                        getFullResponseDescriptors(
+                                        getSingleResponseDescriptors(
                                                 getStoreHomeResponseDescriptors("")
                                         )
                                 )
@@ -119,7 +106,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
                                         getStorePathParameterDescriptor()
                                 ),
                                 PayloadDocumentation.responseFields(
-                                        getFullResponseDescriptors(
+                                        getSingleResponseDescriptors(
                                                 getStoreIdxDescriptors()
                                         )
                                 )

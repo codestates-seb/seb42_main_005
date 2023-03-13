@@ -1,6 +1,5 @@
 package com.project.mainproject.review.dto;
 
-import com.project.mainproject.review.enums.ToggleStatus;
 import lombok.Builder;
 import lombok.Getter;
 
