@@ -25,15 +25,13 @@ public interface ControllerTestHelper<T> {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
     }
-
-    default RequestBuilder patchRequestBuilder(String url, long resourceId, String content) {
+    default RequestBuilder patchRequestBuilder(String url, Long resourceId, String content) {
         return patch(url, resourceId)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
 
     }
-
     default RequestBuilder patchRequestBuilder(String uri, String content) {
         return patch(uri)
                 .accept(MediaType.APPLICATION_JSON)
@@ -41,12 +39,16 @@ public interface ControllerTestHelper<T> {
                 .content(content);
 
     }
+    default RequestBuilder patchRequestBuilder(String uri, Long resourceId) {
+        return patch(uri, resourceId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
 
-    default RequestBuilder getRequestBuilder(String url, long resourceId) {
+    }
+    default RequestBuilder getRequestBuilder(String url, Long resourceId) {
         return get(url, resourceId)
                 .accept(MediaType.APPLICATION_JSON);
     }
-
     default RequestBuilder getRequestBuilder(String uri) {
         return get(uri)
                 .accept(MediaType.APPLICATION_JSON);
@@ -58,65 +60,57 @@ public interface ControllerTestHelper<T> {
                 .accept(MediaType.APPLICATION_JSON);
     }
 
-    default RequestBuilder deleteRequestBuilder(String url, long resourceId) {
+    default RequestBuilder deleteRequestBuilder(String url, Long resourceId) {
         return delete(url, resourceId);
     }
 
     default RequestBuilder deleteRequestBuilder(String uri) {
         return delete(uri);
     }
-
     default String toJsonContent(T t) {
         Gson gson = new Gson();
         String content = gson.toJson(t);
         return content;
     }
-
-    default String getDataParentPath(DataResponseType dataResponseType) {
-        return "response.";
-//        return dataResponseType == DataResponseType.SINGLE ? "response." : "response[].";
-    }
-
     default List<FieldDescriptor> getFullResponseDescriptors(List<FieldDescriptor> dataResponseFieldDescriptors) {
+        Stream<FieldDescriptor> resultResponseDescriptors = getResultResponseDescriptors().stream();
         Stream<FieldDescriptor> defaultResponseDescriptors = getDefaultResponseDescriptors(JsonFieldType.OBJECT).stream();
         Stream<FieldDescriptor> dataResponseDescriptors = dataResponseFieldDescriptors.stream();
-        return Stream.concat(defaultResponseDescriptors, dataResponseDescriptors)
+        return Stream.concat(resultResponseDescriptors,
+                        Stream.concat(defaultResponseDescriptors, dataResponseDescriptors))
                 .collect(Collectors.toList());
     }
-
     default List<FieldDescriptor> getFullPageResponseDescriptors(List<FieldDescriptor> dataResponseFieldDescriptors) {
-        Stream<FieldDescriptor> defaultResponseDescriptors = getDefaultResponseDescriptors(JsonFieldType.ARRAY).stream();
+        Stream<FieldDescriptor> resultResponseDescriptors = getResultResponseDescriptors().stream();
+        Stream<FieldDescriptor> defaultResponseDescriptors = getDefaultResponseDescriptors(JsonFieldType.OBJECT).stream();
         Stream<FieldDescriptor> dataResponseDescriptors = dataResponseFieldDescriptors.stream();
         Stream<FieldDescriptor> pageResponseDescriptors = getPageResponseDescriptors().stream();
 
         Stream<FieldDescriptor> mergedStream =
-                Stream.of(defaultResponseDescriptors, dataResponseDescriptors, pageResponseDescriptors)
+                Stream.of(resultResponseDescriptors, defaultResponseDescriptors, dataResponseDescriptors, pageResponseDescriptors)
                         .flatMap(descriptorStream -> descriptorStream);
         return mergedStream.collect(Collectors.toList());
     }
-
     default List<FieldDescriptor> getDefaultResponseDescriptors(JsonFieldType jsonFieldTypeForData) {
         return Arrays.asList(
                 fieldWithPath("response").type(jsonFieldTypeForData).description("결과 데이터").optional()
         );
     }
-
     default List<FieldDescriptor> getPageResponseDescriptors() {
         return Arrays.asList(
                 fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보").optional(),
                 fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("페이지 번호").optional(),
                 fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 사이즈").optional(),
-                fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 건 수").optional(),
-                fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수").optional(),
+                fieldWithPath("pageInfo.totalElement").type(JsonFieldType.NUMBER).description("전체 건 수").optional(),
+                fieldWithPath("pageInfo.totalPage").type(JsonFieldType.NUMBER).description("전체 페이지 수").optional(),
                 fieldWithPath("pageInfo.isFirst").type(JsonFieldType.BOOLEAN).description("첫 페이지 여부").optional(),
                 fieldWithPath("pageInfo.isFinish").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부").optional()
         );
     }
-
     default List<FieldDescriptor> getResultResponseDescriptors() {
         return Arrays.asList(
-                fieldWithPath("httpCode").type(JsonFieldType.OBJECT).description("결과 코드").optional(),
-                fieldWithPath("message").type(JsonFieldType.NUMBER).description("결과 메세지").optional()
+                fieldWithPath("httpCode").type(JsonFieldType.NUMBER).description("결과 코드").optional(),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지").optional()
         );
     }
 
@@ -129,4 +123,5 @@ public interface ControllerTestHelper<T> {
     enum DataResponseType {
         SINGLE, LIST
     }
+
 }
