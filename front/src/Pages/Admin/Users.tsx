@@ -62,10 +62,10 @@ export default function Users() {
             <span>전체회원관리</span>
             <ButtonContainer>
               <Select>
-                <Option>정지옵션</Option>
-                <Option>3개월</Option>
-                <Option>6개월</Option>
-                <Option>9개월</Option>
+                <option>정지옵션</option>
+                <option>3개월</option>
+                <option>6개월</option>
+                <option>9개월</option>
               </Select>
               <Button color="blue" size="md" text="선택정지" />
               <Button color="blue" size="md" text="선택강퇴" />
@@ -161,14 +161,11 @@ const ButtonContainer = styled.div`
   gap: 20px;
 `;
 const Select = styled.select`
-  background-color: 1px solid green;
-
-  line-height: 1.1;
-  /* padding: 0.5rem 1rem; */
-  /* 버튼 위 라인 효과 */
-  box-shadow: inset 0 1px 0 0 hsl(0, 0%, 100%, 0.4);
-  border: 1px solid transparent;
-  text-decoration: none;
+  border: 1.2px solid var(--l_button-blue);
+  color: var(--l_button-blue);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 3px;
 `;
 const Option = styled.option`
   line-height: 1.1;
