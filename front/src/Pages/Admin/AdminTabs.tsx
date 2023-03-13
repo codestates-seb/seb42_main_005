@@ -21,7 +21,7 @@ export default function AdminTabs({ current }: ThisTab) {
   );
 }
 
-const TabContainer = styled.div`
+const TabContainer = styled.header`
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
