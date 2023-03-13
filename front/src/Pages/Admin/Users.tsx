@@ -134,6 +134,7 @@ const Wrapper = styled.main`
   flex-direction: column;
   justify-content: center;
   margin: 0 20px;
+  padding: 7px;
   width: 80rem;
   height: 40rem;
   overflow: hidden;
@@ -147,8 +148,8 @@ const Page = styled.section`
   flex-direction: column;
   height: 40rem;
   padding: 15px 55px;
-  border-top: 1.5px solid var(--black-100);
-  border-radius: 0 10px 0 0;
+  border: 1px solid var(--black-100);
+  border-radius: 0 10px 10px 10px;
   background-color: var(--white);
 `;
 const Header = styled.header`
@@ -174,7 +175,9 @@ const Select = styled.select`
   color: var(--l_button-blue);
   border-radius: 3px;
   border: 1.2px solid var(--l_button-blue);
-  :focus { outline: none}
+  :focus {
+    outline: none;
+  }
 `;
 const Option = styled.option``;
 const Table = styled.figure`
@@ -220,6 +223,7 @@ const Instead = styled.main`
   align-items: center;
   gap: 20px;
   height: 26rem;
+  width: calc(1150px + 0.6rem);
   color: var(--black-100);
   font-size: 6rem;
   font-weight: bold;
