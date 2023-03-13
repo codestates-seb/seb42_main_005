@@ -16,6 +16,7 @@ public class UriCreator {
     public static URI createUri(String defaultUrl) {
         return UriComponentsBuilder
                 .newInstance()
+                .path(defaultUrl)
                 .build()
                 .toUri();
     }
