@@ -134,7 +134,7 @@ public class UserController {
 
         URI location = UriCreator.createUri(USERS_DEFAULT_URL, 1);
         SingleResponseDto response = CommonStub.getSingleResponseStub();
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().header("Location", location.toString()).body(response);
     }
 
     /*
