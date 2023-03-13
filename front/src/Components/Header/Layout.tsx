@@ -29,5 +29,6 @@ const MainContainer = styled.div`
   .main {
     width: 100%;
     height: calc(100vh - 50px);
+    overflow-y: scroll;
   }
 `;
