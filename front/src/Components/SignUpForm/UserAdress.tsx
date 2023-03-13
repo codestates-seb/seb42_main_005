@@ -28,7 +28,7 @@ export default function UserAdress({ scriptUrl, setSignForms }: Props) {
     setSignForms((prev: Form) => ({ ...prev, address: fullAddress }));
   };
 
-  const handleClick = (e: any) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     open({ onComplete: handleComplete });
     e.preventDefault();
   };

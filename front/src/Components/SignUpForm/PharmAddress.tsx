@@ -28,7 +28,7 @@ export default function PharmAddress({ scriptUrl, setpSignForms }: Props) {
     setpSignForms((prev: Form) => ({ ...prev, address: fullAddress }));
   };
 
-  const handleClick = (e: any) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     open({ onComplete: handleComplete });
     e.preventDefault();
   };

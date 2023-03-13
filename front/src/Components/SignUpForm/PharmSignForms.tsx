@@ -98,7 +98,7 @@ export default function PharmSignForms() {
             type="file"
             ref={PharmImg}
             name="fileName"
-            onChange={(e) => {
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               e.target.files && setPharmImg(e.target.files[0].name);
               e.target.files && setPharmImgFile(e.target.files[0]);
             }}
