@@ -14,8 +14,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import static com.project.mainproject.utils.ApiDocumentUtils.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static com.project.mainproject.utils.ApiDocumentUtils.getRequestPreProcessor;
+import static com.project.mainproject.utils.ApiDocumentUtils.getResponsePreProcessor;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -49,6 +51,9 @@ class StoreControllerTest implements StoreControllerTestHelper {
                                 getResponsePreProcessor(),
                                 requestParameters(
                                         getDefaultRequestParameterDescriptors()
+                                ),
+                                PayloadDocumentation.requestFields(
+                                        getHomeRequestDescriptors()
                                 ),
                                 PayloadDocumentation.responseFields(
                                         getPageResponseDescriptors(

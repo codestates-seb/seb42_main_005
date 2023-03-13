@@ -24,7 +24,7 @@ public class StoreController {
      *  약국 목록_홈
      * */
     @GetMapping
-    public ResponseEntity getStoreHome(@PageableDefault(sort = "storeIdx") Pageable pageable) {
+    public ResponseEntity getStoreHome(@PageableDefault(sort = "storeIdx") Pageable pageable, @RequestBody FilterTagDto filterTagDto) {
         //TODO : Service 구현
 
         PageResponseDto build = CommonStub.getPageResponseStub();
@@ -32,6 +32,7 @@ public class StoreController {
 
         return ResponseEntity.ok().body(build);
     }
+
     /*
     * 약국 상세 조회
     * */
