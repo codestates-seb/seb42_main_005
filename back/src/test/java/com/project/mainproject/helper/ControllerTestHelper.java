@@ -95,6 +95,12 @@ public interface ControllerTestHelper<T> {
         return get(url,resourceId,resourceId2)
                 .accept(MediaType.APPLICATION_JSON);
     }
+    default RequestBuilder deleteRequestBuilder(String url, String content) {
+        return delete(url)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+    }
     default RequestBuilder deleteRequestBuilder(String url, long resourceId) {
         return delete(url, resourceId);
     }
