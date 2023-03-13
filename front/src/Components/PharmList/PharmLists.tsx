@@ -1,7 +1,7 @@
 //홈화면 옆에 약국 리스트
 import styled from "styled-components";
-import { BsSearch } from "react-icons/bs";
 import PharmItem from "./PharmItem";
+import { BsSearch } from "react-icons/bs";
 
 //데이터 들어오면 map으로 돌리기전에 하드코딩으로 두개해놨음
 export default function PharmLists() {
@@ -51,6 +51,7 @@ export default function PharmLists() {
 
 //전체 컨테이너
 const ListContainer = styled.div`
+  position: absolute;
   width: 36rem;
   height: calc(100vh - 50px);
   border-top: 1px solid var(--black-150);
@@ -60,6 +61,7 @@ const ListContainer = styled.div`
   background-color: var(--white);
   box-shadow: var(--bs-lg);
   padding: 1.5rem 0 1rem 1.5rem;
+  z-index: 2;
   transition: 0.2s;
   @media (max-width: 768px) {
     transition: 0.2s;
