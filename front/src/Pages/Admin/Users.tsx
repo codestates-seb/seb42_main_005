@@ -11,6 +11,7 @@ export default function Users() {
       accountStatus: "active",
       nickname: "johnsFavourite",
       email: "papa@johns.com",
+      returnAt: "2023.02.25",
       subscription: "2023.02.13",
       reviewCount: 4,
       reportCount: 0,
@@ -20,6 +21,7 @@ export default function Users() {
       accountStatus: "suspended",
       nickname: "MarchApril",
       email: "papa@johns.com",
+      returnAt: "1996.04.13",
       subscription: "1996.04.25",
       reviewCount: 6,
       reportCount: 99,
@@ -29,7 +31,8 @@ export default function Users() {
       accountStatus: "active",
       nickname: "February",
       email: "painting@landscape.com",
-      subscription: "2019.02.13",
+      returnAt: "2019.02.13",
+      subscription: "2019.02.24",
       reviewCount: 3,
       reportCount: 0,
     },
@@ -38,6 +41,7 @@ export default function Users() {
       accountStatus: "active",
       nickname: "JuneJuly",
       email: "surfing@hawaii.com",
+      returnAt: "2021.07.13",
       subscription: "2021.07.24",
       reviewCount: 20,
       reportCount: 0,
@@ -47,7 +51,8 @@ export default function Users() {
       accountStatus: "suspended",
       nickname: "McMorning",
       email: "Mcdonalds@maccas.com",
-      subscription: "2023.03.13",
+      returnAt: "2023.03.25",
+      subscription: "2023.03.07",
       reviewCount: 45,
       reportCount: 20,
     },
@@ -63,12 +68,13 @@ export default function Users() {
             <ButtonContainer>
               <Select>
                 <Option>정지옵션</Option>
-                <option>3개월</option>
-                <option>6개월</option>
-                <option>9개월</option>
+                <option>3일</option>
+                <option>7일</option>
+                <option>30일</option>
               </Select>
               <Button color="blue" size="md" text="선택정지" />
               <Button color="blue" size="md" text="선택강퇴" />
+              <Button color="blue" size="md" text="선택복구" />
             </ButtonContainer>
           </Header>
           <Table>
@@ -80,6 +86,7 @@ export default function Users() {
               <Values className="accountStatus">계정상태</Values>
               <Values className="nickname">닉네임</Values>
               <Values className="email">email</Values>
+              <Values className="returnAt">복구예정일</Values>
               <Values className="subscription">가입일</Values>
               <Values className="reviewCount">리뷰 수</Values>
               <Values className="reportCount">신고 수</Values>
@@ -95,6 +102,7 @@ export default function Users() {
                     <Values className="accountStatus">{data.accountStatus}</Values>
                     <Values className="nickname">{data.nickname}</Values>
                     <Values className="email">{data.email}</Values>
+                    <Values className="returnAt">{data.returnAt}</Values>
                     <Values className="subscription">{data.subscription}</Values>
                     <Values className="reviewCount">{data.reviewCount}</Values>
                     <Values className="reportCount">{data.reportCount}</Values>
@@ -251,6 +259,9 @@ const Values = styled.span`
   }
   &.email {
     width: 240px;
+  }
+  &.returnAt {
+    width: 120px;
   }
   &.subscription {
     width: 120px;
