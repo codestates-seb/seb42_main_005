@@ -91,8 +91,8 @@ include::{snippets}/get-user/response-fields.adoc[]
 .http-request
 include::{snippets}/get-users/http-request.adoc[]
 
-.path-parameters
-include::{snippets}/get-users/path-parameters.adoc[]
+.request-parameters
+include::{snippets}/get-users/request-parameters.adoc[]
 
 .response-body
 include::{snippets}/get-users/response-body.adoc[]
@@ -108,6 +108,9 @@ include::{snippets}/get-user-reviews/http-request.adoc[]
 .path-parameters
 include::{snippets}/get-user-reviews/path-parameters.adoc[]
 
+.request-parameters
+include::{snippets}/get-user-reviews/request-parameters.adoc[]
+
 .response-body
 include::{snippets}/get-user-reviews/response-body.adoc[]
 
@@ -121,6 +124,9 @@ include::{snippets}/get-user-stores/http-request.adoc[]
 
 .path-parameters
 include::{snippets}/get-user-stores/path-parameters.adoc[]
+
+.request-parameters
+include::{snippets}/get-user-stores/request-parameters.adoc[]
 
 .response-body
 include::{snippets}/get-user-stores/response-body.adoc[]

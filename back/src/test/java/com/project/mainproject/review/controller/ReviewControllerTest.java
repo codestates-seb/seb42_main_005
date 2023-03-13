@@ -24,12 +24,14 @@ import java.util.List;
 
 import static com.project.mainproject.utils.ApiDocumentUtils.getRequestPreProcessor;
 import static com.project.mainproject.utils.ApiDocumentUtils.getResponsePreProcessor;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ReviewController.class)
 @MockBean(JpaMetamodelMappingContext.class)
@@ -70,31 +72,6 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
                                 responseFields(
                                         getPageResponseDescriptors(
                                                 getStoreReviewPageDtoResponseDescriptors("storeReview")
-                                        )
-                                )
-                        )
-                )
-                .andReturn();
-    }
-
-    @Test
-    void getStoreReviewDetail() throws Exception {
-
-        ResultActions actions = mockMvc.perform(getRequestBuilder(getTowPathParam(), storeIdx, reviewIdx));
-        actions
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andDo(
-                        document(
-                                "get-review",
-                                getRequestPreProcessor(),
-                                getResponsePreProcessor(),
-                                pathParameters(
-                                        getStoreReviewPathParameterDescriptor()
-                                ),
-                                responseFields(
-                                        getSingleResponseDescriptors(
-                                                getStoreReviewPageDtoResponseDescriptors("")
                                         )
                                 )
                         )

@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +23,8 @@ public class Normal extends User {
     public Normal(String userID,
                   String password,
                   String email,
-                  String name,
-                  LocalDateTime DOB) {
-        super(userID, password, email, name, DOB);
+                  String name) {
+        super(userID, password, email, name);
         this.pickedStores= new ArrayList<>();
     }
 

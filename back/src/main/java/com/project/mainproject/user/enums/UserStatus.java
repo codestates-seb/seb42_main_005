@@ -1,8 +1,10 @@
 package com.project.mainproject.user.enums;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
+@Getter
 public enum UserStatus {
 
     ACTIVE(0, "활동 회원"),
