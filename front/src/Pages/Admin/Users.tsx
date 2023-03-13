@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import AdminTabs from "./AdminTabs"
+import AdminTabs from "./AdminTabs";
 import Button from "../../Components/Ul/Button";
 import CheckBox from "../../Components/Ul/CheckBox";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
@@ -7,16 +7,49 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 export default function Users() {
   const dummy = [
     {
-      content: "약사 대머리임 ㅋㅋㅋㅋㅋ",
-      email: "waiting@kbs.com",
-      writtenAt: "2023.02.01",
-      reports: 12,
+      classification: "약사",
+      accountStatus: "active",
+      nickname: "johnsFavourite",
+      email: "papa@johns.com",
+      subscription: "2023.02.13",
+      reviewCount: 4,
+      reportCount: 0,
     },
     {
-      content: "잘되면 재밌고 잘안되면 재미없고",
-      email: "boring@coding.com",
-      writtenAt: "2023.02.01",
-      reports: 13,
+      classification: "일반",
+      accountStatus: "suspended",
+      nickname: "MarchApril",
+      email: "papa@johns.com",
+      subscription: "1996.04.25",
+      reviewCount: 6,
+      reportCount: 99,
+    },
+    {
+      classification: "약사",
+      accountStatus: "active",
+      nickname: "February",
+      email: "painting@landscape.com",
+      subscription: "2019.02.13",
+      reviewCount: 3,
+      reportCount: 0,
+    },
+    {
+      classification: "일반",
+      accountStatus: "active",
+      nickname: "JuneJuly",
+      email: "surfing@hawaii.com",
+      subscription: "2021.07.24",
+      reviewCount: 20,
+      reportCount: 0,
+    },
+    {
+      classification: "일반",
+      accountStatus: "suspended",
+      nickname: "McMorning",
+      email: "Mcdonalds@maccas.com",
+      subscription: "2023.03.13",
+      reviewCount: 45,
+      reportCount: 20,
     },
   ];
 
@@ -28,11 +61,12 @@ export default function Users() {
           <Header>
             <span>전체회원관리</span>
             <ButtonContainer>
-              <select>
-                <option>3개월</option>
-                <option>6개월</option>
-                <option>9개월</option>
-              </select>
+              <Select>
+                <Option>정지옵션</Option>
+                <Option>3개월</Option>
+                <Option>6개월</Option>
+                <Option>9개월</Option>
+              </Select>
               <Button color="blue" size="md" text="선택정지" />
               <Button color="blue" size="md" text="선택강퇴" />
             </ButtonContainer>
@@ -42,22 +76,28 @@ export default function Users() {
               <Values className="checkBox">
                 <CheckBox />
               </Values>
-              <Values className="content">내용</Values>
+              <Values className="classification">구분</Values>
+              <Values className="accountStatus">계정상태</Values>
+              <Values className="nickname">닉네임</Values>
               <Values className="email">email</Values>
-              <Values className="writtenAt">작성일</Values>
-              <Values className="reports">신고 수</Values>
+              <Values className="subscription">가입일</Values>
+              <Values className="reviewCount">리뷰 수</Values>
+              <Values className="reportCount">신고 수</Values>
             </Label>
             {dummy.length ? (
               <BelowLable>
-                {dummy.map((data) => (
-                  <Content>
+                {dummy.map((data, i) => (
+                  <Content key={i} className={data.accountStatus === "suspended" ? "suspended" : ""}>
                     <Values className="checkBox">
                       <CheckBox />
                     </Values>
-                    <Values className="content">{data.content}</Values>
+                    <Values className="classification">{data.classification}</Values>
+                    <Values className="accountStatus">{data.accountStatus}</Values>
+                    <Values className="nickname">{data.nickname}</Values>
                     <Values className="email">{data.email}</Values>
-                    <Values className="writtenAt">{data.writtenAt}</Values>
-                    <Values className="reports">{data.reports}</Values>
+                    <Values className="subscription">{data.subscription}</Values>
+                    <Values className="reviewCount">{data.reviewCount}</Values>
+                    <Values className="reportCount">{data.reportCount}</Values>
                   </Content>
                 ))}
               </BelowLable>
@@ -120,6 +160,24 @@ const ButtonContainer = styled.div`
   display: flex;
   gap: 20px;
 `;
+const Select = styled.select`
+  background-color: 1px solid green;
+
+  line-height: 1.1;
+  /* padding: 0.5rem 1rem; */
+  /* 버튼 위 라인 효과 */
+  box-shadow: inset 0 1px 0 0 hsl(0, 0%, 100%, 0.4);
+  border: 1px solid transparent;
+  text-decoration: none;
+`;
+const Option = styled.option`
+  line-height: 1.1;
+  padding: 0.5rem 1rem;
+  /* 버튼 위 라인 효과 */
+  box-shadow: inset 0 1px 0 0 hsl(0, 0%, 100%, 0.4);
+  border: 1px solid transparent;
+  text-decoration: none;
+`;
 const Table = styled.figure`
   display: flex;
   flex-direction: column;
@@ -178,6 +236,9 @@ const Content = styled.div`
   padding: 10px 20px;
   border-bottom: 0.5px solid var(--black-075);
   background-color: var(--white);
+  &.suspended {
+    color: var(--black-200);
+  }
   :hover {
     background-color: var(--black-050);
   }
@@ -188,18 +249,25 @@ const Values = styled.span`
   &.checkBox {
     padding-left: 7px;
   }
-  &.content {
-    width: 400px;
-    white-space: normal;
-    word-break: break-all;
+  &.classification {
+    width: 60px;
+  }
+  &.accountStatus {
+    width: 100px;
+  }
+  &.nickname {
+    width: 180px;
   }
   &.email {
-    width: 300px;
+    width: 240px;
   }
-  &.writtenAt {
-    width: 150px;
+  &.subscription {
+    width: 120px;
   }
-  &.reports {
+  &.reviewCount {
+    width: 60px;
+  }
+  &.reportCount {
     width: 60px;
   }
 `;

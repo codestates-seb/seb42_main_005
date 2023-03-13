@@ -87,8 +87,8 @@ export default function Reports() {
             </Label>
             {dummy.length ? (
               <BelowLable>
-                {dummy.map((data) => (
-                  <Content>
+                {dummy.map((data, i) => (
+                  <Content key={i}>
                     <Values className="checkBox">
                       <CheckBox />
                     </Values>
