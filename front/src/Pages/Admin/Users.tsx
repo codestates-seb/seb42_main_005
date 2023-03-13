@@ -62,7 +62,7 @@ export default function Users() {
             <span>전체회원관리</span>
             <ButtonContainer>
               <Select>
-                <option>정지옵션</option>
+                <Option>정지옵션</Option>
                 <option>3개월</option>
                 <option>6개월</option>
                 <option>9개월</option>
@@ -114,7 +114,7 @@ export default function Users() {
   );
 }
 
-const WholePage = styled.div`
+const WholePage = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -134,7 +134,7 @@ const Wrapper = styled.main`
   box-shadow: var(--wrapped-shadow);
   background-color: var(--black-075);
 `;
-const Page = styled.article`
+const Page = styled.section`
   display: flex;
   flex-direction: column;
   height: 40rem;
@@ -156,24 +156,20 @@ const Header = styled.header`
     padding: 20px 0px 20px 20px;
   }
 `;
-const ButtonContainer = styled.div`
+const ButtonContainer = styled.section`
   display: flex;
   gap: 20px;
 `;
 const Select = styled.select`
-  border: 1.2px solid var(--l_button-blue);
-  color: var(--l_button-blue);
   cursor: pointer;
   padding: 0.5rem;
+  color: var(--l_button-blue);
   border-radius: 3px;
+  border: 1.2px solid var(--l_button-blue);
+  :focus { outline: none}
 `;
 const Option = styled.option`
-  line-height: 1.1;
-  padding: 0.5rem 1rem;
-  /* 버튼 위 라인 효과 */
-  box-shadow: inset 0 1px 0 0 hsl(0, 0%, 100%, 0.4);
-  border: 1px solid transparent;
-  text-decoration: none;
+
 `;
 const Table = styled.figure`
   display: flex;
@@ -190,7 +186,7 @@ const Table = styled.figure`
     }
   }
 `;
-const Label = styled.div`
+const Label = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -203,7 +199,7 @@ const Label = styled.div`
   border-bottom: 1.5px solid var(--black-100);
   background-color: var(--black-050);
 `;
-const BelowLable = styled.div`
+const BelowLable = styled.section`
   display: flex;
   flex-direction: column;
   height: 26rem;
@@ -211,7 +207,7 @@ const BelowLable = styled.div`
   overflow-y: scroll;
   background-color: var(--black-050);
 `;
-const Instead = styled.div`
+const Instead = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -226,7 +222,7 @@ const Instead = styled.div`
     font-size: 2rem;
   }
 `;
-const Content = styled.div`
+const Content = styled.article`
   display: flex;
   justify-content: space-between;
   align-items: center;
