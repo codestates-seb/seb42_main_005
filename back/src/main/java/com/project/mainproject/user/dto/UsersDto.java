@@ -22,6 +22,7 @@ public class UsersDto {
         private LocalDateTime createdAt;
         private int reviewCnt;
         private int reportCnt;
+        private String userStatus;
     }
 
 }

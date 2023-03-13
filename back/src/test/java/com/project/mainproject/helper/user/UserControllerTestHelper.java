@@ -56,7 +56,6 @@ public interface UserControllerTestHelper extends ControllerTestHelper {
                 fieldWithPath(parentPath.concat("userIdx")).type(JsonFieldType.NUMBER).description("회원 식별자"),
                 fieldWithPath(parentPath.concat("email")).type(JsonFieldType.STRING).description("이메일"),
                 fieldWithPath(parentPath.concat("name")).type(JsonFieldType.STRING).description("닉네임"),
-                fieldWithPath(parentPath.concat("dob")).type(JsonFieldType.STRING).description("생년월일"),
                 fieldWithPath(parentPath.concat("createdAt")).type(JsonFieldType.STRING).description("가입일자"),
                 fieldWithPath(parentPath.concat("address")).type(JsonFieldType.STRING).description("주소")
         );
@@ -70,7 +69,8 @@ public interface UserControllerTestHelper extends ControllerTestHelper {
                 fieldWithPath(parentPath.concat("email")).type(JsonFieldType.STRING).description("이메일"),
                 fieldWithPath(parentPath.concat("createdAt")).type(JsonFieldType.STRING).description("가입일자"),
                 fieldWithPath(parentPath.concat("reviewCnt")).type(JsonFieldType.NUMBER).description("남긴 리뷰 수"),
-                fieldWithPath(parentPath.concat("reportCnt")).type(JsonFieldType.NUMBER).description("받은 신고 수?")
+                fieldWithPath(parentPath.concat("reportCnt")).type(JsonFieldType.NUMBER).description("받은 신고 수"),
+                fieldWithPath(parentPath.concat("userStatus")).type(JsonFieldType.STRING).description("회원 상태")
         );
     }
     default List<FieldDescriptor> getDefaultUserReviewsResponseDescriptors(DataResponseType dataResponseType) {
