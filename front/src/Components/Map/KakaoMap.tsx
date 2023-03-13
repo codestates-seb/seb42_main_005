@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 
@@ -9,37 +10,36 @@ declare global {
 }
 
 export default function KakaoMap() {
+  const { kakao } = window;
+  const mapRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    let container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
-    let options = {
-      //지도를 생성할 때 필요한 기본 옵션
-      center: new window.kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
-      level: 3, //확대 수준 (기본값: 3)
-      draggable: true,
-      scrollwheel: true, //마우스 휠, 모바일 터치를 이용한 확대 및 축소 가능 여부
+    const container = mapRef.current;
+    const options = {
+      center: new kakao.maps.LatLng(33.450701, 126.570667),
+      level: 3,
     };
-
-    let map = new window.kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+    // 지도 객체 생성
+    const map = new kakao.maps.Map(container, options);
   }, []);
 
-  function zoomIn() {
-    var level = new window.kakao.map.getLevel(); // 현재 지도의 레벨
+  const zoomIn = () => {
+    var level = window.kakao.map.getLevel(); // 현재 지도의 레벨
     window.kakao.map.setLevel(level - 1); // 지도가 확대
-  }
-  function zoomOut() {
+  };
+  const zoomOut = () => {
     var level = window.kakao.map.getLevel(); // 현재 지도의 레벨
     window.kakao.map.setLevel(level + 1); // 지도가 축소
-  }
+  };
 
   return (
-    <MapContainer id="map">
+    <MapContainer ref={mapRef}>
       <ZoomControler>
-        <ZoomBtn>
-          <AiOutlinePlus className="icon plus" onClick={zoomIn} />
+        <ZoomBtn onClick={zoomIn}>
+          <AiOutlinePlus className="icon plus" />
         </ZoomBtn>
         <span className="partition" />
-        <ZoomBtn>
-          <AiOutlineMinus className="icon minus" onClick={zoomOut} />
+        <ZoomBtn onClick={zoomOut}>
+          <AiOutlineMinus className="icon minus" />
         </ZoomBtn>
       </ZoomControler>
     </MapContainer>
