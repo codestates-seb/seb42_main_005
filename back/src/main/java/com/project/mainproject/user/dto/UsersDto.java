@@ -23,6 +23,7 @@ public class UsersDto {
         private int reviewCnt;
         private int reportCnt;
         private String userStatus;
+        private LocalDateTime recoverAt;
     }
 
 }

@@ -70,7 +70,8 @@ public interface UserControllerTestHelper extends ControllerTestHelper {
                 fieldWithPath(parentPath.concat("createdAt")).type(JsonFieldType.STRING).description("가입일자"),
                 fieldWithPath(parentPath.concat("reviewCnt")).type(JsonFieldType.NUMBER).description("남긴 리뷰 수"),
                 fieldWithPath(parentPath.concat("reportCnt")).type(JsonFieldType.NUMBER).description("받은 신고 수"),
-                fieldWithPath(parentPath.concat("userStatus")).type(JsonFieldType.STRING).description("회원 상태")
+                fieldWithPath(parentPath.concat("userStatus")).type(JsonFieldType.STRING).description("회원 상태"),
+                fieldWithPath(parentPath.concat("recoverAt")).type(JsonFieldType.STRING).description("계정 복구 일자")
         );
     }
     default List<FieldDescriptor> getDefaultUserReviewsResponseDescriptors(DataResponseType dataResponseType) {

@@ -39,6 +39,7 @@ public class UserStub {
                     .reviewCnt(i)
                     .reportCnt(i)
                     .userStatus(i % 2 == 1 ? UserStatus.ACTIVE.getDescription() : UserStatus.SUSPENDED.getDescription())
+                    .recoverAt(LocalDateTime.of(2023, 3, 20 + i, 0, 0, 0))
                     .build();
             users.add(user);
         }
