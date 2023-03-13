@@ -1,5 +1,4 @@
-import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 
@@ -20,15 +19,19 @@ export default function KakaoMap() {
     };
     // 지도 객체 생성
     const map = new kakao.maps.Map(container, options);
+    setMap(map);
+    map.setMaxLevel(7);
   }, []);
 
+  const [_map, setMap]: any = useState();
+  // console.log(_map);
+
   const zoomIn = () => {
-    var level = window.kakao.map.getLevel(); // 현재 지도의 레벨
-    window.kakao.map.setLevel(level - 1); // 지도가 확대
+    _map.setLevel(_map.getLevel() - 1);
   };
+
   const zoomOut = () => {
-    var level = window.kakao.map.getLevel(); // 현재 지도의 레벨
-    window.kakao.map.setLevel(level + 1); // 지도가 축소
+    _map.setLevel(_map.getLevel() + 1);
   };
 
   return (
