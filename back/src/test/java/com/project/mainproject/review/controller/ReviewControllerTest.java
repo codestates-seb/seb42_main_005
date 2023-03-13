@@ -80,31 +80,6 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
     }
 
     @Test
-    void getStoreReviewDetail() throws Exception {
-
-        ResultActions actions = mockMvc.perform(getRequestBuilder(getTowPathParam(), storeIdx, reviewIdx));
-        actions
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andDo(
-                        document(
-                                "get-review",
-                                getRequestPreProcessor(),
-                                getResponsePreProcessor(),
-                                pathParameters(
-                                        getStoreReviewPathParameterDescriptor()
-                                ),
-                                responseFields(
-                                        getSingleResponseDescriptors(
-                                                getStoreReviewPageDtoResponseDescriptors("")
-                                        )
-                                )
-                        )
-                )
-                .andReturn();
-    }
-
-    @Test
     void createReview() throws Exception {
 
         PostCreateReviewDto build = PostCreateReviewDto.builder().image("사진 파일이 들어갈 것이다.").content("리뷰 본문 약사가 맛있고 제품이 친절해요").rating(4).userIdx(userIdx).tags(List.of(new TagIdDto(1L), new TagIdDto(2L))).build();

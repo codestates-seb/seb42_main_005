@@ -6,7 +6,6 @@ import com.project.mainproject.dto.UserIdxRequestDto;
 import com.project.mainproject.dummy.CommonStub;
 import com.project.mainproject.review.dto.*;
 import com.project.mainproject.review.dummy.ReviewStub;
-import com.project.mainproject.review.dto.PostReportReviewPlusDto;
 import com.project.mainproject.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -31,16 +30,6 @@ public class ReviewController {
         PageResponseDto build = CommonStub.getPageResponseStub();
         build.setResponse(ListGetStoreReviewDto.builder().storeReview(ReviewStub.getStoreReviewPageListStub()).build());
         return ResponseEntity.ok().body(build);
-    }
-
-    /*
-    * 약국 정보 상세
-    * */
-    @GetMapping("store/{storeIdx}/review/{reviewIdx}")
-    public ResponseEntity getStoreReviewDetail(@PathVariable Long storeIdx, @PathVariable Long reviewIdx) {
-        SingleResponseDto build = CommonStub.getSingleResponseStub();
-        build.setResponse(ReviewStub.storeReviewDetailDto());
-        return ResponseEntity.ok(build);
     }
 
     /*

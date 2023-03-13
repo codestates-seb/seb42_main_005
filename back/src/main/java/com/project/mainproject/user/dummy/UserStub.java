@@ -6,6 +6,7 @@ import com.project.mainproject.user.dto.UserFindPasswordDto;
 import com.project.mainproject.user.dto.UserInfoDto;
 import com.project.mainproject.user.dto.UserPatchDto;
 import com.project.mainproject.user.dto.UserSignUpDto;
+import com.project.mainproject.user.enums.UserStatus;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,7 +21,6 @@ public class UserStub {
         return UserInfoDto.builder()
                 .userIdx(1L)
                 .name("강호동")
-                .dob(LocalDateTime.now()) // 수정 필요할 듯
                 .createdAt(LocalDateTime.now())
                 .email("zzanghd@gmail.com")
                 .address("서울특별시 강남구 청담동")
@@ -38,6 +38,8 @@ public class UserStub {
                     .createdAt(LocalDateTime.now())
                     .reviewCnt(i)
                     .reportCnt(i)
+                    .userStatus(i % 2 == 1 ? UserStatus.ACTIVE.getDescription() : UserStatus.SUSPENDED.getDescription())
+                    .recoverAt(LocalDateTime.of(2023, 3, 20 + i, 0, 0, 0))
                     .build();
             users.add(user);
         }

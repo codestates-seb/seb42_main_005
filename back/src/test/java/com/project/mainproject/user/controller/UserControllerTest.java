@@ -162,6 +162,9 @@ class UserControllerTest implements UserControllerTestHelper {
                         document("get-users",
                                 getRequestPreProcessor(),
                                 getResponsePreProcessor(),
+                                requestParameters(
+                                        getDefaultRequestParameterDescriptors()
+                                ),
                                 responseFields(
                                         getPageResponseDescriptors(
                                                 getDefaultUsersResponseDescriptors(DataResponseType.LIST))
@@ -184,6 +187,9 @@ class UserControllerTest implements UserControllerTestHelper {
                                 getRequestPreProcessor(),
                                 getResponsePreProcessor(),
                                 pathParameters(getMemberRequestPathParameterDescriptor()),
+                                requestParameters(
+                                        getDefaultRequestParameterDescriptors()
+                                ),
                                 responseFields(
                                         getPageResponseDescriptors(
                                                 getDefaultUserReviewsResponseDescriptors(DataResponseType.LIST))
@@ -206,6 +212,9 @@ class UserControllerTest implements UserControllerTestHelper {
                                 getRequestPreProcessor(),
                                 getResponsePreProcessor(),
                                 pathParameters(getMemberRequestPathParameterDescriptor()),
+                                requestParameters(
+                                        getDefaultRequestParameterDescriptors()
+                                ),
                                 responseFields(
                                         getPageResponseDescriptors(
                                                 getDefaultUserStoresResponseDescriptors(DataResponseType.LIST))
