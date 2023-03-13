@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Button from "../Ul/Button";
 import UserAdress from "./UserAdress";
 
 //!  name, address, email, password

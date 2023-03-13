@@ -10,6 +10,7 @@ export default function PharmSignForms() {
   const [businessImgFile, setbusinessImgFile] = useState<File | null>(null);
   const [pharmImgFile, setPharmImgFile] = useState<File | null>(null);
   //나중에 파일 넘겨줄때 businessImgFile, pharmImgFile 넘겨주면 돼!
+
   const [pSignForm, setpSignForms] = useState({
     email: "",
     password: "",
@@ -26,12 +27,12 @@ export default function PharmSignForms() {
 
   const BusinessImg = useRef<HTMLInputElement>(null);
   const PharmImg = useRef<HTMLInputElement>(null);
-  const onClickBusinessImg = (e: any) => {
+  const onClickBusinessImg = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     BusinessImg.current?.click();
   };
-  //MouseEvent<HTMLButtonElement>
-  const onClickPharmImg = (e: any) => {
+
+  const onClickPharmImg = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     PharmImg.current?.click();
   };
@@ -151,19 +152,18 @@ const SignUpForm = styled.form`
 `;
 const InputContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: center;
   border: 1px solid var(--black-150);
   border-radius: 10px;
   box-shadow: var(--bs-sm);
   margin-bottom: 1rem;
   img {
-    display: flex;
-    justify-content: center;
+    position: absolute;
     width: 2rem;
     height: 2rem;
-    padding-top: 0.2rem;
+    display: inline-block;
     margin-top: 0.2rem;
-    margin-left: 0.4rem;
+    margin-left: 0.5rem;
   }
   .photo_upload {
     padding: 0.7rem 0.8rem;
@@ -179,11 +179,11 @@ const SignUpInInput = styled.input`
   height: 2.7rem;
   outline: none;
   font-size: 1.1rem;
-  padding-left: 0.5rem;
+  /* padding-left: 0.5rem; */
   border: none;
-  &:focus {
+  /* &:focus {
     box-shadow: 0 3px 3px -2px var(--blue-700);
-  }
+  } */
 `;
 const ImgInput = styled.input`
   width: 27rem;
