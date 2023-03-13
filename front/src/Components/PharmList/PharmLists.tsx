@@ -51,6 +51,7 @@ export default function PharmLists() {
 
 //전체 컨테이너
 const ListContainer = styled.div`
+  position: absolute;
   width: 36rem;
   height: calc(100vh - 50px);
   border-top: 1px solid var(--black-150);
@@ -60,6 +61,7 @@ const ListContainer = styled.div`
   background-color: var(--white);
   box-shadow: var(--bs-lg);
   padding: 1.5rem 0 1rem 1.5rem;
+  z-index: 2;
   transition: 0.2s;
   @media (max-width: 768px) {
     transition: 0.2s;
