@@ -1,18 +1,36 @@
 import { useRef, useState } from "react";
 import styled from "styled-components";
 import Button from "../Ul/Button";
+import PharmAddress from "./PharmAddress";
 
+//!  name, address, email, password
 export default function PharmSignForms() {
-  const [businessImg, setBusinessImg]: any = useState(null);
-  const [pharmImg, setPharmImg]: any = useState(null);
+  const [businessImg, setBusinessImg] = useState<string>("");
+  const [pharmImg, setPharmImg] = useState<string>("");
+  const [businessImgFile, setbusinessImgFile] = useState<File | null>(null);
+  const [pharmImgFile, setPharmImgFile] = useState<File | null>(null);
+  //나중에 파일 넘겨줄때 businessImgFile, pharmImgFile 넘겨주면 돼!
+  const [pSignForm, setpSignForms] = useState({
+    email: "",
+    password: "",
+    name: "",
+    address: "",
+  });
+  const [error, setError] = useState({
+    email: true,
+    password: true,
+    name: true,
+  });
 
-  const BusinessImg = useRef<any>();
-  const PharmImg = useRef<any>();
+  const [checks, setChecks] = useState(false);
+
+  const BusinessImg = useRef<HTMLInputElement>(null);
+  const PharmImg = useRef<HTMLInputElement>(null);
   const onClickBusinessImg = (e: any) => {
     e.preventDefault();
     BusinessImg.current?.click();
   };
-
+  //MouseEvent<HTMLButtonElement>
   const onClickPharmImg = (e: any) => {
     e.preventDefault();
     PharmImg.current?.click();
@@ -50,16 +68,8 @@ export default function PharmSignForms() {
         </InputContainer>
         <InputContainer>
           <img alt="live" src="Images/whereyoulive.png" />
-          <SignUpInInput placeholder="주소를 입력하세요" />
-          <div className="adress_find">
-            <Button color="l_blue" size="sm" text="주소 찾기" />
-          </div>
-        </InputContainer>
-        {/* 생년월일 필요한 페이지를 수정하면서
-        가입시 생년월일이 필요없어서 수정할 필요있음! => 백엔드에게 말하기! */}
-        <InputContainer>
-          <img alt="cake" src="Images/cake.png" />
-          <SignUpInInput />
+          <SignUpInInput placeholder="주소를 입력하세요" value={pSignForm.address} />
+          <PharmAddress setpSignForms={setpSignForms} />
         </InputContainer>
         <InputContainer>
           <img alt="camera" src="Images/camera.png" />
@@ -71,8 +81,9 @@ export default function PharmSignForms() {
             type="file"
             ref={BusinessImg}
             name="fileName"
-            onChange={(e) => {
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               e.target.files && setBusinessImg(e.target.files[0].name);
+              e.target.files && setbusinessImgFile(e.target.files[0]);
             }}
           />
         </InputContainer>
@@ -89,6 +100,7 @@ export default function PharmSignForms() {
             name="fileName"
             onChange={(e) => {
               e.target.files && setPharmImg(e.target.files[0].name);
+              e.target.files && setPharmImgFile(e.target.files[0]);
             }}
           />
         </InputContainer>

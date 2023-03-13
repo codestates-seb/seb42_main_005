@@ -4,6 +4,13 @@ import PharmSignForms from "../Components/SignUpForm/PharmSignForms";
 import SignUpFormTab from "../Components/SignUpForm/SignUpFormTab";
 import UserSignUpForms from "../Components/SignUpForm/UserSignUpForms";
 
+export interface Form {
+  email: string;
+  password: string;
+  name: string;
+  address: string;
+}
+
 export default function SignUp() {
   const [tab, setTab] = useState<"user" | "pharm">("user");
 

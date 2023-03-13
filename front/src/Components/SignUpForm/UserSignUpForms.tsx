@@ -1,9 +1,24 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "../Ul/Button";
+import UserAdress from "./UserAdress";
 
-//!  name, address, email, password, dob
+//!  name, address, email, password
 export default function UserSignUpForms() {
+  const [SignForm, setSignForms] = useState({
+    email: "",
+    password: "",
+    name: "",
+    address: "",
+  });
+  const [error, setError] = useState({
+    email: true,
+    password: true,
+    name: true,
+  });
+
+  const [checks, setChecks] = useState(false);
+
   return (
     <Container>
       <SignUpForm>
@@ -36,16 +51,8 @@ export default function UserSignUpForms() {
         </InputContainer>
         <InputContainer>
           <img className="inputimage" alt="live" src="Images/whereyoulive.png" />
-          <SignUpInInput placeholder="주소를 입력하세요" />
-          <div className="adress_find">
-            <Button color="l_blue" size="sm" text="주소 찾기" />
-          </div>
-        </InputContainer>
-        {/* 생년월일 필요한 페이지를 수정하면서
-        가입시 생년월일이 필요없어서 수정할 필요있음! => 백엔드에게 말하기! */}
-        <InputContainer>
-          <img className="inputimage" alt="cake" src="Images/cake.png" />
-          <SignUpInInput />
+          <SignUpInInput placeholder="주소를 입력하세요" value={SignForm.address} />
+          <UserAdress setSignForms={setSignForms} />
         </InputContainer>
         <CheckContainer>
           <Check type="checkbox" />
