@@ -10,7 +10,6 @@ export default function PharmSignForms() {
   const [businessImgFile, setbusinessImgFile] = useState<File | null>(null);
   const [pharmImgFile, setPharmImgFile] = useState<File | null>(null);
   //나중에 파일 넘겨줄때 businessImgFile, pharmImgFile 넘겨주면 돼!
-
   const [pSignForm, setpSignForms] = useState({
     email: "",
     password: "",
@@ -152,18 +151,19 @@ const SignUpForm = styled.form`
 `;
 const InputContainer = styled.div`
   display: flex;
-  flex-direction: center;
+  flex-direction: row;
   border: 1px solid var(--black-150);
   border-radius: 10px;
   box-shadow: var(--bs-sm);
   margin-bottom: 1rem;
   img {
-    position: absolute;
+    display: flex;
+    justify-content: center;
     width: 2rem;
     height: 2rem;
-    display: inline-block;
+    padding-top: 0.2rem;
     margin-top: 0.2rem;
-    margin-left: 0.5rem;
+    margin-left: 0.4rem;
   }
   .photo_upload {
     padding: 0.7rem 0.8rem;
@@ -172,6 +172,9 @@ const InputContainer = styled.div`
     padding-top: 0.7rem;
     padding-left: 1.2rem;
   }
+  &:focus-within {
+    box-shadow: var(--wrapped-shadow);
+  }
 `;
 
 const SignUpInInput = styled.input`
@@ -179,11 +182,10 @@ const SignUpInInput = styled.input`
   height: 2.7rem;
   outline: none;
   font-size: 1.1rem;
-  /* padding-left: 0.5rem; */
+  padding-left: 0.5rem;
   border: none;
-  /* &:focus {
-    box-shadow: 0 3px 3px -2px var(--blue-700);
-  } */
+  text-overflow: ellipsis;
+  color: var(--black-500);
 `;
 const ImgInput = styled.input`
   width: 27rem;
@@ -193,6 +195,7 @@ const ImgInput = styled.input`
   padding-left: 0.5rem;
   border: none;
   color: var(--black-500);
+  text-overflow: ellipsis;
 `;
 const CheckContainer = styled.div`
   display: flex;

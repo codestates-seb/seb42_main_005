@@ -118,6 +118,9 @@ const InputContainer = styled.div`
     padding-left: 1.2rem;
     padding-right: 0.955rem;
   }
+  &:focus-within {
+    box-shadow: var(--wrapped-shadow);
+  }
 `;
 const SignUpInInput = styled.input`
   width: 27rem;
@@ -126,9 +129,7 @@ const SignUpInInput = styled.input`
   font-size: 1.1rem;
   padding-left: 0.5rem;
   border: none;
-  &:focus {
-    box-shadow: 0 3px 3px -2px var(--blue-700);
-  }
+  color: var(--black-500);
 `;
 const CheckContainer = styled.div`
   display: flex;
