@@ -150,6 +150,7 @@ public interface ControllerTestHelper<T> {
                 fieldWithPath("pageInfo.isFinish").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부").optional()
         );
     }
+
     default List<FieldDescriptor> getResultResponseDescriptors() {
         return Arrays.asList(
                 fieldWithPath("httpCode").type(JsonFieldType.NUMBER).description("결과 코드").optional(),
@@ -160,8 +161,7 @@ public interface ControllerTestHelper<T> {
         return List.of(
                 parameterWithName("page").description("조회 페이지 \n 0부터 시작").optional(),
                 parameterWithName("size").description("페이지 당 건 수 \n 기본 값은 ").optional(),
-                parameterWithName("sort").description("정렬 기준").optional(),
-                parameterWithName("direction").description("정렬 오름차순 ASC / 내림차순 DESC \n 기본 값은 ASC").optional()
+                parameterWithName("sort").description("정렬 기준").optional()
         );
     }
     default List<FieldDescriptor> getDefaultWrapperDescriptors(String fieldName,JsonFieldType jsonFieldTypeForData,String description) {

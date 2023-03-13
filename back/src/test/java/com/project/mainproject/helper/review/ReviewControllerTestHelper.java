@@ -8,8 +8,6 @@ import org.springframework.restdocs.request.ParameterDescriptor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -82,7 +80,6 @@ public interface ReviewControllerTestHelper extends ControllerTestHelper {
                 fieldWithPath("tags").type(JsonFieldType.ARRAY).description("태그 정보").optional(),
                 fieldWithPath("tags[].tagIdx").type(JsonFieldType.NUMBER).description("태그 식별 ID").optional(),
                 fieldWithPath("content").type(JsonFieldType.STRING).description("리뷰 본문"),
-                fieldWithPath("image").type(JsonFieldType.STRING).description("리뷰 사진").optional(),
                 fieldWithPath("rating").type(JsonFieldType.NUMBER).description("별점")
         );
     }
@@ -124,6 +121,7 @@ public interface ReviewControllerTestHelper extends ControllerTestHelper {
                 fieldWithPath(parentPath.concat("storeIdx")).type(JsonFieldType.NUMBER).description("약국 식별 ID").optional(),
                 fieldWithPath(parentPath.concat("reviewIdx")).type(JsonFieldType.NUMBER).description("리뷰 식별 ID").optional(),
                 fieldWithPath(parentPath.concat("content")).type(JsonFieldType.STRING).description("리뷰 본문").optional(),
+                fieldWithPath(parentPath.concat("image")).type(JsonFieldType.STRING).description("리뷰 사진").optional(),
                 fieldWithPath(parentPath.concat("reportCreatedAt")).type(JsonFieldType.STRING).description("신고 날짜").optional()
         );
     }
