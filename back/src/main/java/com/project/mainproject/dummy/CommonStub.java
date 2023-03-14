@@ -6,8 +6,7 @@ import com.project.mainproject.dto.SingleResponseDto;
 
 import static com.project.mainproject.enums.ResultStatus.PROCESS_COMPLETED;
 
-public class
-CommonStub {
+public class CommonStub {
     public static PageInfo getPageInfoStub() {
         return PageInfo.builder()
                 .page(0)
