@@ -28,12 +28,15 @@ const SignUpInInput = styled.input`
   border: none;
   text-overflow: ellipsis;
   color: var(--black-500);
+  display: flex;
+  flex-grow: 1;
 `;
 
 const Box = styled.div`
-  position: relative;
-  top: 2.8rem;
-  right: 25rem;
-  font-size: 1px;
+  position: absolute;
+  width: 18rem;
+  margin-top: 2.9rem;
+  margin-left: 2rem;
+  font-size: 0.7rem;
   color: red;
 `;

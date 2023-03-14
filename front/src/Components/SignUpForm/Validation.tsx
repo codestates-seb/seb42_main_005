@@ -1,7 +1,7 @@
-//! 이메일 형식으로, 10글자이상
+//! 이메일 형식으로, 5글자이상
 function emailValidation(email: string) {
   const reg = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
-  if (email.length >= 10) {
+  if (email.length >= 5) {
     if (reg.test(email) == false) {
       return true;
     }

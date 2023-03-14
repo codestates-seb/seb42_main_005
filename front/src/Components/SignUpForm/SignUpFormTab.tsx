@@ -36,13 +36,11 @@ const Tab = styled.div<{ title: string; tab: string }>`
   color: var(--black-500);
   width: 50%;
   height: 3rem;
-  background-color: ${({ title, tab }) => (title === tab ? "var( --white)" : "var(--black-150)")};
+  background-color: ${({ title, tab }) => (title === tab ? "var( --white)" : "var(--black-050)")};
   border: 1px solid var(--black-200);
   border-bottom: none;
   border-top-left-radius: 18px;
   border-top-right-radius: 18px;
-  /* --bs-lg 썼는데 탭 아래 그림자 없앨려고, 
-  spread-radius 값을 음수로 함  */
   box-shadow: 0 -1px 4px -3px hsla(0, 0%, 0%, 0.09), 0 -3px 8px -3px hsla(0, 0%, 0%, 0.1),
     0 -4px 13px -3px hsla(0, 0%, 0%, 0.13);
   cursor: pointer;
