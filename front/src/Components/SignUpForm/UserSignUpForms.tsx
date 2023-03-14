@@ -6,6 +6,7 @@ import { Validate } from "./Validation";
 import { BsPersonCircle } from "react-icons/bs";
 import { FaUserEdit, FaMapMarkerAlt } from "react-icons/fa";
 import { AiOutlineLock } from "react-icons/ai";
+import ErrorAlert from "./ErrorAlert";
 //!  name, address, email, password
 export default function UserSignUpForms() {
   const [signForm, setSignForms] = useState({
@@ -79,10 +80,9 @@ export default function UserSignUpForms() {
             placeholder={"이메일을 입력하세요."}
             value={email}
             onChange={onChange}
-            Error={error.email}
-            ErrorText={"이메일 형식이 올바르지 않습니다."}
           />
         </InputContainer>
+        <ErrorAlert Error={error.email} ErrorText={"이메일 형식이 올바르지 않습니다."} />
         <InputContainer className={`${error.password ? "error" : "success"}`}>
           <AiOutlineLock className="inputimage" />
           <SignUpInput
@@ -91,10 +91,9 @@ export default function UserSignUpForms() {
             placeholder={"비밀번호를 입력하세요."}
             value={password}
             onChange={onChange}
-            Error={error.password}
-            ErrorText={"문자 숫자 특수문자 조합 8자 이상으로 조합해주세요."}
           />
         </InputContainer>
+        <ErrorAlert Error={error.password} ErrorText={"문자 숫자 특수문자 조합 8자 이상으로 조합해주세요."} />
         <InputContainer className={`${error.name ? "error" : "success"}`}>
           <FaUserEdit className="inputimage" />
           <SignUpInput
@@ -103,13 +102,13 @@ export default function UserSignUpForms() {
             placeholder={"닉네임을 입력하세요."}
             value={name}
             onChange={onChange}
-            Error={error.name}
-            ErrorText={"이름에는 공백이 들어갈 수 없습니다."}
           />
         </InputContainer>
+        <ErrorAlert Error={error.name} ErrorText={"이름에는 공백이 들어갈 수 없습니다."} />
         <InputContainer>
           <FaMapMarkerAlt className="inputimage" />
           <SignUpInput
+            readOnly
             type={"text"}
             name={"address"}
             placeholder={"주소를 입력하세요."}
@@ -143,7 +142,7 @@ const Container = styled.div`
     0 4px 13px -3px hsla(0, 0%, 0%, 0.13);
 `;
 const Google = styled.div`
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem;
   .google_button {
     height: 3.3rem;
     width: 37.875rem;
@@ -194,7 +193,7 @@ const InputContainer = styled.div`
   display: flex;
   flex-direction: row;
   border: 1px solid var(--black-150);
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
   border-radius: 10px;
   box-shadow: var(--bs-sm);
   padding: 0 10px;

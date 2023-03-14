@@ -7,6 +7,7 @@ import { Validate } from "./Validation";
 import { BsPersonCircle } from "react-icons/bs";
 import { AiOutlineLock, AiOutlineCamera } from "react-icons/ai";
 import { FaUserEdit, FaMapMarkerAlt } from "react-icons/fa";
+import ErrorAlert from "./ErrorAlert";
 //! name, address, email, password
 //!
 export default function PharmSignForms() {
@@ -102,10 +103,9 @@ export default function PharmSignForms() {
             placeholder={"이메일을 입력하세요."}
             value={email}
             onChange={onChange}
-            Error={error.email}
-            ErrorText={"이메일 형식이 올바르지 않습니다."}
           />
         </InputContainer>
+        <ErrorAlert Error={error.email} ErrorText={"이메일 형식이 올바르지 않습니다."} />
         <InputContainer className={`${error.password ? "error" : "success"}`}>
           <AiOutlineLock className="inputimage" />
           <SignUpInput
@@ -114,10 +114,9 @@ export default function PharmSignForms() {
             placeholder={"비밀번호를 입력하세요."}
             value={password}
             onChange={onChange}
-            Error={error.password}
-            ErrorText={"문자 숫자 특수문자 조합 8자 이상으로 조합해주세요."}
           />
         </InputContainer>
+        <ErrorAlert Error={error.password} ErrorText={"문자 숫자 특수문자 조합 8자 이상으로 조합해주세요."} />
         <InputContainer className={`${error.name ? "error" : "success"}`}>
           <FaUserEdit className="inputimage" />
           <SignUpInput
@@ -126,13 +125,13 @@ export default function PharmSignForms() {
             placeholder={"닉네임을 입력하세요."}
             value={name}
             onChange={onChange}
-            Error={error.name}
-            ErrorText={"이름에는 공백이 들어갈 수 없습니다."}
           />
         </InputContainer>
+        <ErrorAlert Error={error.name} ErrorText={"이름에는 공백이 들어갈 수 없습니다."} />
         <InputContainer>
           <FaMapMarkerAlt className="inputimage" />
           <SignUpInput
+            readOnly
             type={"text"}
             name={"address"}
             placeholder={"주소를 입력하세요."}
@@ -143,7 +142,7 @@ export default function PharmSignForms() {
         </InputContainer>
         <InputContainer>
           <AiOutlineCamera className="inputimage" />
-          <ImgInput value={businessImg} placeholder="사업자 등록증을 올려주세요" />
+          <ImgInput readOnly value={businessImg} placeholder="사업자 등록증을 올려주세요" />
           <div className="photo_upload">
             <Button color="l_blue" size="sm" text="사진업로드" onClick={onClickBusinessImg} />
           </div>
@@ -160,7 +159,7 @@ export default function PharmSignForms() {
 
         <InputContainer>
           <AiOutlineCamera className="inputimage" />
-          <ImgInput value={pharmImg} placeholder="약사면허증 사진을 올려주세요" />
+          <ImgInput readOnly value={pharmImg} placeholder="약사면허증 사진을 올려주세요" />
           <div className="photo_upload">
             <Button color="l_blue" size="sm" text="사진업로드" onClick={onClickPharmImg} />
           </div>
@@ -200,7 +199,7 @@ const Container = styled.div`
 `;
 
 const Google = styled.div`
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem;
   .google_button {
     height: 3.3rem;
     width: 37.875rem;
@@ -254,7 +253,7 @@ const InputContainer = styled.div`
   border: 1px solid var(--black-150);
   border-radius: 10px;
   box-shadow: var(--bs-sm);
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
   padding: 0 10px;
   .inputimage {
     display: flex;
