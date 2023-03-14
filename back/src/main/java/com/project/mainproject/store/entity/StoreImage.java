@@ -16,6 +16,6 @@ import static lombok.AccessLevel.PROTECTED;
 public class StoreImage {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long stareImageIdx;
+    private Long storeImageIdx;
     private String imagePath;
 }
