@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import styled from "styled-components";
 import Button from "../Ul/Button";
 import PharmAddress from "./PharmAddress";
+import SignUpInput from "./SignUpInput";
+import { Validate } from "./Validation";
 
 //!  name, address, email, password
 export default function PharmSignForms() {
@@ -10,6 +12,7 @@ export default function PharmSignForms() {
   const [businessImgFile, setbusinessImgFile] = useState<File | null>(null);
   const [pharmImgFile, setPharmImgFile] = useState<File | null>(null);
   //나중에 파일 넘겨줄때 businessImgFile, pharmImgFile 넘겨주면 돼!
+
   const [pSignForm, setpSignForms] = useState({
     email: "",
     password: "",
@@ -23,6 +26,24 @@ export default function PharmSignForms() {
   });
 
   const [checks, setChecks] = useState(false);
+
+  const { email, password, name, address } = pSignForm;
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let errors = false;
+    const { name, value } = e.target;
+    setpSignForms({
+      ...pSignForm,
+      [name]: value,
+    });
+
+    if (name === "email") {
+      errors = Validate.emailValidation(value);
+    }
+    if (name === "password") {
+      errors = Validate.passwordValidation(value);
+    }
+  };
 
   const BusinessImg = useRef<HTMLInputElement>(null);
   const PharmImg = useRef<HTMLInputElement>(null);
@@ -39,36 +60,51 @@ export default function PharmSignForms() {
   return (
     <Container>
       <SignUpForm>
-        <InputContainer>
+        <InputContainer className={`${error.email ? "error" : "success"}`}>
           <img alt="person" src="Images/person-outline.png" />
-          <SignUpInInput
-            type="email"
-            name="email"
-            placeholder="이메일을 입력하세요"
-            // value
+          <SignUpInput
+            type={"email"}
+            name={"email"}
+            placeholder={"이메일을 입력하세요."}
+            value={email}
+            onChange={onChange}
+            Error={error.email}
+            ErrorText={"이메일 형식이 올바르지 않습니다."}
           />
         </InputContainer>
         <InputContainer>
           <img alt="lock" src="Images/LockPersonOutline.png" />
-          <SignUpInInput
-            type="password"
-            name="password"
-            placeholder="비밀번호을 입력하세요"
-            // value
+          <SignUpInput
+            type={"password"}
+            name={"password"}
+            placeholder={"비밀번호를 입력하세요."}
+            value={password}
+            onChange={onChange}
+            Error={error.password}
+            ErrorText={"비밀번호는 문자 숫자 특수문자 조합 8자 이상으로 조합해주세요."}
           />
         </InputContainer>
         <InputContainer>
           <img alt="person-pencil" src="Images/person-pencil .png" />
-          <SignUpInInput
-            type="nickname"
-            name="nickname"
-            placeholder="닉네임을 입력하세요"
-            // valu
+          <SignUpInput
+            type={"text"}
+            name={"name"}
+            placeholder={"닉네임을 입력하세요."}
+            value={name}
+            onChange={onChange}
+            Error={error.name}
+            ErrorText={"이름에는 공백이 들어갈 수 없습니다."}
           />
         </InputContainer>
         <InputContainer>
           <img alt="live" src="Images/whereyoulive.png" />
-          <SignUpInInput placeholder="주소를 입력하세요" value={pSignForm.address} />
+          <SignUpInput
+            type={"text"}
+            name={"address"}
+            placeholder={"주소를 입력하세요."}
+            value={address as string}
+            onChange={onChange}
+          />
           <PharmAddress setpSignForms={setpSignForms} />
         </InputContainer>
         <InputContainer>
@@ -155,7 +191,7 @@ const InputContainer = styled.div`
   border: 1px solid var(--black-150);
   border-radius: 10px;
   box-shadow: var(--bs-sm);
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   img {
     display: flex;
     justify-content: center;
@@ -172,21 +208,14 @@ const InputContainer = styled.div`
     padding-top: 0.7rem;
     padding-left: 1.2rem;
   }
-  &:focus-within {
+  &.success &:focus-within {
     box-shadow: var(--wrapped-shadow);
+  }
+  &.error &:focus-within {
+    box-shadow: var(--wrapped-shadow-red);
   }
 `;
 
-const SignUpInInput = styled.input`
-  width: 27rem;
-  height: 2.7rem;
-  outline: none;
-  font-size: 1.1rem;
-  padding-left: 0.5rem;
-  border: none;
-  text-overflow: ellipsis;
-  color: var(--black-500);
-`;
 const ImgInput = styled.input`
   width: 27rem;
   height: 2.7rem;
