@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, MutableRefObject } from "react";
 import styled from "styled-components";
 import MapFilter from "./MapFilter";
-import Locations from "../../Util/Locations";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { BiTargetLock } from "react-icons/bi";
 
@@ -12,9 +11,21 @@ declare global {
 }
 
 export default function KakaoMap() {
-  const mapRef = useRef<HTMLElement | null>(null);
-  const location: any = Locations();
-  const [selected, setSelected] = useState<"map_home" | "in_business" | "midnight" | "bookmarks">("map_home");
+  const { kakao } = window;
+  const mapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = mapRef.current;
+    const options = {
+      center: new kakao.maps.LatLng(33.450701, 126.570667),
+      level: 3,
+    };
+    // 지도 객체 생성
+    const map = new kakao.maps.Map(container, options);
+    map.setMaxLevel(7);
+    setMap(map);
+  }, []);
+
   const [_map, setMap]: any = useState();
   const zoomIn = () => {
     _map.setLevel(_map.getLevel() - 1);
@@ -23,28 +34,35 @@ export default function KakaoMap() {
     _map.setLevel(_map.getLevel() + 1);
   };
 
-  const initMap = () => {
-    if (typeof location != "string") {
-      const container = document.getElementById("map");
-      const options = {
-        center: new window.kakao.maps.LatLng(location.latitude, location.longitude),
-        level: 3,
-      };
+  const locationLoadSuccess = (pos: { coords: { latitude: number; longitude: number } }) => {
+    // 현재 위치 받아오기
+    var currentPos = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
 
-      var map = new window.kakao.maps.Map(container as HTMLElement, options);
-      (mapRef as MutableRefObject<any>).current = map;
-    }
+    // 지도 이동(기존 위치와 가깝다면 부드럽게 이동)
+    _map.panTo(currentPos);
+
+    // 마커 생성
+    var marker = new kakao.maps.Marker({
+      position: currentPos,
+    });
+    marker.setMap(null);
+    marker.setMap(_map);
+  };
+  const locationLoadError = (pos: any) => {
+    alert("위치 정보를 가져오는데 실패했습니다.");
   };
 
-  useEffect(() => {
-    window.kakao.maps.load(() => initMap());
-  }, [mapRef]);
-
+  // 위치 가져오기 버튼 클릭시
+  const getCurrentLocBtn = () => {
+    navigator.geolocation.getCurrentPosition(locationLoadSuccess, locationLoadError);
+    _map.setLevel(3);
+  };
+  const [selected, setSelected] = useState<"map_home" | "in_business" | "midnight" | "bookmarks">("map_home");
   return (
-    <MapContainer id="map">
+    <MapContainer ref={mapRef}>
       <MapFilter selected={selected} setSelected={setSelected} />
       <CurrentLocation>
-        <LocaBtn onClick={() => initMap}>
+        <LocaBtn onClick={getCurrentLocBtn}>
           <BiTargetLock className="icon" />
         </LocaBtn>
       </CurrentLocation>
