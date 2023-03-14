@@ -1,7 +1,10 @@
+import { useState } from "react";
 import styled from "styled-components";
 import Button from "../../Components/Ul/Button";
 import { IoIosArrowDropright } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { MdOutlineAddAPhoto } from "react-icons/md";
+import { BiPhotoAlbum } from "react-icons/bi";
 
 let dummy = {
   myInfo: {
@@ -43,12 +46,39 @@ let dummy = {
 };
 
 export default function MyInfo() {
+  const [imageSrc, setImageSrc]: any = useState(null);
+  const onUpload = (e: any) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    return new Promise<void>((resolve) => {
+      reader.onload = () => {
+        setImageSrc(reader.result || null);
+        resolve();
+      };
+    });
+  };
+
   return (
     <WholePage>
       <ContentsWrapper>
         <PageHeading>마이페이지</PageHeading>
         <Information>
-          <ImgContainer>이미지 자리</ImgContainer>
+          <Title>내 정보</Title>
+          <ImgContainer>
+            <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
+            {imageSrc ? (
+              <ReviewImg src={imageSrc} />
+            ) : (
+              <Instead>
+                <BiPhotoAlbum />
+              </Instead>
+            )}
+            <Label htmlFor="img">
+              <MdOutlineAddAPhoto />
+              사진추가하기
+            </Label>
+          </ImgContainer>
           <Content>
             <ContentSet>
               <ContentKey>가입일</ContentKey>
@@ -123,7 +153,6 @@ export default function MyInfo() {
           <Button text="탈퇴하기" color="red" size="lg" />
         </div>
       </ContentsWrapper>
-      {/* <Footer /> */}
     </WholePage>
   );
 }
@@ -134,60 +163,43 @@ const WholePage = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
-  /* overflow-y: scroll; */
 `;
 const ContentsWrapper = styled.section`
-  /* border: 1px solid black; */
-  /*  */
   width: 1000px;
   padding-top: 50px;
   #quitBtnWrapper {
-    /* background-color: yellow; */
-    /*  */
     display: flex;
     justify-content: flex-end;
-    /* height: 400px; */
     margin: 20px 0 100px 0;
   }
 `;
 const PageHeading = styled.h1`
-  /* border: 1px solid brown; */
-  /*  */
   padding-bottom: 30px;
   padding-left: 10px;
   font-size: 40px;
   border-bottom: 1.5px solid var(--black-075);
 `;
 const Information = styled.section`
-  /* border: 1px solid burlywood; */
-  /*  */
   display: flex;
   padding: 20px;
-  gap: 20px;
   border-bottom: 1.5px solid var(--black-075);
 `;
 const ImgContainer = styled.aside`
-  border: 1px solid gainsboro;
-  /*  */
-  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
 `;
 const Title = styled.h2`
-  /* border: 1px solid cadetblue; */
-  /*  */
-  width: 200px;
-  /* font-weight: bold; */
+  width: 180px;
 `;
 const Content = styled.section`
-  /* border: 1px solid tan; */
-  /*  */
-  /* width: 800px; */
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   flex-grow: 1;
-  gap: 10px;
 `;
 const ButtonContainer = styled.span`
   position: absolute;
@@ -196,38 +208,32 @@ const ButtonContainer = styled.span`
   right: 0;
 `;
 const TableHead = styled.h3`
-  /* border: 1px solid khaki; */
-  /*  */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  /* height: 30px; */
-  padding: 2px 10px;
+  padding: 6px 10px;
   color: var(--black-500);
   border-top: 1.5px solid var(--black-075);
   border-bottom: 1.5px solid var(--black-075);
   background-color: var(--black-050);
 `;
 const TableBody = styled.div`
-  /*  */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 1px 10px;
+  padding: 8px 10px;
+  color: var(--black-600);
   border-bottom: 1px solid var(--black-050);
 `;
 const ContentSet = styled.h3`
-  /* border: 1px solid indianred; */
-  /*  */
   display: flex;
   align-items: center;
   gap: 30px;
+  margin: 4px 0;
 `;
 const ContentKey = styled.h3`
-  /* border: 1px solid firebrick; */
-  /*  */
   display: flex;
   align-items: center;
   width: 70px;
@@ -236,36 +242,27 @@ const ContentKey = styled.h3`
   color: var(--black-500);
 `;
 const ContentValue = styled.span`
-  /* border: 1px solid magenta; */
-  /*  */
   font-weight: normal;
   font-size: 18px;
   color: var(--black-700);
 `;
 const Text = styled.span`
-  /* border: 1px solid blue; */
-  /*  */
   display: flex;
   justify-content: center;
   align-items: center;
   &.single {
-    height: 30px;
     width: 50px;
   }
   &.pharm {
-    height: 30px;
     width: 150px;
   }
   &.address {
-    height: 30px;
     width: 270px;
   }
   &.number {
-    height: 30px;
     width: 140px;
   }
   &.review {
-    min-height: 30px;
     width: 300px;
     white-space: normal;
     word-break: break-all;
@@ -277,8 +274,46 @@ const Text = styled.span`
     }
   }
 `;
-// const Footer = styled.footer`
-//   background-color: yellow;
-//   width: 200px;
-//   height: 200px;
-// `;
+const ReviewImgInput = styled.input`
+  position: absolute;
+  display: none;
+`;
+const ReviewImg = styled.img`
+  height: 100px;
+  width: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+`;
+const Instead = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  width: 100px;
+  font-size: 40px;
+  background-color: var(--black-075);
+  color: var(--white);
+  border-radius: 50%;
+`;
+const Label = styled.label`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 104px;
+  margin-top: 5px;
+  padding: 0 2px;
+  gap: 2px;
+  font-size: 15px;
+
+  cursor: pointer;
+  font-family: inherit;
+  border-radius: 3px;
+  font-size: 0.8rem;
+  border: 1.2px solid var(--black-300);
+  color: var(--black-300);
+  box-shadow: var(--bs-btn);
+  :active {
+    background-color: var(--black-025);
+    box-shadow: var(--bs-btn-click);
+  }
+`;
