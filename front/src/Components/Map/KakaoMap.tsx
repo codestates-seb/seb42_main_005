@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, SetStateAction } from "react";
 import styled from "styled-components";
-import UseGeolocation from "../../Util/UseGeolocation";
+import MapFilter from "./MapFilter";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { BiTargetLock } from "react-icons/bi";
 
@@ -13,15 +13,12 @@ declare global {
 export default function KakaoMap() {
   const { kakao } = window;
   const mapRef = useRef<HTMLDivElement>(null);
-  //!
-  const location = UseGeolocation();
-  console.log(JSON.stringify(location));
-  //!
+
   useEffect(() => {
     const container = mapRef.current;
     const options = {
       // center: new kakao.maps.LatLng(33.450701, 126.570667),
-      center: new kakao.maps.LatLng(location.loaded ? JSON.stringify(location) : 33.450701, 126.570667), //!
+      center: new kakao.maps.LatLng(33.450701, 126.570667),
       level: 3,
     };
     // 지도 객체 생성
@@ -64,6 +61,7 @@ export default function KakaoMap() {
 
   return (
     <MapContainer ref={mapRef}>
+      {/* <MapFilter /> */}
       <CurrentLocation>
         <LocaBtn onClick={getCurrentLocBtn}>
           <BiTargetLock className="icon" />

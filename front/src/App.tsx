@@ -17,7 +17,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           //? 임시로 로그인 여부와 계정유형 할당 // isLogin= true | false // account=["User", "Pharm", "Admin"]
-          <Route path="/" element={<Layout isLogin={false} account="" />}>
+          <Route path="/" element={<Layout isLogin={true} account="User" />}>
             <Route path="/" element={<Home />} />
             <Route path="/sign_up" element={<SignUp />} />
             <Route path="/sign_out" element={<SignOut />} />
