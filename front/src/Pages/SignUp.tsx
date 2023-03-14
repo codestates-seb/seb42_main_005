@@ -45,7 +45,7 @@ const Container = styled.div`
 const Title = styled.div`
   display: flex;
   justify-content: center;
-  padding-top: 5rem;
+  padding-top: 2.5rem;
   img {
     padding-right: 1rem;
     width: 3.5rem;
