@@ -69,6 +69,7 @@ public class GlobalExceptionAdvice {
 
         return ResponseEntity
                 .status(HttpStatus.NOT_ACCEPTABLE)
+                .header("Accept","application/json")
                 .body(SingleResponseDto
                         .builder()
                         .httpCode(CommonExceptionCode.ACCEPT_TYPE_ERROR
@@ -87,7 +88,6 @@ public class GlobalExceptionAdvice {
 
         return ResponseEntity
                 .status(HttpStatus.NOT_ACCEPTABLE)
-                .header("Accept","application/json")
                 .body(SingleResponseDto
                         .builder()
                         .httpCode(CommonExceptionCode.NOT_HAVE_BODY
