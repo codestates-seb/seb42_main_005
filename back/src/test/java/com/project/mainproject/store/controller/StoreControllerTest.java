@@ -1,6 +1,7 @@
 package com.project.mainproject.store.controller;
 
 import com.project.mainproject.helper.store.StoreControllerTestHelper;
+import com.project.mainproject.store.dto.FilterTagDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -13,6 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
+import java.util.List;
 
 import static com.project.mainproject.utils.ApiDocumentUtils.getRequestPreProcessor;
 import static com.project.mainproject.utils.ApiDocumentUtils.getResponsePreProcessor;
@@ -39,7 +42,10 @@ class StoreControllerTest implements StoreControllerTestHelper {
         queryParams.add("page", "1");
         queryParams.add("size", "10");
 
-        ResultActions actions = mockMvc.perform(getRequestBuilder(getUrl(),queryParams));
+        FilterTagDto filterTagDto = new FilterTagDto(List.of("깨끗함","주차공간 넓음"));
+        String content = toJsonContent(filterTagDto);
+
+        ResultActions actions = mockMvc.perform(getRequestBuilder(getUrl(),queryParams,content));
 
         actions
                 .andExpect(status().isOk())

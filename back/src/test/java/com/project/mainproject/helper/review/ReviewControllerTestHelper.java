@@ -80,6 +80,7 @@ public interface ReviewControllerTestHelper extends ControllerTestHelper {
                 fieldWithPath("tags").type(JsonFieldType.ARRAY).description("태그 정보").optional(),
                 fieldWithPath("tags[].tagIdx").type(JsonFieldType.NUMBER).description("태그 식별 ID").optional(),
                 fieldWithPath("content").type(JsonFieldType.STRING).description("리뷰 본문"),
+                fieldWithPath("image").type(JsonFieldType.STRING).description("사진 파일 임시! 이부분 사진 업로드 이후 변경 예정"),
                 fieldWithPath("rating").type(JsonFieldType.NUMBER).description("별점")
         );
     }

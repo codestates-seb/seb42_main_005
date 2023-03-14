@@ -112,7 +112,7 @@ public class AdminControllerTest implements AdminControllerTestHelper {
         AdminUsersDto post = AdminStub.getAdminUsers();
         String content = toJsonContent(post);
         //when
-        ResultActions actions = mockMvc.perform(postRequestBuilder("/api/admin/access/failure", content));
+        ResultActions actions = mockMvc.perform(postRequestBuilder("/api/admin/fired", content));
 
         // then
         actions
