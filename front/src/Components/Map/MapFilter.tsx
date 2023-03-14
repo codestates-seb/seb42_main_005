@@ -4,11 +4,6 @@ import { IoCloudyNightOutline } from "react-icons/io5";
 import { HiOutlineHome } from "react-icons/hi2";
 import { AiOutlineMedicineBox } from "react-icons/ai";
 import { RiHeartsLine } from "react-icons/ri";
-
-// interface Selected {
-//   current?: string;
-// }
-// { current }: Selected
 interface Props {
   selected: string;
   setSelected: React.Dispatch<React.SetStateAction<"map_home" | "in_business" | "midnight" | "bookmarks">>;
@@ -84,24 +79,25 @@ const FillterBtn = styled.span<{ title: string; selected: string }>`
   .icon {
     align-items: center;
     font-size: 2.6rem;
-    color: ${({ title, selected }) => (title === selected ? "var(--blue-400)" : "var(--blue-200)")};
+    color: ${({ title, selected }) => (title === selected ? "var(--blue-500)" : "var(--blue-200)")};
     transition: 0.2s;
   }
   .text {
     align-items: center;
     font-size: 0.75rem;
-    color: var(--black-300);
+    font-weight: ${({ title, selected }) => (title === selected ? "700" : "400")};
+    color: ${({ title, selected }) => (title === selected ? "var(--black-500)" : "var(--black-200)")};
     transition: 0.2s;
   }
   &:hover {
     .icon {
-      color: var(--blue-500);
-      font-size: 2.65rem;
+      color: var(--blue-400);
+      font-size: 2.62rem;
       transition: 0.2s;
     }
     .text {
-      color: var(--black-500);
-      font-size: 0.77rem;
+      color: var(--black-400);
+      font-size: 0.76rem;
       transition: 0.2s;
     }
   }

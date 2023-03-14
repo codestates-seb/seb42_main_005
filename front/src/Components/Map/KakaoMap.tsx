@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, SetStateAction } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import MapFilter from "./MapFilter";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
@@ -58,10 +58,10 @@ export default function KakaoMap() {
     navigator.geolocation.getCurrentPosition(locationLoadSuccess, locationLoadError);
     _map.setLevel(3);
   };
-
+  const [selected, setSelected] = useState<"map_home" | "in_business" | "midnight" | "bookmarks">("map_home");
   return (
     <MapContainer ref={mapRef}>
-      {/* <MapFilter /> */}
+      <MapFilter selected={selected} setSelected={setSelected} />
       <CurrentLocation>
         <LocaBtn onClick={getCurrentLocBtn}>
           <BiTargetLock className="icon" />
