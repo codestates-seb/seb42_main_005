@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 public class UserInfoDto {
 
     private Long userIdx;
-    private LocalDateTime dob;
     private LocalDateTime createdAt;
     private String name;
     private String email;

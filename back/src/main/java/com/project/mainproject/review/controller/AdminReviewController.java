@@ -1,18 +1,16 @@
 package com.project.mainproject.review.controller;
 
-import com.project.mainproject.dto.PageInfo;
 import com.project.mainproject.dto.PageResponseDto;
-import com.project.mainproject.review.dto.GetReportedReviewDto;
+import com.project.mainproject.dto.SingleResponseDto;
+import com.project.mainproject.dummy.CommonStub;
+import com.project.mainproject.review.dto.ListGetReportedReviewDto;
+import com.project.mainproject.review.dummy.ReviewStub;
 import com.project.mainproject.user.dto.BannedReviewsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/admin")
@@ -25,43 +23,24 @@ public class AdminReviewController {
     public ResponseEntity getReportedReview(Pageable pageable) {
         //TODO: 서비스단 구현
 
-        PageInfo pageInfo = PageInfo.builder()
-                .page(0)
-                .size(10)
-                .totalPage(100)
-                .totalElement(1000)
-                .isFinish(false)
-                .isFirst(true)
-                .build();
-        List<GetReportedReviewDto> result = new ArrayList<>();
-        for (long i = 1L; i < 16; i++) {
-            GetReportedReviewDto build = GetReportedReviewDto.builder()
-                    .reviewContent("신고 사유 " + i)
-                    .reviewIdx(i)
-                    .reportedCount((int) i)
-                    .reviewCreatedAt(LocalDateTime.now())
-                    .build();
-            result.add(build);
-        }
-        PageResponseDto<List<GetReportedReviewDto>> build = PageResponseDto.<List<GetReportedReviewDto>>builder()
-                .response(result)
-                .pageInfo(pageInfo)
-                .message("success !!")
-                .httpCode(HttpStatus.OK.value()).build();
-        return ResponseEntity.ok().body(build);
+        PageResponseDto build = CommonStub.getPageResponseStub();
+        build.setResponse(ListGetReportedReviewDto.builder().reportedReview(ReviewStub.getReportedReviewDtoListStub()).build());
+
+        return ResponseEntity.status(HttpStatus.OK).body(build);
     }
 
     @DeleteMapping("/banned")
-    public ResponseEntity deleteReviews(BannedReviewsDto bannedReviewsDto) {
+    public ResponseEntity deleteReviews(@RequestBody BannedReviewsDto bannedReviewsDto) {
         //TODO
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/banned")
-    public ResponseEntity restoreReviews(BannedReviewsDto bannedReviewsDto) {
+    public ResponseEntity restoreReviews(@RequestBody BannedReviewsDto bannedReviewsDto) {
         //TODO
 
-        return ResponseEntity.ok().build();
+        SingleResponseDto tmpResponse = CommonStub.getSingleResponseStub();
+        return ResponseEntity.status(HttpStatus.OK).body(tmpResponse);
     }
 }

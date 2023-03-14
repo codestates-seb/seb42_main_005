@@ -9,8 +9,8 @@ public class PageInfo {
     private int page;
     private int totalElement;
     private int totalPage;
-    private boolean isFirst;
-    private boolean isFinish;
+    private Boolean isFirst;
+    private Boolean isFinish;
 
     @Builder
     public PageInfo(int size, int page, int totalElement, int totalPage, boolean isFirst, boolean isFinish) {

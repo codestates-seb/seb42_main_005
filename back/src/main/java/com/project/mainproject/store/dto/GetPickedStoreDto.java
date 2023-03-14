@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 public class GetPickedStoreDto {
     private Long storeIdx;
-    private String name;
+    private String storeName;
     private String address;
     private String tel;
 }

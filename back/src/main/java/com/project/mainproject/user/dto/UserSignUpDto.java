@@ -1,9 +1,11 @@
 package com.project.mainproject.user.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-public class PostUserSignUpDto {
+@AllArgsConstructor // For Test
+public class UserSignUpDto {
 
     private String name;
     private String email;
