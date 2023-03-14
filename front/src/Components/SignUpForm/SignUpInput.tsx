@@ -14,7 +14,7 @@ export default function SignUpInput({ type, name, placeholder, value, onChange, 
   return (
     <>
       <SignUpInInput type={type} name={name} placeholder={placeholder} value={value} onChange={onChange} />
-      {Error && value && value.length >= 1 && <Box>{ErrorText}</Box>}
+      {Error && <Box>{ErrorText}</Box>}
     </>
   );
 }
@@ -33,7 +33,7 @@ const SignUpInInput = styled.input`
 const Box = styled.div`
   position: relative;
   top: 2.8rem;
-  right: 26.5rem;
+  right: 25rem;
   font-size: 1px;
   color: red;
 `;

@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 import Button from "../Ul/Button";
 import PharmAddress from "./PharmAddress";
 import SignUpInput from "./SignUpInput";
@@ -20,9 +21,9 @@ export default function PharmSignForms() {
     address: "",
   });
   const [error, setError] = useState({
-    email: true,
-    password: true,
-    name: true,
+    email: false,
+    password: false,
+    name: false,
   });
 
   const [checks, setChecks] = useState(false);
@@ -43,6 +44,29 @@ export default function PharmSignForms() {
     if (name === "password") {
       errors = Validate.passwordValidation(value);
     }
+    if (name === "name") {
+      errors = Validate.nameValidation(value);
+    }
+
+    setError({
+      ...error,
+      [name]: errors,
+    });
+  };
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { email, password, name, address } = pSignForm;
+
+    if (!email || !password || !name || !address || !businessImg || !pharmImg) {
+      return alert("모든 항목을 입력해주세요");
+    }
+    if (error.email === true || error.password === true || error.name === true) {
+      return alert("항목을 다시 확인해주세요");
+    }
+    if (checks === false) {
+      return alert("회원가입시, 사용자의 현재 위치를 사용하는 것에 동의해주세요");
+    }
   };
 
   const BusinessImg = useRef<HTMLInputElement>(null);
@@ -59,8 +83,8 @@ export default function PharmSignForms() {
 
   return (
     <Container>
-      <SignUpForm>
-        <InputContainer className={`${error.email ? "error" : "success"}`}>
+      <SignUpForm onSubmit={onSubmit}>
+        <InputContainer className={`email ${error.email ? "error" : "success"}`}>
           <img alt="person" src="Images/person-outline.png" />
           <SignUpInput
             type={"email"}
@@ -72,7 +96,7 @@ export default function PharmSignForms() {
             ErrorText={"이메일 형식이 올바르지 않습니다."}
           />
         </InputContainer>
-        <InputContainer>
+        <InputContainer className={`${error.password ? "error" : "success"}`}>
           <img alt="lock" src="Images/LockPersonOutline.png" />
           <SignUpInput
             type={"password"}
@@ -81,10 +105,10 @@ export default function PharmSignForms() {
             value={password}
             onChange={onChange}
             Error={error.password}
-            ErrorText={"비밀번호는 문자 숫자 특수문자 조합 8자 이상으로 조합해주세요."}
+            ErrorText={"문자 숫자 특수문자 조합 8자 이상으로 조합해주세요."}
           />
         </InputContainer>
-        <InputContainer>
+        <InputContainer className={`${error.name ? "error" : "success"}`}>
           <img alt="person-pencil" src="Images/person-pencil .png" />
           <SignUpInput
             type={"text"}
@@ -141,7 +165,7 @@ export default function PharmSignForms() {
           />
         </InputContainer>
         <CheckContainer>
-          <Check type="checkbox" />
+          <Check type="checkbox" onClick={() => setChecks(!checks)} />
           <span className="checkbox_content">
             회원가입시, 사용자의 현재 위치를 사용하는 것에 동의하는 것으로 간주됩니다.
           </span>
@@ -208,10 +232,10 @@ const InputContainer = styled.div`
     padding-top: 0.7rem;
     padding-left: 1.2rem;
   }
-  &.success &:focus-within {
+  &:focus-within {
     box-shadow: var(--wrapped-shadow);
   }
-  &.error &:focus-within {
+  &.error {
     box-shadow: var(--wrapped-shadow-red);
   }
 `;
