@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import MapFilter from "./MapFilter";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { BiTargetLock } from "react-icons/bi";
 
@@ -12,9 +13,11 @@ declare global {
 export default function KakaoMap() {
   const { kakao } = window;
   const mapRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const container = mapRef.current;
     const options = {
+      // center: new kakao.maps.LatLng(33.450701, 126.570667),
       center: new kakao.maps.LatLng(33.450701, 126.570667),
       level: 3,
     };
@@ -55,9 +58,15 @@ export default function KakaoMap() {
     navigator.geolocation.getCurrentPosition(locationLoadSuccess, locationLoadError);
     _map.setLevel(3);
   };
-
+  const [selected, setSelected] = useState<"map_home" | "in_business" | "midnight" | "bookmarks">("map_home");
   return (
     <MapContainer ref={mapRef}>
+      <MapFilter selected={selected} setSelected={setSelected} />
+      <CurrentLocation>
+        <LocaBtn onClick={getCurrentLocBtn}>
+          <BiTargetLock className="icon" />
+        </LocaBtn>
+      </CurrentLocation>
       <ZoomControler>
         <ZoomBtn onClick={zoomIn}>
           <AiOutlinePlus className="icon plus" />
@@ -67,11 +76,6 @@ export default function KakaoMap() {
           <AiOutlineMinus className="icon minus" />
         </ZoomBtn>
       </ZoomControler>
-      <CurrentLocation>
-        <LocaBtn onClick={getCurrentLocBtn}>
-          <BiTargetLock className="icon" />
-        </LocaBtn>
-      </CurrentLocation>
     </MapContainer>
   );
 }
