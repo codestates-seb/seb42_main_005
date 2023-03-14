@@ -1,7 +1,41 @@
-import React from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
+import Button from "../Ul/Button";
+import PharmAddress from "./PharmAddress";
 
+//!  name, address, email, password
 export default function PharmSignForms() {
+  const [businessImg, setBusinessImg] = useState<string>("");
+  const [pharmImg, setPharmImg] = useState<string>("");
+  const [businessImgFile, setbusinessImgFile] = useState<File | null>(null);
+  const [pharmImgFile, setPharmImgFile] = useState<File | null>(null);
+  //나중에 파일 넘겨줄때 businessImgFile, pharmImgFile 넘겨주면 돼!
+  const [pSignForm, setpSignForms] = useState({
+    email: "",
+    password: "",
+    name: "",
+    address: "",
+  });
+  const [error, setError] = useState({
+    email: true,
+    password: true,
+    name: true,
+  });
+
+  const [checks, setChecks] = useState(false);
+
+  const BusinessImg = useRef<HTMLInputElement>(null);
+  const PharmImg = useRef<HTMLInputElement>(null);
+  const onClickBusinessImg = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    BusinessImg.current?.click();
+  };
+
+  const onClickPharmImg = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    PharmImg.current?.click();
+  };
+
   return (
     <Container>
       <SignUpForm>
@@ -34,24 +68,41 @@ export default function PharmSignForms() {
         </InputContainer>
         <InputContainer>
           <img alt="live" src="Images/whereyoulive.png" />
-          <SignUpInInput placeholder="주소를 입력하세요" />
-          <button className="find_button">주소찾기</button>
-        </InputContainer>
-        {/* 생년월일 필요한 페이지를 수정하면서
-        가입시 생년월일이 필요없어서 수정할 필요있음! => 백엔드에게 말하기! */}
-        <InputContainer>
-          <img alt="cake" src="Images/cake.png" />
-          <SignUpInInput />
+          <SignUpInInput placeholder="주소를 입력하세요" value={pSignForm.address} />
+          <PharmAddress setpSignForms={setpSignForms} />
         </InputContainer>
         <InputContainer>
           <img alt="camera" src="Images/camera.png" />
-          <SignUpInInput placeholder="사업자등록증 사진을 올려주세요" />
-          <button className="find_button">사진업로드</button>
+          <ImgInput value={businessImg} placeholder="사업자 등록증을 올려주세요" />
+          <div className="photo_upload">
+            <Button color="l_blue" size="sm" text="사진업로드" onClick={onClickBusinessImg} />
+          </div>
+          <Img
+            type="file"
+            ref={BusinessImg}
+            name="fileName"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              e.target.files && setBusinessImg(e.target.files[0].name);
+              e.target.files && setbusinessImgFile(e.target.files[0]);
+            }}
+          />
         </InputContainer>
+
         <InputContainer>
           <img alt="camera" src="Images/camera.png" />
-          <SignUpInInput placeholder="약사면허증 사진을 올려주세요" />
-          <button className="find_button">사진업로드</button>
+          <ImgInput value={pharmImg} placeholder="약사면허증 사진을 올려주세요" />
+          <div className="photo_upload">
+            <Button color="l_blue" size="sm" text="사진업로드" onClick={onClickPharmImg} />
+          </div>
+          <Img
+            type="file"
+            ref={PharmImg}
+            name="fileName"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              e.target.files && setPharmImg(e.target.files[0].name);
+              e.target.files && setPharmImgFile(e.target.files[0]);
+            }}
+          />
         </InputContainer>
         <CheckContainer>
           <Check type="checkbox" />
@@ -81,21 +132,6 @@ const SignUpForm = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  .find_button {
-    width: 4.3rem;
-    height: 1.6rem;
-    margin-top: 0.6rem;
-    margin-right: 1rem;
-    margin-left: 0.7rem;
-    background-color: var(--blue-500);
-    border-radius: 7px;
-    border: none;
-    color: var(--white);
-    box-shadow: var(--bs-md);
-    &:hover {
-      background-color: var(--blue-400);
-    }
-  }
 
   .signup_button {
     background-color: var(--blue-500);
@@ -127,8 +163,20 @@ const InputContainer = styled.div`
     height: 2rem;
     padding-top: 0.2rem;
     margin-top: 0.2rem;
+    margin-left: 0.4rem;
+  }
+  .photo_upload {
+    padding: 0.7rem 0.8rem;
+  }
+  .adress_find {
+    padding-top: 0.7rem;
+    padding-left: 1.2rem;
+  }
+  &:focus-within {
+    box-shadow: var(--wrapped-shadow);
   }
 `;
+
 const SignUpInInput = styled.input`
   width: 27rem;
   height: 2.7rem;
@@ -136,9 +184,18 @@ const SignUpInInput = styled.input`
   font-size: 1.1rem;
   padding-left: 0.5rem;
   border: none;
-  &:focus {
-    box-shadow: 0 3px 3px -2px var(--blue-700);
-  }
+  text-overflow: ellipsis;
+  color: var(--black-500);
+`;
+const ImgInput = styled.input`
+  width: 27rem;
+  height: 2.7rem;
+  outline: none;
+  font-size: 1.1rem;
+  padding-left: 0.5rem;
+  border: none;
+  color: var(--black-500);
+  text-overflow: ellipsis;
 `;
 const CheckContainer = styled.div`
   display: flex;
@@ -171,4 +228,7 @@ const Check = styled.input`
     background-color: var(--blue-400);
     transition: 0.1s;
   }
+`;
+const Img = styled.input`
+  display: none;
 `;
