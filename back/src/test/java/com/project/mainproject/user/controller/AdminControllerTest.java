@@ -119,13 +119,10 @@ public class AdminControllerTest implements AdminControllerTestHelper {
                 .andExpect(status().isNoContent())
                 .andDo(print())
                 .andDo(document(
-                        "block-users",
+                        "fire-users",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
-                        requestFields(getDefaultUserListDescriptors()),
-                        responseFields(
-                                getSingleResponseDescriptors(new ArrayList<FieldDescriptor>())
-                        )
+                        requestFields(getDefaultUserListDescriptors())
                 ));
     }
 }
