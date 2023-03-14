@@ -29,8 +29,8 @@ include::{snippets}/post-normal-user/http-request.adoc[]
 .request-fields
 include::{snippets}/post-normal-user/request-fields.adoc[]
 
-.response-body
-include::{snippets}/post-normal-user/response-body.adoc[]
+.http-response
+include::{snippets}/post-normal-user/http-response.adoc[]
 
 .response-fields
 include::{snippets}/post-normal-user/response-fields.adoc[]
@@ -44,10 +44,10 @@ include::{snippets}/post-normal-user/response-headers.adoc[]
 include::{snippets}/post-store-user/http-request.adoc[]
 
 .request-fields
-include::{snippets}/post-store-user/request-fields.adoc[]
+include::{snippets}/post-store-user/request-body.adoc[]
 
-.response-body
-include::{snippets}/post-store-user/response-body.adoc[]
+.http-response
+include::{snippets}/post-store-user/http-response.adoc[]
 
 .response-fields
 include::{snippets}/post-store-user/response-fields.adoc[]
@@ -66,8 +66,8 @@ include::{snippets}/find-password/request-fields.adoc[]
 .path-parameters
 include::{snippets}/find-password/path-parameters.adoc[]
 
-.response-body
-include::{snippets}/find-password/response-body.adoc[]
+.http-response
+include::{snippets}/find-password/http-response.adoc[]
 
 .response-fields
 include::{snippets}/find-password/response-fields.adoc[]
@@ -80,8 +80,8 @@ include::{snippets}/get-user/http-request.adoc[]
 .path-parameters
 include::{snippets}/get-user/path-parameters.adoc[]
 
-.response-body
-include::{snippets}/get-user/response-body.adoc[]
+.http-response
+include::{snippets}/get-user/http-response.adoc[]
 
 .response-fields
 include::{snippets}/get-user/response-fields.adoc[]
@@ -94,8 +94,8 @@ include::{snippets}/get-users/http-request.adoc[]
 .request-parameters
 include::{snippets}/get-users/request-parameters.adoc[]
 
-.response-body
-include::{snippets}/get-users/response-body.adoc[]
+.http-response
+include::{snippets}/get-users/http-response.adoc[]
 
 .response-fields
 include::{snippets}/get-users/response-fields.adoc[]
@@ -111,8 +111,8 @@ include::{snippets}/get-user-reviews/path-parameters.adoc[]
 .request-parameters
 include::{snippets}/get-user-reviews/request-parameters.adoc[]
 
-.response-body
-include::{snippets}/get-user-reviews/response-body.adoc[]
+.http-response
+include::{snippets}/get-user-reviews/http-response.adoc[]
 
 .response-fields
 include::{snippets}/get-user-reviews/response-fields.adoc[]
@@ -128,8 +128,8 @@ include::{snippets}/get-user-stores/path-parameters.adoc[]
 .request-parameters
 include::{snippets}/get-user-stores/request-parameters.adoc[]
 
-.response-body
-include::{snippets}/get-user-stores/response-body.adoc[]
+.http-response
+include::{snippets}/get-user-stores/http-response.adoc[]
 
 .response-fields
 include::{snippets}/get-user-stores/response-fields.adoc[]
@@ -145,8 +145,8 @@ include::{snippets}/patch-user/path-parameters.adoc[]
 .request-fields
 include::{snippets}/patch-user/request-fields.adoc[]
 
-.response-body
-include::{snippets}/patch-user/response-body.adoc[]
+.http-response
+include::{snippets}/patch-user/http-response.adoc[]
 
 .response-fields
 include::{snippets}/patch-user/response-fields.adoc[]
@@ -165,8 +165,8 @@ include::{snippets}/patch-user-image/path-parameters.adoc[]
 .request-parts
 include::{snippets}/patch-user-image/request-parts.adoc[]
 
-.response-body
-include::{snippets}/patch-user-image/response-body.adoc[]
+.http-response
+include::{snippets}/patch-user-image/http-response.adoc[]
 
 .response-fields
 include::{snippets}/patch-user-image/response-fields.adoc[]
@@ -185,8 +185,8 @@ include::{snippets}/patch-user/path-parameters.adoc[]
 .request-fields
 include::{snippets}/patch-user/request-fields.adoc[]
 
-.response-body
-include::{snippets}/patch-user/response-body.adoc[]
+.http-response
+include::{snippets}/patch-user/http-response.adoc[]
 
 .response-fields
 include::{snippets}/patch-user/response-fields.adoc[]
@@ -202,5 +202,287 @@ include::{snippets}/delete-user/http-request.adoc[]
 .path-parameters
 include::{snippets}/delete-user/path-parameters.adoc[]
 
-.response-body
-include::{snippets}/delete-user/response-body.adoc[]
+.http-response
+include::{snippets}/delete-user/http-response.adoc[]
+
+
+== ReviewController
+=== 리뷰조회
+.http-request
+include::{snippets}/get-reviews/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-reviews/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-reviews/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-reviews/response-fields.adoc[]
+
+
+=== 리뷰작성
+.http-request
+include::{snippets}/post-review/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/post-review/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/post-review/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-review/response-fields.adoc[]
+
+.response-headers
+include::{snippets}/post-review/response-headers.adoc[]
+
+
+=== 리뷰 수정
+.http-request
+include::{snippets}/patch-review/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-review/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/patch-review/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-review/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-review/response-fields.adoc[]
+
+.response-headers
+include::{snippets}/patch-review/response-headers.adoc[]
+
+
+=== 리뷰 삭제
+.http-request
+include::{snippets}/delete-review/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-review/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-review/http-response.adoc[]
+
+.response-headers
+include::{snippets}/delete-review/response-headers.adoc[]
+
+
+=== 리뷰 좋아요
+.http-request
+include::{snippets}/review-like/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/review-like/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/review-like/request-fields.adoc[]
+
+.http-response
+include::{snippets}/review-like/http-response.adoc[]
+
+.response-fields
+include::{snippets}/review-like/response-fields.adoc[]
+
+.response-headers
+include::{snippets}/review-like/response-headers.adoc[]
+
+
+=== 리뷰 싫어요
+.http-request
+include::{snippets}/review-hate/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/review-hate/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/review-hate/request-fields.adoc[]
+
+.http-response
+include::{snippets}/review-hate/http-response.adoc[]
+
+.response-fields
+include::{snippets}/review-hate/response-fields.adoc[]
+
+.response-headers
+include::{snippets}/review-hate/response-headers.adoc[]
+
+
+=== 리뷰 신고
+.http-request
+include::{snippets}/report-review/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/report-review/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/report-review/request-fields.adoc[]
+
+.http-response
+include::{snippets}/report-review/http-response.adoc[]
+
+.response-fields
+include::{snippets}/report-review/response-fields.adoc[]
+
+.response-headers
+include::{snippets}/report-review/response-headers.adoc[]
+
+
+=== 리뷰 댓글 작성
+.http-request
+include::{snippets}/create-review-plus/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/create-review-plus/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/create-review-plus/request-fields.adoc[]
+
+.http-response
+include::{snippets}/create-review-plus/http-response.adoc[]
+
+.response-fields
+include::{snippets}/create-review-plus/response-fields.adoc[]
+
+.response-headers
+include::{snippets}/create-review-plus/response-headers.adoc[]
+
+
+== StoreController
+=== 약국 목록 조회
+.http-request
+include::{snippets}/get-stores/http-request.adoc[]
+
+.request-fields
+include::{snippets}/get-stores/request-fields.adoc[]
+
+.http-response
+include::{snippets}/get-stores/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-stores/response-fields.adoc[]
+
+
+=== 약국 상세 조회
+.http-request
+include::{snippets}/get-store/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-store/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-store/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-store/response-fields.adoc[]
+
+
+=== 찜한 약국 조회
+.http-request
+include::{snippets}/get-pickedStore/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-pickedStore/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-pickedStore/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-pickedStore/response-fields.adoc[]
+
+
+== AdminController
+=== 약사 회원가입 승인
+.http-request
+include::{snippets}/approval-pharmacy/http-request.adoc[]
+
+.request-fields
+include::{snippets}/approval-pharmacy/request-fields.adoc[]
+
+.http-response
+include::{snippets}/approval-pharmacy/http-response.adoc[]
+
+.response-fields
+include::{snippets}/approval-pharmacy/response-fields.adoc[]
+
+
+=== 약사 회원가입 거절
+.http-request
+include::{snippets}/reject-pharmacy/http-request.adoc[]
+
+.request-fields
+include::{snippets}/reject-pharmacy/request-fields.adoc[]
+
+.http-response
+include::{snippets}/reject-pharmacy/http-response.adoc[]
+
+.response-fields
+include::{snippets}/reject-pharmacy/response-fields.adoc[]
+
+
+=== 회원 정지
+.http-request
+include::{snippets}/block-users/http-request.adoc[]
+
+.request-fields
+include::{snippets}/block-users/request-fields.adoc[]
+
+.http-response
+include::{snippets}/block-users/http-response.adoc[]
+
+.response-fields
+include::{snippets}/block-users/response-fields.adoc[]
+
+
+=== 회원 강퇴
+.http-request
+include::{snippets}/fire-users/http-request.adoc[]
+
+.request-fields
+include::{snippets}/fire-users/request-fields.adoc[]
+
+.http-response
+include::{snippets}/fire-users/http-response.adoc[]
+
+
+== ReviewAdminController
+=== 신고된 리뷰 조회
+.http-request
+include::{snippets}/get-reported-reviews/http-request.adoc[]
+
+.http-response
+include::{snippets}/get-reported-reviews/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-reported-reviews/response-fields.adoc[]
+
+
+=== 블라인드된 리뷰 삭제
+.http-request
+include::{snippets}/delete-banned-reviews/http-request.adoc[]
+
+.request-fields
+include::{snippets}/delete-banned-reviews/request-fields.adoc[]
+
+.http-response
+include::{snippets}/delete-banned-reviews/http-response.adoc[]
+
+
+
+
+=== 블라인드된 리뷰 복구
+.http-request
+include::{snippets}/restore-banned-reviews/http-request.adoc[]
+
+.request-fields
+include::{snippets}/restore-banned-reviews/request-fields.adoc[]
+
+.http-response
+include::{snippets}/restore-banned-reviews/http-response.adoc[]
+
+.response-fields
+include::{snippets}/restore-banned-reviews/response-fields.adoc[]

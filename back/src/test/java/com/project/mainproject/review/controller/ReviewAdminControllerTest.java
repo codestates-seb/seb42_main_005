@@ -75,10 +75,7 @@ public class ReviewAdminControllerTest implements ReviewAdminControllerTestHelpe
                         "delete-banned-reviews",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
-                        requestFields(getDefaultBannedReviewListDescriptors()),
-                        responseFields(
-                                getSingleResponseDescriptors(new ArrayList<FieldDescriptor>())
-                        )
+                        requestFields(getDefaultBannedReviewListDescriptors())
                 ));
     }
 

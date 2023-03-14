@@ -277,7 +277,7 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
                     .andDo(print())
                     .andDo(
                             document(
-                                    "report-review",
+                                    "create-review-plus",
                                     getRequestPreProcessor(),
                                     getResponsePreProcessor(),
                                     pathParameters(
