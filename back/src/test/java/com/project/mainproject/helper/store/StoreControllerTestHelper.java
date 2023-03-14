@@ -7,8 +7,6 @@ import org.springframework.restdocs.request.ParameterDescriptor;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -64,6 +62,13 @@ public interface StoreControllerTestHelper extends ControllerTestHelper {
                 fieldWithPath(parentPath.concat(listPath).concat("createdAt")).type(JsonFieldType.STRING).description("등록 날짜"),
                 fieldWithPath(parentPath.concat(listPath).concat("modifiedAt")).type(JsonFieldType.STRING).description("수정 날짜"),
                 fieldWithPath(parentPath.concat(listPath).concat("tags")).type(JsonFieldType.ARRAY).description("태그")
+        );
+    }
+
+    default List<FieldDescriptor> getHomeRequestDescriptors() {
+
+        return List.of(
+                fieldWithPath("filterCondition").type(JsonFieldType.ARRAY).description("태그 필터 정보").optional()
         );
     }
 

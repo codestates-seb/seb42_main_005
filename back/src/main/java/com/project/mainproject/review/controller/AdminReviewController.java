@@ -8,6 +8,7 @@ import com.project.mainproject.review.dummy.ReviewStub;
 import com.project.mainproject.user.dto.BannedReviewsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,26 +24,23 @@ public class AdminReviewController {
         //TODO: 서비스단 구현
 
         PageResponseDto build = CommonStub.getPageResponseStub();
-        build.setResponse(ListGetReportedReviewDto.builder()
-                .reportedReview(ReviewStub
-                        .getReportedReviewDtoListStub())
-                .build());
+        build.setResponse(ListGetReportedReviewDto.builder().reportedReview(ReviewStub.getReportedReviewDtoListStub()).build());
 
-        return ResponseEntity.ok().body(build);
+        return ResponseEntity.status(HttpStatus.OK).body(build);
     }
 
     @DeleteMapping("/banned")
-    public ResponseEntity deleteReviews(BannedReviewsDto bannedReviewsDto) {
+    public ResponseEntity deleteReviews(@RequestBody BannedReviewsDto bannedReviewsDto) {
         //TODO
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/banned")
-    public ResponseEntity restoreReviews(BannedReviewsDto bannedReviewsDto) {
+    public ResponseEntity restoreReviews(@RequestBody BannedReviewsDto bannedReviewsDto) {
         //TODO
 
-        SingleResponseDto build = CommonStub.getSingleResponseStub();
-        return ResponseEntity.ok().body(build);
+        SingleResponseDto tmpResponse = CommonStub.getSingleResponseStub();
+        return ResponseEntity.status(HttpStatus.OK).body(tmpResponse);
     }
 }

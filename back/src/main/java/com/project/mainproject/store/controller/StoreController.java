@@ -3,6 +3,7 @@ package com.project.mainproject.store.controller;
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.dummy.CommonStub;
+import com.project.mainproject.store.dto.FilterTagDto;
 import com.project.mainproject.store.dto.GetStoreHomeListDto;
 import com.project.mainproject.store.dto.StoreIdxResponse;
 import com.project.mainproject.store.dummy.StoreStub;
@@ -23,7 +24,7 @@ public class StoreController {
      *  약국 목록_홈
      * */
     @GetMapping
-    public ResponseEntity getStoreHome(@PageableDefault(sort = "storeIdx") Pageable pageable) {
+    public ResponseEntity getStoreHome(@PageableDefault(sort = "storeIdx") Pageable pageable, @RequestBody FilterTagDto filterTagDto) {
         //TODO : Service 구현
 
         PageResponseDto build = CommonStub.getPageResponseStub();
@@ -31,6 +32,7 @@ public class StoreController {
 
         return ResponseEntity.ok().body(build);
     }
+
     /*
     * 약국 상세 조회
     * */

@@ -97,6 +97,9 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
                                 pathParameters(
                                         getStorePathParameterDescriptor()
                                 ),
+//                                requestParts(
+//                                        partWithName("image").description("리뷰 이미지 파일")
+//                                ),
                                 requestFields(
                                         getCreateReviewRequestDescriptors()
                                 ),
@@ -274,7 +277,7 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
                     .andDo(print())
                     .andDo(
                             document(
-                                    "report-review",
+                                    "create-review-plus",
                                     getRequestPreProcessor(),
                                     getResponsePreProcessor(),
                                     pathParameters(
