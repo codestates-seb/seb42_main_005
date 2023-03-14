@@ -33,8 +33,7 @@ public class AdminReviewController {
     public ResponseEntity deleteReviews(@RequestBody BannedReviewsDto bannedReviewsDto) {
         //TODO
 
-        SingleResponseDto tmpResponse = CommonStub.getSingleResponseStub();
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(tmpResponse);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/banned")
