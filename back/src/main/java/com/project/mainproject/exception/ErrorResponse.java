@@ -24,21 +24,16 @@ public class ErrorResponse {
     }
 
     public static ErrorResponse of(BindingResult bindingResult) {
-
-        return new ErrorResponse(FieldError.of(bindingResult), null, null);
+        return new ErrorResponse(FieldError.of(bindingResult), null, HttpStatus.BAD_REQUEST);
     }
 
-
     public static ErrorResponse of(Set<ConstraintViolation<?>> constraintViolations) {
-
-        return new ErrorResponse(null, ConstraintViolationError.of(constraintViolations),null);
+        return new ErrorResponse(null, ConstraintViolationError.of(constraintViolations),HttpStatus.BAD_REQUEST);
     }
 
     public static ErrorResponse of(HttpStatus httpStatus) {
-
         return new ErrorResponse(null,null,httpStatus);
     }
-
 
 
     /*
@@ -52,7 +47,6 @@ public class ErrorResponse {
         private String reason;
 
         public static List<ConstraintViolationError> of(Set<ConstraintViolation<?>> constraintViolations) {
-
             return constraintViolations.stream().map(
                     constraintViolation -> new ConstraintViolationError(
                             constraintViolation.getPropertyPath().toString(),
@@ -61,7 +55,6 @@ public class ErrorResponse {
                     )).collect(Collectors.toList());
         }
     }
-
 
 
     /*
