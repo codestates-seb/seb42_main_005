@@ -7,14 +7,19 @@ interface Props {
   placeholder?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  Error?: boolean;
-  ErrorText?: string;
+  readOnly?: boolean;
 }
-export default function SignUpInput({ type, name, placeholder, value, onChange, Error, ErrorText }: Props) {
+export default function SignUpInput({ type, name, placeholder, value, onChange, readOnly }: Props) {
   return (
     <>
-      <SignUpInInput type={type} name={name} placeholder={placeholder} value={value} onChange={onChange} />
-      {Error && <Box>{ErrorText}</Box>}
+      <SignUpInInput
+        type={type}
+        name={name}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        readOnly={readOnly}
+      />
     </>
   );
 }
@@ -30,13 +35,4 @@ const SignUpInInput = styled.input`
   color: var(--black-500);
   display: flex;
   flex-grow: 1;
-`;
-
-const Box = styled.div`
-  position: absolute;
-  width: 18rem;
-  margin-top: 2.9rem;
-  margin-left: 2rem;
-  font-size: 0.7rem;
-  color: red;
 `;
