@@ -9,12 +9,13 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
 public class ReviewTag {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     private Long tagIdx;
 
     @ManyToOne(fetch = LAZY)
