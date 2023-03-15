@@ -1,6 +1,8 @@
 package com.project.mainproject.store.entity;
 
 import com.project.mainproject.VO.OperatingTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Formula;
@@ -12,6 +14,8 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 public class Store {
     @Id
