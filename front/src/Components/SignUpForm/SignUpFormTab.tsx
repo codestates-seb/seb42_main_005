@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import { SELEC_OPTIONS_TAP } from "../SignUpForm/type";
 
 interface Props {
   tab: string;
-  setTab: React.Dispatch<React.SetStateAction<"user" | "pharm">>;
+  setTab: React.Dispatch<React.SetStateAction<SELEC_OPTIONS_TAP>>;
 }
-
 export default function SignUpForms({ tab, setTab }: Props) {
   return (
     <TabContainer>

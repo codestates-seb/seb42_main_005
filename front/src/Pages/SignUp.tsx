@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PharmSignForms from "../Components/SignUpForm/PharmSignForms";
 import SignUpFormTab from "../Components/SignUpForm/SignUpFormTab";
 import UserSignUpForms from "../Components/SignUpForm/UserSignUpForms";
+import { SELEC_OPTIONS_TAP } from "../Components/SignUpForm/type";
 
 export interface Form {
   email: string;
@@ -12,7 +13,7 @@ export interface Form {
 }
 
 export default function SignUp() {
-  const [tab, setTab] = useState<"user" | "pharm">("user");
+  const [tab, setTab] = useState<SELEC_OPTIONS_TAP>("user");
 
   return (
     <Total>
