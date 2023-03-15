@@ -4,13 +4,13 @@ import { useDaumPostcodePopup } from "react-daum-postcode";
 import SignUpInput from "../../Components/SignUpForm/SignUpInput";
 import { Validate } from "../../Components/SignUpForm/Validation";
 import Button from "../../Components/Ul/Button";
-import { BiPhotoAlbum } from "react-icons/bi";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 interface Props {
   scriptUrl?: string;
 }
+
 let dummy = {
   myInfo: {
     profileImg: "Images/logo.png",
@@ -101,16 +101,10 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
   };
 
   return (
-    <>
+    <Wrapper>
       <ImgContainer>
         <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
-        {imageSrc ? (
-          <ReviewImg src={imageSrc} />
-        ) : (
-          <Instead>
-            <BiPhotoAlbum />
-          </Instead>
-        )}
+        {imageSrc ? <ReviewImg src={imageSrc} /> : <ReviewImg src="Images/User.png" />}
         <Label htmlFor="img">
           <MdOutlineAddAPhoto />
           사진추가하기
@@ -160,7 +154,6 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
                 onChange={onChange}
               />
               <Button color="l_blue" size="sm" text="주소 찾기" onClick={handleClick} />
-              {/* <UserAdress setSignForms={setSignForms} /> */}
             </InputWrapper>
           ) : (
             <ContentValue>{dummy.myInfo.address}</ContentValue>
@@ -225,15 +218,14 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
         ) : (
           ""
         )}
-        <ButtonContainer>
-          {isEditing ? (
-            <Button text="수정완료" color="blue" size="lg" onClick={() => setIsEditing(false)} />
-          ) : (
-            <Button text="수정하기" color="blue" size="lg" onClick={() => setIsEditing(true)} />
-          )}
+        <ButtonContainer id="edit">
+          {isEditing ? "" : <Button text="수정하기" color="blue" size="lg" onClick={() => setIsEditing(true)} />}
+        </ButtonContainer>
+        <ButtonContainer id="done">
+          {isEditing ? <Button text="수정완료" color="blue" size="lg" onClick={() => setIsEditing(false)} /> : ""}
         </ButtonContainer>
       </Content>
-    </>
+    </Wrapper>
   );
 }
 
@@ -257,11 +249,25 @@ const AlertMsg = styled.div`
     color: var(--red);
   }
 `;
-const ButtonContainer = styled.span`
-  position: absolute;
+const ButtonContainer = styled.div`
   display: flex;
-  bottom: 0;
-  right: 0;
+  justify-content: flex-end;
+  margin-top: 10px;
+  #edit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+  #done {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    @media (max-width: 768px) {
+      position: static;
+      display: flex;
+      padding-top: 20px;
+    }
+  }
 `;
 const ContentSet = styled.h3`
   display: flex;
@@ -270,7 +276,6 @@ const ContentSet = styled.h3`
   margin: 3px;
 `;
 const ContentKey = styled.h3`
-  /* border: 1px solid blue; */
   display: flex;
   align-items: center;
   width: 80px;
@@ -279,7 +284,6 @@ const ContentKey = styled.h3`
   color: var(--black-500);
 `;
 const ContentValue = styled.span`
-  /* border: 1px solid blue; */
   padding-top: 2px;
   height: 30px;
   font-weight: normal;
@@ -317,6 +321,9 @@ const InputWrapper = styled.span`
     border: 1px solid hsl(359, 46%, 66%);
     transition: 0.2s;
   }
+  @media (max-width: 768px) {
+    width: 350px;
+  }
 `;
 const ReviewImgInput = styled.input`
   position: absolute;
@@ -326,17 +333,6 @@ const ReviewImg = styled.img`
   height: 100px;
   width: 100px;
   object-fit: cover;
-  border-radius: 50%;
-`;
-const Instead = styled.span`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100px;
-  width: 100px;
-  font-size: 40px;
-  background-color: var(--black-075);
-  color: var(--white);
   border-radius: 50%;
 `;
 const Label = styled.label`
@@ -366,4 +362,18 @@ const Content = styled.section`
   flex-direction: column;
   justify-content: flex-end;
   flex-grow: 1;
+  @media (max-width: 768px) {
+    width: 500px;
+  }
+`;
+const Wrapper = styled.main`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 780px;
+
+  @media (max-width: 768px) {
+    width: 600px;
+  }
 `;
