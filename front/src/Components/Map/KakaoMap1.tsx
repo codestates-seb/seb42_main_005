@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, MutableRefObject } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import MapFilter from "./MapFilter";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
@@ -35,14 +35,14 @@ export default function KakaoMap() {
   };
 
   const locationLoadSuccess = (pos: { coords: { latitude: number; longitude: number } }) => {
+    const currentPos = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
     // 현재 위치 받아오기
-    var currentPos = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
 
     // 지도 이동(기존 위치와 가깝다면 부드럽게 이동)
     _map.panTo(currentPos);
 
     // 마커 생성
-    var marker = new kakao.maps.Marker({
+    const marker = new kakao.maps.Marker({
       position: currentPos,
     });
     marker.setMap(null);
