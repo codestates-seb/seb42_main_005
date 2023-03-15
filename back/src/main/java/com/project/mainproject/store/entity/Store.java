@@ -89,7 +89,8 @@ public class Store {
     private Boolean isOperatingHoliday;
 
     private String etc;
-    @Formula("SELECT round(AVG(rating), 2) AS rating FROM review GROUP BY store_idx")
+
+    @Formula("(SELECT IFNULL(ROUND(AVG(r.rating), 2), 0) FROM review r WHERE r.store_store_idx = store_idx)")
     private Double rating;
 
     //연관관계 매핑
