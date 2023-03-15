@@ -38,7 +38,7 @@ export default function UserSignUpForms() {
       [name]: value,
     });
 
-    let errors = false;
+    let errors;
     if (name === FORM_FIELD_NAMES.EMAIL) {
       errors = validators.validateEmail(value);
     }
@@ -54,7 +54,7 @@ export default function UserSignUpForms() {
       ...signForm,
       [name]: value,
     });
-    let errors = false;
+    let errors;
     if (name === FORM_FIELD_NAMES.PASSWORD) {
       errors = validators.validatePassword(value);
     }
@@ -70,7 +70,7 @@ export default function UserSignUpForms() {
       ...signForm,
       [name]: value,
     });
-    let errors = false;
+    let errors;
     if (name === FORM_FIELD_NAMES.NAME) {
       errors = validators.validateName(value);
     }
