@@ -29,9 +29,18 @@ function nameValidation(nickname: string) {
   return false;
 }
 
+//! 비밀번호 일치 확인
+function passwordConfirmValidate(password: string, passwordConfirm: string) {
+  if (password !== passwordConfirm) {
+    return true
+  }
+  return false
+}
+
 const Validate = {
   emailValidation,
   passwordValidation,
   nameValidation,
+  passwordConfirmValidate
 };
 export { Validate };
