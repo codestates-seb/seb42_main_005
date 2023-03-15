@@ -74,7 +74,6 @@ const Title = styled.h2`
   display: flex;
   flex-grow: 1;
   @media (max-width: 768px) {
-    /* border: 1px solid blue; */
     display: flex;
     align-items: flex-start;
     width: 600px;

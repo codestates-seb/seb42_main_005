@@ -22,56 +22,6 @@ let dummy = {
       review: "텐텐 사러 갔는데 여기에는 노마밖에 안팜 ㅠ",
       writtenAt: "2012.02.14",
     },
-    {
-      pharm: "제너럴 약국",
-      review: "졸려 ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ",
-      writtenAt: "2012.02.14",
-    },
-    {
-      pharm: "텐텐좋아약국",
-      review: "텐텐 사러 갔는데 여기에는 노마밖에 안팜 ㅠ",
-      writtenAt: "2012.02.14",
-    },
-    {
-      pharm: "제너럴 약국",
-      review: "졸려 ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ",
-      writtenAt: "2012.02.14",
-    },
-    {
-      pharm: "텐텐좋아약국",
-      review: "텐텐 사러 갔는데 여기에는 노마밖에 안팜 ㅠ",
-      writtenAt: "2012.02.14",
-    },
-    {
-      pharm: "제너럴 약국",
-      review: "졸려 ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ",
-      writtenAt: "2012.02.14",
-    },
-    {
-      pharm: "텐텐좋아약국",
-      review: "텐텐 사러 갔는데 여기에는 노마밖에 안팜 ㅠ",
-      writtenAt: "2012.02.14",
-    },
-    {
-      pharm: "제너럴 약국",
-      review: "졸려 ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ",
-      writtenAt: "2012.02.14",
-    },
-    {
-      pharm: "텐텐좋아약국",
-      review: "텐텐 사러 갔는데 여기에는 노마밖에 안팜 ㅠ",
-      writtenAt: "2012.02.14",
-    },
-    {
-      pharm: "제너럴 약국",
-      review: "졸려 ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ",
-      writtenAt: "2012.02.14",
-    },
-    {
-      pharm: "텐텐좋아약국",
-      review: "텐텐 사러 갔는데 여기에는 노마밖에 안팜 ㅠ",
-      writtenAt: "2012.02.14",
-    },
   ],
 };
 
@@ -127,7 +77,6 @@ const Content = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  /* flex-grow: 1; */
   height: 300px;
   background-color: var(--black-025);
   @media (max-width: 768px) {
