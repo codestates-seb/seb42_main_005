@@ -51,6 +51,10 @@ public class Review extends Auditable {
 
     @OneToMany(mappedBy = "review", fetch = LAZY, cascade = REMOVE)
     private List<ReviewTag> reviewTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "review", fetch = LAZY, cascade = REMOVE)
+    private List<ReviewTag> reviewImages = new ArrayList<>();
+
     //### 간단한 동작메서드 ###//
 
     // ###연관관계  편의 메서드 ###//

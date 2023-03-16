@@ -25,6 +25,7 @@ public class ReviewImage {
 
     // ###연관관계  편의 메서드 ###//
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "REVIEW_IDX")
     private Review review;
 
 }
