@@ -47,4 +47,9 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
+    public void deleteReview(Long reviewIdx) {
+        // TODO: 작성자 검증 시점?
+        reviewRepository.deleteById(reviewIdx);
+    }
+
 }
