@@ -88,7 +88,7 @@ public class ReviewController {
      * */
     @DeleteMapping("/store/{storeIdx}/review/{reviewIdx}")
     public ResponseEntity<URI> deleteReview(@PathVariable Long storeIdx, @PathVariable Long reviewIdx) {
-        reviewService.deleteReview(reviewIdx);
+        reviewService.deleteReview(storeIdx, reviewIdx);
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
 
         return ResponseEntity.noContent().header("Location", location.toString())

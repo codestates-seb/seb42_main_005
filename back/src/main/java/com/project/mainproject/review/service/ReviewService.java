@@ -47,6 +47,7 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void deleteReview(Long storeIdx, Long reviewIdx) {
         // TODO: 작성자 검증 시점?
         Review review = findVerifiedReview(storeIdx, reviewIdx);

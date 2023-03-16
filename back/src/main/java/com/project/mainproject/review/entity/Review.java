@@ -15,6 +15,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -48,7 +49,7 @@ public class Review extends Auditable {
     @JoinColumn(name = "STORE_IDX")
     private Store store;
 
-    @OneToMany(mappedBy = "review", fetch = LAZY)
+    @OneToMany(mappedBy = "review", fetch = LAZY, cascade = REMOVE)
     private List<ReviewTag> reviewTags = new ArrayList<>();
     //### 간단한 동작메서드 ###//
 
