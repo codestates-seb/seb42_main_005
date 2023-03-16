@@ -53,10 +53,16 @@ public class Review extends Auditable {
     private List<ReviewTag> reviewTags = new ArrayList<>();
 
     @OneToMany(mappedBy = "review", fetch = LAZY, cascade = REMOVE)
-    private List<ReviewTag> reviewImages = new ArrayList<>();
+    private List<ReviewImage> reviewImages = new ArrayList<>();
 
     //### 간단한 동작메서드 ###//
 
     // ###연관관계  편의 메서드 ###//
+    public void setReviewImages(ReviewImage reviewImage) {
+        this.reviewImages.add(reviewImage);
+        if (reviewImage.getReview() != this) {
+            reviewImage.setReview(this);
+        }
+    }
 
 }
