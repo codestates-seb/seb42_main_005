@@ -1,47 +1,57 @@
-import { useState } from "react";
 import styled from "styled-components";
+import { zIndex_MapFilter } from "../../Util/z-index";
 import { IoCloudyNightOutline } from "react-icons/io5";
 import { HiOutlineHome } from "react-icons/hi2";
 import { AiOutlineMedicineBox } from "react-icons/ai";
 import { RiHeartsLine } from "react-icons/ri";
-interface Props {
+
+interface FilterProps {
   selected: string;
-  setSelected: React.Dispatch<React.SetStateAction<"map_home" | "in_business" | "midnight" | "bookmarks">>;
+  onClickMapHome?: (e: React.MouseEvent<HTMLSpanElement>) => void;
+  onClickInBusiness?: (e: React.MouseEvent<HTMLSpanElement>) => void;
+  onClickMidnight?: (e: React.MouseEvent<HTMLSpanElement>) => void;
+  onClickBookmarks?: (e: React.MouseEvent<HTMLSpanElement>) => void;
 }
 
-export default function MapFilter({ selected, setSelected }: Props) {
+export default function MapFilter({
+  selected,
+  onClickMapHome,
+  onClickInBusiness,
+  onClickMidnight,
+  onClickBookmarks,
+}: FilterProps) {
   return (
     <CtrlContainer>
-      <FillterBtn title={"map_home"} selected={selected} onClick={() => setSelected("map_home")}>
+      <FillterBtn title={"map_home"} selected={selected} onClick={onClickMapHome}>
         <HiOutlineHome className="icon" />
-        <div className="text">지도 홈</div>
+        <div className="label">지도 홈</div>
       </FillterBtn>
       <span className="partition" />
-      <FillterBtn title={"in_business"} selected={selected} onClick={() => setSelected("in_business")}>
+      <FillterBtn title={"in_business"} selected={selected} onClick={onClickInBusiness}>
         <AiOutlineMedicineBox className="icon" />
-        <div className="text">영업 중</div>
+        <div className="label">영업 중</div>
       </FillterBtn>
       <span className="partition" />
-      <FillterBtn title={"midnight"} selected={selected} onClick={() => setSelected("midnight")}>
+      <FillterBtn title={"midnight"} selected={selected} onClick={onClickMidnight}>
         <IoCloudyNightOutline className="icon" />
-        <div className="text">심 야</div>
+        <div className="label">심 야</div>
       </FillterBtn>
       <span className="partition" />
-      <FillterBtn title={"bookmarks"} selected={selected} onClick={() => setSelected("bookmarks")}>
+      <FillterBtn title={"bookmarks"} selected={selected} onClick={onClickBookmarks}>
         <RiHeartsLine className="icon" />
-        <div className="text">찜 콩</div>
+        <div className="label">찜 콩</div>
       </FillterBtn>
     </CtrlContainer>
   );
 }
-const CtrlContainer = styled.div`
+const CtrlContainer = styled.nav`
   display: flex;
   justify-content: center;
   align-items: center;
   position: fixed;
-  z-index: 9999;
   top: 70px;
   left: 850px;
+  z-index: ${zIndex_MapFilter.CtrlContainer};
   padding: 6px 10px 4px 10px;
   border-radius: 8px;
   background-color: var(--white);
@@ -70,19 +80,21 @@ const CtrlContainer = styled.div`
     }
   }
 `;
-const FillterBtn = styled.span<{ title: string; selected: string }>`
+const FillterBtn = styled.button<{ title: string; selected: string }>`
   cursor: pointer;
   display: block;
   width: 65px;
   height: 65px;
   text-align: center;
+  background-color: transparent;
+  border: none;
   .icon {
     align-items: center;
     font-size: 2.6rem;
     color: ${({ title, selected }) => (title === selected ? "var(--blue-500)" : "var(--blue-200)")};
     transition: 0.2s;
   }
-  .text {
+  .label {
     align-items: center;
     font-size: 0.75rem;
     font-weight: ${({ title, selected }) => (title === selected ? "700" : "400")};
@@ -95,7 +107,7 @@ const FillterBtn = styled.span<{ title: string; selected: string }>`
       font-size: 2.62rem;
       transition: 0.2s;
     }
-    .text {
+    .label {
       color: var(--black-400);
       font-size: 0.76rem;
       transition: 0.2s;

@@ -6,7 +6,7 @@ import { validators } from "../../Components/SignUpForm/Validation";
 import Button from "../../Components/Ul/Button";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
-import InputAlert from "./InputAlert";
+import InputAlert from "../User/InputAlert";
 
 interface Props {
   scriptUrl?: string;
@@ -15,14 +15,14 @@ interface Props {
 let dummy = {
   myInfo: {
     joined: "2021.03.29",
-    name: "caffeine",
+    nickname: "caffeine",
     password: "caffeine1234!@#$",
     email: "JudiPark0426@github.com",
     address: "서울시 종로구 대학로 101",
   },
 };
 
-export default function MyInfoInformation({ scriptUrl }: Props) {
+export default function PharmacistInformation({ scriptUrl }: Props) {
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const onUpload = (e: any) => {
     const file = e.target.files[0];
@@ -37,7 +37,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
   };
   const [isEditing, setIsEditing] = useState(false);
   const [signForm, setSignForms] = useState({
-    name: dummy.myInfo.name,
+    name: dummy.myInfo.nickname,
     password: "",
     newPassword: "",
     confirmNewPassword: "",
@@ -188,13 +188,12 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     <Wrapper onSubmit={onSubmit}>
       <ImgContainer>
         <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
-        {imageSrc ? <ReviewImg src={imageSrc as string} /> : <ReviewImg src="Images/User.png" />}
+        {imageSrc ? <ReviewImg src={imageSrc as string} /> : <ReviewImg src="Images/Pharm.png" />}
         <Label htmlFor="img">
           <MdOutlineAddAPhoto />
           사진추가하기
         </Label>
       </ImgContainer>
-
       <Content>
         <ContentSet>
           <ContentKey>가입일</ContentKey>
@@ -220,7 +219,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
               </AlertMsg>
             </EditWrapper>
           ) : (
-            <ContentValue>{dummy.myInfo.name}</ContentValue>
+            <ContentValue>{dummy.myInfo.nickname}</ContentValue>
           )}
         </ContentSet>
         <ContentSet>
@@ -384,7 +383,6 @@ const EditWrapper = styled.div`
   flex-direction: column;
   gap: 7px;
 `;
-
 const InputWrapper = styled.span`
   display: flex;
   align-items: center;

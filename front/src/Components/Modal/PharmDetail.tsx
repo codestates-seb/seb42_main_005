@@ -195,17 +195,17 @@ const Reviews = styled.div`
 const WriteReviewBtnContainer = styled.span`
   z-index: 2;
   position: absolute;
-  right: 55px;
+  display: flex;
+  justify-content: flex-end;
+  right: 20px;
   bottom: 25px;
-  width: 50px;
+  width: 450px;
+  padding-top: 10px;
+  background-color: var(--white);
   @media (max-width: 768px) {
     z-index: 2;
-    position: absolute;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    right: 20px;
     bottom: 20px;
-    width: 490px;
+    background-color: var(--white);
+    width: 480px;
   }
 `;

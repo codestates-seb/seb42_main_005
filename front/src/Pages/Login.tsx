@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { BsPersonCircle } from "react-icons/bs";
 import SignUpInput from "../Components/SignUpForm/SignUpInput";
 import { AiOutlineLock } from "react-icons/ai";
+import { Link } from "react-router-dom";
 export default function Login() {
   return (
     <Total>
@@ -45,7 +46,9 @@ export default function Login() {
           </LoginForm>
         </ContentContainer>
         <SearchContainer>
-          <Search>비밀번호 찾기</Search>
+          <Link to="/find_pw">
+            <Search>비밀번호 찾기</Search>
+          </Link>
         </SearchContainer>
       </Container>
     </Total>
