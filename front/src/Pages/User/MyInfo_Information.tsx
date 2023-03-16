@@ -377,4 +377,3 @@ const Wrapper = styled.main`
     width: 600px;
   }
 `;
-//
