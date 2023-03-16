@@ -29,7 +29,7 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
 
   return (
     <WriteReviewContainer >
-      <InputTop className="wide"><GrClose className="except" onClick={() => setIsReviewFormShown(false)}/></InputTop>
+      <InputTop className="wide"><GrClose aria-hidden="true" className="except" onClick={() => setIsReviewFormShown(false)}/></InputTop>
       <InputTop>
         <Textarea placeholder="무분별한 비방, 비하, 욕설은 지양해주세요 :)" isValid={true} rows={3} icon={false} />
         <ReviewImgContainer>
@@ -38,11 +38,11 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
             <ReviewImg src={imageSrc} />
           ) : (
             <Instead>
-              <BiPhotoAlbum />
+              <BiPhotoAlbum aria-hidden={true}/>
             </Instead>
           )}
           <Label htmlFor="img">
-            <MdOutlineAddAPhoto />
+            <MdOutlineAddAPhoto aria-hidden="true"/>
           </Label>
         </ReviewImgContainer>
       </InputTop>

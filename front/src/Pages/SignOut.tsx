@@ -39,7 +39,7 @@ export default function SignOut() {
             </span>
             <div>
               <p id="alert" className={errMsg ? "show" : ""}>
-                <AiOutlineExclamationCircle />
+                <AiOutlineExclamationCircle aria-hidden="true"/>
                 체크박스에 동의가 필요합니다
               </p>
               <p>

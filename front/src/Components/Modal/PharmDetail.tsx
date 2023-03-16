@@ -22,7 +22,7 @@ export default function PharmDetail({ setIsModalUp, like, setLike }: Props) {
       <ModalBackDrop onClick={() => setIsModalUp(false)}>
         <ModalContainer onClick={(event) => event.stopPropagation()}>
           <CloseBtnContainer>
-            <GrClose id="close" onClick={() => setIsModalUp(false)} />
+            <GrClose id="close" onClick={() => setIsModalUp(false)} aria-hidden="true"/>
           </CloseBtnContainer>
           <InfoHeader>
             <InfoTitle>킹갓약국</InfoTitle>

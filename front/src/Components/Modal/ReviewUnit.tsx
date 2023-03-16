@@ -45,7 +45,7 @@ export default function ReviewUnit() {
             <Upper>
               <UserInfo>
                 <span id="reply">
-                  <BsArrowReturnRight />
+                  <BsArrowReturnRight aria-hidden="true"/>
                 </span>
                 <UserIcon src="/Images/Pharm.png" />
                 <UserName>킹갓 약사</UserName>

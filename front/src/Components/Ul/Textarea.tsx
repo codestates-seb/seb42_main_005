@@ -16,7 +16,7 @@ export default function Textarea({ id, placeholder, value, rows, icon, isValid, 
     <StyledInput>
       {icon && (
         <div className="left icon">
-          <FaPencilAlt />
+          <FaPencilAlt aria-hidden="true"/>
         </div>
       )}
       <textarea

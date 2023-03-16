@@ -105,7 +105,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
         <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
         {imageSrc ? <ReviewImg src={imageSrc} /> : <ReviewImg src="Images/User.png" />}
         <Label htmlFor="img">
-          <MdOutlineAddAPhoto />
+          <MdOutlineAddAPhoto aria-hidden="true"/>
           사진추가하기
         </Label>
       </ImgContainer>
@@ -128,7 +128,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
                 />
               </InputWrapper>
               <AlertMsg className={`${error.nickname ? "error" : ""}`}>
-                <AiOutlineExclamationCircle />
+                <AiOutlineExclamationCircle aria-hidden="true"/>
                 이름에는 공백이 들어갈 수 없습니다.
               </AlertMsg>
             </EditWrapper>
@@ -173,7 +173,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
                   />
                 </InputWrapper>
                 <AlertMsg className={`${error.password ? "error" : ""}`}>
-                  <AiOutlineExclamationCircle />
+                  <AiOutlineExclamationCircle aria-hidden="true"/>
                   비밀번호가 일치하지 않습니다.
                 </AlertMsg>
               </EditWrapper>
@@ -191,7 +191,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
                   />
                 </InputWrapper>
                 <AlertMsg className={`${error.newPassword ? "error" : ""}`}>
-                  <AiOutlineExclamationCircle />
+                  <AiOutlineExclamationCircle aria-hidden="true"/>
                   문자 숫자 특수문자 조합 8자 이상으로 조합해주세요.
                 </AlertMsg>
               </EditWrapper>
@@ -209,7 +209,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
                   />
                 </InputWrapper>
                 <AlertMsg className={`${error.confirmNewPassword ? "error" : ""}`}>
-                  <AiOutlineExclamationCircle />새 비밀번호와 일치하지 않습니다.
+                  <AiOutlineExclamationCircle aria-hidden="true"/>새 비밀번호와 일치하지 않습니다.
                 </AlertMsg>
               </EditWrapper>
             </ContentSet>

@@ -24,11 +24,11 @@ const [randomError, setRandomError] = useState(false)
           <p>입력시 해당 이메일로 임시 비밀번호가 전송됩니다.</p>
         </Instruction>
         <InputContainer className={randomError ? "error" : ""}>
-          <BsPersonCircle className="inputimage" />
+          <BsPersonCircle className="inputimage" aria-hidden="true"/>
           <SignUpInput type={"email"} name={"email"} placeholder={"이메일을 입력하세요."} onChange={()=>setRandomError(true)} />
         </InputContainer>
         <AlertMsg className={randomError ? "error" : ""}>
-          <AiOutlineExclamationCircle />
+          <AiOutlineExclamationCircle aria-hidden="true"/>
           유효성 검사 로직이 들어갈 자리입니다~!~!
         </AlertMsg>
         <ButtonContainer>

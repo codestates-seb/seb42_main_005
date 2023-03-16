@@ -111,7 +111,7 @@ export default function Users() {
               </BelowLable>
             ) : (
               <Instead>
-                <AiOutlineExclamationCircle />
+                <AiOutlineExclamationCircle aria-hidden="true"/>
                 <span>가입된 회원이 없습니다.</span>
               </Instead>
             )}

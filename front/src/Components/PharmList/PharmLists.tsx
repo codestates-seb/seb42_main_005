@@ -3,7 +3,6 @@ import styled from "styled-components";
 import PharmItem from "./PharmItem";
 import { zIndex_PharmList } from "../../Util/z-index";
 import { BsSearch } from "react-icons/bs";
-import { useState } from "react";
 
 //데이터 들어오면 map으로 돌리기전에 하드코딩으로 두개해놨음
 export default function PharmLists() {
@@ -20,7 +19,7 @@ export default function PharmLists() {
           <PharmHeadContainer>
             <SearchContainer>
               <div>
-                <BsSearch className="searchIcon" />
+                <BsSearch className="searchIcon" aria-hidden="true"/>
               </div>
               <SearchInput placeholder="약국 검색.." />
             </SearchContainer>

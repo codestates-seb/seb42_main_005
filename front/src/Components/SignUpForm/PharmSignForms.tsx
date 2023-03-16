@@ -96,7 +96,7 @@ export default function PharmSignForms() {
       </Google>
       <SignUpForm onSubmit={onSubmit}>
         <InputContainer className={`email ${error.email ? "error" : "success"}`}>
-          <BsPersonCircle className="inputimage" />
+          <BsPersonCircle className="inputimage" aria-hidden="true"/>
           <SignUpInput
             type={"email"}
             name={"email"}
@@ -107,7 +107,7 @@ export default function PharmSignForms() {
         </InputContainer>
         <ErrorAlert Error={error.email} ErrorText={"이메일 형식이 올바르지 않습니다."} />
         <InputContainer className={`${error.password ? "error" : "success"}`}>
-          <AiOutlineLock className="inputimage" />
+          <AiOutlineLock className="inputimage" aria-hidden="true"/>
           <SignUpInput
             type={"password"}
             name={"password"}
@@ -118,7 +118,7 @@ export default function PharmSignForms() {
         </InputContainer>
         <ErrorAlert Error={error.password} ErrorText={"문자 숫자 특수문자 조합 8자 이상으로 조합해주세요."} />
         <InputContainer className={`${error.name ? "error" : "success"}`}>
-          <FaUserEdit className="inputimage" />
+          <FaUserEdit className="inputimage" aria-hidden="true"/>
           <SignUpInput
             type={"text"}
             name={"name"}
@@ -129,7 +129,7 @@ export default function PharmSignForms() {
         </InputContainer>
         <ErrorAlert Error={error.name} ErrorText={"이름에는 공백이 들어갈 수 없습니다."} />
         <InputContainer>
-          <FaMapMarkerAlt className="inputimage" />
+          <FaMapMarkerAlt className="inputimage" aria-hidden="true"/>
           <SignUpInput
             readOnly
             type={"text"}
@@ -141,7 +141,7 @@ export default function PharmSignForms() {
           <PharmAddress setpSignForms={setpSignForms} />
         </InputContainer>
         <InputContainer>
-          <AiOutlineCamera className="inputimage" />
+          <AiOutlineCamera className="inputimage" aria-hidden="true"/>
           <ImgInput readOnly value={businessImg} placeholder="사업자 등록증을 올려주세요" />
           <div className="photo_upload">
             <Button color="l_blue" size="sm" text="사진업로드" onClick={onClickBusinessImg} />
@@ -158,7 +158,7 @@ export default function PharmSignForms() {
         </InputContainer>
 
         <InputContainer>
-          <AiOutlineCamera className="inputimage" />
+          <AiOutlineCamera className="inputimage" aria-hidden="true"/>
           <ImgInput readOnly value={pharmImg} placeholder="약사면허증 사진을 올려주세요" />
           <div className="photo_upload">
             <Button color="l_blue" size="sm" text="사진업로드" onClick={onClickPharmImg} />

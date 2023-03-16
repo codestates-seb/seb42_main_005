@@ -10,7 +10,7 @@ export default function AnyDropDown({ setIsDropDownDown }: Props) {
   return (
     <DropDownContainer onClick={(event) => event.stopPropagation()}>
       <CloseBtnContainer>
-        <GrClose id="close" onClick={() => setIsDropDownDown(false)} />
+        <GrClose id="close" onClick={() => setIsDropDownDown(false)} aria-hidden={true}/>
       </CloseBtnContainer>
       <Unit>
         <Key>월요일</Key>
