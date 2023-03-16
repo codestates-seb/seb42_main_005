@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 
-export default function location() {
+export default function CurrentLocation() {
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | string>("");
 
   useMemo(() => {
@@ -17,8 +17,8 @@ export default function location() {
 
     function error() {
       setLocation({
-        latitude: 37.483034,
-        longitude: 126.902435,
+        latitude: 37.33370506366528,
+        longitude: 127.09738924623072,
       });
       console.log("위치 받기 실패");
     }
