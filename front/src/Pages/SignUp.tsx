@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PharmSignForms from "../Components/SignUpForm/PharmSignForms";
 import SignUpFormTab from "../Components/SignUpForm/SignUpFormTab";
 import UserSignUpForms from "../Components/SignUpForm/UserSignUpForms";
-import { SELEC_OPTIONS_TAP } from "../Components/SignUpForm/type";
+import { SELEC_OPTIONS_TAP } from "../Util/type";
 
 export interface Form {
   email: string;

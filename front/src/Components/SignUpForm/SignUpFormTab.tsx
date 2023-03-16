@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { SELEC_OPTIONS_TAP } from "../SignUpForm/type";
+import { SELEC_OPTIONS_TAP } from "../../Util/type";
 
 interface Props {
   tab: string;
