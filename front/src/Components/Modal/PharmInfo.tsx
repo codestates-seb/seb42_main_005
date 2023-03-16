@@ -60,7 +60,6 @@ export default function PharmInfo({ like, setLike }: Props) {
 }
 
 const InfoContainer = styled.aside`
-  /* z-index: 1; */
   position: relative;
   display: flex;
   flex-direction: column;
@@ -165,6 +164,7 @@ const InfoTagContainer = styled.section`
 `;
 const InfoTagTitle = styled.h3`
   font-size: 14px;
+  font-weight: 400;
   color: var(--black-500);
 `;
 const InfoTagBox = styled.section`
@@ -185,6 +185,7 @@ const More = styled.button`
   font-size: 12px;
   border-radius: 15px;
   border: 1px solid var(--l_button-mint);
+  background-color: transparent;
   :hover {
     color: var(--l_button-mint-hover);
     border: 1px solid var(--l_button-mint-hover);

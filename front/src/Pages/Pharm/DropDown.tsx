@@ -1,5 +1,5 @@
-import { useState } from "react";
 import styled from "styled-components";
+import { zIndex_MyPage } from "../../Util/z-index";
 
 export default function DropDown() {
   return (
@@ -53,6 +53,7 @@ const DropDownContainer = styled.section`
   background: white;
   box-shadow: var(--bs-lg);
   border-radius: 3px;
+  z-index: ${zIndex_MyPage.DropDown};
   @media (max-width: 768px) {
     left: -25px
   }

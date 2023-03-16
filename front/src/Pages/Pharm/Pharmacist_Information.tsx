@@ -1,9 +1,9 @@
 import { useState } from "react";
-import styled from "styled-components";
 import { useDaumPostcodePopup } from "react-daum-postcode";
+import styled from "styled-components";
 import SignUpInput from "../../Components/SignUpForm/SignUpInput";
-import { Validate } from "../../Components/SignUpForm/Validation";
 import Button from "../../Components/Ul/Button";
+import { Validate } from "../../Components/SignUpForm/Validation";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 

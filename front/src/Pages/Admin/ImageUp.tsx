@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { zIndex_AdminPage } from "../../Util/z-index";
 
 interface Props {
   isImgUp: boolean;
@@ -20,7 +21,6 @@ export default function PharmDetail({ isImgUp, setIsImgUp, imgUrl }: Props) {
 }
 
 const ModalBackDrop = styled.section`
-  z-index: 1;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -30,6 +30,7 @@ const ModalBackDrop = styled.section`
   top: 0;
   left: 0;
   background-color: var(--modal-backdrop);
+  z-index: ${zIndex_AdminPage.ModalBackDrop};
 `;
 const Container = styled.div`
   display: flex;
@@ -41,6 +42,7 @@ const Container = styled.div`
     font-size: 20px;
     border-radius: 50%;
   }
+  z-index: ${zIndex_AdminPage.ModalBackDrop};
 `;
 const Img = styled.img`
   height: 600px;

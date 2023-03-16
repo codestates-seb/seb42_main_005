@@ -5,8 +5,8 @@ import ReviewUnit from "./ReviewUnit";
 import WriteReviewForm from "./WriteReviewForm";
 import PharmRank from "../Ul/PharmRank";
 import Button from "../Ul/Button";
+import { zIndex_Modal } from "../../Util/z-index";
 import { GrClose } from "react-icons/gr";
-import { link } from "fs";
 
 interface Props {
   setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
@@ -34,6 +34,13 @@ export default function PharmDetail({ setIsModalUp, like, setLike }: Props) {
               <ReviewTitle>리뷰</ReviewTitle>
               <Reviews>
                 <ReviewUnit />
+                <ReviewUnit />
+                <ReviewUnit />
+                <ReviewUnit />
+                <ReviewUnit />
+                <ReviewUnit />
+                <ReviewUnit />
+                <ReviewUnit />
               </Reviews>
             </ReviewContainer>
           </Constant>
@@ -50,7 +57,6 @@ export default function PharmDetail({ setIsModalUp, like, setLike }: Props) {
 }
 
 const ModalBackDrop = styled.main`
-  z-index: 1;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -60,6 +66,7 @@ const ModalBackDrop = styled.main`
   top: 0;
   left: 0;
   background-color: var(--modal-backdrop);
+  z-index: ${zIndex_Modal.ModalBackDrop};
 `;
 const ModalContainer = styled.section`
   position: relative;
@@ -82,6 +89,7 @@ const ModalContainer = styled.section`
     background-color: var(--white);
     border-radius: 10px;
   }
+  z-index: ${zIndex_Modal.ModalContainer};
 `;
 const InfoHeader = styled.header`
   display: none;
@@ -179,7 +187,6 @@ const Reviews = styled.section`
 `;
 const CloseBtnContainer = styled.div`
   cursor: pointer;
-  z-index: 1000;
   position: absolute;
   display: flex;
   justify-content: flex-end;
@@ -188,4 +195,5 @@ const CloseBtnContainer = styled.div`
   width: 500px;
   font-size: 30px;
   color: var(--black-100);
+  z-index: ${zIndex_Modal.CloseBtnContainer};
 `;

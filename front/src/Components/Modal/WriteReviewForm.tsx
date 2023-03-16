@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Textarea from "../Ul/Textarea";
 import Button from "../Ul/Button";
 import Tag from "../Ul/Tag";
+import { zIndex_Modal } from "../../Util/z-index";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BiPhotoAlbum } from "react-icons/bi";
 import { GrClose } from "react-icons/gr";
@@ -74,7 +75,6 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
 }
 
 const WriteReviewContainer = styled.section`
-  z-index: 3;
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -87,6 +87,7 @@ const WriteReviewContainer = styled.section`
   background-color: var(--white);
   border: 0.5px solid var(--blue-300);
   box-shadow: 0px 0px 5px var(--black-200);
+  z-index: ${zIndex_Modal.WriteReviewContainer};
   .wide{
     display: flex;
     justify-content: flex-end;

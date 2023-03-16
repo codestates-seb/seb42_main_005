@@ -79,7 +79,6 @@ export default function ReviewUnit() {
 }
 
 const ReviewUnitContainer = styled.article`
-  z-index: 1;
   position: relative;
   display: flex;
   flex-direction: column;

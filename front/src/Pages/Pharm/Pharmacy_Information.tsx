@@ -27,7 +27,7 @@ export default function PharmacyInformation() {
   return (
     <Content>
       {isModalUp ? (
-        <PharmDetail isModalUp={isModalUp} setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
+        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
       ) : null}
       <ImgContainer>
         <ReviewImgInput id="pharmImg" type="file" onChange={(e) => onUpload(e)} accept="image/*" />

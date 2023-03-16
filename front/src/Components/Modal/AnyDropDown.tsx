@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { zIndex_Modal } from "../../Util/z-index";
 import { GrClose } from "react-icons/gr";
 
 interface Props {
@@ -48,7 +49,6 @@ export default function AnyDropDown({ setIsDropDownDown }: Props) {
 }
 
 const DropDownContainer = styled.section`
-  z-index: 10;
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -61,6 +61,7 @@ const DropDownContainer = styled.section`
   background: white;
   box-shadow: var(--bs-lg);
   border-radius: 3px;
+  z-index: ${zIndex_Modal.AnyDropDown};
 `;
 const CloseBtnContainer = styled.header`
   cursor: pointer;
