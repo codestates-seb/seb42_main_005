@@ -47,9 +47,15 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteReview(Long reviewIdx) {
+    public void deleteReview(Long storeIdx, Long reviewIdx) {
         // TODO: 작성자 검증 시점?
-        reviewRepository.deleteById(reviewIdx);
+        Review review = findVerifiedReview(storeIdx, reviewIdx);
+        reviewRepository.delete(review);
+    }
+
+    public Review findVerifiedReview(Long storeIdx, Long reviewIdx) {
+        return reviewRepository.findByStoreStoreIdxAndReviewIdx(storeIdx, reviewIdx)
+                .orElseThrow(RuntimeException::new);
     }
 
 }
