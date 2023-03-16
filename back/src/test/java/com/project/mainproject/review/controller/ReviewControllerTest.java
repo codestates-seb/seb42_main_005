@@ -5,8 +5,11 @@ import com.project.mainproject.helper.review.ReviewControllerTestHelper;
 import com.project.mainproject.review.dto.PostCreateReviewDto;
 import com.project.mainproject.review.dto.PostReportReviewPlusDto;
 import com.project.mainproject.review.dto.PostUpdateReviewDto;
+import com.project.mainproject.review.mapper.ReviewMapper;
+import com.project.mainproject.review.service.ReviewService;
 import com.project.mainproject.tag.dto.TagIdDto;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -24,6 +27,9 @@ import java.util.List;
 
 import static com.project.mainproject.utils.ApiDocumentUtils.getRequestPreProcessor;
 import static com.project.mainproject.utils.ApiDocumentUtils.getResponsePreProcessor;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -40,8 +46,11 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
     @Autowired
     private MockMvc mockMvc;
 
-    //@MockBean
-    //의존성 주입 필요한 것들 주입
+    @MockBean
+    private ReviewMapper reviewMapper;
+
+    @MockBean
+    private ReviewService reviewService;
 
     Long userIdx = 1L;
     Long storeIdx = 1L;
@@ -147,6 +156,8 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
     @Test
     void deleteReview() throws Exception {
 
+        doNothing().when(reviewService).deleteReview(Mockito.anyLong(), Mockito.anyLong());
+
         ResultActions actions = mockMvc.perform(deleteRequestBuilder(getTowPathParam(), storeIdx, reviewIdx));
 
         actions
@@ -159,8 +170,9 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
                         pathParameters(
                                 getStoreReviewPathParameterDescriptor()
                         ),
-                        HeaderDocumentation.responseHeaders(
-                                HeaderDocumentation.headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리소스의 URI")
+                        responseHeaders(
+                                headerWithName(HttpHeaders.LOCATION)
+                                        .description("Location header. 등록된 리소스의 URI")
                         )
                 ))
                 .andReturn();
