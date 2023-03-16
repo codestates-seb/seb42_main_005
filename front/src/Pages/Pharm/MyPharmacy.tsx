@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Button from "../../Components/Ul/Button";
 import PharmacistInformation from "./Pharmacist_Information";
 import PharmacyInformation from "./Pharmacy_Information";
-import PharmRank from "../../Components/Ul/PharmRank";
 
 export default function MyPharmacy() {
   return (
@@ -18,8 +17,10 @@ export default function MyPharmacy() {
           <Title>우리약국</Title>
           <PharmacyInformation />
         </Information>
-        <QuitBtnWrapper to="/sign_out">
-          <Button text="탈퇴하기" color="red" size="lg" />
+        <QuitBtnWrapper>
+          <Link to="/sign_out">
+            <Button text="탈퇴하기" color="red" size="lg" />
+          </Link>
         </QuitBtnWrapper>
       </ContentsWrapper>
     </WholePage>
@@ -40,7 +41,8 @@ const ContentsWrapper = styled.section`
     width: 700px;
   }
 `;
-const QuitBtnWrapper = styled(Link)`
+const QuitBtnWrapper = styled.div`
+  cursor: default;
   display: flex;
   justify-content: flex-end;
   margin: 20px 20px 100px 0;

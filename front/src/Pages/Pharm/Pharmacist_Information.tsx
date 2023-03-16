@@ -333,6 +333,7 @@ const ReviewImg = styled.img`
   width: 100px;
   object-fit: cover;
   border-radius: 50%;
+  border: 2px solid var(--blue-100);
 `;
 const Label = styled.label`
   display: flex;

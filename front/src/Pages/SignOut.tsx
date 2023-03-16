@@ -31,8 +31,8 @@ export default function SignOut() {
             <span id="checkBoxWrapper">
               <Check
                 type="checkbox"
-                onClick={() => {
-                  setIsChecked(!isChecked);
+                onChange={(event) => {
+                  setIsChecked(event.target.checked);
                   setErrMsg(false);
                 }}
               />

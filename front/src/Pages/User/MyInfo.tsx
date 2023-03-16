@@ -22,8 +22,10 @@ export default function MyInfo() {
           <Title>내가 남긴 리뷰</Title>
           <MyInfoReviews />
         </Information>
-        <QuitBtnWrapper to="/sign_out">
+        <QuitBtnWrapper>
+          <Link to="/sign_out">
           <Button text="탈퇴하기" color="red" size="lg" />
+          </Link>
         </QuitBtnWrapper>
       </ContentsWrapper>
     </WholePage>
@@ -44,7 +46,8 @@ const ContentsWrapper = styled.section`
     width: 700px;
   }
 `;
-const QuitBtnWrapper = styled(Link)`
+const QuitBtnWrapper = styled.div`
+  cursor: default;
   display: flex;
   justify-content: flex-end;
   margin: 20px 20px 100px 0;
