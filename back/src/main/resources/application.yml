@@ -5,7 +5,7 @@ spring:
     username: ${DATABASE_ID}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    database-platform: org.hibernate.dialect.MySQL5Dialect
+    database-platform: org.hibernate.dialect.MySQL55Dialect
     hibernate:
       ddl-auto: none
     properties:
@@ -45,3 +45,5 @@ mail:
     name:
       member:
         join: email-registration-member
+data-api:
+  service-key: ${SERVICE_KEY}

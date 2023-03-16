@@ -4,11 +4,12 @@ import com.project.mainproject.data.dto.StoreDataDto;
 import com.project.mainproject.store.entity.Store;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
-
 import java.time.LocalTime;
 import java.util.List;
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+
+import static org.mapstruct.ReportingPolicy.IGNORE;
+
+@Mapper(componentModel = "spring", unmappedTargetPolicy = IGNORE)
 public interface StoreMapper {
     List<Store> storeDataDtoListToStores(List<StoreDataDto> storeData);
 
