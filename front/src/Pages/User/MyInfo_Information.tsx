@@ -159,8 +159,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     e.preventDefault();
   };
 
-  const onSubmit: any = (e: { preventDefault: () => void; target: any }) => {
-    // setIsEditing(false);
+  const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const password = formData.get(FORM_FIELD_NAMES.PASSWORD);
