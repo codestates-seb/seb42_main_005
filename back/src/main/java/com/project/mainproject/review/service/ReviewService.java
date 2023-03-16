@@ -1,5 +1,6 @@
 package com.project.mainproject.review.service;
 
+import com.project.mainproject.exception.BusinessLogicException;
 import com.project.mainproject.review.entity.Review;
 import com.project.mainproject.review.repository.ReviewRepository;
 import com.project.mainproject.tag.entity.ReviewTag;
@@ -12,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.project.mainproject.review.exception.ReviewExceptionCode.REVIEW_NOT_EXIST;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +59,7 @@ public class ReviewService {
 
     public Review findVerifiedReview(Long storeIdx, Long reviewIdx) {
         return reviewRepository.findByStoreStoreIdxAndReviewIdx(storeIdx, reviewIdx)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new BusinessLogicException(REVIEW_NOT_EXIST));
     }
 
 }
