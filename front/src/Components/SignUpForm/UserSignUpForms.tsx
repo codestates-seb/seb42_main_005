@@ -130,7 +130,8 @@ export default function UserSignUpForms() {
 }
 const Container = styled.section`
   padding: 2rem 1rem;
-  width: 40rem;
+  width: 35rem;
+  gap: 3px;
   border: 1px solid var(--black-200);
   border-top: none;
   border-bottom-left-radius: 18px;
@@ -139,14 +140,16 @@ const Container = styled.section`
     0 4px 13px -3px hsla(0, 0%, 0%, 0.13);
 `;
 const Google = styled.article`
+  display: flex;
+  justify-content: center;
   padding-bottom: 1rem;
   .google_button {
+    cursor: pointer;
     height: 3.3rem;
-    width: 37.875rem;
-    border: 1px solid var(--black-200);
+    width: 33rem;
     border-radius: 10px;
     background-color: transparent;
-    cursor: pointer;
+    border: 1px solid var(--black-200);
     box-shadow: var(--bs-md);
     &:hover {
       background-color: var(--black-050);

@@ -185,11 +185,9 @@ export default function PharmSignForms() {
   );
 }
 const Container = styled.section`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
   padding: 2rem 1rem;
-  width: 40rem;
+  width: 35rem;
+  gap: 3px;
   border: 1px solid var(--black-200);
   border-top: none;
   border-bottom-left-radius: 18px;
@@ -199,14 +197,16 @@ const Container = styled.section`
 `;
 
 const Google = styled.article`
+  display: flex;
+  justify-content: center;
   padding-bottom: 1rem;
   .google_button {
+    cursor: pointer;
     height: 3.3rem;
-    width: 37.875rem;
-    border: 1px solid var(--black-200);
+    width: 33rem;
     border-radius: 10px;
     background-color: transparent;
-    cursor: pointer;
+    border: 1px solid var(--black-200);
     box-shadow: var(--bs-md);
     &:hover {
       background-color: var(--black-050);
@@ -247,7 +247,7 @@ const SignUpForm = styled.form`
     }
   }
 `;
-const InputContainer = styled.div`
+const InputContainer = styled.article`
   display: flex;
   flex-direction: row;
   margin-bottom: 0.5rem;
@@ -292,7 +292,7 @@ const ImgInput = styled.input`
   font-size: 1.1rem;
   text-overflow: ellipsis;
 `;
-const CheckContainer = styled.div`
+const CheckContainer = styled.article`
   display: flex;
   flex-direction: row;
   padding: 10px 0px 10px 5px;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import PharmSignForms from "../Components/SignUpForm/PharmSignForms";
 import SignUpFormTab from "../Components/SignUpForm/SignUpFormTab";
@@ -30,23 +30,23 @@ export default function SignUp() {
 const Total = styled.main`
   display: flex;
   justify-content: center;
+  height: 100vh;
+  width: 100%;
+  overflow-y: scroll;
 `;
 const Container = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100%;
-  width: 40rem;
+  width: 35rem;
 `;
-
 const Title = styled.header`
   display: flex;
   justify-content: center;
-  padding-top: 6rem;
+  align-items: center;
+  gap: 10px;
   img {
-    padding-right: 1rem;
     width: 3.5rem;
-    height: 3rem;
   }
   h1 {
     color: var(--blue-600);
