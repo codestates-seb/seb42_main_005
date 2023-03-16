@@ -49,7 +49,7 @@ export default function Certify() {
                 {dummy.map((data, i) => (
                   <Content key={i}>
                     <Values className="checkBox">
-                      <CheckBox />
+                      <CheckBox/>
                     </Values>
                     <Values className="nickname">{data.nickname}</Values>
                     <Values className="email">{data.email}</Values>

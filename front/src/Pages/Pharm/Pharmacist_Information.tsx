@@ -21,7 +21,7 @@ let dummy = {
   },
 };
 
-export default function MyInfoInformation({ scriptUrl }: Props) {
+export default function PharmacistInformation({ scriptUrl }: Props) {
   const [imageSrc, setImageSrc]: any = useState(null);
   const onUpload = (e: any) => {
     const file = e.target.files[0];
@@ -103,7 +103,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     <Wrapper>
       <ImgContainer>
         <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
-        {imageSrc ? <ReviewImg src={imageSrc} /> : <ReviewImg src="Images/User.png" />}
+        {imageSrc ? <ReviewImg src={imageSrc} /> : <ReviewImg src="Images/Pharm.png" />}
         <Label htmlFor="img">
           <MdOutlineAddAPhoto />
           사진추가하기
@@ -377,3 +377,4 @@ const Wrapper = styled.main`
     width: 600px;
   }
 `;
+
