@@ -29,7 +29,9 @@ public class Report extends AuditableWithBy {
 
     @ManyToOne(fetch = LAZY)
     private User user;
+
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "REVIEW_IDX")
     private Review review;
 
     //### 간단한 동작메서드 ###//
