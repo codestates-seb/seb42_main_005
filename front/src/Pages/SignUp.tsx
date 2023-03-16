@@ -22,7 +22,7 @@ export default function SignUp() {
           <img alt="logo" src="Images/Logo.png" />
           <h1>회원가입</h1>
         </Title>
-        <SignUpFormTab tab={tab} setTab={setTab} />
+        <SignUpFormTab tab={tab} onClickPharm={() => setTab("pharm")} onClickUser={() => setTab("user")} />
         {tab === "user" ? <UserSignUpForms /> : <PharmSignForms />}
       </Container>
     </Total>
