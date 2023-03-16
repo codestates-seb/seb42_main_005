@@ -20,14 +20,14 @@ export default function SignUpForms({ tab, setTab }: Props) {
   );
 }
 
-const TabContainer = styled.div`
+const TabContainer = styled.section`
   display: flex;
   justify-content: center;
   width: 100%;
   padding-top: 3rem;
 `;
 
-const Tab = styled.div<{ title: string; tab: string }>`
+const Tab = styled.span<{ title: string; tab: string }>`
   display: flex;
   justify-content: center;
   align-items: center;

@@ -5,13 +5,13 @@ import Button from "../Ul/Button";
 import Tag from "../Ul/Tag";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BiPhotoAlbum } from "react-icons/bi";
+import { GrClose } from "react-icons/gr";
 
 interface Props {
-  isReviewFormShown: boolean;
   setIsReviewFormShown: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function WriteReviewForm({ isReviewFormShown, setIsReviewFormShown }: Props) {
+export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
   const [imageSrc, setImageSrc]: any = useState(null);
   const onUpload = (e: any) => {
     const file = e.target.files[0];
@@ -27,9 +27,10 @@ export default function WriteReviewForm({ isReviewFormShown, setIsReviewFormShow
   const [rate, setRate] = useState(0);
 
   return (
-    <WriteReviewContainer>
+    <WriteReviewContainer >
+      <InputTop className="wide"><GrClose className="except" onClick={() => setIsReviewFormShown(false)}/></InputTop>
       <InputTop>
-        <Textarea placeholder="무분별한 비방, 비하, 욕설은 지양해주세요 :)" isValid={true} rows={3} icon={true} />
+        <Textarea placeholder="무분별한 비방, 비하, 욕설은 지양해주세요 :)" isValid={true} rows={3} icon={false} />
         <ReviewImgContainer>
           <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
           {imageSrc ? (
@@ -66,7 +67,6 @@ export default function WriteReviewForm({ isReviewFormShown, setIsReviewFormShow
           size="md"
           text="작성완료"
           icon={true}
-          onClick={() => setIsReviewFormShown(!isReviewFormShown)}
         />
       </InputBot>
     </WriteReviewContainer>
@@ -78,16 +78,20 @@ const WriteReviewContainer = styled.section`
   position: absolute;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   right: 20px;
   bottom: 20px;
-  height: 210px;
-  width: 430px;
   padding: 15px;
-  background-color: var(--white);
+  gap: 8px;
+  width: 430px;
   border-radius: 10px;
+  background-color: var(--white);
   border: 0.5px solid var(--blue-300);
   box-shadow: 0px 0px 5px var(--black-200);
+  .wide{
+    display: flex;
+    justify-content: flex-end;
+    width: 400px;
+  }
   @media (max-width: 768px) {
     position: absolute;
     display: flex;
@@ -98,12 +102,12 @@ const WriteReviewContainer = styled.section`
     min-height: 210px;
   }
 `;
-const InputTop = styled.div`
+const InputTop = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 `;
-const ReviewImgContainer = styled.span`
+const ReviewImgContainer = styled.section`
   display: inline-block;
   position: relative;
 `;
@@ -119,20 +123,20 @@ const ReviewImg = styled.img`
 `;
 const Instead = styled.span`
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   height: 80px;
   width: 100px;
   font-size: 40px;
-  background-color: var(--black-075);
   color: var(--white);
   border-radius: 5px;
+  background-color: var(--black-075);
 `;
 const Label = styled.label`
   position: absolute;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   bottom: 0;
   right: 0;
   height: 26px;
@@ -142,21 +146,21 @@ const Label = styled.label`
   border-radius: 50%;
   box-shadow: 0px 0px 5px 0.5px var(--black-200);
 `;
-const TagSelection = styled.div`
+const TagSelection = styled.section`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   height: 46px;
-  padding: 10px;
+  padding: 10px 15px;
+  gap: 10px;
   border-radius: 5px;
   box-shadow: 0px 0px 5px 0.5px var(--black-100) inset;
 `;
-const InputBot = styled.div`
+const InputBot = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 `;
-const Rating = styled.span`
+const Rating = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -169,12 +173,14 @@ const Rating = styled.span`
 `;
 const StarContainer = styled.span`
   display: flex;
+  padding: 10px;
   gap: 10px;
 `;
 const Star = styled.img`
   width: 20px;
 `;
 const RateNum = styled.span`
-  font-weight: bold;
+  margin-right: 5px;
   color: var(--black-300);
+  font-weight: bold;
 `;

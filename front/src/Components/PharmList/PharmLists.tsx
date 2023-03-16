@@ -50,7 +50,7 @@ export default function PharmLists() {
 }
 
 //전체 컨테이너
-const ListContainer = styled.div`
+const ListContainer = styled.aside`
   position: absolute;
   width: 36rem;
   height: calc(100vh - 50px);
@@ -91,12 +91,12 @@ const EmptyContainer = styled.div`
     }
   }
 `;
-const PharmContainer = styled.div`
+const PharmContainer = styled.main`
   display: flex;
   flex-direction: column;
   height: calc(100vh - 95px);
 `;
-const PharmHeadContainer = styled.div`
+const PharmHeadContainer = styled.header`
   margin-right: 42px;
   margin-bottom: 10px;
   transition: 0.2s;
@@ -105,7 +105,7 @@ const PharmHeadContainer = styled.div`
     margin-right: 22px;
   }
 `;
-const PharmItemContainer = styled.div`
+const PharmItemContainer = styled.section`
   overflow-y: scroll;
   height: calc(100vh - 135px);
   display: flex;
@@ -117,7 +117,7 @@ const PharmItemContainer = styled.div`
 `;
 
 //input
-const SearchContainer = styled.div`
+const SearchContainer = styled.section`
   display: flex;
   justify-content: center;
   margin: 10px 0;
@@ -147,7 +147,7 @@ const SearchInput = styled.input`
 `;
 
 //Buttons
-const ButtonContainer = styled.div`
+const ButtonContainer = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;

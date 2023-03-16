@@ -27,11 +27,11 @@ export default function SignUp() {
     </Total>
   );
 }
-const Total = styled.div`
+const Total = styled.main`
   display: flex;
   justify-content: center;
 `;
-const Container = styled.div`
+const Container = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -39,7 +39,7 @@ const Container = styled.div`
   width: 40rem;
 `;
 
-const Title = styled.div`
+const Title = styled.header`
   display: flex;
   justify-content: center;
   padding-top: 6rem;

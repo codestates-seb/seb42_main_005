@@ -184,11 +184,11 @@ export default function PharmSignForms() {
     </Container>
   );
 }
-const Container = styled.div`
+const Container = styled.section`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  padding: 3rem 1rem 1.5rem 1rem;
+  padding: 2rem 1rem;
   width: 40rem;
   border: 1px solid var(--black-200);
   border-top: none;
@@ -198,7 +198,7 @@ const Container = styled.div`
     0 4px 13px -3px hsla(0, 0%, 0%, 0.13);
 `;
 
-const Google = styled.div`
+const Google = styled.article`
   padding-bottom: 1rem;
   .google_button {
     height: 3.3rem;
@@ -230,7 +230,7 @@ const SignUpForm = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
-
+  gap: 3px;
   .signup_button {
     background-color: var(--blue-500);
     border: none;
@@ -250,11 +250,11 @@ const SignUpForm = styled.form`
 const InputContainer = styled.div`
   display: flex;
   flex-direction: row;
-  border: 1px solid var(--black-150);
-  border-radius: 10px;
-  box-shadow: var(--bs-sm);
   margin-bottom: 0.5rem;
   padding: 0 10px;
+  border-radius: 10px;
+  box-shadow: var(--bs-sm);
+  border: 1px solid var(--black-150);
   .inputimage {
     display: flex;
     justify-content: center;
@@ -281,20 +281,21 @@ const InputContainer = styled.div`
 `;
 
 const ImgInput = styled.input`
-  width: 27rem;
-  height: 2.7rem;
   outline: none;
-  font-size: 1.1rem;
-  padding-left: 0.5rem;
-  border: none;
-  text-overflow: ellipsis;
-  color: var(--black-500);
   display: flex;
   flex-grow: 1;
+  padding-left: 0.5rem;
+  width: 27rem;
+  height: 2.7rem;
+  color: var(--black-500);
+  border: none;
+  font-size: 1.1rem;
+  text-overflow: ellipsis;
 `;
 const CheckContainer = styled.div`
   display: flex;
   flex-direction: row;
+  padding: 10px 0px 10px 5px;
   .checkbox_content {
     color: var(--black-500);
   }

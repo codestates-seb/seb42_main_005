@@ -11,16 +11,16 @@ export default function PharmItem() {
   return (
     <PharmCard>
       {isModalUp ? (
-        <PharmDetail isModalUp={isModalUp} setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
+        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
       ) : null}
       <InfoImgContainer>
-        <Img src="./Images/random.png" alt="고심약국" onClick={() => setIsModalUp(!isModalUp)} />
+        <Img src="./Images/random.png" alt="고심약국" onClick={() => setIsModalUp(true)} />
         <LikeButton onClick={() => setLike(!like)}>
           {like ? <img src="./Images/Heart.png" /> : <img src="./Images/UnHeart.png" />}
         </LikeButton>
       </InfoImgContainer>
       <PharmTitleBox>
-        <PharmName onClick={() => setIsModalUp(!isModalUp)}>킹갓 약국</PharmName>
+        <PharmName onClick={() => setIsModalUp(true)}>킹갓 약국</PharmName>
         <PharmRank />
       </PharmTitleBox>
       <TagContainer>
@@ -34,7 +34,7 @@ export default function PharmItem() {
 }
 
 //약국카드
-const PharmCard = styled.div`
+const PharmCard = styled.article`
   width: 25rem;
   height: 25rem;
   display: flex;
@@ -72,21 +72,17 @@ const LikeButton = styled.span`
   right: 36px;
   top: 12px;
   width: 20px;
-  @media (max-width: 768px) {
-    right: 60px;
-    top: 11px;
-  }
 `;
 
 //약국 타이틀
-const PharmTitleBox = styled.div`
+const PharmTitleBox = styled.header`
   display: flex;
   justify-content: space-between;
   margin-top: 15px;
   padding: 0 15px;
 `;
 
-const PharmName = styled.div`
+const PharmName = styled.h1`
   cursor: pointer;
   font-size: 1.56rem;
   font-weight: bold;
