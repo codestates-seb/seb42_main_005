@@ -1,72 +1,71 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import MapFilter from "./MapFilter";
+import { MapLogic } from "./MapLogic";
+import { zIndex_KakaoMap } from "../../Util/z-index";
+import { SELECT_OPTION_MAP } from "../../Util/type";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { BiTargetLock } from "react-icons/bi";
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
-
 export default function KakaoMap() {
-  const { kakao } = window;
-  const mapRef = useRef<HTMLDivElement>(null);
+  const { _map } = MapLogic();
+  const [selected, setSelected] = useState<SELECT_OPTION_MAP>("map_home");
 
-  useEffect(() => {
-    const container = mapRef.current;
-    const options = {
-      // center: new kakao.maps.LatLng(33.450701, 126.570667),
-      center: new kakao.maps.LatLng(33.450701, 126.570667),
-      level: 3,
-    };
-    // 지도 객체 생성
-    const map = new kakao.maps.Map(container, options);
-    map.setMaxLevel(7);
-    setMap(map);
-  }, []);
-
-  const [_map, setMap]: any = useState();
-  // console.log(_map);
+  //* 줌 인/아웃 버튼 클릭 시
   const zoomIn = () => {
     _map.setLevel(_map.getLevel() - 1);
   };
   const zoomOut = () => {
     _map.setLevel(_map.getLevel() + 1);
   };
-  const locationLoadSuccess = (pos: { coords: { latitude: number; longitude: number } }) => {
-    // 현재 위치 받아오기
-    var currentPos = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
 
-    // 지도 이동(기존 위치와 가깝다면 부드럽게 이동)
-    _map.panTo(currentPos);
-
-    // 마커 생성
-    var marker = new kakao.maps.Marker({
-      position: currentPos,
-    });
-    marker.setMap(null);
-    marker.setMap(_map);
-  };
-  const locationLoadError = (pos: any) => {
-    alert("위치 정보를 가져오는데 실패했습니다.");
-  };
-
-  // 위치 가져오기 버튼 클릭시
+  //* 현재 위치 버튼 클릭 시
   const getCurrentLocBtn = () => {
-    navigator.geolocation.getCurrentPosition(locationLoadSuccess, locationLoadError);
+    navigator.geolocation.getCurrentPosition(
+      (pos: any) => {
+        const latitude = pos.coords.latitude;
+        const longitude = pos.coords.longitude;
+        const currentPos = new window.kakao.maps.LatLng(latitude, longitude);
+
+        _map.panTo(currentPos); // 지도 이동(기존 위치와 가깝다면 부드럽게 이동)
+
+        const currentImageSrc = "./Images/currentPos.png";
+        const currentImageSize = new window.kakao.maps.Size(24, 35);
+        const currentMarkerImage = new window.kakao.maps.MarkerImage(currentImageSrc, currentImageSize);
+
+        // 기존 marker 삭제
+        const markers = _map.getMarkers();
+        markers.setMap(null);
+
+        // 새로운 marker 추가
+        const marker = new window.kakao.maps.Marker({
+          position: currentPos,
+          title: "현 위치",
+          image: currentMarkerImage,
+        });
+        marker.setMap(_map);
+      },
+      (error: any) => {
+        alert("위치 정보를 가져오는데 실패했습니다.");
+      },
+    );
     _map.setLevel(3);
   };
-  const [selected, setSelected] = useState<"map_home" | "in_business" | "midnight" | "bookmarks">("map_home");
+
   return (
-    <MapContainer ref={mapRef}>
-      <MapFilter selected={selected} setSelected={setSelected} />
-      <CurrentLocation>
+    <MapContainer id="map">
+      <MapFilter
+        selected={selected}
+        onClickMapHome={() => setSelected("map_home")}
+        onClickInBusiness={() => setSelected("in_business")}
+        onClickMidnight={() => setSelected("midnight")}
+        onClickBookmarks={() => setSelected("bookmarks")}
+      />
+      <LocaControler>
         <LocaBtn onClick={getCurrentLocBtn}>
           <BiTargetLock className="icon" />
         </LocaBtn>
-      </CurrentLocation>
+      </LocaControler>
       <ZoomControler>
         <ZoomBtn onClick={zoomIn}>
           <AiOutlinePlus className="icon plus" />
@@ -89,7 +88,7 @@ const MapContainer = styled.div`
   height: 100vh;
   top: 0;
   right: 0;
-  z-index: 1;
+  z-index: ${zIndex_KakaoMap.MapContainer};
   @media (max-width: 768px) {
   }
 `;
@@ -99,7 +98,7 @@ const ZoomControler = styled.div`
   justify-content: center;
   align-items: center;
   position: fixed;
-  z-index: 999;
+  z-index: ${zIndex_KakaoMap.ZoomControler};
   bottom: 40px;
   right: 30px;
   padding: 4px;
@@ -137,12 +136,12 @@ const ZoomBtn = styled.span`
   }
 `;
 
-const CurrentLocation = styled.div`
+const LocaControler = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   position: fixed;
-  z-index: 999;
+  z-index: ${zIndex_KakaoMap.CurrentLocation};
   bottom: 140px;
   right: 30px;
   padding: 4px;
