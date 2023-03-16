@@ -129,9 +129,6 @@ export default function UserSignUpForms() {
   );
 }
 const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
   padding: 3rem 1rem 1.5rem 1rem;
   width: 40rem;
   border: 1px solid var(--black-200);
