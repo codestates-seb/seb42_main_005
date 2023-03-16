@@ -45,7 +45,7 @@ const Tabs = styled(Link)`
     background-color: var(--black-075);
   }
   &.this {
-    color: var(--black);
+    color: var(--black-500);
     background-color: var(--white);
   }
 `;
