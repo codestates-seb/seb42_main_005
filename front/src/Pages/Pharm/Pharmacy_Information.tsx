@@ -33,7 +33,7 @@ export default function PharmacyInformation() {
         <ReviewImgInput id="pharmImg" type="file" onChange={(e) => onUpload(e)} accept="image/*" />
         {imageSrc ? <PharmImg src={imageSrc as string} /> : <PharmImg src="Images/ImgPreparing.png" />}
         <Label htmlFor="pharmImg">
-          <MdOutlineAddAPhoto />
+          <MdOutlineAddAPhoto aria-hidden="true" />
           우리 약국 사진추가하기
         </Label>
       </ImgContainer>
@@ -62,6 +62,7 @@ export default function PharmacyInformation() {
               <IoIosArrowDropright
                 id={`dropDown ${isDropDownDown ? "close" : "open"}`}
                 onClick={() => setIsDropDownDown(!isDropDownDown)}
+                aria-hidden="true"
               />
             )}
             09:00-21:00

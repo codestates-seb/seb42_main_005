@@ -190,7 +190,7 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
         <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
         {imageSrc ? <ReviewImg src={imageSrc as string} /> : <ReviewImg src="Images/Pharm.png" />}
         <Label htmlFor="img">
-          <MdOutlineAddAPhoto />
+          <MdOutlineAddAPhoto aria-hidden="true" />
           사진추가하기
         </Label>
       </ImgContainer>
@@ -214,7 +214,7 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
               </InputWrapper>
               <InputAlert value={signForm.name} />
               <AlertMsg className={`${error.name ? "error" : ""}`}>
-                <AiOutlineExclamationCircle />
+                <AiOutlineExclamationCircle aria-hidden="true" />
                 이름에는 공백이 들어갈 수 없습니다.
               </AlertMsg>
             </EditWrapper>
@@ -363,7 +363,7 @@ const ContentSet = styled.h3`
   gap: 10px;
   margin: 3px;
 `;
-const ContentKey = styled.h3`
+const ContentKey = styled.label`
   display: flex;
   align-items: center;
   width: 80px;
