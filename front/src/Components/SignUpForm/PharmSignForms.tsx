@@ -94,9 +94,13 @@ export default function PharmSignForms() {
     });
   };
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
-    const { email, password, name, address } = pSignForm;
+    const formData = new FormData(e.target);
+    const email = formData.get(FORM_FIELD_NAMES.EMAIL);
+    const password = formData.get(FORM_FIELD_NAMES.PASSWORD);
+    const name = formData.get(FORM_FIELD_NAMES.NAME);
+    const address = formData.get(FORM_FIELD_NAMES.ADDRESS);
 
     if (!email || !password || !name || !address || !businessImg || !pharmImg) {
       return alert("모든 항목을 입력해주세요");
@@ -228,7 +232,9 @@ export default function PharmSignForms() {
             회원가입시, 사용자의 현재 위치를 사용하는 것에 동의하는 것으로 간주됩니다.
           </span>
         </CheckContainer>
-        <button className="signup_button">회원가입</button>
+        <button className="signup_button" type="submit">
+          회원가입
+        </button>
       </SignUpForm>
     </Container>
   );
@@ -326,6 +332,7 @@ const InputContainer = styled.div`
   }
   &.red {
     box-shadow: var(--wrapped-shadow-red);
+    border: 1px solid hsl(359, 46%, 66%);
   }
 `;
 

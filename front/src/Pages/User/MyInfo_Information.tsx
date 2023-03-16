@@ -2,10 +2,11 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import SignUpInput from "../../Components/SignUpForm/SignUpInput";
-import { Validate } from "../../Components/SignUpForm/Validation";
+import { validators } from "../../Components/SignUpForm/Validation";
 import Button from "../../Components/Ul/Button";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+import InputAlert from "./InputAlert";
 
 interface Props {
   scriptUrl?: string;
@@ -15,7 +16,7 @@ let dummy = {
   myInfo: {
     profileImg: "Images/logo.png",
     joined: "2021.03.29",
-    nickname: "caffeine",
+    name: "caffeine",
     password: "caffeine1234!@#$",
     email: "JudiPark0426@github.com",
     address: "서울시 종로구 대학로 101",
@@ -37,38 +38,96 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
   };
   const [isEditing, setIsEditing] = useState(false);
   const [signForm, setSignForms] = useState({
-    nickname: dummy.myInfo.nickname,
+    name: dummy.myInfo.name,
     password: "",
     newPassword: "",
     confirmNewPassword: "",
     address: dummy.myInfo.address,
   });
   const [error, setError] = useState({
-    nickname: false,
+    name: false,
     password: false,
     newPassword: false,
     confirmNewPassword: false,
   });
-  const { nickname, address, password, newPassword, confirmNewPassword } = signForm;
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let errors = false;
+  const FORM_FIELD_NAMES = {
+    NAME: "name",
+    PASSWORD: "password",
+    NEWPASSWORD: "newPassword",
+    CONFIRMNEWPASSWORD: "confirmNewPassword",
+    ADDRESS: "address",
+  };
+
+  const changeNameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSignForms({
       ...signForm,
       [name]: value,
     });
-    if (name === "nickname") {
-      errors = Validate.nameValidation(value);
+    let errors;
+    if (name === FORM_FIELD_NAMES.NAME) {
+      errors = validators.validateName(value);
     }
-    if (name === "password") {
-      errors = Validate.passwordConfirmValidate(dummy.myInfo.password, value);
+    setError({
+      ...error,
+      [name]: errors,
+    });
+  };
+
+  const changeAddressHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSignForms({
+      ...signForm,
+      [name]: value,
+    });
+  };
+
+  //현재비밀번호
+  const changeNowPasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSignForms({
+      ...signForm,
+      [name]: value,
+    });
+    let errors;
+    if (name === FORM_FIELD_NAMES.PASSWORD) {
+      errors = validators.validatePasswordCheck(dummy.myInfo.password, value);
     }
-    if (name === "newPassword") {
-      errors = Validate.passwordValidation(value);
+    setError({
+      ...error,
+      [name]: errors,
+    });
+  };
+
+  //새비밀번호
+  const changeNewPasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSignForms({
+      ...signForm,
+      [name]: value,
+    });
+    let errors;
+    if (name === FORM_FIELD_NAMES.NEWPASSWORD) {
+      errors = validators.validatePassword(value);
     }
-    if (name === "confirmNewPassword") {
-      errors = Validate.passwordConfirmValidate(confirmNewPassword, value);
+
+    setError({
+      ...error,
+      [name]: errors,
+    });
+  };
+
+  //새비밀번호 체크
+  const changeNewConfirmPasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSignForms({
+      ...signForm,
+      [name]: value,
+    });
+    let errors;
+    if (name === FORM_FIELD_NAMES.CONFIRMNEWPASSWORD) {
+      errors = validators.validatePasswordCheck(signForm.newPassword, value);
     }
     setError({
       ...error,
@@ -100,8 +159,31 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     e.preventDefault();
   };
 
+  const onSubmit: any = (e: { preventDefault: () => void; target: any }) => {
+    // setIsEditing(false);
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const password = formData.get(FORM_FIELD_NAMES.PASSWORD);
+    const name = formData.get(FORM_FIELD_NAMES.NAME);
+    const address = formData.get(FORM_FIELD_NAMES.ADDRESS);
+    // const newPassword = formData.get(FORM_FIELD_NAMES.NEWPASSWORD);
+    // const confirmNewPassword = formData.get(FORM_FIELD_NAMES.CONFIRMNEWPASSWORD);
+
+    if (!password || !name || !address) {
+      return alert("필수값을 입력해주세요");
+    }
+    if (
+      error.password === true ||
+      error.name === true ||
+      error.newPassword === true ||
+      error.confirmNewPassword === true
+    ) {
+      return alert("항목을 다시 확인해주세요");
+    }
+  };
+
   return (
-    <Wrapper>
+    <Wrapper onSubmit={onSubmit}>
       <ImgContainer>
         <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
         {imageSrc ? <ReviewImg src={imageSrc} /> : <ReviewImg src="Images/User.png" />}
@@ -110,6 +192,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
           사진추가하기
         </Label>
       </ImgContainer>
+
       <Content>
         <ContentSet>
           <ContentKey>가입일</ContentKey>
@@ -119,22 +202,23 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
           <ContentKey>닉네임</ContentKey>
           {isEditing ? (
             <EditWrapper>
-              <InputWrapper className={`${error.nickname ? "error" : ""}`}>
+              <InputWrapper className={`${error.name ? "error" : ""}`}>
                 <SignUpInput
                   type={"text"}
-                  name={"nickname"}
+                  name={FORM_FIELD_NAMES.NAME}
                   placeholder={"닉네임을 입력하세요."}
-                  value={nickname}
-                  onChange={onChange}
+                  value={signForm.name}
+                  onChange={changeNameHandler}
                 />
               </InputWrapper>
-              <AlertMsg className={`${error.nickname ? "error" : ""}`}>
+              <InputAlert value={signForm.name} />
+              <AlertMsg className={`${error.name ? "error" : ""}`}>
                 <AiOutlineExclamationCircle />
                 이름에는 공백이 들어갈 수 없습니다.
               </AlertMsg>
             </EditWrapper>
           ) : (
-            <ContentValue>{dummy.myInfo.nickname}</ContentValue>
+            <ContentValue>{dummy.myInfo.name}</ContentValue>
           )}
         </ContentSet>
         <ContentSet>
@@ -148,10 +232,10 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
               <SignUpInput
                 readOnly
                 type={"text"}
-                name={"address"}
+                name={FORM_FIELD_NAMES.ADDRESS}
                 placeholder={"주소를 입력하세요."}
-                value={address}
-                onChange={onChange}
+                value={signForm.address}
+                onChange={changeAddressHandler}
               />
               <Button color="l_blue" size="sm" text="주소 찾기" onClick={handleClick} />
             </InputWrapper>
@@ -167,12 +251,13 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
                 <InputWrapper className={`${error.password ? "error" : ""}`}>
                   <SignUpInput
                     type={"password"}
-                    name={"password"}
+                    name={FORM_FIELD_NAMES.PASSWORD}
                     placeholder={"현재 비밀번호를 입력하세요."}
-                    value={password}
-                    onChange={onChange}
+                    value={signForm.password}
+                    onChange={changeNowPasswordHandler}
                   />
                 </InputWrapper>
+                <InputAlert value={signForm.password} />
                 <AlertMsg className={`${error.password ? "error" : ""}`}>
                   <AiOutlineExclamationCircle />
                   비밀번호가 일치하지 않습니다.
@@ -185,10 +270,10 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
                 <InputWrapper className={`${error.newPassword ? "error" : ""}`}>
                   <SignUpInput
                     type={"password"}
-                    name={"newPassword"}
+                    name={FORM_FIELD_NAMES.NEWPASSWORD}
                     placeholder={"새 비밀번호를 입력하세요."}
-                    value={newPassword}
-                    onChange={onChange}
+                    value={signForm.newPassword}
+                    onChange={changeNewPasswordHandler}
                   />
                 </InputWrapper>
                 <AlertMsg className={`${error.newPassword ? "error" : ""}`}>
@@ -203,10 +288,10 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
                 <InputWrapper className={`${error.confirmNewPassword ? "error" : ""}`}>
                   <SignUpInput
                     type={"password"}
-                    name={"confirmNewPassword"}
+                    name={FORM_FIELD_NAMES.CONFIRMNEWPASSWORD}
                     placeholder={"새 비밀번호를 한번 더 입력하세요."}
-                    value={confirmNewPassword}
-                    onChange={onChange}
+                    value={signForm.confirmNewPassword}
+                    onChange={changeNewConfirmPasswordHandler}
                   />
                 </InputWrapper>
                 <AlertMsg className={`${error.confirmNewPassword ? "error" : ""}`}>
@@ -219,15 +304,20 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
           ""
         )}
         <ButtonContainer id="edit">
-          {isEditing ? "" : <Button text="수정하기" color="blue" size="lg" onClick={() => setIsEditing(true)} />}
+          {isEditing ? (
+            ""
+          ) : (
+            <Button type={"button"} text="수정하기" color="blue" size="lg" onClick={() => setIsEditing(true)} />
+          )}
         </ButtonContainer>
         <ButtonContainer id="done">
-          {isEditing ? <Button text="수정완료" color="blue" size="lg" onClick={() => setIsEditing(false)} /> : ""}
+          {isEditing ? <Button type={"submit"} text="수정완료" color="blue" size="lg" /> : ""}
         </ButtonContainer>
       </Content>
     </Wrapper>
   );
 }
+// onClick={() => setIsEditing(false)}
 
 const ImgContainer = styled.aside`
   display: flex;
@@ -295,6 +385,7 @@ const EditWrapper = styled.div`
   flex-direction: column;
   gap: 7px;
 `;
+
 const InputWrapper = styled.span`
   display: flex;
   align-items: center;
@@ -366,7 +457,7 @@ const Content = styled.section`
     width: 500px;
   }
 `;
-const Wrapper = styled.main`
+const Wrapper = styled.form`
   position: relative;
   display: flex;
   flex-direction: row;
@@ -377,4 +468,3 @@ const Wrapper = styled.main`
     width: 600px;
   }
 `;
-//

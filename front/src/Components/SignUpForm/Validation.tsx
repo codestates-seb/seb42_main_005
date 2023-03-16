@@ -27,9 +27,19 @@ function validateName(nickname: string) {
   return false;
 }
 
+function validatePasswordCheck(password: string, passwordConfirm: string) {
+  if (password.length >= 1 && passwordConfirm.length >= 1) {
+    if (password !== passwordConfirm) {
+      return true;
+    }
+  }
+  return false;
+}
+
 const validators = {
   validateEmail,
   validatePassword,
   validateName,
+  validatePasswordCheck,
 };
 export { validators };
