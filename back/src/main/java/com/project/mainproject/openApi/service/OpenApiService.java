@@ -6,7 +6,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.project.mainproject.openApi.dto.HolidayDataDto;
+import com.project.mainproject.openApi.entity.HolidayData;
 import com.project.mainproject.openApi.utils.JsonConverter;
+import com.project.mainproject.redis.repository.RedisRepository;
 import com.project.mainproject.utils.UrlCreator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,18 +23,19 @@ import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class OpenApiService {
+    private final RedisRepository redisRepository;
     private final Gson gson;
     String data;
     @Value("${data-api.service-key}")
     private String key;
     @Value("${data-api.service-url}")
     private String defaultUrl;
-    private String line;
 
     public String holiday(String year, String month){
         URL url = getUrl(year, month);
@@ -44,7 +47,7 @@ public class OpenApiService {
 
                 data = getData(rd);
 
-                List<HolidayDataDto> holidayObject = getHolidayObject(data);
+                List<HolidayData> response = getHolidayObject(data);
             }
         }catch(IOException e){
             log.error("API 가져오는 중 문제 발생! IOException ",e);
@@ -54,7 +57,7 @@ public class OpenApiService {
             }
         }
 
-        return data;
+        return "ok";
     }
 
 
@@ -71,15 +74,19 @@ public class OpenApiService {
         return url;
     }
 
-    private List<HolidayDataDto> getHolidayObject(String data) {
+    private List<HolidayData> getHolidayObject(String data) {
         JsonElement element = JsonParser.parseString(data);
         JsonArray item = JsonConverter.jsonElementToArray(element);
-        List<HolidayDataDto> response = gson.fromJson(item.toString(), new TypeToken<List<HolidayDataDto>>() {}.getType());
+        List<HolidayDataDto> holidayDataDtos = gson.fromJson(item.toString(), new TypeToken<List<HolidayDataDto>>() {}.getType());
+        log.info("holidayDataDto = {}",holidayDataDtos);
+        List<HolidayData> response = transHolidayToHolidayDto(holidayDataDtos);
+        insertData(response);
         return response;
     }
 
     private String getData(BufferedReader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
+        String line;
         while ((line = rd.readLine()) != null) {
             sb.append(line);
         }
@@ -104,5 +111,16 @@ public class OpenApiService {
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-type", "application/json");
         return conn;
+    }
+
+    private void insertData(List<HolidayData> response) {
+        Iterable<HolidayData> holidayDataDtos = redisRepository.saveAll(response);
+//        holidayDataDtos.forEach(System.out::println);
+
+        Iterable<HolidayData> all = redisRepository.findAll();
+        all.forEach(System.out::println);
+    }
+    private List<HolidayData> transHolidayToHolidayDto(List<HolidayDataDto> holidayDataDtoList) {
+        return holidayDataDtoList.stream().map(HolidayData::new).collect(Collectors.toList());
     }
 }
