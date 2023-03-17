@@ -5,7 +5,10 @@ import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.dummy.CommonStub;
 import com.project.mainproject.review.dto.*;
 import com.project.mainproject.review.entity.Review;
+import com.project.mainproject.review.entity.ReviewReport;
 import com.project.mainproject.review.mapper.ReviewMapper;
+import com.project.mainproject.review.mapper.ReviewReportMapper;
+import com.project.mainproject.review.service.ReviewReportService;
 import com.project.mainproject.review.service.ReviewService;
 import com.project.mainproject.utils.ResponseBuilder;
 import com.project.mainproject.utils.UriCreator;
@@ -27,7 +30,9 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 public class ReviewController {
 
     private final ReviewService reviewService;
+    private final ReviewReportService reportService;
     private final ReviewMapper reviewMapper;
+    private final ReviewReportMapper reportMapper;
     private final ResponseBuilder responseBuilder;
 
     /*
@@ -113,23 +118,29 @@ public class ReviewController {
      *  리뷰 신고
      * */
     @PostMapping("/store/{storeIdx}/review/{reviewIdx}/report")
-    public ResponseEntity<SingleResponseDto> reportReview(@PathVariable Long storeIdx, @PathVariable Long reviewIdx, @RequestBody PostReportReviewPlusDto postReportReviewPlusDto) {
-        //TODO : 서비스단 구현
+    public ResponseEntity<SingleResponseDto<SimpleReportDto>> reportReview(
+            @PathVariable Long storeIdx,
+            @PathVariable Long reviewIdx,
+            @RequestBody PostReviewReportDto postReportDto
+    ) {
+        // TODO: content 넣어주는지 확인
+        postReportDto.setParameterIdx(reviewIdx);
+        ReviewReport reviewReport = reportMapper.postReportDtoToReviewReport(postReportDto);
+        ReviewReport createdReport = reportService.createReport(storeIdx, reviewReport);
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review/" + reviewIdx);
+        SimpleReportDto responseData = reportMapper.reviewReportToSimpleReportDto(createdReport);
+        SingleResponseDto<SimpleReportDto> response =
+                responseBuilder.buildSingleCreatedResponse(responseData);
 
-        SingleResponseDto build = CommonStub.getSingleResponseStub();
-        build.setResponse(ReportReviewResponseDto.builder().userIdx(postReportReviewPlusDto.getUserIdx()).storeIdx(storeIdx).reviewIdx(reviewIdx).content(postReportReviewPlusDto.getContent()).build());
-
-        return ResponseEntity.ok().header("Location", location.toString())
-                .body(build);
+        return ResponseEntity.ok().header("Location", location.toString()).body(response);
     }
 
     /*
      *  대댓글 달기
      * */
     @PostMapping("/store/{storeIdx}/review/{reviewIdx}")
-    public ResponseEntity<SingleResponseDto> createReviewPlus(@PathVariable Long storeIdx, @PathVariable Long reviewIdx, @RequestBody PostReportReviewPlusDto postReportReviewPlusDto) {
+    public ResponseEntity<SingleResponseDto> createReviewPlus(@PathVariable Long storeIdx, @PathVariable Long reviewIdx) {
         //TODO : 서비스단 구현
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review/" + reviewIdx);

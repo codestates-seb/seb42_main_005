@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.project.mainproject.review.enums.ReviewStatus.POSTED;
 import static com.project.mainproject.review.exception.ReviewExceptionCode.REVIEW_NOT_EXIST;
@@ -59,6 +60,11 @@ public class ReviewService {
                 .orElseThrow(() -> new BusinessLogicException(REVIEW_NOT_EXIST));
     }
 
+    public void verifyReview(Long storeIdx, Long reviewIdx) {
+        Optional<Review> review = reviewRepository.findByStoreStoreIdxAndReviewIdx(storeIdx, reviewIdx);
+        if (review.isEmpty()) throw new BusinessLogicException(REVIEW_NOT_EXIST);
+    }
+
     private void saveReviewImage(MultipartFile image, Review review) {
         String uploadImagePath = uploadImage(image);
         review.addReviewImage(uploadImagePath);
@@ -84,4 +90,5 @@ public class ReviewService {
         }
         if (existImages.size() != 0) FileUploader.deleteImages(existImages);
     }
+
 }

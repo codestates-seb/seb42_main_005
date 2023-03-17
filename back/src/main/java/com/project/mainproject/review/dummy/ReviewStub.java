@@ -7,8 +7,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.project.mainproject.review.dto.StoreReviewPageDto.Tag;
-
 public class ReviewStub {
 
     public static List<GetReportedReviewDto> getReportedReviewDtoListStub() {
@@ -31,8 +29,6 @@ public class ReviewStub {
                 .rating(4)
                 .reviewImage("사진 파일이 들어갈 위치입니다.")
                 .content("내공 얌얌")
-                .tags(List.of(Tag.builder().tagIdx(1L).name(("친절해요")).build(),
-                        Tag.builder().tagIdx(2L).name("주차장이 넓어요").build()))
                 .modifiedAt(LocalDateTime.now())
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -46,8 +42,6 @@ public class ReviewStub {
                     .rating(4)
                     .reviewImage("사진 파일이 들어갈 위치입니다.")
                     .content("내공 얌얌" + i)
-                    .tags(List.of(Tag.builder().tagIdx(1L).name(("친절해요")).build(),
-                            Tag.builder().tagIdx(2L).name("주차장이 넓어요").build()))
                     .modifiedAt(LocalDateTime.now())
                     .createdAt(LocalDateTime.now())
                     .build();
