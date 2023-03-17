@@ -9,8 +9,9 @@ import org.springframework.util.Assert;
 public class PostReplyDto {
     private Long storeIdx;
     private Long userIdx;
-    private Long reviewIdx;
     private String content;
+
+    private Long reviewIdx;
 
     public void setReviewIdx(Long reviewIdx) {
         Assert.notNull(reviewIdx, "reviewIdx must not be null.");
