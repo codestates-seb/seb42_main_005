@@ -5,8 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class UserPatchDto {
+public class PharmacySignUpDto {
     private String name;
-    private String address;
+    private String email;
     private String password;
+    private String address;
 }
