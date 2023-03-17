@@ -6,3 +6,6 @@ export const zIndex_KakaoMap = {
 export const zIndex_MapFilter = {
   CtrlContainer: 10,
 };
+export const zIndex_Header = {
+  Header: 100,
+};

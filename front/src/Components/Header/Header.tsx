@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { zIndex_Header } from "../../Util/z-index";
 import Account from "./Account";
 
 interface AccountProps {
@@ -35,7 +36,7 @@ const HeaderContainer = styled.header`
   padding: 0 8rem 0 6rem;
   background-color: var(--blue-600);
   position: fixed;
-  z-index: 10;
+  z-index: ${zIndex_Header.Header};
   height: 52px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px, rgba(0, 0, 0, 0.2) 0px 7px 13px -3px,
     rgba(0, 0, 0, 0.1) 0px -3px 0px inset, hsl(0, 0%, 100%, 0.3) 0 1px 0 0 inset;

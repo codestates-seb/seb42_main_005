@@ -51,7 +51,6 @@ export function MapLogic() {
           params: {
             ServiceKey: "LYki5UdYrhpVu5YPHg03MBzs3WoCetCv02paAeoaDrc01C9rKu5sVO02/i6dlkmA1+8rxI1HdSK/b8b5cgcTmQ==",
             ServiceType: "json",
-            // pageNo: 5,
             numOfRows: 10000000,
           },
         })

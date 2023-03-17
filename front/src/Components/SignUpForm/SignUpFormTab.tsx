@@ -4,16 +4,16 @@ import { MdOutlineLocalPharmacy } from "react-icons/md";
 
 interface Props {
   tab: string;
-  setTab: React.Dispatch<React.SetStateAction<"user" | "pharm">>;
+  onClickPharm?: (e: React.MouseEvent<HTMLSpanElement>) => void;
+  onClickUser?: (e: React.MouseEvent<HTMLSpanElement>) => void;
 }
-
-export default function SignUpForms({ tab, setTab }: Props) {
+export default function SignUpForms({ tab, onClickPharm, onClickUser }: Props) {
   return (
     <TabContainer>
-      <Tab title={"user"} tab={tab} onClick={() => setTab("user")}>
+      <Tab title={"user"} tab={tab} onClick={onClickUser}>
         일반 회원
       </Tab>
-      <Tab title={"pharm"} tab={tab} onClick={() => setTab("pharm")}>
+      <Tab title={"pharm"} tab={tab} onClick={onClickPharm}>
         <MdOutlineLocalPharmacy className="icon" />
         약사회원
       </Tab>
