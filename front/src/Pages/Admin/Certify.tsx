@@ -77,7 +77,7 @@ export default function Certify() {
               </BelowLable>
             ) : (
               <Instead>
-                <AiOutlineExclamationCircle />
+                <AiOutlineExclamationCircle aria-hidden="true"/>
                 <span>약사인증요청이 없습니다.</span>
               </Instead>
             )}

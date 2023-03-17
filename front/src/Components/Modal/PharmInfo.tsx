@@ -3,6 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import Tag from "../Ul/Tag";
 import PharmRank from "../Ul/PharmRank";
+import AnyDropDown from "./AnyDropDown";
 
 interface Props {
   like: boolean;
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function PharmInfo({ like, setLike }: Props) {
+  const [isDropDownDown, setIsDropDownDown] = useState(false);
   return (
     <InfoContainer>
       <InfoHeader>
@@ -19,7 +21,7 @@ export default function PharmInfo({ like, setLike }: Props) {
       <InfoImgContainer>
         <Img src="./Images/random.png" alt="고심약국"></Img>
         <LikeButton onClick={() => setLike(!like)}>
-          {like ? <img src="./Images/Heart.png" /> : <img src="./Images/UnHeart.png" />}
+          {like ? <img src="./Images/Heart.png" alt="like"/> : <img src="./Images/UnHeart.png" alt="unlike"/>}
         </LikeButton>
       </InfoImgContainer>
       <InfoInfo>
@@ -33,7 +35,15 @@ export default function PharmInfo({ like, setLike }: Props) {
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>영업시간</InfoInfoTitle>
-          <InfoInfoContent>09:00 ~ 21:00</InfoInfoContent>
+          <InfoInfoContent>
+            09:00 ~ 21:00
+            {!isDropDownDown ? (
+              <More id={`dropDown ${isDropDownDown ? "close" : "open"}`} onClick={() => setIsDropDownDown(true)}>
+                영업시간 더보기
+              </More>
+            ) : null}
+            {isDropDownDown ? <AnyDropDown setIsDropDownDown={setIsDropDownDown} /> : null}
+          </InfoInfoContent>
         </InfoUnit>
       </InfoInfo>
       <InfoTagContainer>
@@ -50,11 +60,10 @@ export default function PharmInfo({ like, setLike }: Props) {
 }
 
 const InfoContainer = styled.aside`
-  z-index: 1;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 550px;
   width: 450px;
   padding: 10px 20px 0px 0px;
   border-right: 1px solid var(--black-100);
@@ -71,26 +80,26 @@ const InfoHeader = styled.header`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0px 10px 7px 10px;
+  padding: 10px 10px 10px 10px;
   gap: 10px;
   border-bottom: 1px solid var(--black-100);
   @media (max-width: 768px) {
     display: none;
   }
 `;
-const InfoTitle = styled.div`
+const InfoTitle = styled.h1`
   font-weight: bold;
   font-size: 30px;
   @media (max-width: 768px) {
     margin-top: 30px;
   }
 `;
-const InfoImgContainer = styled.div`
+const InfoImgContainer = styled.section`
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 5px;
+  padding: 20px 5px;
   border-bottom: 1px solid var(--black-100);
 `;
 const Img = styled.img`
@@ -99,59 +108,66 @@ const Img = styled.img`
   height: 15.625rem;
   border-radius: 5px;
 `;
-const LikeButton = styled.span`
+const LikeButton = styled.button`
   position: absolute;
   right: 51px;
-  top: 12px;
+  top: 22px;
   width: 20px;
+  border: none;
+  background-color: transparent;
   @media (max-width: 768px) {
     right: 60px;
-    top: 11px;
+    top: 21px;
   }
 `;
-const InfoInfo = styled.div`
+const InfoInfo = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 10px;
-  gap: 5px;
+  padding: 20px 10px;
+  gap: 10px;
   border-bottom: 1px solid var(--black-100);
   @media (max-width: 768px) {
     padding: 20px;
   }
 `;
-const InfoUnit = styled.div`
+const InfoUnit = styled.article`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
   gap: 20px;
 `;
-const InfoInfoTitle = styled.span`
+const InfoInfoTitle = styled.h2`
+  width: 70px;
   color: var(--black-350);
-  font-size: 17px;
+  font-size: 20px;
   font-weight: bold;
 `;
 const InfoInfoContent = styled.span`
-  font-size: 16px;
+  display: flex;
+  align-items: center;
+  height: 25px;
+  gap: 3px;
+  font-size: 18px;
 `;
-const InfoTagContainer = styled.div`
+const InfoTagContainer = styled.section`
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 20px 10px;
   gap: 5px;
-  border-bottom: 1px solid var(--black-100);
   @media (max-width: 768px) {
     gap: 10px;
     padding: 20px;
     border: none;
   }
 `;
-const InfoTagTitle = styled.div`
+const InfoTagTitle = styled.h3`
   font-size: 14px;
+  font-weight: 400;
   color: var(--black-500);
 `;
-const InfoTagBox = styled.div`
+const InfoTagBox = styled.section`
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 5px;
@@ -159,4 +175,19 @@ const InfoTagBox = styled.div`
   gap: 5px;
   border-radius: 5px;
   box-shadow: 0px 0px 5px 0.5px var(--black-100) inset;
+`;
+const More = styled.button`
+  cursor: pointer;
+  display: inline-block;
+  color: var(--l_button-mint);
+  margin-left: 5px;
+  padding: 3px 5px;
+  font-size: 12px;
+  border-radius: 15px;
+  border: 1px solid var(--l_button-mint);
+  background-color: transparent;
+  :hover {
+    color: var(--l_button-mint-hover);
+    border: 1px solid var(--l_button-mint-hover);
+  }
 `;

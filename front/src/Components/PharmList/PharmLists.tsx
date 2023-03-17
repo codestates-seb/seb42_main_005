@@ -1,16 +1,19 @@
 //홈화면 옆에 약국 리스트
 import styled from "styled-components";
 import PharmItem from "./PharmItem";
+import { zIndex_PharmList } from "../../Util/z-index";
 import { BsSearch } from "react-icons/bs";
+import { useState } from "react";
 
 //데이터 들어오면 map으로 돌리기전에 하드코딩으로 두개해놨음
 export default function PharmLists() {
+  const [hidden, setHidden] = useState<boolean>(false);
   /* 조건부로 할려고 임의로 해놓은 것!
   나중에 데이터 넘어오면 바꿀것*/
 
   return (
-    <ListContainer>
-      <ContainerWrap>
+    <ListContainer className={hidden ? "hide" : ""}>
+      <ContainerWrap className={hidden ? "" : "hide"}>
         <EmptyContainer>
           <span className="partition" />
         </EmptyContainer>
@@ -18,9 +21,10 @@ export default function PharmLists() {
           <PharmHeadContainer>
             <SearchContainer>
               <div>
-                <BsSearch className="searchIcon" />
+                <BsSearch className="searchIcon" aria-hidden="true" />
               </div>
-              <SearchInput placeholder="약국 검색.." />
+              <label htmlFor="search box" />
+              <SearchInput id="search box" placeholder="약국 검색.." />
             </SearchContainer>
             <ButtonContainer>
               <Button>
@@ -44,15 +48,28 @@ export default function PharmLists() {
             <PharmItem />
           </PharmItemContainer>
         </PharmContainer>
+        {hidden ? (
+          <EmptyContainer className="hide">
+            <ShowBtn className={hidden ? "" : "hide"} onClick={() => setHidden(false)}>
+              {"> 눌러서 열기"}
+            </ShowBtn>
+          </EmptyContainer>
+        ) : (
+          <EmptyContainer className="hide">
+            <ShowBtn className={hidden ? "hide" : ""} onClick={() => setHidden(true)}>
+              {"< 눌러서 숨기기"}
+            </ShowBtn>
+          </EmptyContainer>
+        )}
       </ContainerWrap>
     </ListContainer>
   );
 }
 
 //전체 컨테이너
-const ListContainer = styled.div`
+const ListContainer = styled.aside`
   position: absolute;
-  width: 36rem;
+  width: 38rem;
   height: calc(100vh - 50px);
   border-top: 1px solid var(--black-150);
   border-right: 1px solid var(--black-150);
@@ -61,12 +78,18 @@ const ListContainer = styled.div`
   background-color: var(--white);
   box-shadow: var(--bs-lg);
   padding: 1.5rem 0 1rem 1.5rem;
-  z-index: 2;
   transition: 0.2s;
+  &.hide {
+    transform: translate(-550px, 0px);
+  }
   @media (max-width: 768px) {
     transition: 0.2s;
-    width: 30rem;
+    width: 33rem;
+    &.hide {
+      transform: translate(-470px, 0px);
+    }
   }
+  z-index: ${zIndex_PharmList.ListContainer};
 `;
 const ContainerWrap = styled.div`
   display: flex;
@@ -79,6 +102,9 @@ const EmptyContainer = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   margin-right: 36px;
+  &.hide {
+    margin-right: 0;
+  }
   .partition {
     width: 14px;
     border-radius: 7px;
@@ -87,16 +113,15 @@ const EmptyContainer = styled.div`
     transition: 0.2s;
     @media (max-width: 768px) {
       transition: 0.2s;
-      width: 4px;
     }
   }
 `;
-const PharmContainer = styled.div`
+const PharmContainer = styled.main`
   display: flex;
   flex-direction: column;
   height: calc(100vh - 95px);
 `;
-const PharmHeadContainer = styled.div`
+const PharmHeadContainer = styled.header`
   margin-right: 42px;
   margin-bottom: 10px;
   transition: 0.2s;
@@ -105,7 +130,20 @@ const PharmHeadContainer = styled.div`
     margin-right: 22px;
   }
 `;
-const PharmItemContainer = styled.div`
+const ShowBtn = styled.button`
+  background-color: transparent;
+  border: none;
+  display: flex;
+  justify-content: flex-start;
+  margin: 0 20px;
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--black-200);
+  :hover {
+    color: var(--black-400);
+  }
+`;
+const PharmItemContainer = styled.section`
   overflow-y: scroll;
   height: calc(100vh - 135px);
   display: flex;
@@ -117,7 +155,7 @@ const PharmItemContainer = styled.div`
 `;
 
 //input
-const SearchContainer = styled.div`
+const SearchContainer = styled.section`
   display: flex;
   justify-content: center;
   margin: 10px 0;
@@ -147,7 +185,7 @@ const SearchInput = styled.input`
 `;
 
 //Buttons
-const ButtonContainer = styled.div`
+const ButtonContainer = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;

@@ -101,7 +101,7 @@ export default function Reports() {
               </BelowLable>
             ) : (
               <Instead>
-                <AiOutlineExclamationCircle />
+                <AiOutlineExclamationCircle aria-hidden="true"/>
                 <span>신고된 리뷰가 없습니다.</span>
               </Instead>
             )}

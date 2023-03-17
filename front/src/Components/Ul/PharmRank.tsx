@@ -11,7 +11,7 @@ export default function PharmRank() {
   return (
     <Container>
       <div>{starPoint ? <BsStarFill className="select_star" /> : <BsStar className="unSelect_star" />}</div>
-      <Star> {starPoint}/5 </Star>
+      <Star> {starPoint}<span className="rest">/5</span> </Star>
       <Selected>찜콩 45</Selected>
       <span className="partition" />
       <TotalReview> 리뷰 113</TotalReview>
@@ -44,7 +44,14 @@ const Star = styled.span`
   font-weight: bold;
   font-size: 1.3rem;
   margin-right: 1.2rem;
+  margin-left: 0.5rem;
   padding-bottom: 2px;
+  color: var(--black-700);
+  .rest{
+    margin-left: 0.2rem;
+    color: var(--black-500);
+    font-weight: 500;
+  }
 `;
 
 const Selected = styled.span`

@@ -14,7 +14,7 @@ export default function Input({ id, placeholder, value, icon, isValid, onChange 
     <StyledInput>
       {icon && (
         <div className="left icon">
-          <FaPencilAlt />
+          <FaPencilAlt aria-hidden="true"/>
         </div>
       )}
       <input

@@ -6,7 +6,7 @@ interface TagProps {
 }
 
 export default function Tag({ idx, list }: TagProps) {
-  list = ["친절한 서비스", "꼼꼼한 복약지도", "주차가능", "접근성이 좋음"];
+  list = ["친절함", "꼼꼼함", "주차가능", "접근성"];
 
   return <StyledTag>{list[idx]}</StyledTag>;
 }

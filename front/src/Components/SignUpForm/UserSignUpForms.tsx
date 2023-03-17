@@ -182,9 +182,10 @@ export default function UserSignUpForms() {
     </Container>
   );
 }
-const Container = styled.div`
-  padding: 3rem 1rem 1.5rem 1rem;
-  width: 40rem;
+const Container = styled.section`
+  padding: 2rem 1rem;
+  width: 35rem;
+  gap: 3px;
   border: 1px solid var(--black-200);
   border-top: none;
   border-bottom-left-radius: 18px;
@@ -192,15 +193,17 @@ const Container = styled.div`
   box-shadow: 0 1px 4px -3px hsla(0, 0%, 0%, 0.09), 0 3px 8px -3px hsla(0, 0%, 0%, 0.1),
     0 4px 13px -3px hsla(0, 0%, 0%, 0.13);
 `;
-const Google = styled.div`
+const Google = styled.article`
+  display: flex;
+  justify-content: center;
   padding-bottom: 1rem;
   .google_button {
+    cursor: pointer;
     height: 3.3rem;
-    width: 37.875rem;
-    border: 1px solid var(--black-200);
+    width: 33rem;
     border-radius: 10px;
     background-color: transparent;
-    cursor: pointer;
+    border: 1px solid var(--black-200);
     box-shadow: var(--bs-md);
     &:hover {
       background-color: var(--black-050);
@@ -224,6 +227,7 @@ const SignUpForm = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 3px;
   .signup_button {
     background-color: var(--blue-500);
     border: none;
@@ -240,15 +244,15 @@ const SignUpForm = styled.form`
     }
   }
 `;
-const InputContainer = styled.div`
+const InputContainer = styled.article`
   display: flex;
   flex-direction: row;
-  border: 1px solid var(--black-150);
   margin-bottom: 0.5rem;
+  padding: 0 10px;
   border-radius: 10px;
   box-shadow: var(--bs-sm);
   padding: 0 10px;
-  .inputImage {
+  .inputimage {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -270,9 +274,10 @@ const InputContainer = styled.div`
   }
 `;
 
-const CheckContainer = styled.div`
+const CheckContainer = styled.article`
   display: flex;
   flex-direction: row;
+  padding: 10px 0px 10px 5px;
   .checkbox_content {
     color: var(--black-500);
   }

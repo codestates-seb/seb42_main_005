@@ -1,6 +1,6 @@
 import { useState } from "react";
-import styled from "styled-components";
 import { useDaumPostcodePopup } from "react-daum-postcode";
+import styled from "styled-components";
 import SignUpInput from "../../Components/SignUpForm/SignUpInput";
 import { validators } from "../../Components/SignUpForm/Validation";
 import Button from "../../Components/Ul/Button";
@@ -258,8 +258,7 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
                     onChange={changeNowPasswordHandler}
                   />
                 </InputWrapper>
-                <InputAlert value={signForm.password} />
-                <AlertMsg className={`${error.password ? "error" : null}`}>
+                <AlertMsg className={`${error.password ? "error" : ""}`}>
                   <AiOutlineExclamationCircle />
                   비밀번호가 일치하지 않습니다.
                 </AlertMsg>
@@ -278,7 +277,7 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
                   />
                 </InputWrapper>
                 <AlertMsg className={`${error.newPassword ? "error" : null}`}>
-                  <AiOutlineExclamationCircle />
+                  <AiOutlineExclamationCircle aria-hidden="true"/>
                   문자 숫자 특수문자 조합 8자 이상으로 조합해주세요.
                 </AlertMsg>
               </EditWrapper>
@@ -296,7 +295,7 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
                   />
                 </InputWrapper>
                 <AlertMsg className={`${error.confirmNewPassword ? "error" : null}`}>
-                  <AiOutlineExclamationCircle />새 비밀번호와 일치하지 않습니다.
+                  <AiOutlineExclamationCircle aria-hidden="true"/>새 비밀번호와 일치하지 않습니다.
                 </AlertMsg>
               </EditWrapper>
             </ContentSet>

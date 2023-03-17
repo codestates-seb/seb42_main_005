@@ -27,11 +27,11 @@ export default function PharmacyInformation() {
   return (
     <Content>
       {isModalUp ? (
-        <PharmDetail isModalUp={isModalUp} setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
+        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
       ) : null}
       <ImgContainer>
         <ReviewImgInput id="pharmImg" type="file" onChange={(e) => onUpload(e)} accept="image/*" />
-        {imageSrc ? <PharmImg src={imageSrc as string} /> : <PharmImg src="Images/ImgPreparing.png" />}
+        {imageSrc ? <PharmImg src={imageSrc as string} /> : <PharmImg src="Images/ImgPreparing.png"  alt="image preparing"/>}
         <Label htmlFor="pharmImg">
           <MdOutlineAddAPhoto aria-hidden="true" />
           우리 약국 사진추가하기
@@ -54,15 +54,14 @@ export default function PharmacyInformation() {
           <Key>영업시간</Key>
           <Value>
             {isDropDownDown ? (
-              <IoIosArrowDropdown
+              <IoIosArrowDropdown aria-hidden="true"
                 id={`dropDown ${isDropDownDown ? "close" : "open"}`}
                 onClick={() => setIsDropDownDown(!isDropDownDown)}
               />
             ) : (
-              <IoIosArrowDropright
+              <IoIosArrowDropright aria-hidden="true"
                 id={`dropDown ${isDropDownDown ? "close" : "open"}`}
                 onClick={() => setIsDropDownDown(!isDropDownDown)}
-                aria-hidden="true"
               />
             )}
             09:00-21:00
