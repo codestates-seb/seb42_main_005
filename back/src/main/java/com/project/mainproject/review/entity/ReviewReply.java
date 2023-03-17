@@ -2,10 +2,7 @@ package com.project.mainproject.review.entity;
 
 import com.project.mainproject.audit.Auditable;
 import com.project.mainproject.user.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -15,6 +12,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)

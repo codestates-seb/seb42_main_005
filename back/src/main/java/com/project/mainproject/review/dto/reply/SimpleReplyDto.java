@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class SimpleReplyDto {
-    private Long reportIdx;
+    private Long replyIdx;
     private Long userIdx;
 }

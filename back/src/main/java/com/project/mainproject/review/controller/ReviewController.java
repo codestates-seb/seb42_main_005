@@ -3,6 +3,7 @@ package com.project.mainproject.review.controller;
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.review.dto.*;
+import com.project.mainproject.review.dto.reply.PatchReplyDto;
 import com.project.mainproject.review.dto.reply.PostReplyDto;
 import com.project.mainproject.review.dto.reply.SimpleReplyDto;
 import com.project.mainproject.review.entity.Review;
@@ -148,7 +149,7 @@ public class ReviewController {
      *  대댓글 달기
      * */
     @PostMapping("/store/{storeIdx}/review/{reviewIdx}")
-    public ResponseEntity<SingleResponseDto<SimpleReplyDto>> createReviewPlus(
+    public ResponseEntity<SingleResponseDto<SimpleReplyDto>> createReviewReply(
             @PathVariable Long storeIdx,
             @PathVariable Long reviewIdx,
             @RequestBody PostReplyDto replyDto
@@ -159,6 +160,29 @@ public class ReviewController {
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review/" + reviewIdx);
         SimpleReplyDto responseData = replyMapper.reviewReplyToSimpleReplyDto(createdReply);
+        SingleResponseDto<SimpleReplyDto> response =
+                responseBuilder.buildSingleCreatedResponse(responseData);
+
+        return ResponseEntity.ok().header("Location", location.toString()).body(response);
+    }
+
+    /*
+     *  대댓글 수정
+     * */
+    @PatchMapping("/review/{reviewIdx}/review/{replyIdx}")
+    public ResponseEntity<SingleResponseDto<SimpleReplyDto>> updateReviewReply(
+            @PathVariable Long reviewIdx,
+            @PathVariable Long replyIdx,
+            @RequestBody PatchReplyDto replyDto
+    ) {
+        replyDto.setParamsIdx(reviewIdx, replyIdx);
+        ReviewReply targetReply = replyService.findVerifiedReply(reviewIdx, replyIdx);
+
+        ReviewReply reviewReply = replyMapper.reviewDtoToReviewReply(replyDto, targetReply);
+        ReviewReply updatedReply = replyService.updateReply(reviewReply);
+
+        URI location = UriCreator.createUri("/api/store/" + replyDto.getStoreIdx() + "/review/" + reviewIdx);
+        SimpleReplyDto responseData = replyMapper.reviewReplyToSimpleReplyDto(updatedReply);
         SingleResponseDto<SimpleReplyDto> response =
                 responseBuilder.buildSingleCreatedResponse(responseData);
 

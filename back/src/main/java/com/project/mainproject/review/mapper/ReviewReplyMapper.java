@@ -1,10 +1,12 @@
 package com.project.mainproject.review.mapper;
 
+import com.project.mainproject.review.dto.reply.PatchReplyDto;
 import com.project.mainproject.review.dto.reply.PostReplyDto;
 import com.project.mainproject.review.dto.reply.SimpleReplyDto;
 import com.project.mainproject.review.entity.ReviewReply;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -16,5 +18,7 @@ public interface ReviewReplyMapper {
 
     @Mapping(target = "userIdx", source = "user.userIdx")
     SimpleReplyDto reviewReplyToSimpleReplyDto(ReviewReply review);
+
+    ReviewReply reviewDtoToReviewReply(PatchReplyDto requestBody, @MappingTarget ReviewReply reply);
 
 }
