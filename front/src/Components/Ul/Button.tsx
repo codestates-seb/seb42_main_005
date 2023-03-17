@@ -10,9 +10,10 @@ interface BtnProps {
   icon?: boolean;
   disabled?: boolean;
   onClick?: any;
+  type?: "button" | "submit" | "reset" | undefined;
 }
 
-export default function Button({ text, icon, color, size, url, disabled, onClick }: BtnProps) {
+export default function Button({ text, icon, color, size, url, disabled, onClick, type }: BtnProps) {
   // A tag
   if (url) {
     return (
@@ -24,7 +25,7 @@ export default function Button({ text, icon, color, size, url, disabled, onClick
 
   // Button tag
   return (
-    <BasicButton className={`${color} ${size}`} onClick={onClick}>
+    <BasicButton className={`${color} ${size}`} onClick={onClick} type={type}>
       {icon ? <TbNotebook className="icon" aria-hidden="true"/> : null}
       {text}
     </BasicButton>

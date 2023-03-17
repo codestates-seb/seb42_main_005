@@ -1,18 +1,19 @@
 import React from "react";
 import styled from "styled-components";
+import { SELEC_OPTIONS_TAP } from "../../Util/type";
 
 interface Props {
   tab: string;
-  setTab: React.Dispatch<React.SetStateAction<"user" | "pharm">>;
+  onClickPharm?: (e: React.MouseEvent<HTMLSpanElement>) => void;
+  onClickUser?: (e: React.MouseEvent<HTMLSpanElement>) => void;
 }
-
-export default function SignUpForms({ tab, setTab }: Props) {
+export default function SignUpForms({ tab, onClickPharm, onClickUser }: Props) {
   return (
     <TabContainer>
-      <Tab title={"user"} tab={tab} onClick={() => setTab("user")}>
+      <Tab title={"user"} tab={tab} onClick={onClickUser}>
         일반 회원
       </Tab>
-      <Tab title={"pharm"} tab={tab} onClick={() => setTab("pharm")}>
+      <Tab title={"pharm"} tab={tab} onClick={onClickPharm}>
         <img alt="signup_logo" src="Images/SignUpPill.png" />
         약사회원
       </Tab>

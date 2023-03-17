@@ -11,7 +11,7 @@ export default function PharmacyInformation() {
   const [isModalUp, setIsModalUp] = useState(false);
   const [isDropDownDown, setIsDropDownDown] = useState(false);
   const [like, setLike] = useState(false);
-  const [imageSrc, setImageSrc]: any = useState(null);
+  const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const onUpload = (e: any) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -31,9 +31,9 @@ export default function PharmacyInformation() {
       ) : null}
       <ImgContainer>
         <ReviewImgInput id="pharmImg" type="file" onChange={(e) => onUpload(e)} accept="image/*" />
-        {imageSrc ? <PharmImg src={imageSrc} /> : <PharmImg src="Images/ImgPreparing.png"  alt="image preparing"/>}
+        {imageSrc ? <PharmImg src={imageSrc as string} /> : <PharmImg src="Images/ImgPreparing.png"  alt="image preparing"/>}
         <Label htmlFor="pharmImg">
-          <MdOutlineAddAPhoto aria-hidden="true"/>
+          <MdOutlineAddAPhoto aria-hidden="true" />
           우리 약국 사진추가하기
         </Label>
       </ImgContainer>

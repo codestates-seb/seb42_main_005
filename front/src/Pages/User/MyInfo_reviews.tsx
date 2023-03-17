@@ -52,7 +52,7 @@ export default function MyInfoReviews() {
               <Text className="review">{data.review}</Text>
               <Text className="number">{data.writtenAt}</Text>
               <Text className="single icon">
-                <RiDeleteBin6Line aria-hidden="true"/>
+                <RiDeleteBin6Line aria-hidden="true" />
               </Text>
             </TableBody>
           ))}
@@ -60,7 +60,7 @@ export default function MyInfoReviews() {
       ) : (
         <WhenEmpty>
           <Add to="/">
-            <IoMdAddCircleOutline id="icon" aria-hidden="true"/>
+            <IoMdAddCircleOutline id="icon" aria-hidden="true" />
           </Add>
           <span>
             <p>현재 찜한 약국이 없습니다.</p>
