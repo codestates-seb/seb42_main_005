@@ -33,7 +33,7 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
         <HiXMark aria-hidden="true" className="except" onClick={() => setIsReviewFormShown(false)} />
       </InputTop>
       <InputTop>
-        <label htmlFor="review" />
+        <HiddenLabel htmlFor="review" />
         <Textarea
           id="review"
           placeholder="무분별한 비방, 비하, 욕설은 지양해주세요 :)"
@@ -157,6 +157,9 @@ const Label = styled.label`
   color: var(--black-100);
   border-radius: 50%;
   box-shadow: 0px 0px 5px 0.5px var(--black-200);
+`;
+const HiddenLabel = styled.label`
+  display: none;
 `;
 const TagSelection = styled.section`
   display: flex;
