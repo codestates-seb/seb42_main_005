@@ -3,15 +3,17 @@ import styled from "styled-components";
 import PharmItem from "./PharmItem";
 import { zIndex_PharmList } from "../../Util/z-index";
 import { BsSearch } from "react-icons/bs";
+import { useState } from "react";
 
 //데이터 들어오면 map으로 돌리기전에 하드코딩으로 두개해놨음
 export default function PharmLists() {
+  const [hidden, setHidden] = useState<boolean>(false);
   /* 조건부로 할려고 임의로 해놓은 것!
   나중에 데이터 넘어오면 바꿀것*/
 
   return (
-    <ListContainer>
-      <ContainerWrap>
+    <ListContainer className={hidden ? "hide" : ""}>
+      <ContainerWrap className={hidden ? "" : "hide"}>
         <EmptyContainer>
           <span className="partition" />
         </EmptyContainer>
@@ -19,9 +21,9 @@ export default function PharmLists() {
           <PharmHeadContainer>
             <SearchContainer>
               <div>
-                <BsSearch className="searchIcon" aria-hidden="true"/>
+                <BsSearch className="searchIcon" aria-hidden="true" />
               </div>
-              <label htmlFor="search box"/>
+              <label htmlFor="search box" />
               <SearchInput id="search box" placeholder="약국 검색.." />
             </SearchContainer>
             <ButtonContainer>
@@ -46,6 +48,19 @@ export default function PharmLists() {
             <PharmItem />
           </PharmItemContainer>
         </PharmContainer>
+        {hidden ? (
+          <EmptyContainer className="hide">
+            <ShowBtn className={hidden ? "" : "hide"} onClick={() => setHidden(false)}>
+              {"> 눌러서 열기"}
+            </ShowBtn>
+          </EmptyContainer>
+        ) : (
+          <EmptyContainer className="hide">
+            <ShowBtn className={hidden ? "hide" : ""} onClick={() => setHidden(true)}>
+              {"< 눌러서 숨기기"}
+            </ShowBtn>
+          </EmptyContainer>
+        )}
       </ContainerWrap>
     </ListContainer>
   );
@@ -54,7 +69,7 @@ export default function PharmLists() {
 //전체 컨테이너
 const ListContainer = styled.aside`
   position: absolute;
-  width: 36rem;
+  width: 38rem;
   height: calc(100vh - 50px);
   border-top: 1px solid var(--black-150);
   border-right: 1px solid var(--black-150);
@@ -64,9 +79,15 @@ const ListContainer = styled.aside`
   box-shadow: var(--bs-lg);
   padding: 1.5rem 0 1rem 1.5rem;
   transition: 0.2s;
+  &.hide {
+    transform: translate(-550px, 0px);
+  }
   @media (max-width: 768px) {
     transition: 0.2s;
-    width: 30rem;
+    width: 33rem;
+    &.hide {
+      transform: translate(-470px, 0px);
+    }
   }
   z-index: ${zIndex_PharmList.ListContainer};
 `;
@@ -81,6 +102,9 @@ const EmptyContainer = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   margin-right: 36px;
+  &.hide {
+    margin-right: 0;
+  }
   .partition {
     width: 14px;
     border-radius: 7px;
@@ -89,7 +113,6 @@ const EmptyContainer = styled.div`
     transition: 0.2s;
     @media (max-width: 768px) {
       transition: 0.2s;
-      width: 4px;
     }
   }
 `;
@@ -105,6 +128,19 @@ const PharmHeadContainer = styled.header`
   @media (max-width: 768px) {
     transition: 0.2s;
     margin-right: 22px;
+  }
+`;
+const ShowBtn = styled.button`
+  background-color: transparent;
+  border: none;
+  display: flex;
+  justify-content: flex-start;
+  margin: 0 20px;
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--black-200);
+  :hover {
+    color: var(--black-400);
   }
 `;
 const PharmItemContainer = styled.section`

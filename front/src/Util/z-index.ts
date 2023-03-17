@@ -11,15 +11,15 @@ export const zIndex_PharmList = {
 };
 export const zIndex_Modal = {
   ModalBackDrop: 20,
-  ModalContainer: 30,
-  CloseBtnContainer: 40,
-  AnyDropDown: 40,
-  WriteReviewContainer: 50
+  ModalContainer: 21,
+  CloseBtnContainer: 22,
+  AnyDropDown: 22,
+  WriteReviewContainer: 23
 };
 export const zIndex_MyPage = {
   DropDown: 10,
 };
 export const zIndex_AdminPage = {
-  ModalBackDrop: 1,
-  ShowImg: 10,
+  ModalBackDrop: 20,
+  ShowImg: 21,
 };
