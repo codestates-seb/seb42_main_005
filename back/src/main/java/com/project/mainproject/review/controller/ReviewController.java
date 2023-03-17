@@ -9,6 +9,7 @@ import com.project.mainproject.review.dummy.ReviewStub;
 import com.project.mainproject.review.entity.Review;
 import com.project.mainproject.review.mapper.ReviewMapper;
 import com.project.mainproject.review.service.ReviewService;
+import com.project.mainproject.tag.entity.ReviewTag;
 import com.project.mainproject.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
+import java.util.List;
 
 import static com.project.mainproject.enums.ResultStatus.CREATE_COMPLETED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -54,7 +56,8 @@ public class ReviewController {
     ) {
         postDto.setStoreIdx(storeIdx);
         Review review = reviewMapper.reviewDtoToReview(postDto);
-        Review createdReview = reviewService.createReview(review, image);
+        List<ReviewTag> reviewTags = reviewMapper.tagIdsDtoToReviewTags(postDto.getTags());
+        Review createdReview = reviewService.createReview(review, reviewTags, image);
 
         // 이하 데이터 변환 부분 -> 어디에서?
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");

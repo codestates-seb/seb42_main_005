@@ -4,6 +4,7 @@ import com.project.mainproject.audit.Auditable;
 import com.project.mainproject.review.enums.ReviewStatus;
 import com.project.mainproject.store.entity.Store;
 import com.project.mainproject.tag.entity.ReviewTag;
+import com.project.mainproject.tag.entity.Tag;
 import com.project.mainproject.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -59,18 +60,19 @@ public class Review extends Auditable {
     private List<ReviewImage> reviewImages = new ArrayList<>();
 
     //### 간단한 동작메서드 ###//
-    public void addReviewImage(ReviewImage image) {
-        this.reviewImages.add(image);
-        if (image.getReview() != this)
-            image.setReview(this);
+    public void addReviewTag(Tag tag) {
+        reviewTags.add(ReviewTag.builder()
+                        .tag(tag)
+                        .review(this)
+                        .build());
+    }
+    public void addReviewImage(String imagePath) {
+        reviewImages.add(ReviewImage.builder()
+                        .imagePath(imagePath)
+                        .review(this)
+                        .build());
     }
 
     // ###연관관계  편의 메서드 ###//
-    public void setReviewImages(ReviewImage reviewImage) {
-        this.reviewImages.add(reviewImage);
-        if (reviewImage.getReview() != this) {
-            reviewImage.setReview(this);
-        }
-    }
 
 }

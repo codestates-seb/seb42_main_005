@@ -8,13 +8,16 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ReviewMapper {
 
     @Mapping(target = "user.userIdx", source = "userIdx")
     @Mapping(target = "store.storeIdx", source = "storeIdx")
-    @Mapping(target = "reviewTags", source = "tags")
     Review reviewDtoToReview(PostCreateReviewDto requestBody);
+
+    List<ReviewTag> tagIdsDtoToReviewTags(List<TagIdDto> tagDto);
 
     @Mapping(target = "tag.tagIdx", source = "tagIdx")
     ReviewTag tagIdDtoToReviewTag(TagIdDto tagDto);
