@@ -2,7 +2,6 @@ package com.project.mainproject.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.domain.Page;
 
 @Getter
 public class PageInfo {
@@ -14,7 +13,7 @@ public class PageInfo {
     private Boolean isFinish;
 
     @Builder
-    public PageInfo(int size, int page, int totalElement, int totalPage, boolean isFirst, boolean isFinish) {
+    public PageInfo(int size, int page, long totalElement, int totalPage, boolean isFirst, boolean isFinish) {
         this.size = size;
         this.page = page;
         this.totalElement = totalElement;
@@ -23,12 +22,4 @@ public class PageInfo {
         this.isFinish = isFinish;
     }
 
-    public PageInfo(Page page) {
-        this.size = page.getSize();
-        this.page = page.getNumber();
-        this.totalElement = page.getTotalElements();
-        this.totalPage = page.getTotalPages();
-        this.isFirst = page.isFirst();
-        this.isFinish = page.isLast();
-    }
 }

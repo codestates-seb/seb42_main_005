@@ -2,6 +2,7 @@ package com.project.mainproject.review.mapper;
 
 import com.project.mainproject.review.dto.PostCreateReviewDto;
 import com.project.mainproject.review.dto.PostUpdateReviewDto;
+import com.project.mainproject.review.dto.SimpleReviewDto;
 import com.project.mainproject.review.dto.StoreReviewPageDto;
 import com.project.mainproject.review.entity.Review;
 import org.mapstruct.Mapper;
@@ -18,6 +19,10 @@ public interface ReviewMapper {
     Review reviewDtoToReview(PostCreateReviewDto requestBody);
 
     Review reviewDtoToReview(PostUpdateReviewDto requestBody, @MappingTarget Review review);
+
+    @Mapping(target = "userIdx", source = "user.userIdx")
+    @Mapping(target = "storeIdx", source = "store.storeIdx")
+    SimpleReviewDto reviewToSimpleReviewDto(Review review);
 
     List<StoreReviewPageDto> reviewsToReviewsDto(List<Review> reviews);
     @Mapping(target = "reviewImage", expression = "java(review.getReviewImages().size() == 0 " +
