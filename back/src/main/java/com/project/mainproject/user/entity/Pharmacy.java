@@ -17,16 +17,4 @@ public class Pharmacy extends User {
     private String businessCertificate;
     private String pharmacistCertificate;
 
-
-//    @Builder
-    public Pharmacy(String password,
-                    String email,
-                    String name,
-                    String businessCertificate,
-                    String pharmacistCertificate) {
-        super(password, email, name);
-        this.businessCertificate = businessCertificate;
-        this.pharmacistCertificate = pharmacistCertificate;
-    }
-
 }

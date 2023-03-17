@@ -20,14 +20,6 @@ public class Normal extends User {
     @Builder.Default
     private List<PickedStore> pickedStores = new ArrayList<>();
 
-//    @Builder
-    public Normal(String password,
-                  String email,
-                  String name) {
-        super(password, email, name);
-        this.pickedStores= new ArrayList<>();
-    }
-
     public void addStore(PickedStore pickedStore) {
         this.pickedStores.add(pickedStore);
     }
