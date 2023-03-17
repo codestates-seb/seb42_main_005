@@ -1,18 +1,14 @@
 package com.project.mainproject.review.dto;
 
-import com.project.mainproject.tag.dto.TagIdDto;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.Assert;
-
-import java.util.List;
 
 @Getter
 @Builder
 public class PostCreateReviewDto {
     private Long userIdx;
     private Long storeIdx;
-    private List<TagIdDto> tags;
     private String content;
     private int rating;
 
