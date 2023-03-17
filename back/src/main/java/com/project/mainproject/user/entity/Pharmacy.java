@@ -1,38 +1,32 @@
 package com.project.mainproject.user.entity;
 
-import com.project.mainproject.user.enums.PharmacyStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-
-import static javax.persistence.EnumType.STRING;
-import static lombok.AccessLevel.PROTECTED;
-
+import javax.persistence.Table;
+@SuperBuilder
 @Entity
 @Getter
-@NoArgsConstructor(access = PROTECTED)
+@Setter
+@NoArgsConstructor
+@Table(name = "USER_STORE")
 public class Pharmacy extends User {
     private String businessCertificate;
-
     private String pharmacistCertificate;
 
-    @Enumerated(value = STRING)
-    private PharmacyStatus pharmacyStatus;
 
 //    @Builder
-    public Pharmacy(String userId,
-                    String password,
+    public Pharmacy(String password,
                     String email,
                     String name,
                     String businessCertificate,
-                    String pharmacistCertificate,
-                    PharmacyStatus pharmacyStatus) {
-        super(userId, password, email, name);
+                    String pharmacistCertificate) {
+        super(password, email, name);
         this.businessCertificate = businessCertificate;
         this.pharmacistCertificate = pharmacistCertificate;
-        this.pharmacyStatus = pharmacyStatus;
     }
 
 }
