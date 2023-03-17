@@ -244,7 +244,7 @@ const SignUpForm = styled.form`
     }
   }
 `;
-const InputContainer = styled.div`
+const InputContainer = styled.article`
   display: flex;
   flex-direction: row;
   border: 1px solid var(--black-150);
@@ -275,7 +275,7 @@ const InputContainer = styled.div`
   }
 `;
 
-const CheckContainer = styled.div`
+const CheckContainer = styled.article`
   display: flex;
   align-items: center;
   margin: 20px 0;

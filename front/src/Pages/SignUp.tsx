@@ -28,7 +28,7 @@ export default function SignUp() {
     </Total>
   );
 }
-const Total = styled.main`
+const Total = styled.section`
   display: flex;
   justify-content: center;
   height: 100vh;
