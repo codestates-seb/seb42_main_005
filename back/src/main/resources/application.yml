@@ -45,3 +45,5 @@ mail:
     name:
       member:
         join: email-registration-member
+data-api:
+  service-key: ${SERVICE_KET}
