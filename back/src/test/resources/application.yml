@@ -1,3 +1,4 @@
+#    변경 필요
 spring:
   datasource:
     url: ${DATABASEURL2}
