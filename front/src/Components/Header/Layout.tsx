@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Outlet, useLocation } from "react-router";
+import { Outlet } from "react-router";
 import Header from "./Header";
 
 interface AccountProps {

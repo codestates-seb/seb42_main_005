@@ -1,4 +1,3 @@
-// 약국 별점, 찜콩, 리뷰수
 import styled from "styled-components";
 import { BsStar } from "react-icons/bs";
 import { BsStarFill } from "react-icons/bs";
@@ -12,9 +11,8 @@ export default function PharmRank() {
     <Container>
       <div>{starPoint ? <BsStarFill className="select_star" /> : <BsStar className="unSelect_star" />}</div>
       <Star>
-        {" "}
         {starPoint}
-        <span className="rest">/5</span>{" "}
+        <span className="rest">/5</span>
       </Star>
       <Selected>찜콩 45</Selected>
       <span className="partition" />
