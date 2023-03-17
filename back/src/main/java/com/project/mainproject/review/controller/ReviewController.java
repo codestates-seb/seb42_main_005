@@ -9,6 +9,7 @@ import com.project.mainproject.review.mapper.ReviewMapper;
 import com.project.mainproject.review.mapper.ReviewReportMapper;
 import com.project.mainproject.review.service.ReviewReportService;
 import com.project.mainproject.review.service.ReviewService;
+import com.project.mainproject.user.dto.UserReviewDto;
 import com.project.mainproject.utils.ResponseBuilder;
 import com.project.mainproject.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
@@ -133,6 +134,25 @@ public class ReviewController {
                 responseBuilder.buildSingleCreatedResponse(responseData);
 
         return ResponseEntity.ok().header("Location", location.toString()).body(response);
+    }
+
+    /*
+    회원 정보 조회_작성 리뷰
+    */
+    @GetMapping("review/user/{userIdx}")
+    public ResponseEntity<PageResponseDto<ListGetStoreReviewDto>> getUserReviews(
+            @PathVariable("userIdx") Long userIdx, Pageable pageable
+    ) {
+        Page<Review> reviews = reviewService.getUserReviews(userIdx, pageable);
+
+        UserReviewDto responseData = UserReviewDto.builder()
+                .reviews(reviewMapper.reviewsToUserReviewsDto(reviews.getContent()))
+                .build();
+
+        PageResponseDto<ListGetStoreReviewDto> response =
+                responseBuilder.buildPageResponse(reviews, responseData);
+
+        return ResponseEntity.ok().body(response);
     }
 
 }
