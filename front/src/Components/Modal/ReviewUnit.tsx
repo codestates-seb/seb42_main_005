@@ -14,18 +14,13 @@ export default function ReviewUnit() {
         <section>
           <Upper>
             <UserInfo>
-              <UserIcon src="/Images/User.png" alt="user"/>
+              <UserIcon src="/Images/User.png" alt="user" />
               <UserName>caffeine</UserName>
               <Created>2023.03.05</Created>
             </UserInfo>
             <ButtonContainer>
               {/* 약사계정이면 댓글 버튼이 보이고, 아닌경우에는 안보이는 로직 작성 필요 */}
-              <Button
-                color="l_mint"
-                size="sm"
-                text="댓 글"
-                onClick={() => setIsCommentFormShown(true)}
-              />
+              <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsCommentFormShown(true)} />
               <Button color="l_black" size="sm" text="신 고" />
             </ButtonContainer>
           </Upper>
@@ -45,20 +40,15 @@ export default function ReviewUnit() {
             <Upper>
               <UserInfo>
                 <span id="reply">
-                  <BsArrowReturnRight aria-hidden="true"/>
+                  <BsArrowReturnRight aria-hidden="true" />
                 </span>
-                <UserIcon src="/Images/Pharm.png" alt="pharmacist"/>
+                <UserIcon src="/Images/Pharm.png" alt="pharmacist" />
                 <UserName>킹갓 약사</UserName>
                 <Created>2023.03.05</Created>
               </UserInfo>
               <ButtonContainer>
                 {/* 약사계정이면 댓글 버튼이 보이고, 아닌경우에는 안보이는 로직 작성 필요 */}
-                <Button
-                  color="l_blue"
-                  size="sm"
-                  text="수 정"
-                  onClick={() => setIsCommentFormShown(true)}
-                />
+                <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsCommentFormShown(true)} />
                 <Button color="l_red" size="sm" text="삭 제" />
               </ButtonContainer>
             </Upper>
@@ -70,7 +60,7 @@ export default function ReviewUnit() {
             <Instruction>
               <p>댓글을 작성해주세요. 작성 완료 시 'Enter'를 눌러주세요.</p>
             </Instruction>
-            <label htmlFor="comment of review"/>
+            <label htmlFor="comment of review" />
             <Input id="comment of review" placeholder="감사합니다 :)" isValid={true} icon={true} />
           </WriteCommentForm>
         ) : null}

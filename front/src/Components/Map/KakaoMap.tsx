@@ -1,13 +1,18 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import styled from "styled-components";
 import MapFilter from "./MapFilter";
 import { MapLogic } from "./MapLogic";
 import { zIndex_KakaoMap } from "../../Util/z-index";
-import { SELECT_OPTION_MAP } from "../../Util/type";
+import { SELECT_HIDDEN, SELECT_OPTION_MAP } from "../../Util/type";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { BiTargetLock } from "react-icons/bi";
 
-export default function KakaoMap() {
+interface Props {
+  hidden: SELECT_HIDDEN;
+  setHidden: Dispatch<SetStateAction<SELECT_HIDDEN>>;
+}
+
+export default function KakaoMap({ hidden, setHidden }: Props) {
   const { _map } = MapLogic();
   const [selected, setSelected] = useState<SELECT_OPTION_MAP>("map_home");
 
@@ -53,14 +58,16 @@ export default function KakaoMap() {
   };
 
   return (
-    <MapContainer id="map">
-      <MapFilter
-        selected={selected}
-        onClickMapHome={() => setSelected("map_home")}
-        onClickInBusiness={() => setSelected("in_business")}
-        onClickMidnight={() => setSelected("midnight")}
-        onClickBookmarks={() => setSelected("bookmarks")}
-      />
+    <MapContainer id="map" className={hidden ? "close" : ""}>
+      <TopControler className={hidden ? "close" : ""}>
+        <MapFilter
+          selected={selected}
+          onClickMapHome={() => setSelected("map_home")}
+          onClickInBusiness={() => setSelected("in_business")}
+          onClickMidnight={() => setSelected("midnight")}
+          onClickBookmarks={() => setSelected("bookmarks")}
+        />
+      </TopControler>
       <LocaControler>
         <LocaBtn onClick={getCurrentLocBtn}>
           <BiTargetLock className="icon" />
@@ -89,6 +96,11 @@ const MapContainer = styled.div`
   top: 0;
   right: 0;
   z-index: ${zIndex_KakaoMap.MapContainer};
+  transition: 0.2s;
+  &.close {
+    width: 100vw;
+    transition: 0.2s;
+  }
   @media (max-width: 768px) {
   }
 `;
@@ -135,7 +147,29 @@ const ZoomBtn = styled.span`
     margin-top: 5px;
   }
 `;
-
+const TopControler = styled.div`
+  position: fixed;
+  z-index: ${zIndex_KakaoMap.CtrlContainer};
+  top: 70px;
+  left: 750px;
+  transition: 0.2s;
+  @media (max-width: 1200px) {
+    left: 650px;
+    transition: 0.2s;
+    &.close {
+      left: 280px;
+      transition: 0.2s;
+    }
+  }
+  @media (max-width: 768px) {
+    left: 540px;
+    transition: 0.2s;
+    &.close {
+      left: 80px;
+      transition: 0.2s;
+    }
+  }
+`;
 const LocaControler = styled.div`
   display: flex;
   justify-content: center;

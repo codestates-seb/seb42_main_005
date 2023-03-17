@@ -10,13 +10,11 @@ export default function PharmItem() {
 
   return (
     <PharmCard>
-      {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
-      ) : null}
+      {isModalUp ? <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} /> : null}
       <InfoImgContainer>
         <Img src="./Images/random.png" alt="고심약국" onClick={() => setIsModalUp(true)} />
         <LikeButton onClick={() => setLike(!like)}>
-          {like ? <img src="./Images/Heart.png" alt="like"/> : <img src="./Images/UnHeart.png" alt="unlike"/>}
+          {like ? <img src="./Images/Heart.png" alt="like" /> : <img src="./Images/UnHeart.png" alt="unlike" />}
         </LikeButton>
       </InfoImgContainer>
       <PharmTitleBox>
