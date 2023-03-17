@@ -135,17 +135,6 @@ const ButtonContainer = styled.section`
   display: flex;
   gap: 20px;
 `;
-const Select = styled.select`
-  cursor: pointer;
-  padding: 0.5rem;
-  color: var(--l_button-blue);
-  border-radius: 3px;
-  border: 1.2px solid var(--l_button-blue);
-  :focus {
-    outline: none;
-  }
-`;
-const Option = styled.option``;
 const Table = styled.figure`
   display: flex;
   flex-direction: column;

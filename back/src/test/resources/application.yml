@@ -1,7 +1,13 @@
 #    변경 필요
+server:
+  address: localhost
+  port: 8080
+
 spring:
   datasource:
-    url: ${DATABASEURL2}
-    password: ${DATABASE_PASSWORD2}
-    username: ${DATABASE_ID2}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/QNA?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&useSSL=true
+    password: pass
+    username: root
+
+

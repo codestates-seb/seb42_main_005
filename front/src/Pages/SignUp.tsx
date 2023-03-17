@@ -37,15 +37,12 @@ const Container = styled.div`
   justify-content: center;
   height: 100%;
   width: 40rem;
-  h1 {
-    font-size: 2.2rem;
-  }
 `;
 
 const Title = styled.div`
   display: flex;
   justify-content: center;
-  padding-top: 5rem;
+  padding-top: 6rem;
   img {
     padding-right: 1rem;
     width: 3.5rem;
@@ -53,5 +50,6 @@ const Title = styled.div`
   }
   h1 {
     color: var(--blue-600);
+    font-size: 2.2rem;
   }
 `;
