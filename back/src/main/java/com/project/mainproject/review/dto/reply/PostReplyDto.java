@@ -1,4 +1,4 @@
-package com.project.mainproject.review.dto;
+package com.project.mainproject.review.dto.reply;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import org.springframework.util.Assert;
 
 @Getter
 @AllArgsConstructor
-public class PostReviewReportDto {
+public class PostReplyDto {
     private Long userIdx;
     private Long reviewIdx;
     private String content;

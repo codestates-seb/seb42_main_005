@@ -2,12 +2,16 @@ package com.project.mainproject.review.controller;
 
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
-import com.project.mainproject.dummy.CommonStub;
 import com.project.mainproject.review.dto.*;
+import com.project.mainproject.review.dto.reply.PostReplyDto;
+import com.project.mainproject.review.dto.reply.SimpleReplyDto;
 import com.project.mainproject.review.entity.Review;
+import com.project.mainproject.review.entity.ReviewReply;
 import com.project.mainproject.review.entity.ReviewReport;
 import com.project.mainproject.review.mapper.ReviewMapper;
+import com.project.mainproject.review.mapper.ReviewReplyMapper;
 import com.project.mainproject.review.mapper.ReviewReportMapper;
+import com.project.mainproject.review.service.ReviewReplyService;
 import com.project.mainproject.review.service.ReviewReportService;
 import com.project.mainproject.review.service.ReviewService;
 import com.project.mainproject.utils.ResponseBuilder;
@@ -31,8 +35,12 @@ public class ReviewController {
 
     private final ReviewService reviewService;
     private final ReviewReportService reportService;
+
+    private final ReviewReplyService replyService;
     private final ReviewMapper reviewMapper;
     private final ReviewReportMapper reportMapper;
+    private final ReviewReplyMapper replyMapper;
+
     private final ResponseBuilder responseBuilder;
 
     /*
@@ -124,7 +132,7 @@ public class ReviewController {
             @RequestBody PostReviewReportDto postReportDto
     ) {
         // TODO: content 넣어주는지 확인
-        postReportDto.setParameterIdx(reviewIdx);
+        postReportDto.setReviewIdx(reviewIdx);
         ReviewReport reviewReport = reportMapper.postReportDtoToReviewReport(postReportDto);
         ReviewReport createdReport = reportService.createReport(storeIdx, reviewReport);
 
@@ -140,14 +148,20 @@ public class ReviewController {
      *  대댓글 달기
      * */
     @PostMapping("/store/{storeIdx}/review/{reviewIdx}")
-    public ResponseEntity<SingleResponseDto> createReviewPlus(@PathVariable Long storeIdx, @PathVariable Long reviewIdx) {
-        //TODO : 서비스단 구현
+    public ResponseEntity<SingleResponseDto<SimpleReplyDto>> createReviewPlus(
+            @PathVariable Long storeIdx,
+            @PathVariable Long reviewIdx,
+            @RequestBody PostReplyDto replyDto
+    ) {
+        replyDto.setReviewIdx(reviewIdx);
+        ReviewReply reviewReply = replyMapper.postReplyDtoToReviewReply(replyDto);
+        ReviewReply createdReply = replyService.createReply(storeIdx, reviewReply);
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review/" + reviewIdx);
+        SimpleReplyDto responseData = replyMapper.reviewReplyToSimpleReplyDto(createdReply);
+        SingleResponseDto<SimpleReplyDto> response =
+                responseBuilder.buildSingleCreatedResponse(responseData);
 
-        SingleResponseDto build = CommonStub.getSingleResponseStub();
-        build.setResponse(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).userIdx(1L).build());
-
-        return ResponseEntity.created(location).body(build);
+        return ResponseEntity.ok().header("Location", location.toString()).body(response);
     }
 }

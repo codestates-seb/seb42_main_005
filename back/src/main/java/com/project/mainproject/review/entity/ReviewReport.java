@@ -15,7 +15,6 @@ import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
-import static lombok.Builder.Default;
 
 @Entity
 @Getter
@@ -27,10 +26,8 @@ public class ReviewReport extends AuditableWithBy {
     @Column(name = "REVIEW_REPORT_IDX")
     private Long reportIdx;
 
-    @Default
     private String content = "";
 
-    @Default
     @Enumerated(value = STRING)
     private ReportStatus reportStatus = REGISTERED;
 

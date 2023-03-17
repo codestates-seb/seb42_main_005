@@ -58,6 +58,10 @@ public class Review extends Auditable {
     @OneToMany(mappedBy = "review", fetch = LAZY, cascade = {ALL}, orphanRemoval = true)
     private List<ReviewImage> reviewImages = new ArrayList<>();
 
+    @Default
+    @OneToMany(mappedBy = "review", fetch = LAZY, cascade = {ALL}, orphanRemoval = true)
+    private List<ReviewReply> reviewReplies = new ArrayList<>();
+
     //### 간단한 동작메서드 ###//
     public void addReviewImage(String imagePath) {
         reviewImages.add(ReviewImage.builder()
