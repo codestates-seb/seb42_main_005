@@ -111,6 +111,8 @@ export default function PharmSignForms() {
     if (checks === false) {
       return alert("회원가입시, 사용자의 현재 위치를 사용하는 것에 동의해주세요");
     }
+
+    console.log(businessImgFile);
   };
 
   const BusinessImg = useRef<HTMLInputElement>(null);
@@ -239,7 +241,7 @@ export default function PharmSignForms() {
     </Container>
   );
 }
-const Container = styled.div`
+const Container = styled.section`
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -253,7 +255,7 @@ const Container = styled.div`
     0 4px 13px -3px hsla(0, 0%, 0%, 0.13);
 `;
 
-const Google = styled.div`
+const Google = styled.article`
   padding-bottom: 1rem;
   .google_button {
     height: 3.3rem;
@@ -339,6 +341,8 @@ const InputContainer = styled.div`
 const ImgInput = styled.input`
   width: 27rem;
   height: 2.7rem;
+  width: 27rem;
+  height: 2.7rem;
   outline: none;
   font-size: 1.1rem;
   padding-left: 0.5rem;
@@ -348,11 +352,12 @@ const ImgInput = styled.input`
   display: flex;
   flex-grow: 1;
 `;
-const CheckContainer = styled.div`
+const CheckContainer = styled.article`
   display: flex;
   align-items: center;
   margin: 20px 0;
   .checkbox_content {
+    font-size: 15px;
     font-size: 15px;
     color: var(--black-500);
   }

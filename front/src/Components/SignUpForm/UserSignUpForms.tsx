@@ -182,7 +182,7 @@ export default function UserSignUpForms() {
     </Container>
   );
 }
-const Container = styled.div`
+const Container = styled.section`
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -195,7 +195,7 @@ const Container = styled.div`
   box-shadow: 0 1px 4px -3px hsla(0, 0%, 0%, 0.09), 0 3px 8px -3px hsla(0, 0%, 0%, 0.1),
     0 4px 13px -3px hsla(0, 0%, 0%, 0.13);
 `;
-const Google = styled.div`
+const Google = styled.article`
   padding-bottom: 1rem;
   .google_button {
     height: 3.3rem;
@@ -248,6 +248,7 @@ const InputContainer = styled.div`
   display: flex;
   flex-direction: row;
   border: 1px solid var(--black-150);
+  border: 1px solid var(--black-150);
   margin-bottom: 0.5rem;
   border-radius: 10px;
   box-shadow: var(--bs-sm);
@@ -279,6 +280,7 @@ const CheckContainer = styled.div`
   align-items: center;
   margin: 20px 0;
   .checkbox_content {
+    font-size: 15px;
     font-size: 15px;
     color: var(--black-500);
   }

@@ -8,9 +8,9 @@ interface Props {
 
 export default function AnyDropDown({ setIsDropDownDown }: Props) {
   return (
-    <DropDownContainer onClick={() => setIsDropDownDown(false)} >
+    <DropDownContainer onClick={() => setIsDropDownDown(false)}>
       <CloseBtnContainer>
-        <HiXMark id="close" onClick={() => setIsDropDownDown(false)} aria-hidden="true"/>
+        <HiXMark id="close" onClick={() => setIsDropDownDown(false)} aria-hidden="true" />
       </CloseBtnContainer>
       <Unit>
         <Key>월요일</Key>
@@ -79,6 +79,7 @@ const CloseBtnContainer = styled.header`
   transition: 0.2s;
   #close:hover {
     color: var(--black-600);
+    transition: 0.2s;
     transition: 0.2s;
   }
 `;
