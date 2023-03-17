@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { zIndex_Modal } from "../../Util/z-index";
-import { GrClose } from "react-icons/gr";
+import { HiXMark } from "react-icons/hi2";
 
 interface Props {
   setIsDropDownDown: React.Dispatch<React.SetStateAction<boolean>>;
@@ -8,9 +8,9 @@ interface Props {
 
 export default function AnyDropDown({ setIsDropDownDown }: Props) {
   return (
-    <DropDownContainer onClick={(event) => event.stopPropagation()}>
+    <DropDownContainer onClick={() => setIsDropDownDown(false)} >
       <CloseBtnContainer>
-        <GrClose id="close" onClick={() => setIsDropDownDown(false)} aria-hidden={true}/>
+        <HiXMark id="close" onClick={() => setIsDropDownDown(false)} aria-hidden="true"/>
       </CloseBtnContainer>
       <Unit>
         <Key>월요일</Key>
@@ -55,8 +55,11 @@ const DropDownContainer = styled.section`
   justify-content: center;
   align-items: flex-start;
   padding: 8px 0;
-  bottom: 5px;
-  right: 15px;
+  bottom: -35px;
+  right: 72px;
+  @media (max-width: 768px) {
+    right: 65px;
+  }
   gap: 3px;
   background: white;
   box-shadow: var(--bs-lg);
@@ -71,10 +74,12 @@ const CloseBtnContainer = styled.header`
   margin-bottom: 2px;
   height: 15px;
   width: 146px;
-  font-size: 15px;
-  color: var(--black-100);
-  &#close:hover {
+  font-size: 19px;
+  color: var(--black-300);
+  transition: 0.2s;
+  #close:hover {
     color: var(--black-600);
+    transition: 0.2s;
   }
 `;
 const Unit = styled.article`

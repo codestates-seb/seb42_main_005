@@ -6,7 +6,7 @@ import WriteReviewForm from "./WriteReviewForm";
 import PharmRank from "../Ul/PharmRank";
 import Button from "../Ul/Button";
 import { zIndex_Modal } from "../../Util/z-index";
-import { GrClose } from "react-icons/gr";
+import { HiXMark } from "react-icons/hi2";
 
 interface Props {
   setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,7 +22,7 @@ export default function PharmDetail({ setIsModalUp, like, setLike }: Props) {
       <ModalBackDrop onClick={() => setIsModalUp(false)}>
         <ModalContainer onClick={(event) => event.stopPropagation()}>
           <CloseBtnContainer>
-            <GrClose id="close" onClick={() => setIsModalUp(false)} aria-hidden="true"/>
+            <HiXMark id="close" onClick={() => setIsModalUp(false)} aria-hidden="true"/>
           </CloseBtnContainer>
           <InfoHeader>
             <InfoTitle>킹갓약국</InfoTitle>
@@ -190,10 +190,10 @@ const CloseBtnContainer = styled.div`
   position: absolute;
   display: flex;
   justify-content: flex-end;
-  top: 20px;
+  top: 15px;
   right: 20px;
   width: 500px;
-  font-size: 30px;
+  font-size: 40px;
   color: var(--black-100);
   z-index: ${zIndex_Modal.CloseBtnContainer};
 `;
