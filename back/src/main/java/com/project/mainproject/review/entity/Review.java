@@ -16,12 +16,12 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.CascadeType.REMOVE;
-import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
+import static lombok.Builder.Default;
 
 @Entity
 @Getter
@@ -39,7 +39,7 @@ public class Review extends Auditable {
     @Formula("(SELECT count(1) FROM report r WHERE r.review_idx = review_idx)")
     private int reportCnt;
 
-    @Builder.Default
+    @Default
     @Enumerated(value = STRING)
     private ReviewStatus reviewStatus = ReviewStatus.POSTED;
 
@@ -51,12 +51,12 @@ public class Review extends Auditable {
     @JoinColumn(name = "STORE_IDX")
     private Store store;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "review", fetch = LAZY, cascade = {PERSIST, REMOVE})
+    @Default
+    @OneToMany(mappedBy = "review", fetch = LAZY, cascade = {ALL}, orphanRemoval = true)
     private List<ReviewTag> reviewTags = new ArrayList<>();
 
-    @Builder.Default
-    @OneToMany(mappedBy = "review", fetch = LAZY, cascade = {PERSIST, REMOVE})
+    @Default
+    @OneToMany(mappedBy = "review", fetch = LAZY, cascade = {ALL}, orphanRemoval = true)
     private List<ReviewImage> reviewImages = new ArrayList<>();
 
     //### 간단한 동작메서드 ###//

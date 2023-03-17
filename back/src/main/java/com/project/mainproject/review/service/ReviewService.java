@@ -8,6 +8,8 @@ import com.project.mainproject.tag.entity.Tag;
 import com.project.mainproject.tag.repository.TagRepository;
 import com.project.mainproject.utils.FileUploader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.project.mainproject.review.enums.ReviewStatus.POSTED;
 import static com.project.mainproject.review.exception.ReviewExceptionCode.REVIEW_NOT_EXIST;
 
 @Service
@@ -24,6 +27,12 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final TagRepository tagRepository;
+
+    public Page<Review> getReviews(Long storeIdx, Pageable pageable) {
+        // TODO: 존재하는 약국 검증 추가 (StoreService)
+        return reviewRepository.findAllByStoreStoreIdxAndReviewStatusOrderByCreatedAtDesc(
+                storeIdx, POSTED, pageable);
+    }
 
     @Transactional
     public Review createReview(Review review, List<ReviewTag> reviewTags, MultipartFile image) {
