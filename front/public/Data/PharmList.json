@@ -1,0 +1,122 @@
+{
+    "storeHome" : [ {
+        "storeIdx" : 1,
+        "name" : "주사랑믿음약국",
+        "address" : "서울 특별시 송파구 롯데타워 301호점",
+        "longitude" : 203.12312312,
+        "latitude" : 111.22323311,
+        "tel" : "010-1234-1234",
+        "etc" : "이곳은 비고란입니다.",
+        "rating" : 4.2,
+        "image" : "https://flexible.img.hani.co.kr/flexible/normal/658/479/imgdb/original/2023/0115/20230115501377.jpg",
+        "createdAt" : "2023-03-14T11:40:15.962372",
+        "modifiedAt" : "2023-03-14T11:40:15.962392",
+        "tags" : [ "재료가 신선해요", "주차장이 넓어요" ]
+      }, {
+        "storeIdx" : 2,
+        "name" : "주사랑믿음약국",
+        "address" : "서울 특별시 송파구 롯데타워 301호점",
+        "longitude" : 203.12312312,
+        "latitude" : 111.22323311,
+        "tel" : "010-1234-1234",
+        "etc" : "이곳은 비고란입니다.",
+        "rating" : 4.2,
+        "image" : "https://flexible.img.hani.co.kr/flexible/normal/658/479/imgdb/original/2023/0115/20230115501377.jpg",
+        "createdAt" : "2023-03-14T11:40:15.962431",
+        "modifiedAt" : "2023-03-14T11:40:15.962435",
+        "tags" : [ "재료가 신선해요", "주차장이 넓어요" ]
+      }, {
+        "storeIdx" : 3,
+        "name" : "주사랑믿음약국",
+        "address" : "서울 특별시 송파구 롯데타워 301호점",
+        "longitude" : 203.12312312,
+        "latitude" : 111.22323311,
+        "tel" : "010-1234-1234",
+        "etc" : "이곳은 비고란입니다.",
+        "rating" : 4.2,
+        "image" : "https://flexible.img.hani.co.kr/flexible/normal/658/479/imgdb/original/2023/0115/20230115501377.jpg",
+        "createdAt" : "2023-03-14T11:40:15.962441",
+        "modifiedAt" : "2023-03-14T11:40:15.962444",
+        "tags" : [ "재료가 신선해요", "주차장이 넓어요" ]
+      }, {
+        "storeIdx" : 4,
+        "name" : "주사랑믿음약국",
+        "address" : "서울 특별시 송파구 롯데타워 301호점",
+        "longitude" : 203.12312312,
+        "latitude" : 111.22323311,
+        "tel" : "010-1234-1234",
+        "etc" : "이곳은 비고란입니다.",
+        "rating" : 4.2,
+        "image" : "https://flexible.img.hani.co.kr/flexible/normal/658/479/imgdb/original/2023/0115/20230115501377.jpg",
+        "createdAt" : "2023-03-14T11:40:15.962451",
+        "modifiedAt" : "2023-03-14T11:40:15.962455",
+        "tags" : [ "재료가 신선해요", "주차장이 넓어요" ]
+      }, {
+        "storeIdx" : 5,
+        "name" : "주사랑믿음약국",
+        "address" : "서울 특별시 송파구 롯데타워 301호점",
+        "longitude" : 203.12312312,
+        "latitude" : 111.22323311,
+        "tel" : "010-1234-1234",
+        "etc" : "이곳은 비고란입니다.",
+        "rating" : 4.2,
+        "image" : "https://flexible.img.hani.co.kr/flexible/normal/658/479/imgdb/original/2023/0115/20230115501377.jpg",
+        "createdAt" : "2023-03-14T11:40:15.96246",
+        "modifiedAt" : "2023-03-14T11:40:15.962464",
+        "tags" : [ "재료가 신선해요", "주차장이 넓어요" ]
+      }, {
+        "storeIdx" : 6,
+        "name" : "주사랑믿음약국",
+        "address" : "서울 특별시 송파구 롯데타워 301호점",
+        "longitude" : 203.12312312,
+        "latitude" : 111.22323311,
+        "tel" : "010-1234-1234",
+        "etc" : "이곳은 비고란입니다.",
+        "rating" : 4.2,
+        "image" : "https://flexible.img.hani.co.kr/flexible/normal/658/479/imgdb/original/2023/0115/20230115501377.jpg",
+        "createdAt" : "2023-03-14T11:40:15.962468",
+        "modifiedAt" : "2023-03-14T11:40:15.962471",
+        "tags" : [ "재료가 신선해요", "주차장이 넓어요" ]
+      }, {
+        "storeIdx" : 7,
+        "name" : "주사랑믿음약국",
+        "address" : "서울 특별시 송파구 롯데타워 301호점",
+        "longitude" : 203.12312312,
+        "latitude" : 111.22323311,
+        "tel" : "010-1234-1234",
+        "etc" : "이곳은 비고란입니다.",
+        "rating" : 4.2,
+        "image" : "https://flexible.img.hani.co.kr/flexible/normal/658/479/imgdb/original/2023/0115/20230115501377.jpg",
+        "createdAt" : "2023-03-14T11:40:15.962476",
+        "modifiedAt" : "2023-03-14T11:40:15.962479",
+        "tags" : [ "재료가 신선해요", "주차장이 넓어요" ]
+      }, {
+        "storeIdx" : 8,
+        "name" : "주사랑믿음약국",
+        "address" : "서울 특별시 송파구 롯데타워 301호점",
+        "longitude" : 203.12312312,
+        "latitude" : 111.22323311,
+        "tel" : "010-1234-1234",
+        "etc" : "이곳은 비고란입니다.",
+        "rating" : 4.2,
+        "image" : "https://flexible.img.hani.co.kr/flexible/normal/658/479/imgdb/original/2023/0115/20230115501377.jpg",
+        "createdAt" : "2023-03-14T11:40:15.962484",
+        "modifiedAt" : "2023-03-14T11:40:15.962487",
+        "tags" : [ "재료가 신선해요", "주차장이 넓어요" ]
+      }, {
+        "storeIdx" : 9,
+        "name" : "주사랑믿음약국",
+        "address" : "서울 특별시 송파구 롯데타워 301호점",
+        "longitude" : 203.12312312,
+        "latitude" : 111.22323311,
+        "tel" : "010-1234-1234",
+        "etc" : "이곳은 비고란입니다.",
+        "rating" : 4.2,
+        "image" : "https://flexible.img.hani.co.kr/flexible/normal/658/479/imgdb/original/2023/0115/20230115501377.jpg",
+        "createdAt" : "2023-03-14T11:40:15.962492",
+        "modifiedAt" : "2023-03-14T11:40:15.962495",
+        "tags" : [ "재료가 신선해요", "주차장이 넓어요" ]
+      } ]
+    }
+  
+

@@ -16,6 +16,7 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
   const [imageSrc, setImageSrc]: any = useState(null);
   const onUpload = (e: any) => {
     const file = e.target.files[0];
+    console.log(file);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     return new Promise<void>((resolve) => {

@@ -1,0 +1,14 @@
+{
+  "storeIdx": 1,
+  "name": "주사랑믿음약국",
+  "address": "서울 특별시 송파구 롯데타워 301호점",
+  "longitude": 203.12312312,
+  "latitude": 111.22323311,
+  "tel": "010-1234-1234",
+  "etc": "이곳은 비고란입니다.",
+  "rating": 4.2,
+  "image": "https://flexible.img.hani.co.kr/flexible/normal/658/479/imgdb/original/2023/0115/20230115501377.jpg",
+  "createdAt": "2023-03-14T11:40:15.996428",
+  "modifiedAt": "2023-03-14T11:40:15.996444",
+  "tags": ["재료가 신선해요", "주차장이 넓어요"]
+}
