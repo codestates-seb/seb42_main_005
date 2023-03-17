@@ -6,7 +6,7 @@ import Tag from "../Ul/Tag";
 import { zIndex_Modal } from "../../Util/z-index";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BiPhotoAlbum } from "react-icons/bi";
-import { GrClose } from "react-icons/gr";
+import { HiXMark } from "react-icons/hi2";
 
 interface Props {
   setIsReviewFormShown: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,10 +30,10 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
   return (
     <WriteReviewContainer>
       <InputTop className="wide">
-        <GrClose aria-hidden="true" className="except" onClick={() => setIsReviewFormShown(false)} />
+        <HiXMark aria-hidden="true" className="except" onClick={() => setIsReviewFormShown(false)} />
       </InputTop>
       <InputTop>
-        <label htmlFor="review" />
+        <HiddenLabel htmlFor="review" />
         <Textarea
           id="review"
           placeholder="무분별한 비방, 비하, 욕설은 지양해주세요 :)"
@@ -96,6 +96,13 @@ const WriteReviewContainer = styled.section`
     display: flex;
     justify-content: flex-end;
     width: 400px;
+    font-size: 20px;
+    color: var(--black-300);
+    transition: 0.2s;
+    #close:hover {
+      color: var(--black-600);
+      transition: 0.2s;
+    }
   }
   @media (max-width: 768px) {
     position: absolute;
@@ -150,6 +157,9 @@ const Label = styled.label`
   color: var(--black-100);
   border-radius: 50%;
   box-shadow: 0px 0px 5px 0.5px var(--black-200);
+`;
+const HiddenLabel = styled.label`
+  display: none;
 `;
 const TagSelection = styled.section`
   display: flex;

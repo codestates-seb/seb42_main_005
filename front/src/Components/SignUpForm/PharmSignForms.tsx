@@ -304,7 +304,7 @@ const SignUpForm = styled.form`
     }
   }
 `;
-const InputContainer = styled.article`
+const InputContainer = styled.div`
   display: flex;
   flex-direction: row;
   border: 1px solid var(--black-150);
@@ -341,6 +341,8 @@ const InputContainer = styled.article`
 const ImgInput = styled.input`
   width: 27rem;
   height: 2.7rem;
+  width: 27rem;
+  height: 2.7rem;
   outline: none;
   font-size: 1.1rem;
   padding-left: 0.5rem;
@@ -355,6 +357,7 @@ const CheckContainer = styled.article`
   align-items: center;
   margin: 20px 0;
   .checkbox_content {
+    font-size: 15px;
     font-size: 15px;
     color: var(--black-500);
   }

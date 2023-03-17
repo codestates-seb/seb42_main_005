@@ -244,9 +244,10 @@ const SignUpForm = styled.form`
     }
   }
 `;
-const InputContainer = styled.article`
+const InputContainer = styled.div`
   display: flex;
   flex-direction: row;
+  border: 1px solid var(--black-150);
   border: 1px solid var(--black-150);
   margin-bottom: 0.5rem;
   border-radius: 10px;
@@ -274,11 +275,12 @@ const InputContainer = styled.article`
   }
 `;
 
-const CheckContainer = styled.article`
+const CheckContainer = styled.div`
   display: flex;
   align-items: center;
   margin: 20px 0;
   .checkbox_content {
+    font-size: 15px;
     font-size: 15px;
     color: var(--black-500);
   }
