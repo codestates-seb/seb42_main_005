@@ -33,5 +33,12 @@ public class ReviewReplyService {
         // TODO: 유저 검증
         return reviewReplyRepository.save(reviewReply);
     }
+    
+    @Transactional
+    public void deleteReply(Long reviewIdx, Long replyIdx) {
+        // TODO: 유저 검증
+        ReviewReply reply = findVerifiedReply(reviewIdx, replyIdx);
+        reviewReplyRepository.delete(reply);
+    }
 
 }

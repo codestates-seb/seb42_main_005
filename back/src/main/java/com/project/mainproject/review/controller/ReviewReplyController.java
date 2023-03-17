@@ -25,9 +25,9 @@ public class ReviewReplyController {
     private final ResponseBuilder responseBuilder;
 
     /*
-     *  대댓글 달기
+     *  리뷰 답변 달기
      * */
-    @PostMapping("/{reviewIdx}")
+    @PostMapping("/{reviewIdx}/reply")
     public ResponseEntity<SingleResponseDto<SimpleReplyDto>> createReviewPlus(
             @PathVariable Long reviewIdx,
             @RequestBody PostReplyDto replyDto
@@ -45,9 +45,9 @@ public class ReviewReplyController {
     }
 
     /*
-     *  대댓글 수정
+     *  리뷰 답변 수정
      * */
-    @PatchMapping("/{reviewIdx}/review/{replyIdx}")
+    @PatchMapping("/{reviewIdx}/reply/{replyIdx}")
     public ResponseEntity<SingleResponseDto<SimpleReplyDto>> updateReviewReply(
             @PathVariable Long reviewIdx,
             @PathVariable Long replyIdx,
@@ -65,6 +65,16 @@ public class ReviewReplyController {
                 responseBuilder.buildSingleOkResponse(responseData);
 
         return ResponseEntity.ok().header("Location", location.toString()).body(response);
+    }
+
+    /*
+     *  리뷰 답변 삭제
+     * */
+    @DeleteMapping("/{reviewIdx}/reply/{replyIdx}")
+    public ResponseEntity<URI> deleteReviewReply(@PathVariable Long reviewIdx, @PathVariable Long replyIdx) {
+        replyService.deleteReply(reviewIdx, replyIdx);
+
+        return ResponseEntity.noContent().build();
     }
 
 }
