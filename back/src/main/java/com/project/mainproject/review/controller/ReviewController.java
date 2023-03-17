@@ -8,7 +8,6 @@ import com.project.mainproject.review.dto.*;
 import com.project.mainproject.review.entity.Review;
 import com.project.mainproject.review.mapper.ReviewMapper;
 import com.project.mainproject.review.service.ReviewService;
-import com.project.mainproject.tag.entity.ReviewTag;
 import com.project.mainproject.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
-import java.util.List;
 
 import static com.project.mainproject.enums.ResultStatus.CREATE_COMPLETED;
 import static com.project.mainproject.enums.ResultStatus.PROCESS_COMPLETED;
@@ -42,7 +40,6 @@ public class ReviewController {
             @PathVariable Long storeIdx,
             Pageable pageable
     ) {
-        //TODO : Service 구현
         Page<Review> reviews = reviewService.getReviews(storeIdx, pageable);
 
         ListGetStoreReviewDto responseData = ListGetStoreReviewDto.builder()
@@ -71,9 +68,8 @@ public class ReviewController {
     ) {
         postDto.setStoreIdx(storeIdx);
         Review review = reviewMapper.reviewDtoToReview(postDto);
-        List<ReviewTag> reviewTags = reviewMapper.tagIdsDtoToReviewTags(postDto.getTags());
 
-        Review createdReview = reviewService.createReview(review, reviewTags, image);
+        Review createdReview = reviewService.saveReview(review, image);
 
         // 이하 데이터 변환 부분 -> 어디에서?
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
@@ -95,16 +91,31 @@ public class ReviewController {
      *  리뷰 수정
      * */
     @PatchMapping("/store/{storeIdx}/review/{reviewIdx}")
-    public ResponseEntity updateReview(@PathVariable Long storeIdx, @PathVariable Long reviewIdx, @RequestBody PostUpdateReviewDto postDto) {
-        //TODO : Service 구현
+    public ResponseEntity<SingleResponseDto<SimpleReviewDto>> updateReview(
+            @PathVariable Long storeIdx, @PathVariable Long reviewIdx,
+            @RequestPart PostUpdateReviewDto patchDto,
+            @RequestPart(required = false) MultipartFile image
+    ) {
+        patchDto.setStoreIdx(storeIdx);
+        Review targetReview = reviewService.findVerifiedReview(storeIdx, reviewIdx);
+        Review review = reviewMapper.reviewDtoToReview(patchDto, targetReview);
+
+        Review updatedReview = reviewService.updateReview(review, image);
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
 
-        SingleResponseDto build = CommonStub.getSingleResponseStub();
-        build.setResponse(SimpleReviewDto.builder().reviewIdx(reviewIdx).storeIdx(storeIdx).userIdx(postDto.getUserIdx()).build());
+        SimpleReviewDto responseData = SimpleReviewDto.builder()
+                .reviewIdx(updatedReview.getReviewIdx())
+                .storeIdx(storeIdx)
+                .userIdx(patchDto.getUserIdx())
+                .build();
+        SingleResponseDto<SimpleReviewDto> response = SingleResponseDto.<SimpleReviewDto>builder()
+                .response(responseData)
+                .httpCode(CREATE_COMPLETED.getHttpCode())
+                .message(CREATE_COMPLETED.getMessage())
+                .build();
 
-        return ResponseEntity.ok().header("Location", location.toString())
-                .body(build);
+        return ResponseEntity.ok().header("Location", location.toString()).body(response);
     }
 
     /*
@@ -115,8 +126,7 @@ public class ReviewController {
         reviewService.deleteReview(storeIdx, reviewIdx);
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
 
-        return ResponseEntity.noContent().header("Location", location.toString())
-                .build();
+        return ResponseEntity.noContent().header("Location", location.toString()).build();
     }
 
     /*

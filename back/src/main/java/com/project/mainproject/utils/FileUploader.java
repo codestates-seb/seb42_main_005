@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -14,7 +15,7 @@ public class FileUploader {
 //    private String uploadPath;
     private final static String uploadDir = "C:/study/file/";
 
-    public static String saveFile(MultipartFile uploadFile) {
+    public static String saveImage(MultipartFile uploadFile) {
         String fileName = createFileName(uploadFile.getOriginalFilename());
         String uploadFilePath = uploadDir + fileName;
         try {
@@ -36,6 +37,15 @@ public class FileUploader {
         int idx = originalFilename.lastIndexOf(".");
 
         return originalFilename.substring(idx);
+    }
+    
+    public static void deleteImages(List<String> imagePaths) {
+        boolean isSuccess = false;
+        for (String imagePath : imagePaths) {
+            File deleteFile = new File(imagePath);
+            isSuccess = deleteFile.delete();
+            if (!isSuccess) throw new RuntimeException("파일 삭제 실패");
+        }
     }
 
 }

@@ -4,17 +4,15 @@ import com.project.mainproject.audit.Auditable;
 import com.project.mainproject.review.enums.ReviewStatus;
 import com.project.mainproject.store.entity.Store;
 import com.project.mainproject.tag.entity.ReviewTag;
-import com.project.mainproject.tag.entity.Tag;
 import com.project.mainproject.user.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
@@ -25,6 +23,7 @@ import static lombok.Builder.Default;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "REVIEW")
 @Builder
 @AllArgsConstructor
@@ -53,24 +52,32 @@ public class Review extends Auditable {
 
     @Default
     @OneToMany(mappedBy = "review", fetch = LAZY, cascade = {ALL}, orphanRemoval = true)
-    private List<ReviewTag> reviewTags = new ArrayList<>();
+    private Set<ReviewTag> reviewTags = new HashSet<>();
 
     @Default
     @OneToMany(mappedBy = "review", fetch = LAZY, cascade = {ALL}, orphanRemoval = true)
     private List<ReviewImage> reviewImages = new ArrayList<>();
 
     //### 간단한 동작메서드 ###//
-    public void addReviewTag(Tag tag) {
-        reviewTags.add(ReviewTag.builder()
-                        .tag(tag)
-                        .review(this)
-                        .build());
-    }
     public void addReviewImage(String imagePath) {
         reviewImages.add(ReviewImage.builder()
                         .imagePath(imagePath)
                         .review(this)
                         .build());
+    }
+
+    public void updateReviewImage(String imagePath) {
+        deleteReviewImage();
+        if (!imagePath.equals("")) {
+            reviewImages.add(ReviewImage.builder()
+                    .imagePath(imagePath)
+                    .review(this)
+                    .build());
+        }
+    }
+
+    public void deleteReviewImage() {
+        reviewImages.clear();
     }
 
     // ###연관관계  편의 메서드 ###//
