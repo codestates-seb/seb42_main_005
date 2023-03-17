@@ -103,7 +103,7 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
     <Wrapper>
       <ImgContainer>
         <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
-        {imageSrc ? <ReviewImg src={imageSrc} /> : <ReviewImg src="Images/Pharm.png" />}
+        {imageSrc ? <ReviewImg src={imageSrc} /> : <ReviewImg src="Images/Pharm.png" alt="pharmacist"/>}
         <Label htmlFor="img">
           <MdOutlineAddAPhoto aria-hidden="true"/>
           사진추가하기

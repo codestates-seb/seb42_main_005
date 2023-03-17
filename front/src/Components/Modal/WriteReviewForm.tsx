@@ -31,14 +31,15 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
     <WriteReviewContainer >
       <InputTop className="wide"><GrClose aria-hidden="true" className="except" onClick={() => setIsReviewFormShown(false)}/></InputTop>
       <InputTop>
-        <Textarea placeholder="무분별한 비방, 비하, 욕설은 지양해주세요 :)" isValid={true} rows={3} icon={false} />
+      <label htmlFor="review"/>
+        <Textarea id="review" placeholder="무분별한 비방, 비하, 욕설은 지양해주세요 :)" isValid={true} rows={3} icon={false} />
         <ReviewImgContainer>
           <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
           {imageSrc ? (
             <ReviewImg src={imageSrc} />
           ) : (
             <Instead>
-              <BiPhotoAlbum aria-hidden={true}/>
+              <BiPhotoAlbum aria-hidden="true"/>
             </Instead>
           )}
           <Label htmlFor="img">

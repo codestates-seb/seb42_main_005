@@ -31,7 +31,7 @@ export default function PharmacyInformation() {
       ) : null}
       <ImgContainer>
         <ReviewImgInput id="pharmImg" type="file" onChange={(e) => onUpload(e)} accept="image/*" />
-        {imageSrc ? <PharmImg src={imageSrc} /> : <PharmImg src="Images/ImgPreparing.png" />}
+        {imageSrc ? <PharmImg src={imageSrc} /> : <PharmImg src="Images/ImgPreparing.png"  alt="image preparing"/>}
         <Label htmlFor="pharmImg">
           <MdOutlineAddAPhoto aria-hidden="true"/>
           우리 약국 사진추가하기

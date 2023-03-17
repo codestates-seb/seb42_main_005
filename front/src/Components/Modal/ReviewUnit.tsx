@@ -14,7 +14,7 @@ export default function ReviewUnit() {
         <section>
           <Upper>
             <UserInfo>
-              <UserIcon src="/Images/User.png" />
+              <UserIcon src="/Images/User.png" alt="user"/>
               <UserName>caffeine</UserName>
               <Created>2023.03.05</Created>
             </UserInfo>
@@ -47,7 +47,7 @@ export default function ReviewUnit() {
                 <span id="reply">
                   <BsArrowReturnRight aria-hidden="true"/>
                 </span>
-                <UserIcon src="/Images/Pharm.png" />
+                <UserIcon src="/Images/Pharm.png" alt="pharmacist"/>
                 <UserName>킹갓 약사</UserName>
                 <Created>2023.03.05</Created>
               </UserInfo>
@@ -59,7 +59,7 @@ export default function ReviewUnit() {
                   text="수 정"
                   onClick={() => setIsCommentFormShown(true)}
                 />
-                <Button color="l_red" size="sm" text="삭 제 " />
+                <Button color="l_red" size="sm" text="삭 제" />
               </ButtonContainer>
             </Upper>
             <Comment>누가우리약국 오라고 칼들고 협박함? 다신 오지마ㅇㅇ</Comment>
@@ -70,7 +70,8 @@ export default function ReviewUnit() {
             <Instruction>
               <p>댓글을 작성해주세요. 작성 완료 시 'Enter'를 눌러주세요.</p>
             </Instruction>
-            <Input placeholder="감사합니다 :)" isValid={true} icon={true} />
+            <label htmlFor="comment of review"/>
+            <Input id="comment of review" placeholder="감사합니다 :)" isValid={true} icon={true} />
           </WriteCommentForm>
         ) : null}
       </ReviewUnitContainer>

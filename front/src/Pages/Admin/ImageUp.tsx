@@ -13,7 +13,7 @@ export default function PharmDetail({ isImgUp, setIsImgUp, imgUrl }: Props) {
       <ModalBackDrop onClick={() => setIsImgUp(!isImgUp)}>
         <Container>
           <span onClick={() => setIsImgUp(!isImgUp)}>닫기</span>
-          <Img src={`${imgUrl}`} onClick={(event) => event.stopPropagation()}></Img>
+          <Img src={imgUrl} onClick={(event) => event.stopPropagation()}></Img>
         </Container>
       </ModalBackDrop>
     </>

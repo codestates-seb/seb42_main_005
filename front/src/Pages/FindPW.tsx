@@ -14,7 +14,7 @@ const [randomError, setRandomError] = useState(false)
   return (
     <Wrapper>
       <LogoContainer>
-        <img alt="logo" src="Images/Logo.png" />
+        <img alt="logo" src="Images/Logo.png"/>
         <h1>Medi-Map</h1>
       </LogoContainer>
       <Container>

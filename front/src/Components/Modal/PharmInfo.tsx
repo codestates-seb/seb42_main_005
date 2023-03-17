@@ -21,7 +21,7 @@ export default function PharmInfo({ like, setLike }: Props) {
       <InfoImgContainer>
         <Img src="./Images/random.png" alt="고심약국"></Img>
         <LikeButton onClick={() => setLike(!like)}>
-          {like ? <img src="./Images/Heart.png" /> : <img src="./Images/UnHeart.png" />}
+          {like ? <img src="./Images/Heart.png" alt="like"/> : <img src="./Images/UnHeart.png" alt="unlike"/>}
         </LikeButton>
       </InfoImgContainer>
       <InfoInfo>

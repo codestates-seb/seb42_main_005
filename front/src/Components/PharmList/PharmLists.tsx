@@ -21,7 +21,8 @@ export default function PharmLists() {
               <div>
                 <BsSearch className="searchIcon" aria-hidden="true"/>
               </div>
-              <SearchInput placeholder="약국 검색.." />
+              <label htmlFor="search box"/>
+              <SearchInput id="search box" placeholder="약국 검색.." />
             </SearchContainer>
             <ButtonContainer>
               <Button>
