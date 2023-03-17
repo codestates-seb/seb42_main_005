@@ -1,5 +1,7 @@
 package com.project.mainproject.review.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +13,9 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@Builder
 @Table(name = "REVIEW_IMAGE")
+@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 public class ReviewImage {
 

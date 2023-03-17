@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -49,13 +50,20 @@ public class Review extends Auditable {
     @JoinColumn(name = "STORE_IDX")
     private Store store;
 
-    @OneToMany(mappedBy = "review", fetch = LAZY, cascade = REMOVE)
+    @Builder.Default
+    @OneToMany(mappedBy = "review", fetch = LAZY, cascade = {PERSIST, REMOVE})
     private List<ReviewTag> reviewTags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "review", fetch = LAZY, cascade = REMOVE)
+    @Builder.Default
+    @OneToMany(mappedBy = "review", fetch = LAZY, cascade = {PERSIST, REMOVE})
     private List<ReviewImage> reviewImages = new ArrayList<>();
 
     //### 간단한 동작메서드 ###//
+    public void addReviewImage(ReviewImage image) {
+        this.reviewImages.add(image);
+        if (image.getReview() != this)
+            image.setReview(this);
+    }
 
     // ###연관관계  편의 메서드 ###//
     public void setReviewImages(ReviewImage reviewImage) {
