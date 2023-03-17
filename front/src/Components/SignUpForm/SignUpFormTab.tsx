@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { MdOutlineLocalPharmacy } from "react-icons/md";
 
 interface Props {
   tab: string;
@@ -13,7 +14,7 @@ export default function SignUpForms({ tab, setTab }: Props) {
         일반 회원
       </Tab>
       <Tab title={"pharm"} tab={tab} onClick={() => setTab("pharm")}>
-        <img alt="signup_logo" src="Images/SignUpPill.png" />
+        <MdOutlineLocalPharmacy className="icon" />
         약사회원
       </Tab>
     </TabContainer>
@@ -44,9 +45,9 @@ const Tab = styled.div<{ title: string; tab: string }>`
   box-shadow: 0 -1px 4px -3px hsla(0, 0%, 0%, 0.09), 0 -3px 8px -3px hsla(0, 0%, 0%, 0.1),
     0 -4px 13px -3px hsla(0, 0%, 0%, 0.13);
   cursor: pointer;
-  img {
-    width: 1.5rem;
-    height: 1.3rem;
-    padding-right: 0.5rem;
+  .icon {
+    font-size: 1.2rem;
+    margin-right: 0.2rem;
+    margin-bottom: 2px;
   }
 `;

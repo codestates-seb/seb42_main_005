@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import CurrentLocation from "./CurrentLocation";
 
 declare global {
@@ -44,6 +45,28 @@ export function MapLogic() {
       myMarker.setMap(map);
       map.setMaxLevel(10);
       setMap(map);
+
+      axios
+        .get("https://apis.data.go.kr/B552657/ErmctInsttInfoInqireService/getParmacyFullDown", {
+          params: {
+            ServiceKey: "LYki5UdYrhpVu5YPHg03MBzs3WoCetCv02paAeoaDrc01C9rKu5sVO02/i6dlkmA1+8rxI1HdSK/b8b5cgcTmQ==",
+            ServiceType: "json",
+            // pageNo: 5,
+            numOfRows: 10000000,
+          },
+        })
+        .then((response) => {
+          console.log(response.data.response.body.items.item);
+          const pharmacies = response.data.response.body.items.item;
+          for (let i = 0; i < pharmacies.length; i++) {
+            const markerPosition = new kakao.maps.LatLng(pharmacies[i].wgs84Lat, pharmacies[i].wgs84Lon);
+            const marker = new kakao.maps.Marker({
+              position: markerPosition,
+              title: pharmacies[i].dutyName,
+            });
+            marker.setMap(map);
+          }
+        });
     }
   }, [location, kakao]);
 

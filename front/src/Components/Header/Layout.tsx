@@ -20,7 +20,7 @@ export default function Layout({ isLogin, account }: AccountProps) {
   );
 }
 
-const MainContainer = styled.div`
+const MainContainer = styled.main`
   display: flex;
   margin: 0 auto;
   width: 100%;

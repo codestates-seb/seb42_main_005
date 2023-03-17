@@ -2,6 +2,7 @@
 import styled from "styled-components";
 import PharmItem from "./PharmItem";
 import { BsSearch } from "react-icons/bs";
+import { RiHomeLine } from "react-icons/ri";
 
 //데이터 들어오면 map으로 돌리기전에 하드코딩으로 두개해놨음
 export default function PharmLists() {
@@ -15,6 +16,7 @@ export default function PharmLists() {
           <span className="partition" />
         </EmptyContainer>
         <PharmContainer>
+          <h2 hidden>약국 리스트</h2>
           <PharmHeadContainer>
             <SearchContainer>
               <div>
@@ -24,8 +26,8 @@ export default function PharmLists() {
             </SearchContainer>
             <ButtonContainer>
               <Button>
-                <img className="ourpharm_img" alt="pharm" src="Images/OurPharmGo.png" />
-                <span className="ourpharm">우리 약국</span>
+                <RiHomeLine className="logo" />
+                <span className="my_place">우리 약국</span>
               </Button>
               <FilterButtons>
                 <FilterButton>가까운순</FilterButton>
@@ -50,7 +52,7 @@ export default function PharmLists() {
 }
 
 //전체 컨테이너
-const ListContainer = styled.div`
+const ListContainer = styled.nav`
   position: absolute;
   width: 36rem;
   height: calc(100vh - 50px);
@@ -96,7 +98,7 @@ const PharmContainer = styled.div`
   flex-direction: column;
   height: calc(100vh - 95px);
 `;
-const PharmHeadContainer = styled.div`
+const PharmHeadContainer = styled.header`
   margin-right: 42px;
   margin-bottom: 10px;
   transition: 0.2s;
@@ -158,18 +160,19 @@ const Button = styled.button`
   all: unset;
   cursor: pointer;
   margin-right: 88px;
-  .ourpharm_img {
-    margin-right: 0.3rem;
-  }
-  .ourpharm {
-    font-size: 1rem;
-    color: var(--blue-500);
+  color: var(--blue-400);
+  font-size: 1rem;
+  transition: 0.2s;
+  .logo {
+    font-size: 1.1rem;
+    margin-right: 0.2rem;
     transition: 0.2s;
-    &:hover {
-      font-weight: 600;
-      color: var(--blue-600);
-      transition: 0.2s;
-    }
+    vertical-align: -2px;
+  }
+  :hover {
+    font-weight: 600;
+    color: var(--blue-600);
+    transition: 0.2s;
   }
 `;
 const FilterButtons = styled.div`

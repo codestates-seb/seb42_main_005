@@ -44,6 +44,7 @@ const Star = styled.span`
   font-weight: bold;
   font-size: 1.3rem;
   margin-right: 1.2rem;
+  margin-left: 0.2rem;
   padding-bottom: 2px;
 `;
 
