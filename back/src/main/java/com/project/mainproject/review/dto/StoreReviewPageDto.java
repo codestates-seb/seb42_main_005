@@ -13,7 +13,14 @@ public class StoreReviewPageDto {
     private String content;
     private int rating;
     private String reviewImage;
-    private List<String> tags;
+    private List<Tag> tags;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+
+    @Getter
+    @Builder
+    public static class Tag {
+        private Long tagIdx;
+        private String name;
+    }
 }

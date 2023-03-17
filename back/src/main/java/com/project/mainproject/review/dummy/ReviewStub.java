@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.project.mainproject.review.dto.StoreReviewPageDto.Tag;
+import static com.project.mainproject.review.dto.StoreReviewPageDto.builder;
+
 public class ReviewStub {
 
     public static List<GetReportedReviewDto> getReportedReviewDtoListStub() {
@@ -24,12 +27,13 @@ public class ReviewStub {
     }
 
     public static StoreReviewPageDto storeReviewDetailDto() {
-        return StoreReviewPageDto.builder()
+        return builder()
                 .reviewIdx(1L)
                 .rating(4)
                 .reviewImage("사진 파일이 들어갈 위치입니다.")
                 .content("내공 얌얌")
-                .tags(List.of("신선함", "주차장이 넓어요", "친절함"))
+                .tags(List.of(Tag.builder().tagIdx(1L).name(("친절해요")).build(),
+                        Tag.builder().tagIdx(2L).name("주차장이 넓어요").build()))
                 .modifiedAt(LocalDateTime.now())
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -38,12 +42,13 @@ public class ReviewStub {
     public static List<StoreReviewPageDto> getStoreReviewPageListStub() {
         List<StoreReviewPageDto> result = new ArrayList<>();
         for (Long i = 1L; i < 20; i++) {
-            StoreReviewPageDto build = StoreReviewPageDto.builder()
+            StoreReviewPageDto build = builder()
                     .reviewIdx(i)
                     .rating(4)
                     .reviewImage("사진 파일이 들어갈 위치입니다.")
                     .content("내공 얌얌" + i)
-                    .tags(List.of("신선함", "주차장이 넓어요", "친절함"))
+                    .tags(List.of(Tag.builder().tagIdx(1L).name(("친절해요")).build(),
+                            Tag.builder().tagIdx(2L).name("주차장이 넓어요").build()))
                     .modifiedAt(LocalDateTime.now())
                     .createdAt(LocalDateTime.now())
                     .build();
