@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import styled from "styled-components";
 import axios from "axios";
 import CurrentLocation from "./CurrentLocation";
+import "./customOverlay.css";
 
 declare global {
   interface Window {
@@ -23,26 +25,26 @@ export function MapLogic() {
       // 지도 객체 생성
       const map = new kakao.maps.Map(container as HTMLElement, options);
       // 마커 생성
-      const currentPos = new kakao.maps.LatLng(location.latitude, location.longitude);
-      const currentImageSrc = "./Images/currentPos.png";
-      const currentImageSize = new kakao.maps.Size(24, 35);
-      const currentMarkerImage = new kakao.maps.MarkerImage(currentImageSrc, currentImageSize);
-      const marker = new kakao.maps.Marker({
-        position: currentPos,
+      const PositionCurrent = new kakao.maps.LatLng(location.latitude, location.longitude);
+      const ImageSrcCurrent = "./Images/currentPos.png";
+      const ImageSizeCurrent = new kakao.maps.Size(24, 35);
+      const MarkerImageCurrent = new kakao.maps.MarkerImage(ImageSrcCurrent, ImageSizeCurrent);
+      const MarkerCurrent = new kakao.maps.Marker({
+        position: PositionCurrent,
         title: "현 위치",
-        image: currentMarkerImage,
+        image: MarkerImageCurrent,
       });
-      const myPlace = new kakao.maps.LatLng(37.33370506366528, 127.09738924623072); // 추후에 유저가 설정한 좌표 들어감
-      const imageSrc = "./Images/myPlace.png";
-      const imageSize = new kakao.maps.Size(24, 35);
-      const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-      const myMarker = new kakao.maps.Marker({
-        position: myPlace,
+      const PositionMyPlace = new kakao.maps.LatLng(37.33370506366528, 127.09738924623072); // 추후에 유저가 설정한 좌표 들어감
+      const ImageSrcMy = "./Images/myPlace.png";
+      const ImageSizeMy = new kakao.maps.Size(24, 35);
+      const MarkerImageMy = new kakao.maps.MarkerImage(ImageSrcMy, ImageSizeMy);
+      const MarkerMy = new kakao.maps.Marker({
+        position: PositionMyPlace,
         title: "우리 집",
-        image: markerImage,
+        image: MarkerImageMy,
       });
-      marker.setMap(map);
-      myMarker.setMap(map);
+      MarkerCurrent.setMap(map);
+      MarkerMy.setMap(map);
       map.setMaxLevel(10);
       setMap(map);
 
@@ -55,15 +57,19 @@ export function MapLogic() {
           },
         })
         .then((response) => {
-          console.log(response.data.response.body.items.item);
           const pharmacies = response.data.response.body.items.item;
           for (let i = 0; i < pharmacies.length; i++) {
-            const markerPosition = new kakao.maps.LatLng(pharmacies[i].wgs84Lat, pharmacies[i].wgs84Lon);
-            const marker = new kakao.maps.Marker({
-              position: markerPosition,
+            const PositionPharmacy = new kakao.maps.LatLng(pharmacies[i].wgs84Lat, pharmacies[i].wgs84Lon);
+            const content =
+              '<div class="customoverlay">' + `<span class="title">${pharmacies[i].dutyName}</span>` + "</div>";
+            const MarkerPharmacy = new kakao.maps.CustomOverlay({
+              map: map,
+              position: PositionPharmacy,
+              content: content,
+              yAnchor: 1,
               title: pharmacies[i].dutyName,
             });
-            marker.setMap(map);
+            MarkerPharmacy.setMap(map);
           }
         });
     }

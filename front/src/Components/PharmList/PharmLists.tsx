@@ -14,7 +14,6 @@ interface Props {
 }
 //데이터 들어오면 map으로 돌리기전에 하드코딩으로 두개해놨음
 export default function PharmLists({ hidden, setHidden }: Props) {
-  // const [hidden, setHidden] = useState<boolean>(false);
   /* 조건부로 할려고 임의로 해놓은 것!
   나중에 데이터 넘어오면 바꿀것*/
 
@@ -65,19 +64,6 @@ export default function PharmLists({ hidden, setHidden }: Props) {
             <PharmItem />
           </PharmItemContainer>
         </PharmContainer>
-        {/* {hidden ? (
-          <EmptyContainer className="hide">
-            <ShowBtn className={hidden ? "" : "hide"} onClick={() => setHidden(false)}>
-              {"> 눌러서 열기"}
-            </ShowBtn>
-          </EmptyContainer>
-        ) : (
-          <EmptyContainer className="hide">
-            <ShowBtn className={hidden ? "hide" : ""} onClick={() => setHidden(true)}>
-              {"< 눌러서 숨기기"}
-            </ShowBtn>
-          </EmptyContainer>
-        )} */}
       </ContainerWrap>
     </ListContainer>
   );

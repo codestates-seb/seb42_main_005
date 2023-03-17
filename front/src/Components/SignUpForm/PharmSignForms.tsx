@@ -209,7 +209,6 @@ export default function PharmSignForms() {
             }}
           />
         </InputContainer>
-
         <InputContainer>
           <AiOutlineCamera className="inputImage" aria-hidden="true" />
           <label htmlFor="pharm-img"></label>

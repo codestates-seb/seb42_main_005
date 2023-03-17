@@ -5,7 +5,7 @@ import { MapLogic } from "./MapLogic";
 import { zIndex_KakaoMap } from "../../Util/z-index";
 import { SELECT_HIDDEN, SELECT_OPTION_MAP } from "../../Util/type";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
-import { BiTargetLock } from "react-icons/bi";
+import { BiTargetLock, BiMapAlt } from "react-icons/bi";
 
 interface Props {
   hidden: SELECT_HIDDEN;
@@ -67,6 +67,16 @@ export default function KakaoMap({ hidden, setHidden }: Props) {
           onClickMidnight={() => setSelected("midnight")}
           onClickBookmarks={() => setSelected("bookmarks")}
         />
+        <ReControler className={hidden ? "close" : ""}>
+          <ReBtn>
+            <BiMapAlt className="icon" />
+            <div className="label">
+              현 지도에서
+              <br />
+              다시 검색
+            </div>
+          </ReBtn>
+        </ReControler>
       </TopControler>
       <LocaControler>
         <LocaBtn onClick={getCurrentLocBtn}>
@@ -147,6 +157,68 @@ const ZoomBtn = styled.span`
     margin-top: 5px;
   }
 `;
+const ReControler = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 70px;
+  left: 1115px;
+  padding: 4px;
+  z-index: ${zIndex_KakaoMap.CurrentLocation};
+  border-radius: 8px;
+  background-color: var(--white);
+  box-shadow: var(--bs-lg);
+  @media (max-width: 1200px) {
+    left: 1010px;
+    transition: 0.2s;
+    &.close {
+      left: 640px;
+      transition: 0.2s;
+    }
+  }
+  @media (max-width: 768px) {
+    padding: 5px;
+    top: 415px;
+    left: 540px;
+    transition: 0.2s;
+    &.close {
+      left: 60px;
+      transition: 0.2s;
+    }
+  }
+`;
+const ReBtn = styled.span`
+  cursor: pointer;
+  display: block;
+  width: 67px;
+  height: 67px;
+  text-align: center;
+  .icon {
+    align-items: center;
+    font-size: 1.8rem;
+    color: var(--blue-200);
+    margin-top: 5px;
+    transition: 0.2s;
+  }
+  .label {
+    align-items: center;
+    font-size: 0.66rem;
+    font-weight: 500;
+    color: var(--black-200);
+    transition: 0.2s;
+  }
+  &:hover {
+    .icon {
+      color: var(--blue-500);
+      transition: 0.2s;
+    }
+    .label {
+      color: var(--black-500);
+      transition: 0.2s;
+    }
+  }
+`;
 const TopControler = styled.div`
   position: fixed;
   z-index: ${zIndex_KakaoMap.CtrlContainer};
@@ -165,7 +237,7 @@ const TopControler = styled.div`
     left: 540px;
     transition: 0.2s;
     &.close {
-      left: 80px;
+      left: 60px;
       transition: 0.2s;
     }
   }
