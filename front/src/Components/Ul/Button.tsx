@@ -26,7 +26,7 @@ export default function Button({ text, icon, color, size, url, disabled, onClick
   // Button tag
   return (
     <BasicButton className={`${color} ${size}`} onClick={onClick} type={type}>
-      {icon ? <TbNotebook className="icon" /> : null}
+      {icon ? <TbNotebook className="icon" aria-hidden="true"/> : null}
       {text}
     </BasicButton>
   );

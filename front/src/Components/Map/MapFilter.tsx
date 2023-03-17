@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { zIndex_MapFilter } from "../../Util/z-index";
 import { IoCloudyNightOutline } from "react-icons/io5";
 import { HiOutlineHome } from "react-icons/hi2";
 import { AiOutlineMedicineBox } from "react-icons/ai";
@@ -48,10 +47,7 @@ const CtrlContainer = styled.nav`
   display: flex;
   justify-content: center;
   align-items: center;
-  position: fixed;
-  top: 70px;
-  left: 850px;
-  z-index: ${zIndex_MapFilter.CtrlContainer};
+
   padding: 6px 10px 4px 10px;
   border-radius: 8px;
   background-color: var(--white);
@@ -63,13 +59,8 @@ const CtrlContainer = styled.nav`
     margin: 0 10px;
     background-color: var(--black-100);
   }
-  @media (max-width: 1200px) {
-    left: 650px;
-    transition: 0.2s;
-  }
   @media (max-width: 768px) {
     flex-direction: column;
-    left: 490px;
     padding: 10px 6px 10px 6px;
     transition: 0.2s;
     .partition {

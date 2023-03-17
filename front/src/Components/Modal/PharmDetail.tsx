@@ -1,4 +1,3 @@
-//! 모달 컴포넌트 본 창입니다
 import { useState } from "react";
 import styled from "styled-components";
 import PharmInfo from "./PharmInfo";
@@ -6,21 +5,25 @@ import ReviewUnit from "./ReviewUnit";
 import WriteReviewForm from "./WriteReviewForm";
 import PharmRank from "../Ul/PharmRank";
 import Button from "../Ul/Button";
+import { zIndex_Modal } from "../../Util/z-index";
+import { HiXMark } from "react-icons/hi2";
 
 interface Props {
-  isModalUp: boolean;
   setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
   like: boolean;
   setLike: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function PharmDetail({ isModalUp, setIsModalUp, like, setLike }: Props) {
+export default function PharmDetail({ setIsModalUp, like, setLike }: Props) {
   const [isReviewFormShown, setIsReviewFormShown] = useState(false);
 
   return (
     <>
-      <ModalBackDrop onClick={() => setIsModalUp(!isModalUp)}>
+      <ModalBackDrop onClick={() => setIsModalUp(false)}>
         <ModalContainer onClick={(event) => event.stopPropagation()}>
+          <CloseBtnContainer>
+            <HiXMark id="close" onClick={() => setIsModalUp(false)} aria-hidden="true" />
+          </CloseBtnContainer>
           <InfoHeader>
             <InfoTitle>킹갓약국</InfoTitle>
             <PharmRank />
@@ -31,30 +34,29 @@ export default function PharmDetail({ isModalUp, setIsModalUp, like, setLike }: 
               <ReviewTitle>리뷰</ReviewTitle>
               <Reviews>
                 <ReviewUnit />
+                <ReviewUnit />
+                <ReviewUnit />
+                <ReviewUnit />
+                <ReviewUnit />
+                <ReviewUnit />
+                <ReviewUnit />
+                <ReviewUnit />
               </Reviews>
             </ReviewContainer>
-            {isReviewFormShown ? (
-              <WriteReviewForm isReviewFormShown={isReviewFormShown} setIsReviewFormShown={setIsReviewFormShown} />
-            ) : null}
-            {isReviewFormShown ? null : (
-              <WriteReviewBtnContainer>
-                <Button
-                  onClick={() => setIsReviewFormShown(!isReviewFormShown)}
-                  color="mint"
-                  size="md"
-                  text="리뷰쓰기"
-                />
-              </WriteReviewBtnContainer>
-            )}
           </Constant>
+          {isReviewFormShown ? <WriteReviewForm setIsReviewFormShown={setIsReviewFormShown} /> : null}
+          {isReviewFormShown ? null : (
+            <WriteReviewBtnContainer>
+              <Button onClick={() => setIsReviewFormShown(true)} color="mint" size="md" text="리뷰쓰기" />
+            </WriteReviewBtnContainer>
+          )}
         </ModalContainer>
       </ModalBackDrop>
     </>
   );
 }
 
-const ModalBackDrop = styled.div`
-  z-index: 1;
+const ModalBackDrop = styled.main`
   position: fixed;
   display: flex;
   justify-content: center;
@@ -64,15 +66,16 @@ const ModalBackDrop = styled.div`
   top: 0;
   left: 0;
   background-color: var(--modal-backdrop);
+  z-index: ${zIndex_Modal.ModalBackDrop};
 `;
-const ModalContainer = styled.div`
+const ModalContainer = styled.section`
   position: relative;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   top: 30px;
-  height: 600px;
+  height: 700px;
   width: 940px;
   background-color: var(--white);
   border-radius: 10px;
@@ -86,40 +89,7 @@ const ModalContainer = styled.div`
     background-color: var(--white);
     border-radius: 10px;
   }
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  height: 600px;
-  width: 940px;
-  background-color: var(--white);
-  border-radius: 10px;
-  @media (max-width: 768px) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-bottom: 20px;
-    height: 700px;
-    width: 500px;
-    background-color: var(--white);
-    border-radius: 10px;
-  }
-`;
-const Constant = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  @media (max-width: 768px) {
-    flex-direction: column;
-    overflow-y: scroll;
-    height: 580px;
-    padding-top: calc(100% - 180px);
-  }
-  ::-webkit-scrollbar-track {
-    background-color: var(--black-075);
-    border-radius: 0px 5px 5px 0px;
-  }
+  z-index: ${zIndex_Modal.ModalContainer};
 `;
 const InfoHeader = styled.header`
   display: none;
@@ -134,7 +104,35 @@ const InfoHeader = styled.header`
     border-bottom: 1px solid var(--black-100);
   }
 `;
-const InfoTitle = styled.div`
+const Constant = styled.section`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  ::-webkit-scrollbar-track {
+    background-color: var(--black-075);
+    border-radius: 0px 5px 5px 0px;
+  }
+  @media (max-width: 768px) {
+    display: block;
+    overflow-y: scroll;
+  }
+`;
+const WriteReviewBtnContainer = styled.footer`
+  position: absolute;
+  display: flex;
+  justify-content: flex-end;
+  right: 20px;
+  bottom: 25px;
+  width: 450px;
+  padding-top: 10px;
+  background-color: var(--white);
+  @media (max-width: 768px) {
+    position: static;
+    bottom: 20px;
+    background-color: var(--white);
+  }
+`;
+const InfoTitle = styled.h1`
   font-weight: bold;
   font-size: 30px;
   @media (max-width: 768px) {
@@ -146,7 +144,7 @@ const ReviewContainer = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  height: 550px;
+  height: 600px;
   width: 450px;
   padding: 10px 0px 0px 20px;
   @media (max-width: 768px) {
@@ -155,34 +153,29 @@ const ReviewContainer = styled.main`
     align-items: center;
     height: auto;
     padding: 20px 10px 10px 10px;
-    margin-bottom: 60px;
     border-bottom: 1px solid var(--black-100);
   }
 `;
-const ReviewTitle = styled.div`
+const ReviewTitle = styled.h2`
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--black-100);
-  color: var(--black-500);
-  font-weight: bold;
   font-size: 25px;
+  font-weight: bold;
+  color: var(--black-500);
+  border-bottom: 1px solid var(--black-100);
   @media (max-width: 768px) {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 450px;
     padding-left: 10px;
     gap: 100px;
+    width: 450px;
   }
 `;
-const Reviews = styled.div`
+const Reviews = styled.section`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   overflow-y: scroll;
-  border-bottom: 0.5px solid var(--black-100);
-  ::-webkit-scrollbar-track {
-    visibility: hidden;
-  }
   :active::-webkit-scrollbar-track {
     width: 0.6rem;
     visibility: visible;
@@ -192,20 +185,15 @@ const Reviews = styled.div`
     overflow: visible;
   }
 `;
-const WriteReviewBtnContainer = styled.span`
-  z-index: 2;
+const CloseBtnContainer = styled.div`
+  cursor: pointer;
   position: absolute;
   display: flex;
   justify-content: flex-end;
+  top: 15px;
   right: 20px;
-  bottom: 25px;
-  width: 450px;
-  padding-top: 10px;
-  background-color: var(--white);
-  @media (max-width: 768px) {
-    z-index: 2;
-    bottom: 20px;
-    background-color: var(--white);
-    width: 480px;
-  }
+  width: 500px;
+  font-size: 40px;
+  color: var(--black-100);
+  z-index: ${zIndex_Modal.CloseBtnContainer};
 `;

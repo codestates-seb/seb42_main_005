@@ -1,17 +1,26 @@
 //홈화면 옆에 약국 리스트
+import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import PharmItem from "./PharmItem";
+import { zIndex_PharmList } from "../../Util/z-index";
 import { BsSearch } from "react-icons/bs";
 import { RiHomeLine } from "react-icons/ri";
+import { VscTriangleLeft } from "react-icons/vsc";
+import { SELECT_HIDDEN } from "../../Util/type";
 
+interface Props {
+  hidden: SELECT_HIDDEN;
+  setHidden: Dispatch<SetStateAction<SELECT_HIDDEN>>;
+}
 //데이터 들어오면 map으로 돌리기전에 하드코딩으로 두개해놨음
-export default function PharmLists() {
+export default function PharmLists({ hidden, setHidden }: Props) {
+  // const [hidden, setHidden] = useState<boolean>(false);
   /* 조건부로 할려고 임의로 해놓은 것!
   나중에 데이터 넘어오면 바꿀것*/
 
   return (
-    <ListContainer>
-      <ContainerWrap>
+    <ListContainer className={hidden ? "hide" : ""}>
+      <ContainerWrap className={hidden ? "" : "hide"}>
         <EmptyContainer>
           <span className="partition" />
         </EmptyContainer>
@@ -20,9 +29,19 @@ export default function PharmLists() {
           <PharmHeadContainer>
             <SearchContainer>
               <div>
-                <BsSearch className="searchIcon" />
+                <BsSearch className="searchIcon" aria-hidden="true" />
               </div>
-              <SearchInput placeholder="약국 검색.." />
+              <label htmlFor="search box" />
+              <SearchInput id="search box" placeholder="약국 검색.." />
+              {hidden ? (
+                <ShowBtn className="folded">
+                  <VscTriangleLeft className={hidden ? "open" : ""} onClick={() => setHidden(false)} />
+                </ShowBtn>
+              ) : (
+                <ShowBtn className="folded">
+                  <VscTriangleLeft className={hidden ? "" : "close"} onClick={() => setHidden(true)} />
+                </ShowBtn>
+              )}
             </SearchContainer>
             <ButtonContainer>
               <Button>
@@ -46,15 +65,28 @@ export default function PharmLists() {
             <PharmItem />
           </PharmItemContainer>
         </PharmContainer>
+        {/* {hidden ? (
+          <EmptyContainer className="hide">
+            <ShowBtn className={hidden ? "" : "hide"} onClick={() => setHidden(false)}>
+              {"> 눌러서 열기"}
+            </ShowBtn>
+          </EmptyContainer>
+        ) : (
+          <EmptyContainer className="hide">
+            <ShowBtn className={hidden ? "hide" : ""} onClick={() => setHidden(true)}>
+              {"< 눌러서 숨기기"}
+            </ShowBtn>
+          </EmptyContainer>
+        )} */}
       </ContainerWrap>
     </ListContainer>
   );
 }
 
 //전체 컨테이너
-const ListContainer = styled.nav`
+const ListContainer = styled.aside`
   position: absolute;
-  width: 36rem;
+  width: 34rem;
   height: calc(100vh - 50px);
   border-top: 1px solid var(--black-150);
   border-right: 1px solid var(--black-150);
@@ -63,12 +95,18 @@ const ListContainer = styled.nav`
   background-color: var(--white);
   box-shadow: var(--bs-lg);
   padding: 1.5rem 0 1rem 1.5rem;
-  z-index: 2;
   transition: 0.2s;
+  &.hide {
+    transform: translate(-500px, 0px);
+  }
   @media (max-width: 768px) {
     transition: 0.2s;
-    width: 30rem;
+    width: 33rem;
+    &.hide {
+      transform: translate(-480px, 0px);
+    }
   }
+  z-index: ${zIndex_PharmList.ListContainer};
 `;
 const ContainerWrap = styled.div`
   display: flex;
@@ -80,7 +118,10 @@ const EmptyContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  margin-right: 36px;
+  margin-right: 30px;
+  &.folded {
+    margin-right: 0;
+  }
   .partition {
     width: 14px;
     border-radius: 7px;
@@ -89,25 +130,22 @@ const EmptyContainer = styled.div`
     transition: 0.2s;
     @media (max-width: 768px) {
       transition: 0.2s;
-      width: 4px;
     }
   }
 `;
-const PharmContainer = styled.div`
+const PharmContainer = styled.main`
   display: flex;
   flex-direction: column;
   height: calc(100vh - 95px);
 `;
 const PharmHeadContainer = styled.header`
-  margin-right: 42px;
   margin-bottom: 10px;
   transition: 0.2s;
   @media (max-width: 768px) {
     transition: 0.2s;
-    margin-right: 22px;
   }
 `;
-const PharmItemContainer = styled.div`
+const PharmItemContainer = styled.section`
   overflow-y: scroll;
   height: calc(100vh - 135px);
   display: flex;
@@ -119,7 +157,7 @@ const PharmItemContainer = styled.div`
 `;
 
 //input
-const SearchContainer = styled.div`
+const SearchContainer = styled.section`
   display: flex;
   justify-content: center;
   margin: 10px 0;
@@ -139,6 +177,7 @@ const SearchInput = styled.input`
   border: 3px solid var(--blue-300);
   outline: none;
   font-size: 1.1rem;
+  margin-right: 5px;
   padding-left: 2.8rem;
   transition: 0.2s;
   :focus {
@@ -147,13 +186,36 @@ const SearchInput = styled.input`
     transition: 0.2s;
   }
 `;
-
+const ShowBtn = styled.button`
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  display: flex;
+  justify-content: flex-start;
+  margin: 3px 5px 0 5px;
+  font-weight: 600;
+  font-size: 40px;
+  color: var(--black-100);
+  transition: 0.2s;
+  :hover {
+    color: var(--black-300);
+    transition: 0.2s;
+  }
+  .close {
+    transform: rotate(0deg);
+    transition: transform 0.3s ease-in;
+  }
+  .open {
+    transform: rotate(-180deg);
+    transition: transform 0.3s ease-in;
+  }
+`;
 //Buttons
-const ButtonContainer = styled.div`
+const ButtonContainer = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  margin: 25px 5px 3px 5px;
+  margin: 25px 60px 3px 5px;
 `;
 //우리약국 가기
 const Button = styled.button`

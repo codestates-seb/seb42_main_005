@@ -1,7 +1,6 @@
-import React from "react";
 import styled from "styled-components";
-import { BsPersonCircle } from "react-icons/bs";
 import SignUpInput from "../Components/SignUpForm/SignUpInput";
+import { BsPersonCircle } from "react-icons/bs";
 import { AiOutlineLock } from "react-icons/ai";
 import { Link } from "react-router-dom";
 export default function Login() {
@@ -23,7 +22,7 @@ export default function Login() {
           </Google>
           <LoginForm>
             <InputContainer>
-              <BsPersonCircle className="inputimage" />
+              <BsPersonCircle className="inputimage" aria-hidden="true"/>
               <SignUpInput
                 type={"email"}
                 name={"email"}
@@ -33,7 +32,7 @@ export default function Login() {
               />
             </InputContainer>
             <InputContainer>
-              <AiOutlineLock className="inputimage" />
+              <AiOutlineLock className="inputimage" aria-hidden="true"/>
               <SignUpInput
                 type={"password"}
                 name={"password"}

@@ -28,7 +28,7 @@ export default function MyInfoLikes() {
   return (
     <Content>
       {isModalUp ? (
-        <PharmDetail isModalUp={isModalUp} setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
+        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
       ) : null}
       <TableHead>
         <Text className="single" />
