@@ -36,25 +36,4 @@ public interface ReviewMapper {
     @Mapping(target = "name", source = "tag.name")
     Tag reviewTagToTagDto(ReviewTag reviewTag);
 
-
-    //    default Review reviewDtoToReview(PostCreateReviewDto requestBody) {
-//        User user = User.builder().userIdx(requestBody.getUserIdx()).build();
-//        Store store = Store.builder().storeIdx(requestBody.getStoreIdx()).build();
-//
-//        List<ReviewTag> reviewTags = requestBody.getTags().stream()
-//                .map(reviewTagDto -> {
-//                    return ReviewTag.builder()
-//                            .tag(Tag.builder().tagIdx(reviewTagDto.getTagIdx()).build())
-//                            .review(Review.builder().build())
-//                            .build();
-//                }).collect(Collectors.toList());
-//
-//        return Review.builder()
-//                .user(user)
-//                .content(requestBody.getContent())
-//                .rating(requestBody.getRating())
-//                .store(store)
-//                .reviewTags(reviewTags)
-//                .build();
-//    }
 }
