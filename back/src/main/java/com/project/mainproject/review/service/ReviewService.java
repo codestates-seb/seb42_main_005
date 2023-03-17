@@ -1,14 +1,18 @@
 package com.project.mainproject.review.service;
 
 import com.project.mainproject.review.entity.Review;
+import com.project.mainproject.review.entity.ReviewImage;
+import com.project.mainproject.review.repository.ReviewImageRepository;
 import com.project.mainproject.review.repository.ReviewRepository;
 import com.project.mainproject.tag.entity.ReviewTag;
 import com.project.mainproject.tag.entity.Tag;
 import com.project.mainproject.tag.repository.ReviewTagRepository;
 import com.project.mainproject.tag.repository.TagRepository;
+import com.project.mainproject.utils.FileUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,16 +25,15 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final TagRepository tagRepository;
     private final ReviewTagRepository reviewTagRepository;
+    private final ReviewImageRepository reviewImageRepository;
 
     @Transactional
-    public Review createReview(Review review) {
+    public Review createReview(Review review, MultipartFile image) { // TODO: IMAGE UPLOAD
         verifyTags(review.getReviewTags());
 
         Review createdReview = reviewRepository.save(review);
-        for (ReviewTag reviewTag : createdReview.getReviewTags()) {
-            reviewTag.setReview(createdReview);
-            reviewTagRepository.save(reviewTag);
-        }
+        saveReviewTags(createdReview);
+        saveReviewImage(image, createdReview);
 
         return createdReview;
     }
@@ -47,4 +50,23 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
+    private void saveReviewTags(Review review) {
+        for (ReviewTag reviewTag : review.getReviewTags()) {
+            reviewTag.setReview(review);
+            reviewTagRepository.save(reviewTag);
+        }
+    }
+
+    private void saveReviewImage(MultipartFile image, Review review) {
+        String uploadImagePath = uploadImage(image);
+        ReviewImage reviewImage = ReviewImage.builder()
+                .imagePath(uploadImagePath)
+                .review(review)
+                .build();
+        reviewImageRepository.save(reviewImage);
+    }
+
+    private String uploadImage(MultipartFile image) {
+        return FileUploader.saveFile(image);
+    }
 }

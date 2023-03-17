@@ -14,7 +14,6 @@ public class PostCreateReviewDto {
     private Long storeIdx;
     private List<TagIdDto> tags;
     private String content;
-    private String image;
     private int rating;
 
     public PostCreateReviewDto setStoreIdx(Long storeIdx) {
