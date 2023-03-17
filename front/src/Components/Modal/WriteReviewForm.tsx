@@ -6,7 +6,7 @@ import Tag from "../Ul/Tag";
 import { zIndex_Modal } from "../../Util/z-index";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BiPhotoAlbum } from "react-icons/bi";
-import { GrClose } from "react-icons/gr";
+import { HiXMark } from "react-icons/hi2";
 
 interface Props {
   setIsReviewFormShown: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,22 +28,30 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
   const [rate, setRate] = useState(0);
 
   return (
-    <WriteReviewContainer >
-      <InputTop className="wide"><GrClose aria-hidden="true" className="except" onClick={() => setIsReviewFormShown(false)}/></InputTop>
+    <WriteReviewContainer>
+      <InputTop className="wide">
+        <HiXMark aria-hidden="true" className="except" onClick={() => setIsReviewFormShown(false)} />
+      </InputTop>
       <InputTop>
-      <label htmlFor="review"/>
-        <Textarea id="review" placeholder="무분별한 비방, 비하, 욕설은 지양해주세요 :)" isValid={true} rows={3} icon={false} />
+        <label htmlFor="review" />
+        <Textarea
+          id="review"
+          placeholder="무분별한 비방, 비하, 욕설은 지양해주세요 :)"
+          isValid={true}
+          rows={3}
+          icon={false}
+        />
         <ReviewImgContainer>
           <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
           {imageSrc ? (
             <ReviewImg src={imageSrc} />
           ) : (
             <Instead>
-              <BiPhotoAlbum aria-hidden="true"/>
+              <BiPhotoAlbum aria-hidden="true" />
             </Instead>
           )}
           <Label htmlFor="img">
-            <MdOutlineAddAPhoto aria-hidden="true"/>
+            <MdOutlineAddAPhoto aria-hidden="true" />
           </Label>
         </ReviewImgContainer>
       </InputTop>
@@ -64,12 +72,7 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
           </StarContainer>
           <RateNum>{rate} / 5</RateNum>
         </Rating>
-        <Button
-          color="blue"
-          size="md"
-          text="작성완료"
-          icon={true}
-        />
+        <Button color="blue" size="md" text="작성완료" icon={true} />
       </InputBot>
     </WriteReviewContainer>
   );
@@ -89,10 +92,17 @@ const WriteReviewContainer = styled.section`
   border: 0.5px solid var(--blue-300);
   box-shadow: 0px 0px 5px var(--black-200);
   z-index: ${zIndex_Modal.WriteReviewContainer};
-  .wide{
+  .wide {
     display: flex;
     justify-content: flex-end;
     width: 400px;
+    font-size: 20px;
+    color: var(--black-300);
+    transition: 0.2s;
+    #close:hover {
+      color: var(--black-600);
+      transition: 0.2s;
+    }
   }
   @media (max-width: 768px) {
     position: absolute;
