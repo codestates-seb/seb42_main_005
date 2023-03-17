@@ -43,13 +43,13 @@ export default function MyInfoLikes() {
             return (
               <TableBody key={i}>
                 <Text className="single icon">
-                  <IoIosArrowDropright onClick={() => setIsModalUp(!isModalUp)} />
+                  <IoIosArrowDropright onClick={() => setIsModalUp(!isModalUp)} aria-hidden="true" />
                 </Text>
                 <Text className="pharm">{data.pharm}</Text>
                 <Text className="address">{data.address}</Text>
                 <Text className="number">{data.tel}</Text>
                 <Text className="single icon">
-                  <RiDeleteBin6Line />
+                  <RiDeleteBin6Line aria-hidden="true" />
                 </Text>
               </TableBody>
             );
@@ -58,7 +58,7 @@ export default function MyInfoLikes() {
       ) : (
         <WhenEmpty>
           <Add to="/">
-            <IoMdAddCircleOutline id="icon" />
+            <IoMdAddCircleOutline id="icon" aria-hidden="true" />
           </Add>
           <span>
             <p>현재 찜한 약국이 없습니다.</p>
