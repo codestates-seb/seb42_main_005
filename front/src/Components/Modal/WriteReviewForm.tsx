@@ -2,7 +2,6 @@ import { useState } from "react";
 import styled from "styled-components";
 import Textarea from "../Ul/Textarea";
 import Button from "../Ul/Button";
-import Tag from "../Ul/Tag";
 import { zIndex_Modal } from "../../Util/z-index";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BiPhotoAlbum } from "react-icons/bi";
@@ -56,12 +55,6 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
           </Label>
         </ReviewImgContainer>
       </InputTop>
-      <TagSelection>
-        <Tag idx={0} />
-        <Tag idx={1} />
-        <Tag idx={2} />
-        <Tag idx={3} />
-      </TagSelection>
       <InputBot>
         <Rating>
           <StarContainer>
@@ -161,15 +154,6 @@ const Label = styled.label`
 `;
 const HiddenLabel = styled.label`
   display: none;
-`;
-const TagSelection = styled.section`
-  display: flex;
-  flex-direction: row;
-  height: 46px;
-  padding: 10px 15px;
-  gap: 10px;
-  border-radius: 5px;
-  box-shadow: 0px 0px 5px 0.5px var(--black-100) inset;
 `;
 const InputBot = styled.section`
   display: flex;

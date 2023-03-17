@@ -1,7 +1,6 @@
 //! 모달 컴포넌트 오른편 약국 정보 부분입니다
 import { useState } from "react";
 import styled from "styled-components";
-import Tag from "../Ul/Tag";
 import PharmRank from "../Ul/PharmRank";
 import AnyDropDown from "./AnyDropDown";
 
@@ -26,14 +25,6 @@ export default function PharmInfo({ like, setLike }: Props) {
       </InfoImgContainer>
       <InfoInfo>
         <InfoUnit>
-          <InfoInfoTitle>주소</InfoInfoTitle>
-          <InfoInfoContent>서울시 종로구 대학로 101</InfoInfoContent>
-        </InfoUnit>
-        <InfoUnit>
-          <InfoInfoTitle>전화번호</InfoInfoTitle>
-          <InfoInfoContent>02-1234-1234</InfoInfoContent>
-        </InfoUnit>
-        <InfoUnit>
           <InfoInfoTitle>영업시간</InfoInfoTitle>
           <InfoInfoContent>
             09:00 ~ 21:00
@@ -45,16 +36,15 @@ export default function PharmInfo({ like, setLike }: Props) {
             {isDropDownDown ? <AnyDropDown setIsDropDownDown={setIsDropDownDown} /> : null}
           </InfoInfoContent>
         </InfoUnit>
+        <InfoUnit>
+          <InfoInfoTitle>주소</InfoInfoTitle>
+          <InfoInfoContent>서울시 종로구 대학로 101</InfoInfoContent>
+        </InfoUnit>
+        <InfoUnit>
+          <InfoInfoTitle>전화번호</InfoInfoTitle>
+          <InfoInfoContent>02-1234-1234</InfoInfoContent>
+        </InfoUnit>
       </InfoInfo>
-      <InfoTagContainer>
-        <InfoTagTitle>사람들이 많이 선택한 태그!</InfoTagTitle>
-        <InfoTagBox>
-          <Tag idx={0} />
-          <Tag idx={1} />
-          <Tag idx={2} />
-          <Tag idx={3} />
-        </InfoTagBox>
-      </InfoTagContainer>
     </InfoContainer>
   );
 }
@@ -63,9 +53,9 @@ const InfoContainer = styled.aside`
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   width: 450px;
-  padding: 10px 20px 0px 0px;
+  padding: 10px 20px 20px 0px;
   border-right: 1px solid var(--black-100);
   @media (max-width: 768px) {
     height: auto;
@@ -80,7 +70,7 @@ const InfoHeader = styled.header`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 10px 10px 10px 10px;
+  padding: 10px;
   gap: 10px;
   border-bottom: 1px solid var(--black-100);
   @media (max-width: 768px) {
@@ -99,7 +89,7 @@ const InfoImgContainer = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 5px;
+  padding: 15px 5px;
   border-bottom: 1px solid var(--black-100);
 `;
 const Img = styled.img`
@@ -111,22 +101,20 @@ const Img = styled.img`
 const LikeButton = styled.button`
   position: absolute;
   right: 51px;
-  top: 22px;
+  top: 17px;
   width: 20px;
   border: none;
   background-color: transparent;
   @media (max-width: 768px) {
     right: 60px;
-    top: 21px;
   }
 `;
 const InfoInfo = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 20px 10px;
+  padding: 20px 20px 10px 20px;
   gap: 10px;
-  border-bottom: 1px solid var(--black-100);
   @media (max-width: 768px) {
     padding: 20px;
   }
@@ -141,7 +129,7 @@ const InfoUnit = styled.article`
 const InfoInfoTitle = styled.h2`
   width: 70px;
   color: var(--black-350);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
 `;
 const InfoInfoContent = styled.span`
@@ -149,32 +137,7 @@ const InfoInfoContent = styled.span`
   align-items: center;
   height: 25px;
   gap: 3px;
-  font-size: 18px;
-`;
-const InfoTagContainer = styled.section`
-  display: flex;
-  flex-direction: column;
-  padding: 20px 10px;
-  gap: 5px;
-  @media (max-width: 768px) {
-    gap: 10px;
-    padding: 20px;
-    border: none;
-  }
-`;
-const InfoTagTitle = styled.h3`
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--black-500);
-`;
-const InfoTagBox = styled.section`
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 5px;
-  padding: 10px;
-  gap: 5px;
-  border-radius: 5px;
-  box-shadow: 0px 0px 5px 0.5px var(--black-100) inset;
+  font-size: 19px;
 `;
 const More = styled.button`
   cursor: pointer;

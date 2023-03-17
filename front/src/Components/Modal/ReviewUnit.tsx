@@ -1,9 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
-import Tag from "../Ul/Tag";
 import Input from "../Ul/Input";
 import Button from "../Ul/Button";
 import { BsArrowReturnRight } from "react-icons/bs";
+import { BsFillStarFill } from "react-icons/bs";
 
 export default function ReviewUnit() {
   const [isCommentFormShown, setIsCommentFormShown] = useState(false);
@@ -17,6 +17,13 @@ export default function ReviewUnit() {
               <UserIcon src="/Images/User.png" alt="user" />
               <UserName>caffeine</UserName>
               <Created>2023.03.05</Created>
+              <StarContainer>
+                <BsFillStarFill />
+                <BsFillStarFill />
+                <BsFillStarFill />
+                <BsFillStarFill />
+                <BsFillStarFill />
+              </StarContainer>
             </UserInfo>
             <ButtonContainer>
               {/* 약사계정이면 댓글 버튼이 보이고, 아닌경우에는 안보이는 로직 작성 필요 */}
@@ -26,13 +33,7 @@ export default function ReviewUnit() {
           </Upper>
           <Lower>
             <Rest>
-              <ReviewText>쌍화탕은 하나씩 주시는데 약사선생님은 바쁘신지 불친절합니다.</ReviewText>
-              <ReviewTagContainer>
-                <Tag idx={0} />
-                <Tag idx={1} />
-                <Tag idx={2} />
-                <Tag idx={3} />
-              </ReviewTagContainer>
+              쌍화탕은 하나씩 주시는데 약사선생님은 바쁘신지 불친절합니다.
             </Rest>
             <ReviewImg src="./Images/쌍화탕.jpg" />
           </Lower>
@@ -74,12 +75,13 @@ const ReviewUnitContainer = styled.article`
   display: flex;
   flex-direction: column;
   padding: 15px 10px 10px 10px;
-  border-bottom: 1px solid var(--black-100);
+  margin-bottom: 20px;
+  border: 1px solid var(--black-100);
+  border-radius: 5px;
   @media (max-width: 768px) {
     position: static;
     display: flex;
     justify-content: space-between;
-    padding: 10px 0px;
     width: 420px;
   }
 `;
@@ -113,6 +115,10 @@ const Created = styled.span`
   color: var(--black-300);
   font-size: 12px;
 `;
+const StarContainer = styled.span`
+  color: var(--l_button-mint);
+  font-size: 12px;
+`;
 const ButtonContainer = styled.span`
   display: flex;
   gap: 5px;
@@ -123,23 +129,16 @@ const Lower = styled.section`
   flex-direction: row;
   justify-content: space-between;
 `;
-const Rest = styled.main`
+const Rest = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-`;
-const ReviewText = styled.section`
-  padding-top: 10px;
   width: 280px;
-  height: 0px;
+  padding: 10px;
   font-size: 14px;
-`;
-const ReviewTagContainer = styled.section`
-  display: flex;
-  overflow: hidden;
-  width: 280px;
-  height: 27px;
-  gap: 10px;
+  line-height: 20px;
+  border-radius: 5px;
+  border: 1px solid var(--black-100);
 `;
 const ReviewImg = styled.img`
   object-fit: cover;
@@ -160,7 +159,7 @@ const Comment = styled.div`
   font-size: 14px;
   border-radius: 5px;
   background-color: var(--black-025);
-  box-shadow: 0px 0px 5px 0.5px var(--black-100) inset;
+  border: 1px solid var(--black-100);
 `;
 const WriteCommentForm = styled.section`
   display: flex;

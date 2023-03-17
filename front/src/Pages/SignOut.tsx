@@ -64,7 +64,7 @@ export default function SignOut() {
   );
 }
 
-const Wrapper = styled.main`
+const Wrapper = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;

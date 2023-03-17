@@ -65,19 +65,6 @@ export default function PharmLists({ hidden, setHidden }: Props) {
             <PharmItem />
           </PharmItemContainer>
         </PharmContainer>
-        {/* {hidden ? (
-          <EmptyContainer className="hide">
-            <ShowBtn className={hidden ? "" : "hide"} onClick={() => setHidden(false)}>
-              {"> 눌러서 열기"}
-            </ShowBtn>
-          </EmptyContainer>
-        ) : (
-          <EmptyContainer className="hide">
-            <ShowBtn className={hidden ? "hide" : ""} onClick={() => setHidden(true)}>
-              {"< 눌러서 숨기기"}
-            </ShowBtn>
-          </EmptyContainer>
-        )} */}
       </ContainerWrap>
     </ListContainer>
   );

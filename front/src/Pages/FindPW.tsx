@@ -2,12 +2,10 @@ import { useState } from "react";
 import styled from "styled-components";
 import Button from "../Components/Ul/Button";
 import SignUpInput from "../Components/SignUpForm/SignUpInput";
-// import { Validate } from "../Components/SignUpForm/Validation"
 import { BsPersonCircle } from "react-icons/bs";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function FindPW() {
-  // 일단은 onchange 에 에러가 생긴 것 처럼 구현해 뒀습니다!!! validate 로직으로 바꿔주시면 감사하겠습니다!
 
 const [randomError, setRandomError] = useState(false)
 
@@ -39,7 +37,7 @@ const [randomError, setRandomError] = useState(false)
   );
 }
 
-const Wrapper = styled.main`
+const Wrapper = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;

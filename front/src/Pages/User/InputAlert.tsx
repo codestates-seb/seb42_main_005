@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
