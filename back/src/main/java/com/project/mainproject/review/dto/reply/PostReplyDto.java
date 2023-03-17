@@ -8,8 +8,10 @@ import org.springframework.util.Assert;
 @AllArgsConstructor
 public class PostReplyDto {
     private Long userIdx;
-    private Long reviewIdx;
+    private Long storeIdx;
     private String content;
+
+    private Long reviewIdx;
 
     public void setReviewIdx(Long reviewIdx) {
         Assert.notNull(reviewIdx, "store_idx must not be null.");
