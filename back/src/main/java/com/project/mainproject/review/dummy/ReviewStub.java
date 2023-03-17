@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.project.mainproject.review.dto.StoreReviewPageDto.Tag;
-import static com.project.mainproject.review.dto.StoreReviewPageDto.builder;
 
 public class ReviewStub {
 
@@ -27,7 +26,7 @@ public class ReviewStub {
     }
 
     public static StoreReviewPageDto storeReviewDetailDto() {
-        return builder()
+        return StoreReviewPageDto.builder()
                 .reviewIdx(1L)
                 .rating(4)
                 .reviewImage("사진 파일이 들어갈 위치입니다.")
@@ -42,7 +41,7 @@ public class ReviewStub {
     public static List<StoreReviewPageDto> getStoreReviewPageListStub() {
         List<StoreReviewPageDto> result = new ArrayList<>();
         for (Long i = 1L; i < 20; i++) {
-            StoreReviewPageDto build = builder()
+            StoreReviewPageDto build = StoreReviewPageDto.builder()
                     .reviewIdx(i)
                     .rating(4)
                     .reviewImage("사진 파일이 들어갈 위치입니다.")

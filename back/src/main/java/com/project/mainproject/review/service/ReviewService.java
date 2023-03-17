@@ -36,11 +36,13 @@ public class ReviewService {
 
     @Transactional
     public Review createReview(Review review, List<ReviewTag> reviewTags, MultipartFile image) {
-        List<Tag> tags = findVerifiedTags(reviewTags);
-
         Review createdReview = reviewRepository.save(review);
-        saveReviewTags(tags, createdReview);
-        saveReviewImage(image, createdReview);
+
+        if (reviewTags != null) {
+            List<Tag> tags = findVerifiedTags(reviewTags);
+            saveReviewTags(tags, createdReview);
+        }
+        if (image != null) saveReviewImage(image, createdReview);
 
         return createdReview;
     }
