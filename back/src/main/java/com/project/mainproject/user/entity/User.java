@@ -43,8 +43,15 @@ public class User extends Auditable{
     @CollectionTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "USER_IDX"))
     private List<String> role;
 
-    //@Builder
-    public User(String password, String email, String name) {
+
+    @Builder // For Mapper
+    public User(Long userIdx) {
+        this.userIdx = userIdx;
+    }
+
+    @Builder
+    public User(Long userIdx, String password, String email, String name) {
+        this.userIdx = userIdx;
         this.password = password;
         this.email = email;
         this.name = name;
