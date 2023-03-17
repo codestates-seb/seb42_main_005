@@ -125,7 +125,7 @@ export default function Account({ isLogin, account }: AccountProps) {
     );
 }
 
-const AccountContainer = styled.div`
+const AccountContainer = styled.section`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -162,12 +162,14 @@ const AccountContainer = styled.div`
     margin: 0 8px 0 0;
   }
 `;
-const DropdownBtn = styled.div`
+const DropdownBtn = styled.button`
   cursor: pointer;
   position: inherit;
+  padding-top: 4px;
+  background-color: transparent;
+  border: none;
   font-size: 1.2rem;
   color: var(--white);
-  padding-top: 4px;
   transition: 0.1s ease-out;
   :hover {
     cursor: pointer;

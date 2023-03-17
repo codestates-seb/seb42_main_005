@@ -27,7 +27,7 @@ export default function MyPharmacy() {
   );
 }
 
-const WholePage = styled.main`
+const WholePage = styled.section`
   height: 100vh;
   width: 100%;
   display: flex;

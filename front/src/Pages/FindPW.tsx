@@ -65,7 +65,7 @@ export default function FindPW() {
   );
 }
 
-const Wrapper = styled.main`
+const Wrapper = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;

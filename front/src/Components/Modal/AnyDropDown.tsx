@@ -8,9 +8,9 @@ interface Props {
 
 export default function AnyDropDown({ setIsDropDownDown }: Props) {
   return (
-    <DropDownContainer onClick={() => setIsDropDownDown(false)} >
+    <DropDownContainer onClick={() => setIsDropDownDown(false)}>
       <CloseBtnContainer>
-        <HiXMark id="close" onClick={() => setIsDropDownDown(false)} aria-hidden="true"/>
+        <HiXMark id="close" onClick={() => setIsDropDownDown(false)} aria-hidden="true" />
       </CloseBtnContainer>
       <Unit>
         <Key>월요일</Key>
@@ -55,13 +55,14 @@ const DropDownContainer = styled.section`
   justify-content: center;
   align-items: flex-start;
   padding: 8px 0;
-  bottom: -35px;
-  right: 72px;
+  bottom: -70px;
+  right: 60px;
   @media (max-width: 768px) {
     right: 65px;
+    bottom: -80px;
   }
   gap: 3px;
-  background: white;
+  background: var(--black-050);
   box-shadow: var(--bs-lg);
   border-radius: 3px;
   z-index: ${zIndex_Modal.AnyDropDown};
@@ -79,6 +80,7 @@ const CloseBtnContainer = styled.header`
   transition: 0.2s;
   #close:hover {
     color: var(--black-600);
+    transition: 0.2s;
     transition: 0.2s;
   }
 `;

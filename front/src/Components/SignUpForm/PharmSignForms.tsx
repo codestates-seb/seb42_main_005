@@ -111,6 +111,8 @@ export default function PharmSignForms() {
     if (checks === false) {
       return alert("회원가입시, 사용자의 현재 위치를 사용하는 것에 동의해주세요");
     }
+
+    console.log(businessImgFile);
   };
 
   const BusinessImg = useRef<HTMLInputElement>(null);
@@ -339,6 +341,8 @@ const InputContainer = styled.article`
 const ImgInput = styled.input`
   width: 27rem;
   height: 2.7rem;
+  width: 27rem;
+  height: 2.7rem;
   outline: none;
   font-size: 1.1rem;
   padding-left: 0.5rem;
@@ -353,6 +357,7 @@ const CheckContainer = styled.article`
   align-items: center;
   margin: 20px 0;
   .checkbox_content {
+    font-size: 15px;
     font-size: 15px;
     color: var(--black-500);
   }

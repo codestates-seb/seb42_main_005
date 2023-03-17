@@ -248,6 +248,7 @@ const InputContainer = styled.article`
   display: flex;
   flex-direction: row;
   border: 1px solid var(--black-150);
+  border: 1px solid var(--black-150);
   margin-bottom: 0.5rem;
   border-radius: 10px;
   box-shadow: var(--bs-sm);
@@ -279,6 +280,7 @@ const CheckContainer = styled.article`
   align-items: center;
   margin: 20px 0;
   .checkbox_content {
+    font-size: 15px;
     font-size: 15px;
     color: var(--black-500);
   }

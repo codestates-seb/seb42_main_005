@@ -95,7 +95,7 @@ const WholePage = styled.section`
   width: 100vw;
   height: calc(100vh - 52px);
 `;
-const Wrapper = styled.main`
+const Wrapper = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -171,7 +171,7 @@ const BelowLable = styled.section`
   overflow-y: scroll;
   background-color: var(--black-050);
 `;
-const Instead = styled.main`
+const Instead = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;

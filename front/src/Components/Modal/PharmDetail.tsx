@@ -22,7 +22,7 @@ export default function PharmDetail({ setIsModalUp, like, setLike }: Props) {
       <ModalBackDrop onClick={() => setIsModalUp(false)}>
         <ModalContainer onClick={(event) => event.stopPropagation()}>
           <CloseBtnContainer>
-            <HiXMark id="close" onClick={() => setIsModalUp(false)} aria-hidden="true"/>
+            <HiXMark id="close" onClick={() => setIsModalUp(false)} aria-hidden="true" />
           </CloseBtnContainer>
           <InfoHeader>
             <InfoTitle>킹갓약국</InfoTitle>
@@ -56,7 +56,7 @@ export default function PharmDetail({ setIsModalUp, like, setLike }: Props) {
   );
 }
 
-const ModalBackDrop = styled.main`
+const ModalBackDrop = styled.section`
   position: fixed;
   display: flex;
   justify-content: center;
@@ -75,7 +75,7 @@ const ModalContainer = styled.section`
   justify-content: center;
   align-items: center;
   top: 30px;
-  height: 700px;
+  height: 600px;
   width: 940px;
   background-color: var(--white);
   border-radius: 10px;
@@ -139,12 +139,12 @@ const InfoTitle = styled.h1`
     margin-top: 30px;
   }
 `;
-const ReviewContainer = styled.main`
+const ReviewContainer = styled.section`
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  height: 600px;
+  height: 510px;
   width: 450px;
   padding: 10px 0px 0px 20px;
   @media (max-width: 768px) {
@@ -157,7 +157,7 @@ const ReviewContainer = styled.main`
   }
 `;
 const ReviewTitle = styled.h2`
-  padding-bottom: 10px;
+  padding: 10px;
   font-size: 25px;
   font-weight: bold;
   color: var(--black-500);
@@ -176,6 +176,7 @@ const Reviews = styled.section`
   flex-direction: column;
   flex-grow: 1;
   overflow-y: scroll;
+  padding: 10px 10px 0 0;
   :active::-webkit-scrollbar-track {
     width: 0.6rem;
     visibility: visible;

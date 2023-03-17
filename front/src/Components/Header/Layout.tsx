@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Outlet, useLocation } from "react-router";
+import { Outlet } from "react-router";
 import Header from "./Header";
 
 interface AccountProps {
@@ -20,7 +20,7 @@ export default function Layout({ isLogin, account }: AccountProps) {
   );
 }
 
-const MainContainer = styled.div`
+const MainContainer = styled.main`
   display: flex;
   margin: 0 auto;
   width: 100%;
