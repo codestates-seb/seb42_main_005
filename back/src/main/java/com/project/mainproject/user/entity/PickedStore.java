@@ -17,9 +17,10 @@ import static lombok.AccessLevel.PROTECTED;
 public class PickedStore {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long pickedStoreId;
+    private Long pickedStoreIdx;
 
     private String storeId;
+    //혹시 storeId 만든 이유가 무엇인가요 ?
 
     //연관관계 매핑
     @ManyToOne(fetch = LAZY)
