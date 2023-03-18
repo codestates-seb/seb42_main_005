@@ -36,6 +36,7 @@ public class Review extends Auditable {
     private User user;
 
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "REVIEW_ID")
     private Store store;
     //### 간단한 동작메서드 ###//
 
