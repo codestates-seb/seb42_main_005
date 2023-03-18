@@ -46,7 +46,7 @@ public class ReviewController {
         Page<Review> reviews = reviewService.getReviews(storeIdx, pageable);
 
         ListGetStoreReviewDto responseData = ListGetStoreReviewDto.builder()
-                .storeReview(reviewMapper.reviewsToReviewsDto(reviews.getContent()))
+                .storeReviews(reviewMapper.reviewsToReviewsDto(reviews.getContent()))
                 .build();
 
         PageResponseDto<ListGetStoreReviewDto> response =
