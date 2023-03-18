@@ -1,6 +1,7 @@
-import styled from "styled-components";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { zIndex_Header } from "../../Util/z-index";
 import { IoIosArrowBack } from "react-icons/io";
 
 interface AccountProps {
@@ -130,12 +131,12 @@ const AccountContainer = styled.section`
   flex-direction: row;
   align-items: center;
   .main_nav {
-    margin-left: 0.5rem;
-    list-style: none;
-    font-size: 13px;
     display: flex;
-    height: 100%;
     align-items: center;
+    list-style: none;
+    height: 100%;
+    margin-left: 0.5rem;
+    font-size: 13px;
   }
   .profile {
     display: flex;
@@ -146,28 +147,28 @@ const AccountContainer = styled.section`
     border-radius: 50%;
   }
   .name {
-    overflow: hidden;
-    text-overflow: ellipsis;
+    margin: 0 7px 0 10px;
     white-space: nowrap;
     font-size: 1.1rem;
     font-weight: 500;
     color: var(--white);
-    margin: 0 7px 0 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .identity {
+    margin: 0 8px 0 0;
+    padding-top: 2.5px;
     font-size: 1rem;
     font-weight: 400;
-    padding-top: 2.5px;
     color: var(--white);
-    margin: 0 8px 0 0;
   }
 `;
 const DropdownBtn = styled.button`
   cursor: pointer;
   position: inherit;
   padding-top: 4px;
-  background-color: transparent;
   border: none;
+  background-color: transparent;
   font-size: 1.2rem;
   color: var(--white);
   transition: 0.1s ease-out;
@@ -185,55 +186,55 @@ const DropdownBtn = styled.button`
 `;
 const Content = styled.div`
   position: absolute;
-  display: flex;
-  justify-content: center;
   right: 115px;
   top: 42px;
+  display: flex;
+  justify-content: center;
   width: 110px;
   border-radius: 3px;
-  background: white;
+  background-color: white;
   box-shadow: var(--bs-lg);
   transition: 0.2s;
   ul {
-    list-style-type: none;
     position: relative;
+    list-style-type: none;
     padding: 10px 0px 10px 0px;
   }
   li {
-    padding: 5px 10px 3px 15px;
     width: 110px;
+    padding: 5px 10px 3px 15px;
+    text-align: right;
     font-size: 0.9rem;
     font-weight: 500;
-    text-align: right;
     color: var(--black-600);
     transition: 0.2s;
   }
   li:hover {
     cursor: pointer;
+    background-color: var(--black-050);
     color: var(--black-800);
-    background: var(--black-050);
     transition: 0.2s;
   }
   @media (max-width: 768px) {
-    transition: 0.2s;
     right: 45px;
+    transition: 0.2s;
   }
 `;
 const DropdownBackdrop = styled.div`
   position: absolute;
-  width: 100vw;
-  height: 100vh;
   top: 0;
   right: 0;
-  z-index: 300;
+  width: 100vw;
+  height: 100vh;
+  z-index: ${zIndex_Header.Dropdown};
 `;
 
 const LinkButton = styled(Link)`
-  background-color: transparent;
   border: none;
+  background-color: transparent;
+  font-size: 1rem;
   color: var(--white);
   text-decoration-line: none;
-  font-size: 1rem;
   transition: 0.2s;
   &:hover {
     font-weight: 700;
@@ -246,14 +247,14 @@ const LinkButton = styled(Link)`
 `;
 
 const Partition = styled.span`
-  background-color: var(--white);
   width: 1.4px;
   height: 14px;
   margin: 0 30px;
   border-radius: 0.7px;
+  background-color: var(--white);
   transition: 0.2s;
   @media (max-width: 768px) {
-    transition: 0.2s;
     margin: 0 10px;
+    transition: 0.2s;
   }
 `;

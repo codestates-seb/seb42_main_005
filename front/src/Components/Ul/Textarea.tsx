@@ -16,7 +16,7 @@ export default function Textarea({ id, placeholder, value, rows, icon, isValid, 
     <StyledInput>
       {icon && (
         <div className="left icon">
-          <FaPencilAlt aria-hidden="true"/>
+          <FaPencilAlt aria-hidden="true" />
         </div>
       )}
       <textarea
@@ -32,32 +32,32 @@ export default function Textarea({ id, placeholder, value, rows, icon, isValid, 
 }
 
 const StyledInput = styled.div`
-  display: flex;
-  align-items: center;
   position: relative;
   height: 80px;
   width: 280px;
+  display: flex;
+  align-items: center;
   .icon {
+    position: absolute;
+    top: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    color: var(--black-200);
     font-size: 1.2rem;
-    top: 8px;
+    color: var(--black-200);
   }
   .left {
     left: 0;
     margin-left: calc(1.6rem - 0.75rem);
   }
   textarea {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Adjusted", "Segoe UI", "Liberation Sans", sans-serif;
     flex: 1 1 0;
     padding: 0.6rem 0.7rem;
     border: 1.2px solid var(--black-100);
     border-radius: 4px;
-    outline: none;
     font-size: 0.9rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Adjusted", "Segoe UI", "Liberation Sans", sans-serif;
+    outline: none;
     resize: none;
     transition: 0.2s;
   }
@@ -78,8 +78,8 @@ const StyledInput = styled.div`
     transition: 0.2s;
   }
   .error:focus {
-    box-shadow: var(--wrapped-shadow-red);
     border: 1px solid hsl(359, 46%, 66%);
+    box-shadow: var(--wrapped-shadow-red);
     transition: 0.2s;
   }
 `;
