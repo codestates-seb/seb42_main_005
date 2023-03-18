@@ -1,6 +1,7 @@
 package com.project.mainproject.store.entity;
 
 import com.project.mainproject.VO.OperatingTime;
+import com.project.mainproject.audit.Auditable;
 import com.project.mainproject.review.entity.Review;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-public class Store {
+public class Store extends Auditable {
     @Id
     @GeneratedValue
     private Long storeIdx;
