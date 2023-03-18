@@ -1,9 +1,75 @@
+import React, { useState } from "react";
 import styled from "styled-components";
-import SignUpInput from "../Components/SignUpForm/SignUpInput";
 import { BsPersonCircle } from "react-icons/bs";
+import SignUpInput from "../Components/SignUpForm/SignUpInput";
 import { AiOutlineLock } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { validators } from "../Components/SignUpForm/Validation";
+import ErrorAlert from "../Components/SignUpForm/ErrorAlert";
+
 export default function Login() {
+  const [loginForm, setLoginForms] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [error, setError] = useState({
+    email: false,
+    password: false,
+  });
+
+  const FORM_FIELD_NAMES = {
+    EMAIL: "email",
+    PASSWORD: "password",
+  };
+
+  const changeEmailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLoginForms({
+      ...loginForm,
+      [name]: value,
+    });
+
+    let errors;
+    if (name === FORM_FIELD_NAMES.EMAIL) {
+      errors = validators.validateEmail(value);
+    }
+    setError({
+      ...error,
+      [name]: errors,
+    });
+  };
+
+  const changePasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLoginForms({
+      ...loginForm,
+      [name]: value,
+    });
+    let errors;
+    if (name === FORM_FIELD_NAMES.PASSWORD) {
+      errors = validators.validatePassword(value);
+    }
+    setError({
+      ...error,
+      [name]: errors,
+    });
+  };
+
+  const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const email = formData.get(FORM_FIELD_NAMES.EMAIL);
+    const password = formData.get(FORM_FIELD_NAMES.PASSWORD);
+
+    if (!email || !password) {
+      return alert("모든 항목을 입력해주세요");
+    }
+    if (error.email === true || error.password === true) {
+      return alert("항목을 다시 확인해주세요");
+    }
+  };
+
   return (
     <Total>
       <Container>
@@ -20,28 +86,34 @@ export default function Login() {
               </GoogleButton>
             </button>
           </Google>
-          <LoginForm>
-            <InputContainer>
-              <BsPersonCircle className="inputimage" aria-hidden="true"/>
+          <LoginForm onSubmit={onSubmit}>
+            <InputContainer className={`${error.email ? "red" : null}`}>
+              <BsPersonCircle className="inputimage" aria-hidden="true" />
+              <label htmlFor="email-input"></label>
               <SignUpInput
                 type={"email"}
-                name={"email"}
+                name={FORM_FIELD_NAMES.EMAIL}
                 placeholder={"이메일을 입력하세요."}
-                // value={email}
-                // onChange={onChange}
+                value={loginForm.email}
+                onChange={changeEmailHandler}
               />
             </InputContainer>
-            <InputContainer>
-              <AiOutlineLock className="inputimage" aria-hidden="true"/>
+            <ErrorAlert Error={error.email} ErrorText={"이메일 형식이 올바르지 않습니다."} />
+            <InputContainer className={`${error.email ? "red" : null}`}>
+              <AiOutlineLock className="inputimage" aria-hidden="true" />
+              <label htmlFor="password-input"></label>
               <SignUpInput
                 type={"password"}
-                name={"password"}
+                name={FORM_FIELD_NAMES.PASSWORD}
                 placeholder={"비밀번호를 입력하세요."}
-                // value={password}
-                // onChange={onChange}
+                value={loginForm.password}
+                onChange={changePasswordHandler}
               />
             </InputContainer>
-            <button className="login_button">로그인</button>
+            <ErrorAlert Error={error.password} ErrorText={"문자 숫자 특수문자 조합 8자 이상으로 조합해주세요."} />
+            <button className="login_button" type="submit">
+              로그인
+            </button>
           </LoginForm>
         </ContentContainer>
         <SearchContainer>
@@ -53,26 +125,26 @@ export default function Login() {
     </Total>
   );
 }
-const Total = styled.div`
+const Total = styled.main`
   display: flex;
   justify-content: center;
+  height: 100vh;
+  width: 100%;
 `;
-const Container = styled.div`
+const Container = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100%;
-  width: 40rem;
+  width: 35rem;
 `;
-const Title = styled.div`
+const Title = styled.header`
   display: flex;
   justify-content: center;
-  padding-top: 6rem;
-  padding-bottom: 4rem;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 3rem;
   img {
-    padding-right: 1rem;
     width: 3.5rem;
-    height: 3rem;
   }
   h1 {
     color: var(--blue-600);
@@ -80,18 +152,18 @@ const Title = styled.div`
   }
 `;
 const ContentContainer = styled.div`
-  padding: 3rem 1rem 3rem 1rem;
-  width: 40rem;
+  padding: 2rem;
+  width: 35rem;
   border: 1px solid var(--black-200);
   border-radius: 18px;
   box-shadow: var(--bs-lg);
 `;
 
-const Google = styled.div`
-  padding-bottom: 2rem;
+const Google = styled.article`
+  padding-bottom: 1rem;
   .google_button {
     height: 3.3rem;
-    width: 37.875rem;
+    width: 31rem;
     border: 1px solid var(--black-200);
     border-radius: 10px;
     background-color: transparent;
@@ -119,6 +191,7 @@ const LoginForm = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 5px;
   .login_button {
     background-color: var(--blue-500);
     border: none;
@@ -135,11 +208,11 @@ const LoginForm = styled.form`
     }
   }
 `;
-const InputContainer = styled.div`
+const InputContainer = styled.article`
   display: flex;
   flex-direction: row;
   border: 1px solid var(--black-150);
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.5rem;
   border-radius: 10px;
   box-shadow: var(--bs-sm);
   padding: 0 10px;
@@ -152,8 +225,15 @@ const InputContainer = styled.div`
     margin: auto;
     color: var(--black-200);
   }
+  &:focus-within {
+    box-shadow: var(--wrapped-shadow);
+  }
+  &.red {
+    box-shadow: var(--wrapped-shadow-red);
+    border: 1px solid hsl(359, 46%, 66%);
+  }
 `;
-const SearchContainer = styled.div`
+const SearchContainer = styled.article`
   display: flex;
   justify-content: center;
 `;
