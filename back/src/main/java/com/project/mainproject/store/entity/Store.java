@@ -1,6 +1,8 @@
 package com.project.mainproject.store.entity;
 
 import com.project.mainproject.VO.OperatingTime;
+import com.project.mainproject.audit.Auditable;
+import com.project.mainproject.review.entity.Review;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Formula;
@@ -13,7 +15,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Store {
+public class Store extends Auditable {
     @Id
     @GeneratedValue
     private Long storeIdx;
@@ -90,4 +92,7 @@ public class Store {
     //연관관계 매핑
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoreImage> storeImages;
+
+    @OneToMany(mappedBy = "store",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Review> reviews;
 }
