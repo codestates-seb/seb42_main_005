@@ -26,8 +26,8 @@ const Container = styled.div`
   flex-direction: row;
   align-items: center;
   .unSelect_star {
-    color: var(--black-350);
     font-size: 1.2rem;
+    color: var(--black-350);
     margin-right: 0.4rem;
   }
   .select_star {
@@ -37,22 +37,22 @@ const Container = styled.div`
   .partition {
     width: 1.4px;
     height: 1rem;
-    background-color: var(--black-300);
     margin: 0 12px;
+    background-color: var(--black-300);
   }
 `;
 
 const Star = styled.span`
-  font-weight: bold;
-  font-size: 1.3rem;
   margin-right: 1.2rem;
   margin-left: 0.2rem;
   padding-bottom: 2px;
+  font-size: 1.3rem;
+  font-weight: bold;
   color: var(--black-700);
   .rest {
     margin-left: 0.2rem;
-    color: var(--black-500);
     font-weight: 500;
+    color: var(--black-500);
   }
 `;
 

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
 import axios from "axios";
 import CurrentLocation from "./CurrentLocation";
 import "./customOverlay.css";
@@ -14,6 +13,7 @@ export function MapLogic() {
   const { kakao } = window;
   const location: any = CurrentLocation();
   const [_map, setMap]: any = useState();
+  const API_URL = "https://apis.data.go.kr/B552657";
 
   useEffect(() => {
     if (typeof location != "string" && kakao) {
@@ -49,27 +49,36 @@ export function MapLogic() {
       setMap(map);
 
       axios
-        .get("https://apis.data.go.kr/B552657/ErmctInsttInfoInqireService/getParmacyFullDown", {
+        .get(`${API_URL}/ErmctInsttInfoInqireService/getParmacyFullDown`, {
           params: {
-            ServiceKey: "LYki5UdYrhpVu5YPHg03MBzs3WoCetCv02paAeoaDrc01C9rKu5sVO02/i6dlkmA1+8rxI1HdSK/b8b5cgcTmQ==",
+            ServiceKey: "LYki5UdYrhpVu5YPHg03MBzs3WoCetCv02paAeoaDrc01C9rKu5sVO02/i6dlkmA1+8rxI1HdSK/b8b5cgcTmQ==", // 배포 때 .env파일로
             ServiceType: "json",
             numOfRows: 1000,
           },
         })
         .then((response) => {
-          const pharmacies = response.data.response.body.items.item;
-          for (let i = 0; i < pharmacies.length; i++) {
-            const PositionPharmacy = new kakao.maps.LatLng(pharmacies[i].wgs84Lat, pharmacies[i].wgs84Lon);
-            const content =
-              '<div class="customoverlay">' + `<span class="title">${pharmacies[i].dutyName}</span>` + "</div>";
-            const MarkerPharmacy = new kakao.maps.CustomOverlay({
-              map: map,
-              position: PositionPharmacy,
-              content: content,
-              yAnchor: 1,
-              title: pharmacies[i].dutyName,
+          try {
+            const responseData = response.data.response || {};
+            const body = responseData.body || {};
+            const items = body.items || {};
+            const pharmacies = items.item || [];
+
+            pharmacies.map((pharmacy: { wgs84Lat: any; wgs84Lon: any; dutyName: any }) => {
+              const PositionPharmacy = new kakao.maps.LatLng(pharmacy.wgs84Lat, pharmacy.wgs84Lon);
+              const content =
+                '<div class="customoverlay">' + `<span class="title">${pharmacy.dutyName}</span>` + "</div>";
+              const MarkerPharmacy = new kakao.maps.CustomOverlay({
+                map: map,
+                position: PositionPharmacy,
+                content: content,
+                yAnchor: 1,
+                title: pharmacy.dutyName,
+              });
+              MarkerPharmacy.setMap(map);
+              return MarkerPharmacy;
             });
-            MarkerPharmacy.setMap(map);
+          } catch (error) {
+            console.error("문제 발생!", error);
           }
         });
     }

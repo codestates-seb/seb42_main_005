@@ -47,7 +47,6 @@ const CtrlContainer = styled.nav`
   display: flex;
   justify-content: center;
   align-items: center;
-
   padding: 6px 10px 4px 10px;
   border-radius: 8px;
   background-color: var(--white);
@@ -77,8 +76,8 @@ const FillterBtn = styled.button<{ title: string; selected: string }>`
   width: 65px;
   height: 65px;
   text-align: center;
-  background-color: transparent;
   border: none;
+  background-color: transparent;
   .icon {
     align-items: center;
     font-size: 2.6rem;
@@ -94,13 +93,13 @@ const FillterBtn = styled.button<{ title: string; selected: string }>`
   }
   &:hover {
     .icon {
-      color: var(--blue-400);
       font-size: 2.62rem;
+      color: var(--blue-400);
       transition: 0.2s;
     }
     .label {
-      color: var(--black-400);
       font-size: 0.76rem;
+      color: var(--black-400);
       transition: 0.2s;
     }
   }

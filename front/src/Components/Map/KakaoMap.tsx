@@ -97,14 +97,14 @@ export default function KakaoMap({ hidden, setHidden }: Props) {
 }
 
 const MapContainer = styled.div`
-  background-color: var(--black-200);
   position: fixed;
+  top: 0;
+  right: 0;
   align-items: center;
   justify-content: center;
   width: calc(100vw - 30rem);
   height: 100vh;
-  top: 0;
-  right: 0;
+  background-color: var(--black-200);
   z-index: ${zIndex_KakaoMap.MapContainer};
   transition: 0.2s;
   &.close {
@@ -115,18 +115,18 @@ const MapContainer = styled.div`
   }
 `;
 const ZoomControler = styled.div`
+  position: fixed;
+  bottom: 40px;
+  right: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: fixed;
-  z-index: ${zIndex_KakaoMap.ZoomControler};
-  bottom: 40px;
-  right: 30px;
   padding: 4px;
   border-radius: 8px;
   background-color: var(--white);
   box-shadow: var(--bs-lg);
+  z-index: ${zIndex_KakaoMap.ZoomControler};
   .partition {
     width: 32px;
     height: 1px;
@@ -145,9 +145,9 @@ const ZoomBtn = styled.span`
     color: var(--black-300);
     transition: 0.2s;
     &:hover {
+      font-size: 1.7rem;
       color: var(--blue-400);
       transition: 0.2s;
-      font-size: 1.7rem;
     }
   }
   .plus {
@@ -158,17 +158,17 @@ const ZoomBtn = styled.span`
   }
 `;
 const ReControler = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: fixed;
   top: 70px;
   left: 1115px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 4px;
-  z-index: ${zIndex_KakaoMap.CurrentLocation};
   border-radius: 8px;
   background-color: var(--white);
   box-shadow: var(--bs-lg);
+  z-index: ${zIndex_KakaoMap.CurrentLocation};
   @media (max-width: 1200px) {
     left: 1010px;
     transition: 0.2s;
@@ -178,9 +178,9 @@ const ReControler = styled.div`
     }
   }
   @media (max-width: 768px) {
-    padding: 5px;
     top: 415px;
     left: 540px;
+    padding: 5px;
     transition: 0.2s;
     &.close {
       left: 60px;
@@ -196,9 +196,9 @@ const ReBtn = styled.span`
   text-align: center;
   .icon {
     align-items: center;
+    margin-top: 5px;
     font-size: 1.8rem;
     color: var(--blue-200);
-    margin-top: 5px;
     transition: 0.2s;
   }
   .label {
@@ -221,9 +221,9 @@ const ReBtn = styled.span`
 `;
 const TopControler = styled.div`
   position: fixed;
-  z-index: ${zIndex_KakaoMap.CtrlContainer};
   top: 70px;
   left: 750px;
+  z-index: ${zIndex_KakaoMap.CtrlContainer};
   transition: 0.2s;
   @media (max-width: 1200px) {
     left: 650px;
@@ -243,17 +243,17 @@ const TopControler = styled.div`
   }
 `;
 const LocaControler = styled.div`
+  position: fixed;
+  bottom: 140px;
+  right: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: fixed;
-  z-index: ${zIndex_KakaoMap.CurrentLocation};
-  bottom: 140px;
-  right: 30px;
   padding: 4px;
   border-radius: 8px;
   background-color: var(--white);
   box-shadow: var(--bs-lg);
+  z-index: ${zIndex_KakaoMap.CurrentLocation};
 `;
 const LocaBtn = styled.span`
   cursor: pointer;
@@ -263,9 +263,9 @@ const LocaBtn = styled.span`
   text-align: center;
   .icon {
     align-items: center;
+    margin-top: 1px;
     font-size: 2.2rem;
     color: var(--black-300);
-    margin-top: 1px;
     transition: 0.2s;
     &:hover {
       color: var(--blue-400);
