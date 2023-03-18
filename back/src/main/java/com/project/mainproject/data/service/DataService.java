@@ -13,6 +13,7 @@ import com.project.mainproject.store.mapper.StoreMapper;
 import com.project.mainproject.store.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -28,7 +29,8 @@ public class DataService {
     private final StoreMapper mapper;
     private final StoreRepository storeRepository;
     @Value("${data-api.service-key}")
-    private String AUTH_KEY;
+    private String SERVICE_KEY;
+
     public DataService(StoreMapper mapper, StoreRepository storeRepository) {
         this.mapper = mapper;
         this.storeRepository = storeRepository;
@@ -39,7 +41,7 @@ public class DataService {
 
             StringBuilder uriBuilder = new StringBuilder(SERVICE_URL);
             uriBuilder.append("/getParmacyListInfoInqire")
-                    .append("?serviceKey=").append(AUTH_KEY)
+                    .append("?serviceKey=").append(SERVICE_KEY)
                     .append("&Q0=").append(URLEncoder.encode(paramVo.getQ0(), UTF_8))
                     .append("&Q1=").append(URLEncoder.encode(paramVo.getQ1(), UTF_8))
                     .append("&QT=").append(paramVo.getQT())
@@ -81,6 +83,7 @@ public class DataService {
         }
     }
 
+    @Transactional
     public void insertData(List<StoreDataDto> dataDto) {
         List<Store> stores = mapper.storeDataDtoListToStores(dataDto);
         storeRepository.saveAll(stores);
