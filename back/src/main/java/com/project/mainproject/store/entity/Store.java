@@ -3,6 +3,8 @@ package com.project.mainproject.store.entity;
 import com.project.mainproject.VO.OperatingTime;
 import com.project.mainproject.audit.Auditable;
 import com.project.mainproject.review.entity.Review;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Formula;
@@ -10,10 +12,14 @@ import org.hibernate.annotations.Formula;
 import javax.persistence.*;
 import java.util.List;
 
+import static javax.persistence.CascadeType.REMOVE;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@Table(name = "STORE")
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 public class Store extends Auditable {
     @Id
@@ -81,7 +87,6 @@ public class Store extends Auditable {
     })
     private OperatingTime holidayOperating;
 
-
     //추 후 변경 필요
     private Boolean isOperatingHoliday;
 
@@ -90,9 +95,9 @@ public class Store extends Auditable {
     private Double rating;
 
     //연관관계 매핑
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoreImage> storeImages;
 
-    @OneToMany(mappedBy = "store",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "store", cascade = REMOVE, orphanRemoval = true)
     private List<Review> reviews;
 }

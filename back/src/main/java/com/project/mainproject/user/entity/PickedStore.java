@@ -13,7 +13,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @Table(name = "PICKED_STORE")
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor
 public class PickedStore {
     @Id
     @GeneratedValue(strategy = IDENTITY)

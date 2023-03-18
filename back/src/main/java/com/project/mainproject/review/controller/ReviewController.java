@@ -6,6 +6,9 @@ import com.project.mainproject.dto.UserIdxRequestDto;
 import com.project.mainproject.dummy.CommonStub;
 import com.project.mainproject.review.dto.*;
 import com.project.mainproject.review.dummy.ReviewStub;
+import com.project.mainproject.review.entity.Review;
+import com.project.mainproject.review.mapper.ReviewMapper;
+import com.project.mainproject.review.service.ReviewService;
 import com.project.mainproject.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -14,10 +17,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
+import static com.project.mainproject.enums.ResultStatus.CREATE_COMPLETED;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class ReviewController {
+
+    private final ReviewService reviewService;
+    private final ReviewMapper reviewMapper;
     private final String DEFAULT_URI = "/api";
 
     /*
@@ -36,14 +44,27 @@ public class ReviewController {
      *  리뷰 작성
      * */
     @PostMapping("store/{storeIdx}/review")
-    public ResponseEntity createReview(@PathVariable Long storeIdx, @RequestBody PostCreateReviewDto postDto) {
-        //TODO : Service 구현
+    public ResponseEntity<SingleResponseDto<SimpleReviewDto>> createReview(@PathVariable Long storeIdx,
+                                                                           @RequestBody PostCreateReviewDto postDto
+    ) {
+        postDto.setStoreIdx(storeIdx);
+        Review review = reviewMapper.reviewDtoToReview(postDto);
+        Review createdReview = reviewService.createReview(review);
 
+        // 이하 데이터 변환 부분 -> 어디에서?
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
-        SingleResponseDto build = CommonStub.getSingleResponseStub();
-        build.setResponse(SimpleReviewDto.builder().reviewIdx(1L).storeIdx(storeIdx).userIdx(postDto.getUserIdx()).build());
-        System.out.println("location = " + location);
-        return ResponseEntity.created(location).body(build);
+        SimpleReviewDto responseData = SimpleReviewDto.builder()
+                                            .reviewIdx(createdReview.getReviewIdx())
+                                            .storeIdx(storeIdx)
+                                            .userIdx(postDto.getUserIdx())
+                                            .build();
+        SingleResponseDto<SimpleReviewDto> response = SingleResponseDto.<SimpleReviewDto>builder()
+                                            .response(responseData)
+                                            .httpCode(CREATE_COMPLETED.getHttpCode())
+                                            .message(CREATE_COMPLETED.getMessage())
+                                            .build();
+
+        return ResponseEntity.created(location).body(response);
     }
 
     /*
