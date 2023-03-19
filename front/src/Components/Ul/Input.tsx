@@ -14,7 +14,7 @@ export default function Input({ id, placeholder, value, icon, isValid, onChange 
     <StyledInput>
       {icon && (
         <div className="left icon">
-          <FaPencilAlt aria-hidden="true"/>
+          <FaPencilAlt aria-hidden="true" />
         </div>
       )}
       <input
@@ -30,31 +30,31 @@ export default function Input({ id, placeholder, value, icon, isValid, onChange 
 }
 
 const StyledInput = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
-  position: relative;
   .icon {
+    position: absolute;
+    top: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    color: var(--black-200);
     font-size: 1.2rem;
-    top: 8px;
+    color: var(--black-200);
   }
   .left {
     left: 0;
     margin-left: calc(1.6rem - 0.75rem);
   }
   input {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Adjusted", "Segoe UI", "Liberation Sans", sans-serif;
-    flex: 1 1 0;
     padding: 0.6rem 0.7rem;
+    height: 2.4rem;
+    flex: 1 1 0;
     border: 1.2px solid var(--black-100);
     border-radius: 4px;
     outline: none;
     font-size: 0.9rem;
-    height: 2.4rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Adjusted", "Segoe UI", "Liberation Sans", sans-serif;
     transition: 0.2s;
   }
   input::placeholder {
@@ -74,8 +74,8 @@ const StyledInput = styled.div`
     transition: 0.2s;
   }
   .error:focus {
-    box-shadow: var(--wrapped-shadow-red);
     border: 1px solid hsl(359, 46%, 66%);
+    box-shadow: var(--wrapped-shadow-red);
     transition: 0.2s;
   }
 `;

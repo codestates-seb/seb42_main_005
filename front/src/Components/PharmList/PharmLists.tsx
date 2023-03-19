@@ -92,22 +92,24 @@ export default function PharmLists({ hidden, setHidden }: Props) {
 //전체 컨테이너
 const ListContainer = styled.aside`
   position: absolute;
+  top: 50px;
+  left: 0;
   width: 34rem;
   height: calc(100vh - 50px);
+  padding: 1.5rem 0 1rem 1.5rem;
+  border-radius: 0 15px 15px 0;
   border-top: 1px solid var(--black-150);
   border-right: 1px solid var(--black-150);
   border-bottom: 1px solid var(--black-150);
-  border-radius: 0 15px 15px 0;
   background-color: var(--white);
   box-shadow: var(--bs-lg);
-  padding: 1.5rem 0 1rem 1.5rem;
   transition: 0.2s;
   &.hide {
     transform: translate(-500px, 0px);
   }
   @media (max-width: 768px) {
-    transition: 0.2s;
     width: 33rem;
+    transition: 0.2s;
     &.hide {
       transform: translate(-480px, 0px);
     }
@@ -120,10 +122,10 @@ const ContainerWrap = styled.div`
   justify-content: flex-end;
 `;
 const EmptyContainer = styled.div`
-  flex: 1 1 0;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  flex: 1 1 0;
   margin-right: 30px;
   &.folded {
     margin-right: 0;
@@ -152,11 +154,11 @@ const PharmHeadContainer = styled.header`
   }
 `;
 const PharmItemContainer = styled.section`
-  overflow-y: scroll;
-  height: calc(100vh - 135px);
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: calc(100vh - 135px);
+  overflow-y: scroll;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.05) 2px 2px 4px inset, rgba(0, 0, 0, 0.05) 0px 7px 7px -3px inset,
     rgba(0, 0, 0, 0.05) 0px -7px 7px -3px inset;
@@ -168,23 +170,23 @@ const SearchContainer = styled.section`
   justify-content: center;
   margin: 10px 0;
   .searchIcon {
+    position: absolute;
+    display: inline-block;
     width: 1.5rem;
     height: 1.5rem;
-    display: inline-block;
-    position: absolute;
-    opacity: 0.4;
     margin: 0.8rem;
+    opacity: 0.4;
   }
 `;
 const SearchInput = styled.input`
   width: 26rem;
   height: 3rem;
-  border-radius: 10px;
-  border: 3px solid var(--blue-300);
-  outline: none;
-  font-size: 1.1rem;
   margin-right: 5px;
   padding-left: 2.8rem;
+  border: 3px solid var(--blue-300);
+  border-radius: 10px;
+  outline: none;
+  font-size: 1.1rem;
   transition: 0.2s;
   :focus {
     border-color: var(--blue-400);
@@ -194,13 +196,13 @@ const SearchInput = styled.input`
 `;
 const ShowBtn = styled.button`
   cursor: pointer;
-  background-color: transparent;
-  border: none;
   display: flex;
   justify-content: flex-start;
   margin: 3px 5px 0 5px;
-  font-weight: 600;
+  border: none;
+  background-color: transparent;
   font-size: 40px;
+  font-weight: 600;
   color: var(--black-100);
   transition: 0.2s;
   :hover {
@@ -225,17 +227,17 @@ const ButtonContainer = styled.section`
 `;
 //우리약국 가기
 const Button = styled.button`
-  all: unset;
   cursor: pointer;
+  all: unset;
   margin-right: 88px;
-  color: var(--blue-400);
   font-size: 1rem;
+  color: var(--blue-400);
   transition: 0.2s;
   .logo {
-    font-size: 1.1rem;
     margin-right: 0.2rem;
-    transition: 0.2s;
+    font-size: 1.1rem;
     vertical-align: -2px;
+    transition: 0.2s;
   }
   :hover {
     font-weight: 600;
@@ -250,16 +252,16 @@ const FilterButtons = styled.div`
   .partition {
     width: 1.4px;
     height: 0.9rem;
-    background-color: var(--black-300);
     margin: 0 15px;
+    background-color: var(--black-300);
   }
 `;
 const FilterButton = styled.button`
   cursor: pointer;
-  background-color: var(--white);
   border: none;
-  color: var(--black-350);
+  background-color: var(--white);
   font-size: 0.9rem;
+  color: var(--black-350);
   transition: 0.2s;
   &:hover {
     color: var(--blue-500);

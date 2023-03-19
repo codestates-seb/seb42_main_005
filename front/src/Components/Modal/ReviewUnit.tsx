@@ -4,7 +4,6 @@ import Input from "../Ul/Input";
 import Button from "../Ul/Button";
 import { BsArrowReturnRight } from "react-icons/bs";
 import { BsFillStarFill } from "react-icons/bs";
-// import { detailDate } from "../Ul/detailDate";
 
 interface Props {
   reviewList: any;
