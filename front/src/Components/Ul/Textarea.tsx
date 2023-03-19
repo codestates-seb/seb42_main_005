@@ -8,7 +8,7 @@ interface InputProps {
   rows: number;
   isValid?: boolean;
   icon?: boolean;
-  onChange?: () => void;
+  onChange?: any;
 }
 
 export default function Textarea({ id, placeholder, value, rows, icon, isValid, onChange }: InputProps) {
@@ -16,7 +16,7 @@ export default function Textarea({ id, placeholder, value, rows, icon, isValid, 
     <StyledInput>
       {icon && (
         <div className="left icon">
-          <FaPencilAlt aria-hidden="true"/>
+          <FaPencilAlt aria-hidden="true" />
         </div>
       )}
       <textarea

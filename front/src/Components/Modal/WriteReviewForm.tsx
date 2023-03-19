@@ -26,6 +26,11 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
     });
   };
   const [rate, setRate] = useState(0);
+  const [text, setText] = useState("");
+
+  const handlerText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setText(e.target.value);
+  };
 
   return (
     <WriteReviewContainer>
@@ -40,6 +45,8 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
           isValid={true}
           rows={3}
           icon={false}
+          value={text}
+          onChange={handlerText}
         />
         <ReviewImgContainer>
           <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>

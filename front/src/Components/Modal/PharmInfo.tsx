@@ -1,24 +1,28 @@
 //! 모달 컴포넌트 오른편 약국 정보 부분입니다
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import PharmRank from "../Ul/PharmRank";
 import AnyDropDown from "./AnyDropDown";
-
+import axios from "axios";
+import { getPharmDActions } from "../../Redux/slice/getPharmSlice";
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 interface Props {
   like: boolean;
   setLike: React.Dispatch<React.SetStateAction<boolean>>;
+  pharmListDetail: any;
 }
 
-export default function PharmInfo({ like, setLike }: Props) {
+export default function PharmInfo({ like, setLike, pharmListDetail }: Props) {
   const [isDropDownDown, setIsDropDownDown] = useState(false);
+
   return (
     <InfoContainer>
       <InfoHeader>
-        <InfoTitle>킹갓약국</InfoTitle>
-        <PharmRank />
+        <InfoTitle>{pharmListDetail.name}</InfoTitle>
+        {pharmListDetail && <PharmRank rating={pharmListDetail.rating} />}
       </InfoHeader>
       <InfoImgContainer>
-        <Img src="./Images/random.png" alt="고심약국"></Img>
+        <Img src={pharmListDetail.image} alt="고심약국"></Img>
         <LikeButton onClick={() => setLike(!like)}>
           {like ? <img src="./Images/Heart.png" alt="like" /> : <img src="./Images/UnHeart.png" alt="unlike" />}
         </LikeButton>
@@ -38,11 +42,11 @@ export default function PharmInfo({ like, setLike }: Props) {
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>주소</InfoInfoTitle>
-          <InfoInfoContent>서울시 종로구 대학로 101</InfoInfoContent>
+          <InfoInfoContent>{pharmListDetail.address}</InfoInfoContent>
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>전화번호</InfoInfoTitle>
-          <InfoInfoContent>02-1234-1234</InfoInfoContent>
+          <InfoInfoContent>{pharmListDetail.tel}</InfoInfoContent>
         </InfoUnit>
       </InfoInfo>
     </InfoContainer>

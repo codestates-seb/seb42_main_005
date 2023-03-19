@@ -4,8 +4,12 @@ import Input from "../Ul/Input";
 import Button from "../Ul/Button";
 import { BsArrowReturnRight } from "react-icons/bs";
 import { BsFillStarFill } from "react-icons/bs";
+// import { detailDate } from "../Ul/detailDate";
 
-export default function ReviewUnit() {
+interface Props {
+  reviewList: any;
+}
+export default function ReviewUnit({ reviewList }: Props) {
   const [isCommentFormShown, setIsCommentFormShown] = useState(false);
 
   return (
@@ -16,13 +20,47 @@ export default function ReviewUnit() {
             <UserInfo>
               <UserIcon src="/Images/User.png" alt="user" />
               <UserName>caffeine</UserName>
-              <Created>2023.03.05</Created>
+              <Created>{new Date(reviewList.createdAt).toLocaleDateString()}</Created>
               <StarContainer>
-                <BsFillStarFill />
-                <BsFillStarFill />
-                <BsFillStarFill />
-                <BsFillStarFill />
-                <BsFillStarFill />
+                {reviewList.rating === 1 ? <BsFillStarFill /> : ""}
+                {reviewList.rating === 2 ? (
+                  <>
+                    <BsFillStarFill />
+                    <BsFillStarFill />
+                  </>
+                ) : (
+                  ""
+                )}
+                {reviewList.rating === 3 ? (
+                  <>
+                    <BsFillStarFill />
+                    <BsFillStarFill />
+                    <BsFillStarFill />
+                  </>
+                ) : (
+                  ""
+                )}
+                {reviewList.rating === 4 ? (
+                  <>
+                    <BsFillStarFill />
+                    <BsFillStarFill />
+                    <BsFillStarFill />
+                    <BsFillStarFill />
+                  </>
+                ) : (
+                  ""
+                )}
+                {reviewList.rating === 5 ? (
+                  <>
+                    <BsFillStarFill />
+                    <BsFillStarFill />
+                    <BsFillStarFill />
+                    <BsFillStarFill />
+                    <BsFillStarFill />
+                  </>
+                ) : (
+                  ""
+                )}
               </StarContainer>
             </UserInfo>
             <ButtonContainer>
@@ -32,9 +70,7 @@ export default function ReviewUnit() {
             </ButtonContainer>
           </Upper>
           <Lower>
-            <Rest>
-              쌍화탕은 하나씩 주시는데 약사선생님은 바쁘신지 불친절합니다.
-            </Rest>
+            <Rest>{reviewList.content}</Rest>
             <ReviewImg src="./Images/쌍화탕.jpg" />
           </Lower>
           <CommentContainer>
