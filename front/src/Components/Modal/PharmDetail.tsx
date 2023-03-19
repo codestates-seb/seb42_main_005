@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import PharmInfo from "./PharmInfo";
 import ReviewUnit from "./ReviewUnit";
@@ -7,15 +7,38 @@ import PharmRank from "../Ul/PharmRank";
 import Button from "../Ul/Button";
 import { zIndex_Modal } from "../../Util/z-index";
 import { HiXMark } from "react-icons/hi2";
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import axios from "axios";
+import { getReviewListActions } from "../../Redux/slice/getReviewSlice";
 
 interface Props {
   setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
   like: boolean;
   setLike: React.Dispatch<React.SetStateAction<boolean>>;
+  pharmListDetail: any;
 }
 
-export default function PharmDetail({ setIsModalUp, like, setLike }: Props) {
+export default function PharmDetail({ setIsModalUp, like, setLike, pharmListDetail }: Props) {
   const [isReviewFormShown, setIsReviewFormShown] = useState(false);
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    const getReviews = async () => {
+      try {
+        const response = await axios.get("http://localhost:3003/response");
+        // console.log(response.data);
+
+        dispatch(getReviewListActions.getReviewList(response.data));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getReviews();
+  }, []);
+
+  const reviewList = useAppSelector((state: any) => {
+    return state.getReview.response.storeReview;
+  });
 
   return (
     <>
@@ -25,22 +48,17 @@ export default function PharmDetail({ setIsModalUp, like, setLike }: Props) {
             <HiXMark id="close" onClick={() => setIsModalUp(false)} aria-hidden="true" />
           </CloseBtnContainer>
           <InfoHeader>
-            <InfoTitle>킹갓약국</InfoTitle>
-            <PharmRank />
+            <InfoTitle>{pharmListDetail.name}</InfoTitle>
+            <PharmRank rating={pharmListDetail.rating} />
           </InfoHeader>
           <Constant>
-            <PharmInfo like={like} setLike={setLike} />
+            <PharmInfo like={like} setLike={setLike} pharmListDetail={pharmListDetail} />
             <ReviewContainer>
               <ReviewTitle>리뷰</ReviewTitle>
               <Reviews>
-                <ReviewUnit />
-                <ReviewUnit />
-                <ReviewUnit />
-                <ReviewUnit />
-                <ReviewUnit />
-                <ReviewUnit />
-                <ReviewUnit />
-                <ReviewUnit />
+                {reviewList?.map((el: any) => (
+                  <ReviewUnit reviewList={el} key={el.reviewIdx} />
+                ))}
               </Reviews>
             </ReviewContainer>
           </Constant>
