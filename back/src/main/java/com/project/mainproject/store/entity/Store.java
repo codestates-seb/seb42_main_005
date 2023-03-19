@@ -3,11 +3,11 @@ package com.project.mainproject.store.entity;
 import com.project.mainproject.VO.OperatingTime;
 import com.project.mainproject.audit.Auditable;
 import com.project.mainproject.review.entity.Review;
+import com.project.mainproject.user.entity.PickedStore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.util.List;
@@ -91,8 +91,8 @@ public class Store extends Auditable {
     private Boolean isOperatingHoliday;
 
     private String etc;
-    @Formula("SELECT round(AVG(rating), 2) AS rating FROM review GROUP BY store_idx")
-    private Double rating;
+//    @Formula("SELECT round(AVG(rating), 2) AS rating FROM review GROUP BY store_idx")
+//    private Double rating;
 
     //연관관계 매핑
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -100,4 +100,7 @@ public class Store extends Auditable {
 
     @OneToMany(mappedBy = "store", cascade = REMOVE, orphanRemoval = true)
     private List<Review> reviews;
+
+    @OneToMany(mappedBy = "store")
+    private List<PickedStore> pickedStores;
 }

@@ -49,6 +49,7 @@ public class Review extends Auditable {
     private Store store;
 
     @OneToMany(mappedBy = "review", fetch = LAZY)
+    @Builder.Default
     private List<ReviewTag> reviewTags = new ArrayList<>();
     //### 간단한 동작메서드 ###//
 
