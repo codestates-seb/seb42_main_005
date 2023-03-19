@@ -20,13 +20,11 @@ interface Props {
 
 export default function PharmDetail({ setIsModalUp, like, setLike, pharmListDetail }: Props) {
   const [isReviewFormShown, setIsReviewFormShown] = useState(false);
-
   const dispatch = useAppDispatch();
   useEffect(() => {
     const getReviews = async () => {
       try {
         const response = await axios.get("http://localhost:3003/response");
-        // console.log(response.data);
 
         dispatch(getReviewListActions.getReviewList(response.data));
       } catch (error) {

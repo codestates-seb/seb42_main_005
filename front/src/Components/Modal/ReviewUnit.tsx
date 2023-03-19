@@ -70,7 +70,7 @@ export default function ReviewUnit({ reviewList }: Props) {
           </Upper>
           <Lower>
             <Rest>{reviewList.content}</Rest>
-            <ReviewImg src="./Images/쌍화탕.jpg" />
+            <ReviewImg src={reviewList.reviewImage} />
           </Lower>
           <CommentContainer>
             <Upper>
