@@ -95,8 +95,8 @@ public class Store extends Auditable {
 //    private Double rating;
 
     //연관관계 매핑
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StoreImage> storeImages;
+    @OneToOne(mappedBy = "store",cascade = CascadeType.ALL)
+    private StoreImage storeImages;
 
     @OneToMany(mappedBy = "store", cascade = REMOVE, orphanRemoval = true)
     private List<Review> reviews;

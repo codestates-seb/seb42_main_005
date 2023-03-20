@@ -1,11 +1,11 @@
 package com.project.mainproject.store.dto.DBdto;
 
 import com.project.mainproject.VO.OperatingTime;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 
 @Getter
 @Setter
@@ -17,9 +17,9 @@ public class DBStoreDetailDto {
     private Double latitude;
     private String tel;
     private String etc;
-    private double rating;
+    private Double rating;
     private Long likeStoreCount;
-    private Collection<String> image;
+    private String image;
     private OperatingTime monday;
     private OperatingTime tuesday;
     private OperatingTime wednesday;
@@ -31,7 +31,8 @@ public class DBStoreDetailDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public DBStoreDetailDto(Long storeIdx, String name, String address, Double longitude, Double latitude, String tel, String etc, double rating, Long likeStoreCount, Collection<String> image, OperatingTime monday, OperatingTime tuesday, OperatingTime wednesday, OperatingTime thursday, OperatingTime friday, OperatingTime saturday, OperatingTime sunday, OperatingTime holiday, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    @QueryProjection
+    public DBStoreDetailDto(Long storeIdx, String name, String address, Double longitude, Double latitude, String tel, String etc, Double rating, Long likeStoreCount, String image, OperatingTime monday, OperatingTime tuesday, OperatingTime wednesday, OperatingTime thursday, OperatingTime friday, OperatingTime saturday, OperatingTime sunday, OperatingTime holiday, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.storeIdx = storeIdx;
         this.name = name;
         this.address = address;

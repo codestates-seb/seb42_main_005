@@ -19,7 +19,7 @@ public class StoreImage {
 
     private String imagePath;
 
-    @ManyToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "STORE_IDX")
     private Store store;
 }
