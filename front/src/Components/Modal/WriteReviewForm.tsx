@@ -6,7 +6,6 @@ import { zIndex_Modal } from "../../Util/z-index";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BiPhotoAlbum } from "react-icons/bi";
 import { HiXMark } from "react-icons/hi2";
-// import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import { getReviewListActions } from "../../Redux/slice/getReviewSlice";
@@ -53,41 +52,48 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
       [name]: value,
     });
   };
-
-  const prevReviewList = useAppSelector((state: any) => {
-    return state.getReview.response.storeReview;
+  const reviewLists = useAppSelector((state: any) => {
+    return state.getReview.response;
   });
-  // console.log(prevReviewList);
-
-  // const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const review = formData.get("content");
     const star = formData.get("rating");
 
-    let newData = {
-      reviewIdx: 53,
-      content: review,
-      rating: star,
-      createdAt: new Date(),
+    //나중에 수정 , 화면에 뜨는지 확인하려고 한것
+    let newData: any = {
+      storeReview: [
+        {
+          reviewIdx: 53,
+          name: "이성은",
+          userImage:
+            "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTIy/MDAxNTIzMDI3MjQ1Nzk3.k5nYScR4RH3Tx2JVS6pQiqoKRakgtsjJnBvRSg1VfD8g.SYovJeXlx8Am487HAc9RSJ_4gNpbnhuQVPPh24_N568g.JPEG.monday20000/1522512872270.jpg?type=w800",
+          reviewImage:
+            "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTcz/MDAxNTIzMDI3MjQ1NDU4.uP9jhQMTNwQSSUGZcDRlddU5E11r4Kl4QRTnaSrrqKkg.OX4yCUKh3wbhgF0zGlxOT6TNIaDa3vvd9S3bMDvHfEwg.JPEG.monday20000/1522493493318.jpg?type=w800",
+          content: review,
+          rating: star,
+          createdAt: new Date(),
+          modifiedAt: new Date(),
+        },
+      ],
     };
 
     const postReview = async () => {
       try {
         await axios({
-          url: "http://localhost:3003/response",
+          url: "http://localhost:3010/response",
           method: "post",
           data: newData,
-          //화면에 보여줄려고 data바꿈
-          // data: [...prevReviewList, newData],
         });
       } catch (error) {
         console.log(error);
       }
     };
+    dispatch(getReviewListActions.getReviewList(newData));
+    setReviewList({ reviewIdx: 0, content: "", rating: 0, createdAt: "" });
     postReview();
-    // window.location.href = "http://localhost:5173/";
   };
 
   return (
