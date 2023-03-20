@@ -1,11 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import getPharmSlice from "../slice/getPharmSlice";
-import getPharmListSlice from "../slice/getPharmListSlice";
 import getReviewSlice from "../slice/getReviewSlice";
 
 const rootReducer = combineReducers({
-  getPharmDetail: getPharmSlice,
-  getPharmListDetail: getPharmListSlice,
   getReview: getReviewSlice,
 });
 
