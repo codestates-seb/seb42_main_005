@@ -21,6 +21,7 @@ public class DBStoreDetailDto {
     private String etc;
     private Double rating;      //별점
     private Long pickedStoreCount;  //찜한약국
+    private Long reviewCount;
     private String image;
     private OperatingTime monday;
     private OperatingTime tuesday;
@@ -34,7 +35,7 @@ public class DBStoreDetailDto {
     private LocalDateTime modifiedAt;
 
     @QueryProjection
-    public DBStoreDetailDto(Long storeIdx, String name, String address, Double longitude, Double latitude, String tel, String etc, Double rating, Long likeStoreCount, String image, OperatingTime monday, OperatingTime tuesday, OperatingTime wednesday, OperatingTime thursday, OperatingTime friday, OperatingTime saturday, OperatingTime sunday, OperatingTime holiday, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    public DBStoreDetailDto(Long storeIdx, String name, String address, Double longitude, Double latitude, String tel, String etc, Double rating, Long likeStoreCount,Long reviewCount, String image, OperatingTime monday, OperatingTime tuesday, OperatingTime wednesday, OperatingTime thursday, OperatingTime friday, OperatingTime saturday, OperatingTime sunday, OperatingTime holiday, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.storeIdx = storeIdx;
         this.name = name;
         this.address = address;
@@ -44,6 +45,7 @@ public class DBStoreDetailDto {
         this.etc = etc;
         this.rating = rating;
         this.pickedStoreCount = likeStoreCount;
+        this.reviewCount = reviewCount;
         this.image = image;
         this.monday = monday;
         this.tuesday = tuesday;

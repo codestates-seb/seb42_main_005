@@ -17,6 +17,7 @@ public class GetStoreDetailDto {
     private String etc;
     private double rating;
     private Long pickedStoreCount;
+    private Long reviewCount;
     private String image;
     private TodayOperatingTimeDto todayOperatingTime;
     private OperatingDayOfWeekDto operatingTime;

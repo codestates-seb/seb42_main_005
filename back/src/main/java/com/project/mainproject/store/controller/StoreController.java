@@ -2,8 +2,6 @@ package com.project.mainproject.store.controller;
 
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.dummy.CommonStub;
-import com.project.mainproject.enums.ResultStatus;
-import com.project.mainproject.store.dto.GetStoreDetailDto;
 import com.project.mainproject.store.dto.GetStoreListRequestDto;
 import com.project.mainproject.store.dto.StoreIdxResponse;
 import com.project.mainproject.store.service.StoreGetService;
@@ -26,7 +24,7 @@ public class StoreController {
     public ResponseEntity getStoreHome(@RequestBody GetStoreListRequestDto requestDto) {
         //TODO : 정렬 조건에 대한 문제가 여전히 존재합니다. 해당 문제를 체크할 필요가 있습니다.
 
-        SingleResponseDto response = storeGetService.getStoreSliceDto(requestDto);
+        SingleResponseDto response = storeGetService.getStoreListDto(requestDto);
 
         return ResponseEntity.ok().body(response);
     }
@@ -39,14 +37,7 @@ public class StoreController {
         //TODO : Service 구현
         log.info("#### 이몸 등장!");
 
-        GetStoreDetailDto findData = storeGetService.getStoreDetailDto(storeIdx);
-        SingleResponseDto<GetStoreDetailDto> responseDto = SingleResponseDto.<GetStoreDetailDto>builder()
-                .response(findData)
-                .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
-                .message(ResultStatus.PROCESS_COMPLETED.getMessage())
-                .build();
-
-        return ResponseEntity.ok().body(responseDto);
+        return ResponseEntity.ok(storeGetService.getStoreDetailDto(storeIdx));
     }
 
     /*
