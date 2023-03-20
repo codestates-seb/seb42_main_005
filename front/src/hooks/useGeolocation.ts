@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 
-export default function CurrentLocation() {
+export default function useGeolocation() {
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | string>("");
 
   useMemo(() => {

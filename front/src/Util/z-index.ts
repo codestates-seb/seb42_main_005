@@ -1,8 +1,7 @@
 export const zIndex_KakaoMap = {
   MapContainer: 1,
-  CurrentLocation: 10,
-  ZoomControler: 10,
-  CtrlContainer: 10,
+  MapButtons: 10,
+  MapFilter: 11,
 };
 export const zIndex_PharmList = {
   ListContainer: 10,

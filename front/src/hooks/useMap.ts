@@ -1,17 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import CurrentLocation from "./CurrentLocation";
-import "./customOverlay.css";
+import useGeolocation from "./useGeolocation";
+import "./PharmacyOverlay.css";
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
+const { kakao } = window;
 
-export function MapLogic() {
-  const { kakao } = window;
-  const location: any = CurrentLocation();
+export function useMap() {
+  const location: any = useGeolocation();
   const [_map, setMap]: any = useState();
   const API_URL = "https://apis.data.go.kr/B552657";
 
@@ -24,7 +19,7 @@ export function MapLogic() {
       };
       // 지도 객체 생성
       const map = new kakao.maps.Map(container as HTMLElement, options);
-      // 마커 생성
+
       const PositionCurrent = new kakao.maps.LatLng(location.latitude, location.longitude);
       const ImageSrcCurrent = "./Images/currentPos.png";
       const ImageSizeCurrent = new kakao.maps.Size(24, 35);
@@ -63,20 +58,24 @@ export function MapLogic() {
             const items = body.items || {};
             const pharmacies = items.item || [];
 
-            pharmacies.map((pharmacy: { wgs84Lat: any; wgs84Lon: any; dutyName: any }) => {
-              const PositionPharmacy = new kakao.maps.LatLng(pharmacy.wgs84Lat, pharmacy.wgs84Lon);
-              const content =
-                '<div class="customoverlay">' + `<span class="title">${pharmacy.dutyName}</span>` + "</div>";
-              const MarkerPharmacy = new kakao.maps.CustomOverlay({
-                map: map,
-                position: PositionPharmacy,
-                content: content,
-                yAnchor: 1,
-                title: pharmacy.dutyName,
-              });
-              MarkerPharmacy.setMap(map);
-              return MarkerPharmacy;
-            });
+            const pharmaciesInMap = pharmacies.filter((pharmacy: { latitude: any; longitude: any }) =>
+              map.getBounds().contains(new kakao.maps.LatLng(pharmacy.latitude, pharmacy.longitude)),
+            );
+            console.log(pharmaciesInMap);
+            // pharmacies.map((pharmacy: { wgs84Lat: any; wgs84Lon: any; dutyName: any }) => {
+            //   const PositionPharmacy = new kakao.maps.LatLng(pharmacy.wgs84Lat, pharmacy.wgs84Lon);
+            //   const content =
+            //     '<div class="customoverlay">' + `<span class="title">${pharmacy.dutyName}</span>` + "</div>";
+            //   const MarkerPharmacy = new kakao.maps.CustomOverlay({
+            //     map: map,
+            //     position: PositionPharmacy,
+            //     content: content,
+            //     yAnchor: 1,
+            //     title: pharmacy.dutyName,
+            //   });
+            //   MarkerPharmacy.setMap(map);
+            //   return MarkerPharmacy;
+            // });
           } catch (error) {
             console.error("문제 발생!", error);
           }
