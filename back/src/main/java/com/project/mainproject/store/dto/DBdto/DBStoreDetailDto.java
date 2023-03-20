@@ -4,11 +4,13 @@ import com.project.mainproject.VO.OperatingTime;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@ToString
 public class DBStoreDetailDto {
     private Long storeIdx;
     private String name;
@@ -17,8 +19,8 @@ public class DBStoreDetailDto {
     private Double latitude;
     private String tel;
     private String etc;
-    private Double rating;
-    private Long likeStoreCount;
+    private Double rating;      //별점
+    private Long pickedStoreCount;  //찜한약국
     private String image;
     private OperatingTime monday;
     private OperatingTime tuesday;
@@ -41,7 +43,7 @@ public class DBStoreDetailDto {
         this.tel = tel;
         this.etc = etc;
         this.rating = rating;
-        this.likeStoreCount = likeStoreCount;
+        this.pickedStoreCount = likeStoreCount;
         this.image = image;
         this.monday = monday;
         this.tuesday = tuesday;

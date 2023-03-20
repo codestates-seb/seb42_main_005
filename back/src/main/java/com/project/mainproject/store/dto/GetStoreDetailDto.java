@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Builder
@@ -17,8 +16,8 @@ public class GetStoreDetailDto {
     private String tel;
     private String etc;
     private double rating;
-    private Long likeStoreCount;
-    private List<String> image;
+    private Long pickedStoreCount;
+    private String image;
     private TodayOperatingTimeDto todayOperatingTime;
     private OperatingDayOfWeekDto operatingTime;
     private Boolean isOperating;
