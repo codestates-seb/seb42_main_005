@@ -10,4 +10,13 @@ public class StoreService {
     private StoreRepository storeRepository;
 
 
+
+
+
+
+    //### 내부 동작 로직 ###//
+
+
+
+
 }

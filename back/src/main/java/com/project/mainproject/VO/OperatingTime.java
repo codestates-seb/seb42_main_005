@@ -4,11 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.persistence.Access;
 import javax.persistence.Embeddable;
 import java.time.LocalTime;
 
+import static javax.persistence.AccessType.FIELD;
+
 @Getter
 @Embeddable
+@Access(FIELD)
 @Builder
 @AllArgsConstructor
 public class OperatingTime {
@@ -19,10 +23,19 @@ public class OperatingTime {
         super();
     }
     //편의 메서드
+    public boolean checkOperating() {
+        if (LocalTime.now().isBefore(endTime) && startTime != null) {
+            return true;
+        }
+        return false;
+    }
+    public boolean isNightOperating() {
 
-    //TODO : 영업 시간 인지 체크
-
-    //TODO : 심야 영업 여부
+        if (endTime.getHour() > 22) {
+            return true;
+        }
+        return false;
+    }
 
 
 }

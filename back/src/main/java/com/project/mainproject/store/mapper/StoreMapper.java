@@ -1,50 +1,60 @@
 package com.project.mainproject.store.mapper;
 
 import com.project.mainproject.data.dto.StoreDataDto;
+import com.project.mainproject.store.dto.DBdto.DBStoreDetailDto;
+import com.project.mainproject.store.dto.GetStoreDetailDto;
 import com.project.mainproject.store.entity.Store;
+import com.project.mainproject.store.utils.TransOperatingTime;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import java.time.LocalTime;
+import org.mapstruct.ReportingPolicy;
+
 import java.util.List;
 
-import static org.mapstruct.ReportingPolicy.IGNORE;
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public abstract class StoreMapper {
+    protected final TransOperatingTime transOperatingTime = new TransOperatingTime();
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = IGNORE)
-public interface StoreMapper {
-    List<Store> storeDataDtoListToStores(List<StoreDataDto> storeData);
+    @Mapping(target = "operatingTime", source = ".")
+    @Mapping(target = "isOperating",expression = "java(transOperatingTime.todayOperating(dbStoreDetailDto).checkOperating())")
+    @Mapping(target = "isOperatingNight",expression = "java(transOperatingTime.todayOperating(dbStoreDetailDto).isNightOperating())")
+    @Mapping(target = "todayOperatingTime.operatingTime" , expression ="java(transOperatingTime.todayOperating(dBStoreDetailDto))")
+    public abstract GetStoreDetailDto getStoreDetailDto(DBStoreDetailDto dbStoreDetailDto);
+
+    public abstract List<Store> storeDataDtoListToStores(List<StoreDataDto> storeData);
 
     @Mapping(target = "mondayOperating.startTime",
-            expression = "java(stringToLocalTime(storeDataDto.getDutyTime1s()))")
+            expression = "java(transOperatingTime.stringToLocalTime(storeDataDto.getDutyTime1s()))")
     @Mapping(target = "mondayOperating.endTime",
-            expression = "java(stringToLocalTime(storeDataDto.getDutyTime1c()))")
+            expression = "java(transOperatingTime.stringToLocalTime(storeDataDto.getDutyTime1c()))")
     @Mapping(target = "tuesdayOperating.startTime",
-            expression = "java(stringToLocalTime(storeDataDto.getDutyTime1s()))")
+            expression = "java(transOperatingTime.stringToLocalTime(storeDataDto.getDutyTime1s()))")
     @Mapping(target = "tuesdayOperating.endTime",
-            expression = "java(stringToLocalTime(storeDataDto.getDutyTime1c()))")
+            expression = "java(transOperatingTime.stringToLocalTime(storeDataDto.getDutyTime1c()))")
     @Mapping(target = "wednesdayOperating.startTime",
-            expression = "java(stringToLocalTime(storeDataDto.getDutyTime3s()))")
+            expression = "java(transOperatingTime.stringToLocalTime(storeDataDto.getDutyTime3s()))")
     @Mapping(target = "wednesdayOperating.endTime",
-            expression = "java(stringToLocalTime(storeDataDto.getDutyTime3c()))")
+            expression = "java(transOperatingTime.stringToLocalTime(storeDataDto.getDutyTime3c()))")
     @Mapping(target = "thursdayOperating.startTime",
-            expression = "java(stringToLocalTime(storeDataDto.getDutyTime4s()))")
+            expression = "java(transOperatingTime.stringToLocalTime(storeDataDto.getDutyTime4s()))")
     @Mapping(target = "thursdayOperating.endTime",
-            expression = "java(stringToLocalTime(storeDataDto.getDutyTime4c()))")
+            expression = "java(transOperatingTime.stringToLocalTime(storeDataDto.getDutyTime4c()))")
     @Mapping(target = "fridayOperating.startTime",
-            expression = "java(stringToLocalTime(storeDataDto.getDutyTime5s()))")
+            expression = "java(transOperatingTime.stringToLocalTime(storeDataDto.getDutyTime5s()))")
     @Mapping(target = "fridayOperating.endTime",
-            expression = "java(stringToLocalTime(storeDataDto.getDutyTime5c()))")
+            expression = "java(transOperatingTime.stringToLocalTime(storeDataDto.getDutyTime5c()))")
     @Mapping(target = "saturdayOperating.startTime",
-            expression = "java(stringToLocalTime(storeDataDto.getDutyTime6s()))")
+            expression = "java(transOperatingTime.stringToLocalTime(storeDataDto.getDutyTime6s()))")
     @Mapping(target = "saturdayOperating.endTime",
-            expression = "java(stringToLocalTime(storeDataDto.getDutyTime6c()))")
+            expression = "java(transOperatingTime.stringToLocalTime(storeDataDto.getDutyTime6c()))")
     @Mapping(target = "sundayOperating.startTime",
-            expression = "java(stringToLocalTime(storeDataDto.getDutyTime7s()))")
+            expression = "java(transOperatingTime.stringToLocalTime(storeDataDto.getDutyTime7s()))")
     @Mapping(target = "sundayOperating.endTime",
-            expression = "java(stringToLocalTime(storeDataDto.getDutyTime7c()))")
+            expression = "java(transOperatingTime.stringToLocalTime(storeDataDto.getDutyTime7c()))")
     @Mapping(target = "holidayOperating.startTime",
-            expression = "java(stringToLocalTime(storeDataDto.getDutyTime8s()))")
+            expression = "java(transOperatingTime.stringToLocalTime(storeDataDto.getDutyTime8s()))")
     @Mapping(target = "holidayOperating.endTime",
-            expression = "java(stringToLocalTime(storeDataDto.getDutyTime8c()))")
+            expression = "java(transOperatingTime.stringToLocalTime(storeDataDto.getDutyTime8c()))")
     @Mapping(target = "isOperatingHoliday",
             expression = "java(storeDataDto.getDutyTime8s() != null ? true : false)")
     @Mapping(target = "address", source = "dutyAddr")
@@ -53,15 +63,6 @@ public interface StoreMapper {
     @Mapping(target = "tel", source = "dutyTel1")
     @Mapping(target = "etc", source = "dutyEtc")
     @Mapping(target = "name", source = "dutyName")
-    Store storeDataDtoToStore(StoreDataDto storeDataDto);
-
-    default LocalTime stringToLocalTime(String str) {
-        if (str == null) return null;
-        StringBuilder sb = new StringBuilder(str);
-        sb.insert(2, ":");
-        int hour = Integer.parseInt(sb.substring(0,2));
-        if (hour > 23) sb.replace(0,2, "0" + (hour - 24));
-        return LocalTime.parse(sb.toString());
-    }
+    public abstract Store storeDataDtoToStore(StoreDataDto storeDataDto);
 
 }
