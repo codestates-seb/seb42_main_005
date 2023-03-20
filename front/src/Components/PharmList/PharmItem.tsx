@@ -17,9 +17,13 @@ export default function PharmItem({ pharmListDetail }: Props) {
         <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} pharmListDetail={pharmListDetail} />
       ) : null}
       <InfoImgContainer>
-        <Img src={pharmListDetail && pharmListDetail.image} alt="고심약국" onClick={() => setIsModalUp(true)} />
+        {pharmListDetail.image ? (
+          <PharmImg src={pharmListDetail.image as string} onClick={() => setIsModalUp(true)} />
+        ) : (
+          <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." onClick={() => setIsModalUp(true)} />
+        )}
         <LikeButton onClick={() => setLike(!like)}>
-          {like ? <img src="./Images/Heart.png" alt="like" /> : <img src="./Images/UnHeart.png" alt="unlike" />}
+          {like ? <img src="./Images/Heart.png" alt="좋아요가 선택된 상태의 꽉 찬 하트모양입니다." /> : <img src="./Images/UnHeart.png" alt="좋아요 하기 전의 빈 하트모양입니다." />}
         </LikeButton>
       </InfoImgContainer>
       <PharmTitleBox>
@@ -75,4 +79,11 @@ const PharmName = styled.h1`
   cursor: pointer;
   font-size: 1.56rem;
   font-weight: bold;
+`;
+const PharmImg = styled.img`
+  object-fit: cover;
+  width: 23.75rem;
+  height: 15.625rem;
+  border-radius: 5px;
+  border: 2px solid var(--black-100);
 `;

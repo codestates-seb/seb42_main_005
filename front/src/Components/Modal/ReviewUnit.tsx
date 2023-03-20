@@ -17,49 +17,11 @@ export default function ReviewUnit({ reviewList }: Props) {
         <section>
           <Upper>
             <UserInfo>
-              <UserIcon src="/Images/User.png" alt="user" />
+              <UserIcon src="/Images/User.png" alt="일반계정 사용자의 이미지 입니다." />
               <UserName>caffeine</UserName>
               <Created>{new Date(reviewList.createdAt).toLocaleDateString()}</Created>
               <StarContainer>
-                {reviewList.rating === 1 ? <BsFillStarFill /> : ""}
-                {reviewList.rating === 2 ? (
-                  <>
-                    <BsFillStarFill />
-                    <BsFillStarFill />
-                  </>
-                ) : (
-                  ""
-                )}
-                {reviewList.rating === 3 ? (
-                  <>
-                    <BsFillStarFill />
-                    <BsFillStarFill />
-                    <BsFillStarFill />
-                  </>
-                ) : (
-                  ""
-                )}
-                {reviewList.rating === 4 ? (
-                  <>
-                    <BsFillStarFill />
-                    <BsFillStarFill />
-                    <BsFillStarFill />
-                    <BsFillStarFill />
-                  </>
-                ) : (
-                  ""
-                )}
-                {reviewList.rating === 5 ? (
-                  <>
-                    <BsFillStarFill />
-                    <BsFillStarFill />
-                    <BsFillStarFill />
-                    <BsFillStarFill />
-                    <BsFillStarFill />
-                  </>
-                ) : (
-                  ""
-                )}
+                {new Array(reviewList.rating).fill('').map(e=><BsFillStarFill />)}
               </StarContainer>
             </UserInfo>
             <ButtonContainer>
@@ -180,6 +142,7 @@ const ReviewImg = styled.img`
   height: 80px;
   width: 100px;
   border-radius: 5px;
+  border: 2px solid var(--black-100);
 `;
 const CommentContainer = styled.section`
   display: flex;

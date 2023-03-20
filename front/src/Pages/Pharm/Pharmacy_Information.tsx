@@ -30,7 +30,7 @@ export default function PharmacyInformation() {
         <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
       ) : null}
       <ImgContainer>
-        <ReviewImgInput id="pharmImg" type="file" onChange={(e) => onUpload(e)} accept="image/*" />
+        <ImgInput id="pharmImg" type="file" onChange={(e) => onUpload(e)} accept="image/*" />
         {imageSrc ? <PharmImg src={imageSrc as string} /> : <PharmImg src="Images/ImgPreparing.png"  alt="image preparing"/>}
         <Label htmlFor="pharmImg">
           <MdOutlineAddAPhoto aria-hidden="true" />
@@ -147,7 +147,7 @@ const Value = styled.span`
     color: var(--black-400);
   }
 `;
-const ReviewImgInput = styled.input`
+const ImgInput = styled.input`
   position: absolute;
   display: none;
 `;

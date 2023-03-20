@@ -1,20 +1,16 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const getReviewSlice: any = createSlice({
   name: "getReview",
   initialState: {
-    response: {
-      storeReview: [],
-    },
+    storeReview: [],
   },
   reducers: {
-    getReviewList: (state: any, action: PayloadAction<any>) => {
-      state.response = action.payload;
+    getReviewListAction: (state: any, action: PayloadAction<any>) => {
+      state.storeReview = action.payload;
     },
   },
 });
-const { getReviewList } = getReviewSlice.actions;
-export const getReviewListActions = getReviewSlice.actions;
-export const getReview = (state: any) => state.getPharmDetail.response;
+export const { getReviewListAction } = getReviewSlice.actions;
+export const getReview = (state: any) => state.getPharmDetail.storeReview;
 export default getReviewSlice.reducer;

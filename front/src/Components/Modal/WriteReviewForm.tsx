@@ -49,12 +49,12 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
           onChange={handlerText}
         />
         <ReviewImgContainer>
-          <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
+          <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"/>
           {imageSrc ? (
             <ReviewImg src={imageSrc} />
           ) : (
             <Instead>
-              <BiPhotoAlbum aria-hidden="true" />
+              <BiPhotoAlbum aria-hidden="true"/>
             </Instead>
           )}
           <Label htmlFor="img">
@@ -133,6 +133,7 @@ const ReviewImg = styled.img`
   height: 80px;
   width: 100px;
   border-radius: 5px;
+  border: 1px solid var(--black-100);
 `;
 const Instead = styled.span`
   display: flex;

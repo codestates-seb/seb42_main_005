@@ -1,35 +1,33 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
-import PharmDetail from "../../Components/Modal/PharmDetail";
-import { IoIosArrowDropright } from "react-icons/io";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import LikedPharmacy from "./MyInfo_likedPharmacy"
 import { IoMdAddCircleOutline } from "react-icons/io";
-
-let dummy = {
-  myLikes: [
-    {
-      pharm: "킹갓약국",
-      address: "서울시 종로구 대학로 101",
-      tel: "1588-5700",
-    },
-    {
-      pharm: "제너럴 약국",
-      address: "서울시 중랑구 신내로 156",
-      tel: "02-2276-7000",
-    },
-  ],
-};
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import axios from "axios";
+import { getLikedPharmListAction } from "../../Redux/slice/getLikedPharmListSlice";
 
 export default function MyInfoLikes() {
-  const [isModalUp, setIsModalUp] = useState(false);
-  const [like, setLike] = useState(false);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const getLikedPharmList = async () => {
+      try {
+        const response = await axios.get("http://localhost:3004/response");
+        dispatch(getLikedPharmListAction(response.data));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getLikedPharmList();
+  }, []);
+
+  const LikedPharmacies = useAppSelector((state: any) => {
+    return state.getLikedPharmList.response.stores;
+  });
 
   return (
     <Content>
-      {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
-      ) : null}
       <TableHead>
         <Text className="single" />
         <Text className="pharm">약국명</Text>
@@ -37,23 +35,9 @@ export default function MyInfoLikes() {
         <Text className="number">전화번호</Text>
         <Text className="single" />
       </TableHead>
-      {dummy.myLikes.length ? (
+      {LikedPharmacies.length ? (
         <Rest>
-          {dummy.myLikes.map((data, i) => {
-            return (
-              <TableBody key={i}>
-                <Text className="single icon">
-                  <IoIosArrowDropright onClick={() => setIsModalUp(!isModalUp)} aria-hidden="true" />
-                </Text>
-                <Text className="pharm">{data.pharm}</Text>
-                <Text className="address">{data.address}</Text>
-                <Text className="number">{data.tel}</Text>
-                <Text className="single icon">
-                  <RiDeleteBin6Line aria-hidden="true" />
-                </Text>
-              </TableBody>
-            );
-          })}
+          {LikedPharmacies.map((likedPharmacy: any) => <LikedPharmacy likedPharmacy={likedPharmacy}/>)}
         </Rest>
       ) : (
         <WhenEmpty>
@@ -75,7 +59,6 @@ const Content = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  /* flex-grow: 1; */
   height: 300px;
   background-color: var(--black-025);
   @media (max-width: 768px) {

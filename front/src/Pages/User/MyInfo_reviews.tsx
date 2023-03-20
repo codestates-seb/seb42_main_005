@@ -1,39 +1,34 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
-import PharmDetail from "../../Components/Modal/PharmDetail";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import MyReview from "../User/MyInfo_MyReview"
 import { IoMdAddCircleOutline } from "react-icons/io";
-
-let dummy = {
-  myReviews: [
-    {
-      pharm: "킹갓약국",
-      review: "내꿈은 늘 너였어 박연진",
-      writtenAt: "2012.02.14",
-    },
-    {
-      pharm: "제너럴 약국",
-      review: "졸려 ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ",
-      writtenAt: "2012.02.14",
-    },
-    {
-      pharm: "텐텐좋아약국",
-      review: "텐텐 사러 갔는데 여기에는 노마밖에 안팜 ㅠ",
-      writtenAt: "2012.02.14",
-    },
-  ],
-};
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import axios from "axios";
+import { getReviewListAction } from "../../Redux/slice/getReviewSlice";
 
 export default function MyInfoReviews() {
-  const [isModalUp, setIsModalUp] = useState(false);
-  const [like, setLike] = useState(false);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const getMyReviews = async () => {
+      try {
+        const response = await axios.get("http://localhost:3005/response");
+        dispatch(getReviewListAction(response.data));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getMyReviews();
+  }, []);
+
+  const Reviews = useAppSelector((state: any) => {
+    return state.getMyReviews.response.reviews;
+  });
+
 
   return (
     <Content>
-      {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
-      ) : null}
       <TableHead>
         <Text className="single" />
         <Text className="pharm">약국명</Text>
@@ -41,20 +36,10 @@ export default function MyInfoReviews() {
         <Text className="number">작성일</Text>
         <Text className="single" />
       </TableHead>
-      {dummy.myReviews.length ? (
+      {Reviews.length ? (
         <Rest>
-          {dummy.myReviews.map((data, i) => (
-            <TableBody>
-              <Text className="single">{i + 1}</Text>
-              <Text className="pharm" onClick={() => setIsModalUp(!isModalUp)}>
-                {data.pharm}
-              </Text>
-              <Text className="review">{data.review}</Text>
-              <Text className="number">{data.writtenAt}</Text>
-              <Text className="single icon">
-                <RiDeleteBin6Line aria-hidden="true" />
-              </Text>
-            </TableBody>
+          {Reviews.map((review: any, i: number )=> (
+            <MyReview review={review} key={i}/>
           ))}
         </Rest>
       ) : (

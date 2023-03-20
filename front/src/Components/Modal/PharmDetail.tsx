@@ -37,7 +37,7 @@ export default function PharmDetail({ setIsModalUp, like, setLike, pharmListDeta
   }, []);
 
   const reviewList = useAppSelector((state: any) => {
-    return state.getReview.response.storeReview;
+    return state.getReview.storeReview;
   });
 
   return (
@@ -48,7 +48,7 @@ export default function PharmDetail({ setIsModalUp, like, setLike, pharmListDeta
             <HiXMark id="close" onClick={() => setIsModalUp(false)} aria-hidden="true" />
           </CloseBtnContainer>
           <InfoHeader>
-            <InfoTitle>{pharmListDetail.name}</InfoTitle>
+            <InfoTitle>{pharmListDetail.storeName}</InfoTitle>
             <PharmRank rating={pharmListDetail.rating} />
           </InfoHeader>
           <Constant>

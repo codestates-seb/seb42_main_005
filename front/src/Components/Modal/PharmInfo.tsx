@@ -22,7 +22,11 @@ export default function PharmInfo({ like, setLike, pharmListDetail }: Props) {
         {pharmListDetail && <PharmRank rating={pharmListDetail.rating} />}
       </InfoHeader>
       <InfoImgContainer>
-        <Img src={pharmListDetail.image} alt="고심약국"></Img>
+        {pharmListDetail.image ? (
+          <PharmImg src={pharmListDetail.image as string}/>
+        ) : (
+          <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다."/>
+        )}
         <LikeButton onClick={() => setLike(!like)}>
           {like ? <img src="./Images/Heart.png" alt="like" /> : <img src="./Images/UnHeart.png" alt="unlike" />}
         </LikeButton>
@@ -157,4 +161,11 @@ const More = styled.button`
     color: var(--l_button-mint-hover);
     border: 1px solid var(--l_button-mint-hover);
   }
+`;
+const PharmImg = styled.img`
+  object-fit: cover;
+  width: 23.75rem;
+  height: 15.625rem;
+  border-radius: 5px;
+  border: 2px solid var(--black-100);
 `;

@@ -9,7 +9,7 @@ import { VscTriangleLeft } from "react-icons/vsc";
 import { SELECT_HIDDEN } from "../../Util/type";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import axios from "axios";
-import { getPharmDListActions } from "../../Redux/slice/getPharmListSlice";
+import { getPharmListAction } from "../../Redux/slice/getPharmListSlice";
 import { useEffect } from "react";
 
 interface Props {
@@ -26,7 +26,7 @@ export default function PharmLists({ hidden, setHidden }: Props) {
         const response = await axios.get("http://localhost:3002/response");
         // console.log(response.data);
 
-        dispatch(getPharmDListActions.getPharmListD(response.data));
+        dispatch(getPharmListAction(response.data));
       } catch (error) {
         console.log(error);
       }
