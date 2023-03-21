@@ -11,4 +11,5 @@ public class GetStoreListRequestDto {
     private Double lng;
     private Long distance;
     private String sortCondition;
+    private String filterCondition;
 }

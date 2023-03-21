@@ -21,22 +21,17 @@ public class StoreController {
      *  약국 목록_페이지 리스트
      * */
     @GetMapping
-    public ResponseEntity getStoreHome(@RequestBody GetStoreListRequestDto requestDto) {
-        //TODO : 정렬 조건에 대한 문제가 여전히 존재합니다. 해당 문제를 체크할 필요가 있습니다.
-
+    public ResponseEntity getStoreList(@RequestBody GetStoreListRequestDto requestDto) {
         SingleResponseDto response = storeGetService.getStoreListDto(requestDto);
 
         return ResponseEntity.ok().body(response);
     }
 
     /*
-     * 약국 상세 조회
+     * 약국 상세 조회 - 완성
      * */
     @GetMapping("/{storeIdx}")
     public ResponseEntity getStoreDetail(@PathVariable Long storeIdx) {
-        //TODO : Service 구현
-        log.info("#### 이몸 등장!");
-
         return ResponseEntity.ok(storeGetService.getStoreDetailDto(storeIdx));
     }
 

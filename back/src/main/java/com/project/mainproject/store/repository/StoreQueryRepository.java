@@ -5,10 +5,10 @@ import com.project.mainproject.store.dto.DBdto.DBStoreListDto;
 import com.project.mainproject.store.dto.DBdto.QDBStoreDetailDto;
 import com.project.mainproject.store.dto.DBdto.QDBStoreListDto;
 import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
@@ -62,7 +62,7 @@ public class StoreQueryRepository {
         return dbStoreDetailDto;
     }
 
-    public List<DBStoreListDto> getStoreList(double lat, double lng, double distanceCondition, String sortCondition, String filterCond, boolean isHoliday) {
+    public List<DBStoreListDto> getStoreList(double lat, double lng, double distanceCondition, String sortCondition, String operatingFilterCond, boolean isHoliday) {
         Expression<Double> latitude  = Expressions.constant(lat);
         Expression<Double> longitude = Expressions.constant(lng);
         Expression<Double> distanceCond = Expressions.constant(distanceCondition);
@@ -71,15 +71,14 @@ public class StoreQueryRepository {
                 .select(new QDBStoreListDto(
                         store.storeIdx,store.name,store.address,store.latitude,store.longitude,
                         review.rating.avg(),
-                        JPAExpressions          //distance
-                                .select(
+                        ExpressionUtils.as( (
                                         acos(sin(radians(store.latitude))
                                                 .multiply(sin(radians(latitude)))
                                                 .add(cos(radians(store.latitude))
                                                         .multiply(cos(radians(latitude)))
                                                         .multiply(cos(radians(store.longitude.subtract(longitude)))))
-                                        ).multiply(RADIUS_EARTH_KM).as("distance")
-                                ),
+                                        ).multiply(RADIUS_EARTH_KM)
+                                ), "distance"),
                         pickedStore.storeId.count(),
                         review.reviewIdx.count(),
                         store.storeImages.imagePath,
@@ -89,8 +88,9 @@ public class StoreQueryRepository {
                 .leftJoin(store.reviews,review)
                 .leftJoin(store.pickedStores, pickedStore)
                 .leftJoin(store.storeImages, storeImage)
-                .where(getDistanceCondition(latitude, longitude, distanceCond),getOperatingCondition(isHoliday,filterCond))
+                .where(getDistanceCondition(latitude, longitude, distanceCond),getOperatingCondition(isHoliday,operatingFilterCond))
                 .orderBy(orderByCondition(sortCondition))
+                .groupBy(store.storeIdx, storeImage.imagePath)
                 .fetch();
     }
 
@@ -98,44 +98,8 @@ public class StoreQueryRepository {
 
     //내부 동작 쿼리 orderBy
     private OrderSpecifier orderByCondition(String sortCondition) {
-        switch (sortCondition) {
-            case "pickedStoreCount":
-            case "reviewCount":
-                return Expressions.numberPath(Long.class, sortCondition).asc();
-            default:
-                return Expressions.numberPath(Double.class, sortCondition).asc();
-        }
+                return Expressions.stringPath(sortCondition).asc();
     }
-
-    //내부 동작 쿼리 select
-    private Expression<Double> getReviewRating(Long storeIdx) {
-        return JPAExpressions          //rating
-                .select(review.rating.avg().as("rating"))
-                .from(review);
-    }
-
-    private Expression<Long> pickedStoreCount(Long storeIdx) {
-        return JPAExpressions.select(pickedStore.count().as("pickedStoreCount"))
-                .from(pickedStore)
-                .where(pickedStore.store.storeIdx.eq(storeIdx));
-    }
-
-    private Expression<Long> reviewCount() {
-        return JPAExpressions.select(review.count().as("reviewCount"));
-    }
-
-    private Expression<Double> getDistance(Expression<Double> latitude, Expression<Double> longitude) {
-        return JPAExpressions          //distance
-                .select(
-                        acos(sin(radians(store.latitude))
-                                .multiply(sin(radians(latitude)))
-                                .add(cos(radians(store.latitude))
-                                        .multiply(cos(radians(latitude)))
-                                        .multiply(cos(radians(store.longitude.subtract(longitude))))).as("distance")
-                        )
-                );
-    }
-
 
     //내부동작 쿼리 where 절
     private BooleanExpression getDistanceCondition(Expression<Double> latitude, Expression<Double> longitude, Expression<Double> distanceCond) {
@@ -146,8 +110,9 @@ public class StoreQueryRepository {
                         .multiply(cos(radians(store.longitude.subtract(longitude)))))).multiply(RADIUS_EARTH_KM).loe(distanceCond);
     }
 
-    private BooleanExpression getOperatingCondition(boolean isHoliday, String filterCond) {
-        if (!filterCond.equals("holiday")) {
+    private BooleanExpression getOperatingCondition(boolean isHoliday, String filterCond) {     //operating여부
+
+        if (filterCond==null ||!filterCond.equals("holiday")) {
             return null;
         }
 
