@@ -7,13 +7,13 @@ import lombok.Getter;
 public class PageInfo {
     private int size;
     private int page;
-    private int totalElement;
+    private long totalElement;
     private int totalPage;
     private Boolean isFirst;
     private Boolean isFinish;
 
     @Builder
-    public PageInfo(int size, int page, int totalElement, int totalPage, boolean isFirst, boolean isFinish) {
+    public PageInfo(int size, int page, long totalElement, int totalPage, boolean isFirst, boolean isFinish) {
         this.size = size;
         this.page = page;
         this.totalElement = totalElement;
@@ -21,4 +21,5 @@ public class PageInfo {
         this.isFirst = isFirst;
         this.isFinish = isFinish;
     }
+
 }

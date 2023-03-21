@@ -1,12 +1,11 @@
 package com.project.mainproject.review.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
-public class PostReportReviewPlusDto {
+@Builder
+public class SimpleReportDto {
+    private Long reportIdx;
     private Long userIdx;
-    private String content;
 }

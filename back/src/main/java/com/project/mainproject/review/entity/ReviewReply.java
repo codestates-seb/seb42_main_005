@@ -1,10 +1,8 @@
-package com.project.mainproject.tag.entity;
+package com.project.mainproject.review.entity;
 
-import com.project.mainproject.review.entity.Review;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.project.mainproject.audit.Auditable;
+import com.project.mainproject.user.entity.User;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -14,17 +12,22 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-public class ReviewTag {
+public class ReviewReply extends Auditable {
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long reviewTagIdx;
+    @Column(name = "review_reply_idx")
+    private Long replyIdx;
+
+    @Column(length = 1000)
+    private String content;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "TAG_IDX")
-    private Tag tag;
+    private User user;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "REVIEW_IDX")
