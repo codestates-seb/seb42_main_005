@@ -41,9 +41,23 @@ public class StoreController {
     @PostMapping("/{storeIdx}/pick")
     public ResponseEntity pickedStore(@PathVariable Long storeIdx) {
         //TODO : Service 구현
+
+
         SingleResponseDto build = CommonStub.getSingleResponseStub();
         build.setResponse(StoreIdxResponse.builder().storeIdx(1L).build());
         return ResponseEntity.ok().body(build);
     }
+
+    /*
+    *  찜한 약국 보여주기
+    * */
+
+    @GetMapping("/user/{userIdx}/pick/")
+    public ResponseEntity getPickedStoreList(@PathVariable Long userIdx) {
+        SingleResponseDto pickedStoreList = storeGetService.getPickedStoreList(userIdx);
+
+        return ResponseEntity.ok().body(pickedStoreList);
+    }
+
 }
 

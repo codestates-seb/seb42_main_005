@@ -1,9 +1,6 @@
 package com.project.mainproject.store.repository;
 
-import com.project.mainproject.store.dto.DBdto.DBStoreDetailDto;
-import com.project.mainproject.store.dto.DBdto.DBStoreListDto;
-import com.project.mainproject.store.dto.DBdto.QDBStoreDetailDto;
-import com.project.mainproject.store.dto.DBdto.QDBStoreListDto;
+import com.project.mainproject.store.dto.DBdto.*;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.OrderSpecifier;
@@ -93,6 +90,17 @@ public class StoreQueryRepository {
                 .groupBy(store.storeIdx, storeImage.imagePath)
                 .fetch();
     }
+
+    public List<DBPickedStoredListDto> getPickedStoreList(Long userIdx) {
+        return queryFactory
+                .select(new QDBPickedStoredListDto(
+                        store.storeIdx, store.name, store.address, store.tel))
+                .from(pickedStore)
+                .join(pickedStore.store, store)
+                .where(pickedStore.normal.userIdx.eq(userIdx))
+                .fetch();
+    }
+
 
 
 
