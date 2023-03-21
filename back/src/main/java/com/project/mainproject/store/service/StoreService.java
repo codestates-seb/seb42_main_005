@@ -15,7 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
+@RequiredArgsConstructor
 public class StoreService {
     private final StoreQueryRepository storeQueryRepository;
     private final PickedStoreRepository pickedStoreRepository;
@@ -28,7 +29,7 @@ public class StoreService {
 
         for (PickedStore pickedStore : findPickedStores) {
             if (pickedStore.getNormal().getUserIdx().equals(userIdx)) {
-                pickedStore.removePickedStore(findUser, findStore);      //처리 로직
+                pickedStore.removePickedStore(findUser, findStore);
                 findPickedStores.remove(pickedStore);
                 pickedStoreRepository.delete(pickedStore);
 
@@ -54,5 +55,6 @@ public class StoreService {
                 .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
                 .build();
     }
+
 
 }

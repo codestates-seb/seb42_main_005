@@ -2,6 +2,7 @@ package com.project.mainproject.store.controller;
 
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.store.dto.GetStoreListRequestDto;
+import com.project.mainproject.store.dto.StoreSearchStoreDto;
 import com.project.mainproject.store.service.StoreGetService;
 import com.project.mainproject.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,9 @@ public class StoreController {
      * */
     @GetMapping("/{storeIdx}")
     public ResponseEntity getStoreDetail(@PathVariable Long storeIdx) {
-        return ResponseEntity.ok(storeGetService.getStoreDetailDto(storeIdx));
+        SingleResponseDto storeDetailDto = storeGetService.getStoreDetailDto(storeIdx);
+
+        return ResponseEntity.ok(storeDetailDto);
     }
 
     /*
@@ -54,8 +57,17 @@ public class StoreController {
     public ResponseEntity getPickedStoreList(@PathVariable Long userIdx) {
         SingleResponseDto pickedStoreList = storeGetService.getPickedStoreList(userIdx);
 
-        return ResponseEntity.ok().body(pickedStoreList);
+        return ResponseEntity.ok(pickedStoreList);
     }
 
+    /*
+     * 약국 이름으로 검색하기
+     * */
+    @GetMapping("/search")
+    public ResponseEntity searchStore(@RequestBody StoreSearchStoreDto storeSearchStoreDto) {
+        SingleResponseDto searchResult = storeGetService.getSearchStoreList(storeSearchStoreDto);
+
+        return ResponseEntity.ok(searchResult);
+    }
 }
 
