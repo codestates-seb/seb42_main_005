@@ -7,15 +7,30 @@ import { BsSearch } from "react-icons/bs";
 import { RiHomeLine } from "react-icons/ri";
 import { VscTriangleLeft } from "react-icons/vsc";
 import { SELECT_HIDDEN } from "../../Util/type";
+import axios from "axios";
+import { useEffect } from "react";
+import { useState } from "react";
 
 interface Props {
   hidden: SELECT_HIDDEN;
   setHidden: Dispatch<SetStateAction<SELECT_HIDDEN>>;
 }
-//데이터 들어오면 map으로 돌리기전에 하드코딩으로 두개해놨음
 export default function PharmLists({ hidden, setHidden }: Props) {
-  /* 조건부로 할려고 임의로 해놓은 것!
-  나중에 데이터 넘어오면 바꿀것*/
+  const [totalPharmList, settotalPharmList] = useState([]);
+
+  useEffect(() => {
+    const getPharmLists = async () => {
+      try {
+        const response = await axios.get("http://localhost:3002/response");
+        // console.log(response.data.storeHome);
+
+        settotalPharmList(response.data.storeHome);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPharmLists();
+  }, []);
 
   return (
     <ContainerList className={hidden ? "hide" : ""}>
@@ -55,6 +70,7 @@ export default function PharmLists({ hidden, setHidden }: Props) {
                 <ButtonSort>별점높은순</ButtonSort>
               </SortContainer>
             </ButtonContainer>
+<<<<<<< HEAD
           </ListHead>
           <ListBody>
             <PharmItem />
@@ -64,6 +80,15 @@ export default function PharmLists({ hidden, setHidden }: Props) {
             <PharmItem />
           </ListBody>
         </PharmList>
+=======
+          </PharmHeadContainer>
+          <PharmItemContainer>
+            {totalPharmList.map((el: any) => (
+              <PharmItem totalPharmList={el} key={el.storeIdx} />
+            ))}
+          </PharmItemContainer>
+        </PharmContainer>
+>>>>>>> dev
       </ContainerWrap>
     </ContainerList>
   );

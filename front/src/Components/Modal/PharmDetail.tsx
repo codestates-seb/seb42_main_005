@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import PharmInfo from "./PharmInfo";
 import ReviewUnit from "./ReviewUnit";
@@ -7,52 +7,79 @@ import PharmRank from "../Ul/PharmRank";
 import Button from "../Ul/Button";
 import { zIndex_Modal } from "../../Util/z-index";
 import { HiXMark } from "react-icons/hi2";
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import axios from "axios";
+import { getReviewListActions } from "../../Redux/slice/getReviewSlice";
 
 interface Props {
   setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
   like: boolean;
   setLike: React.Dispatch<React.SetStateAction<boolean>>;
+  pharmDetail: any;
 }
-
-export default function PharmDetail({ setIsModalUp, like, setLike }: Props) {
+//storeIdx 받아서 파라미터로 쓰는걸로 수정!
+export default function PharmDetail({ setIsModalUp, like, setLike, pharmDetail }: Props) {
   const [isReviewFormShown, setIsReviewFormShown] = useState(false);
 
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const getReviews = async () => {
+      try {
+        const response = await axios.get("http://localhost:3010/response");
+        dispatch(getReviewListActions.getReviewList(response.data));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getReviews();
+  }, []);
+
+  // useEffect(() => {
+  //   axios
+  //     .all([axios.get("http://localhost:3010/response"), axios.get("http://localhost:3020/response")])
+  //     .then(
+  //       axios.spread((res1, res2) => {
+  //         setPharmDetail(res2.data);
+  //         dispatch(getReviewListActions.getReviewList(res1.data));
+  //       }),
+  //     )
+  //     .catch((err) => console.log(err));
+  // }, []);
+
+  const reviewList = useAppSelector((state: any) => {
+    return state.getReview.response.storeReview;
+  });
+
   return (
-    <>
-      <ModalBackDrop onClick={() => setIsModalUp(false)}>
-        <ModalContainer onClick={(event) => event.stopPropagation()}>
-          <CloseBtnContainer>
-            <HiXMark id="close" onClick={() => setIsModalUp(false)} aria-hidden="true" />
-          </CloseBtnContainer>
-          <InfoHeader>
-            <InfoTitle>킹갓약국</InfoTitle>
-            <PharmRank />
-          </InfoHeader>
-          <Constant>
-            <PharmInfo like={like} setLike={setLike} />
-            <ReviewContainer>
-              <ReviewTitle>리뷰</ReviewTitle>
-              <Reviews>
-                <ReviewUnit />
-                <ReviewUnit />
-                <ReviewUnit />
-                <ReviewUnit />
-                <ReviewUnit />
-                <ReviewUnit />
-                <ReviewUnit />
-                <ReviewUnit />
-              </Reviews>
-            </ReviewContainer>
-          </Constant>
-          {isReviewFormShown ? <WriteReviewForm setIsReviewFormShown={setIsReviewFormShown} /> : null}
-          {isReviewFormShown ? null : (
-            <WriteReviewBtnContainer>
-              <Button onClick={() => setIsReviewFormShown(true)} color="mint" size="md" text="리뷰쓰기" />
-            </WriteReviewBtnContainer>
-          )}
-        </ModalContainer>
-      </ModalBackDrop>
-    </>
+    <ModalBackDrop onClick={() => setIsModalUp(false)}>
+      <ModalContainer onClick={(event) => event.stopPropagation()}>
+        <CloseBtnContainer>
+          <HiXMark id="close" onClick={() => setIsModalUp(false)} aria-hidden="true" />
+        </CloseBtnContainer>
+        <InfoHeader>
+          <InfoTitle>{pharmDetail.name}</InfoTitle>
+          <PharmRank rating={pharmDetail.rating} />
+        </InfoHeader>
+        <Constant>
+          <PharmInfo like={like} setLike={setLike} pharmDetail={pharmDetail} />
+          <ReviewContainer>
+            <ReviewTitle>리뷰</ReviewTitle>
+            <Reviews>
+              {reviewList?.map((el: any) => (
+                <ReviewUnit reviewList={el} key={el.reviewIdx} />
+              ))}
+            </Reviews>
+          </ReviewContainer>
+        </Constant>
+        {isReviewFormShown ? <WriteReviewForm setIsReviewFormShown={setIsReviewFormShown} /> : null}
+        {isReviewFormShown ? null : (
+          <WriteReviewBtnContainer>
+            <Button onClick={() => setIsReviewFormShown(true)} color="mint" size="md" text="리뷰쓰기" />
+          </WriteReviewBtnContainer>
+        )}
+      </ModalContainer>
+    </ModalBackDrop>
   );
 }
 

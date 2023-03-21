@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import styled from "styled-components";
 import MapFilter from "./MapFilter";
-import MapButtons from "./Mapbuttons";
+import MapButtons from "./MapButtons";
 import { useMap } from "../../hooks/useMap";
 import { zIndex_KakaoMap } from "../../Util/z-index";
 import { SELECT_HIDDEN, SELECT_OPTION_MAP } from "../../Util/type";

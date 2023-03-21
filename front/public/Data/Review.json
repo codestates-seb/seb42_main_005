@@ -3,174 +3,59 @@
     "storeReview": [
       {
         "reviewIdx": 1,
-        "content": "내공 얌얌1",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.518506",
-        "modifiedAt": "2023-03-14T11:40:15.518489"
-      },
-      {
-        "reviewIdx": 2,
-        "content": "내공 얌얌2",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
+        "name": "박은정",
+        "userImage": "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTIy/MDAxNTIzMDI3MjQ1Nzk3.k5nYScR4RH3Tx2JVS6pQiqoKRakgtsjJnBvRSg1VfD8g.SYovJeXlx8Am487HAc9RSJ_4gNpbnhuQVPPh24_N568g.JPEG.monday20000/1522512872270.jpg?type=w800",
+        "reviewImage": "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTcz/MDAxNTIzMDI3MjQ1NDU4.uP9jhQMTNwQSSUGZcDRlddU5E11r4Kl4QRTnaSrrqKkg.OX4yCUKh3wbhgF0zGlxOT6TNIaDa3vvd9S3bMDvHfEwg.JPEG.monday20000/1522493493318.jpg?type=w800",
+        "content": "내공 얌얌",
+        "rating": 3,
         "createdAt": "2023-03-14T11:40:15.518532",
-        "modifiedAt": "2023-03-14T11:40:15.518527"
+        "modifiedAt": "2023-03-14T11:40:15.518527",
+        "comments": [
+          {
+            "commentIdx": 1,
+            "userIdx": 2,
+            "name": "김영재 약사",
+            "userImage": "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTIy/MDAxNTIzMDI3MjQ1Nzk3.k5nYScR4RH3Tx2JVS6pQiqoKRakgtsjJnBvRSg1VfD8g.SYovJeXlx8Am487HAc9RSJ_4gNpbnhuQVPPh24_N568g.JPEG.monday20000/1522512872270.jpg?type=w800",
+            "createdAt": "2023-03-14T11:40:15.518532",
+            "content": "약은 약사에게. 뿡뿡"
+          },
+          {
+            "commentIdx": 2,
+            "userIdx": 2,
+            "name": "김영재 약사",
+            "userImage": "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTIy/MDAxNTIzMDI3MjQ1Nzk3.k5nYScR4RH3Tx2JVS6pQiqoKRakgtsjJnBvRSg1VfD8g.SYovJeXlx8Am487HAc9RSJ_4gNpbnhuQVPPh24_N568g.JPEG.monday20000/1522512872270.jpg?type=w800",
+            "createdAt": "2023-03-14T11:40:15.518532",
+            "content": "영양제 신상많아요. 뿡뿡"
+          },
+          {
+            "commentIdx": 3,
+            "userIdx": 2,
+            "name": "김영재 약사",
+            "userImage": "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTIy/MDAxNTIzMDI3MjQ1Nzk3.k5nYScR4RH3Tx2JVS6pQiqoKRakgtsjJnBvRSg1VfD8g.SYovJeXlx8Am487HAc9RSJ_4gNpbnhuQVPPh24_N568g.JPEG.monday20000/1522512872270.jpg?type=w800",
+            "createdAt": "2023-03-14T11:40:15.518532",
+            "content": "비타500할인합니다. 뿡뿡"
+          }
+        ]
       },
       {
         "reviewIdx": 3,
-        "content": "내공 얌얌3",
+        "name": "이성은",
+        "userImage": "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTIy/MDAxNTIzMDI3MjQ1Nzk3.k5nYScR4RH3Tx2JVS6pQiqoKRakgtsjJnBvRSg1VfD8g.SYovJeXlx8Am487HAc9RSJ_4gNpbnhuQVPPh24_N568g.JPEG.monday20000/1522512872270.jpg?type=w800",
+        "reviewImage": "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTcz/MDAxNTIzMDI3MjQ1NDU4.uP9jhQMTNwQSSUGZcDRlddU5E11r4Kl4QRTnaSrrqKkg.OX4yCUKh3wbhgF0zGlxOT6TNIaDa3vvd9S3bMDvHfEwg.JPEG.monday20000/1522493493318.jpg?type=w800",
+        "content": "내공 얌얌2",
         "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.518543",
-        "modifiedAt": "2023-03-14T11:40:15.518539"
-      },
-      {
-        "reviewIdx": 4,
-        "content": "내공 얌얌4",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.518554",
-        "modifiedAt": "2023-03-14T11:40:15.51855"
-      },
-      {
-        "reviewIdx": 5,
-        "content": "내공 얌얌5",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.518564",
-        "modifiedAt": "2023-03-14T11:40:15.51856"
-      },
-      {
-        "reviewIdx": 6,
-        "content": "내공 얌얌6",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.518575",
-        "modifiedAt": "2023-03-14T11:40:15.518571"
-      },
-      {
-        "reviewIdx": 7,
-        "content": "내공 얌얌7",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.51859",
-        "modifiedAt": "2023-03-14T11:40:15.518581"
-      },
-      {
-        "reviewIdx": 8,
-        "content": "내공 얌얌8",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.5186",
-        "modifiedAt": "2023-03-14T11:40:15.518597"
-      },
-      {
-        "reviewIdx": 9,
-        "content": "내공 얌얌9",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.51861",
-        "modifiedAt": "2023-03-14T11:40:15.518607"
-      },
-      {
-        "reviewIdx": 10,
-        "content": "내공 얌얌10",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.518622",
-        "modifiedAt": "2023-03-14T11:40:15.518618"
-      },
-      {
-        "reviewIdx": 11,
-        "content": "내공 얌얌11",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.518632",
-        "modifiedAt": "2023-03-14T11:40:15.518629"
-      },
-      {
-        "reviewIdx": 12,
-        "content": "내공 얌얌12",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.518642",
-        "modifiedAt": "2023-03-14T11:40:15.518639"
-      },
-      {
-        "reviewIdx": 13,
-        "content": "내공 얌얌13",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.518652",
-        "modifiedAt": "2023-03-14T11:40:15.518649"
-      },
-      {
-        "reviewIdx": 14,
-        "content": "내공 얌얌14",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.518662",
-        "modifiedAt": "2023-03-14T11:40:15.518659"
-      },
-      {
-        "reviewIdx": 15,
-        "content": "내공 얌얌15",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.518672",
-        "modifiedAt": "2023-03-14T11:40:15.518669"
-      },
-      {
-        "reviewIdx": 16,
-        "content": "내공 얌얌16",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.518682",
-        "modifiedAt": "2023-03-14T11:40:15.518679"
-      },
-      {
-        "reviewIdx": 17,
-        "content": "내공 얌얌17",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.518692",
-        "modifiedAt": "2023-03-14T11:40:15.518689"
-      },
-      {
-        "reviewIdx": 18,
-        "content": "내공 얌얌18",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.518702",
-        "modifiedAt": "2023-03-14T11:40:15.518699"
-      },
-      {
-        "reviewIdx": 19,
-        "content": "내공 얌얌19",
-        "rating": 4,
-        "reviewImage": "사진 파일이 들어갈 위치입니다.",
-        "tags": ["신선함", "주차장이 넓어요", "친절함"],
-        "createdAt": "2023-03-14T11:40:15.518713",
-        "modifiedAt": "2023-03-14T11:40:15.518709"
+        "createdAt": "2023-03-14T11:40:15.518532",
+        "modifiedAt": "2023-03-14T11:40:15.518527",
+        "comments": [
+          {
+            "commentIdx": 1,
+            "userIdx": 2,
+            "name": "김영재 약사",
+            "userImage": "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTIy/MDAxNTIzMDI3MjQ1Nzk3.k5nYScR4RH3Tx2JVS6pQiqoKRakgtsjJnBvRSg1VfD8g.SYovJeXlx8Am487HAc9RSJ_4gNpbnhuQVPPh24_N568g.JPEG.monday20000/1522512872270.jpg?type=w800",
+            "createdAt": "2023-03-14T11:40:15.518532",
+            "content": "이곳은 대댓글 본문 입니다. 뿡뿡"
+          }
+        ]
       }
     ]
   }

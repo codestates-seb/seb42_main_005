@@ -1,5 +1,5 @@
 //! 모달 컴포넌트 오른편 약국 정보 부분입니다
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import PharmRank from "../Ul/PharmRank";
 import AnyDropDown from "./AnyDropDown";
@@ -7,18 +7,20 @@ import AnyDropDown from "./AnyDropDown";
 interface Props {
   like: boolean;
   setLike: React.Dispatch<React.SetStateAction<boolean>>;
+  pharmDetail: any;
 }
 
-export default function PharmInfo({ like, setLike }: Props) {
+export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
   const [isDropDownDown, setIsDropDownDown] = useState(false);
+
   return (
     <InfoContainer>
       <InfoHeader>
-        <InfoTitle>킹갓약국</InfoTitle>
-        <PharmRank />
+        <InfoTitle>{pharmDetail.name}</InfoTitle>
+        {pharmDetail && <PharmRank rating={pharmDetail.rating} />}
       </InfoHeader>
       <InfoImgContainer>
-        <Img src="./Images/random.png" alt="고심약국"></Img>
+        <Img src={pharmDetail.image} alt="고심약국"></Img>
         <LikeButton onClick={() => setLike(!like)}>
           {like ? <img src="./Images/Heart.png" alt="like" /> : <img src="./Images/UnHeart.png" alt="unlike" />}
         </LikeButton>
@@ -33,16 +35,16 @@ export default function PharmInfo({ like, setLike }: Props) {
                 영업시간 더보기
               </More>
             ) : null}
-            {isDropDownDown ? <AnyDropDown setIsDropDownDown={setIsDropDownDown} /> : null}
+            {isDropDownDown ? <AnyDropDown setIsDropDownDown={setIsDropDownDown} pharmDetail={pharmDetail} /> : null}
           </InfoInfoContent>
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>주소</InfoInfoTitle>
-          <InfoInfoContent>서울시 종로구 대학로 101</InfoInfoContent>
+          <InfoInfoContent>{pharmDetail.address}</InfoInfoContent>
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>전화번호</InfoInfoTitle>
-          <InfoInfoContent>02-1234-1234</InfoInfoContent>
+          <InfoInfoContent>{pharmDetail.tel}</InfoInfoContent>
         </InfoUnit>
       </InfoInfo>
     </InfoContainer>

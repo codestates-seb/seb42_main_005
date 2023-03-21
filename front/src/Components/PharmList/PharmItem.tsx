@@ -1,24 +1,44 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import PharmRank from "../Ul/PharmRank";
 import PharmDetail from "../Modal/PharmDetail";
+import axios from "axios";
 
-export default function PharmItem() {
+interface Props {
+  totalPharmList: any;
+}
+
+export default function PharmItem({ totalPharmList }: Props) {
   const [isModalUp, setIsModalUp] = useState(false);
   const [like, setLike] = useState(false);
+  const [pharmDetail, setPharmDetail]: any = useState();
+
+  useEffect(() => {
+    const getPharmDetail = async () => {
+      try {
+        const response = await axios.get("http://localhost:3020/response");
+        setPharmDetail(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPharmDetail();
+  }, []);
 
   return (
     <PharmCard>
-      {isModalUp ? <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} /> : null}
+      {isModalUp ? (
+        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} pharmDetail={pharmDetail} />
+      ) : null}
       <InfoImgContainer>
-        <Img src="./Images/random.png" alt="고심약국" onClick={() => setIsModalUp(true)} />
+        <Img src={totalPharmList && totalPharmList.image} alt="고심약국" onClick={() => setIsModalUp(true)} />
         <LikeButton onClick={() => setLike(!like)}>
           {like ? <img src="./Images/Heart.png" alt="like" /> : <img src="./Images/UnHeart.png" alt="unlike" />}
         </LikeButton>
       </InfoImgContainer>
       <PharmTitleBox>
-        <PharmName onClick={() => setIsModalUp(true)}>킹갓 약국</PharmName>
-        <PharmRank />
+        <PharmName onClick={() => setIsModalUp(true)}>{totalPharmList && totalPharmList.name}</PharmName>
+        {totalPharmList && <PharmRank rating={totalPharmList.rating} />}
       </PharmTitleBox>
     </PharmCard>
   );
