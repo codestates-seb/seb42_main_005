@@ -6,10 +6,12 @@ import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Component
 public class TransOperatingTime {
     public OperatingTime todayOperating(DBStoreDetailDto dBStoreDetailDto) {
+
         DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();
         switch (dayOfWeek) {
             case MONDAY:
@@ -31,5 +33,13 @@ public class TransOperatingTime {
         }
     }
 
+    public LocalTime stringToLocalTime(String str) {
+        if (str == null) return null;
+        StringBuilder sb = new StringBuilder(str);
+        sb.insert(2, ":");
+        int hour = Integer.parseInt(sb.substring(0,2));
+        if (hour > 23) sb.replace(0,2, "0" + (hour - 24));
+        return LocalTime.parse(sb.toString());
+    }
 
 }
