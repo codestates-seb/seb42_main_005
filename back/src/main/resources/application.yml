@@ -16,6 +16,9 @@ spring:
         default_batch_fetch_size: 100
     database: mysql
   #      open-in-view: false
+  redis:
+    host: localhost
+    port: 6379
 logging:
   level:
     org.hibernate.sql: info
@@ -46,4 +49,5 @@ mail:
       member:
         join: email-registration-member
 data-api:
-  service-key: ${SERVICE_KET}
+  service-key: ${SERVICE_KEY}
+  service-url: https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?

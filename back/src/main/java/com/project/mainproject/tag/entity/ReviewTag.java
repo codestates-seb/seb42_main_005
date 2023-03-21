@@ -1,17 +1,22 @@
 package com.project.mainproject.tag.entity;
 
 import com.project.mainproject.review.entity.Review;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 public class ReviewTag {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -25,17 +30,4 @@ public class ReviewTag {
     @JoinColumn(name = "REVIEW_IDX")
     private Review review;
 
-    public void setReview(Review review) {
-        this.review = review;
-        if (!this.review.getReviewTags().contains(this)) {
-            this.review.getReviewTags().add(this);
-        }
-    }
-//
-//    public void setTag(Tag tag) {
-//        this.tag = tag;
-//        if (!this.tag.getReviewTags().contains(this)) {
-//            this.tag.setReviewTag(this);
-//        }
-//    }
 }
