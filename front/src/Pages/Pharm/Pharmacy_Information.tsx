@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import PharmDetail from "../../Components/Modal/PharmDetail";
+// import PharmDetail from "../../Components/Modal/PharmDetail";
 import PharmRank from "../../Components/Ul/PharmRank";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { IoIosArrowDropright } from "react-icons/io";
@@ -27,7 +27,8 @@ export default function PharmacyInformation() {
   return (
     <Content>
       {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
+        // <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
+        ""
       ) : null}
       <ImgContainer>
         <ImgInput id="pharmImg" type="file" onChange={(e) => onUpload(e)} accept="image/*" />
@@ -40,7 +41,7 @@ export default function PharmacyInformation() {
       <InfomationContainer>
         <Header>
           <PharmName onClick={() => setIsModalUp(!isModalUp)}>킹갓약국</PharmName>
-          <PharmRank />
+          {/* <PharmRank /> */}
         </Header>
         <Unit>
           <Key>주소</Key>

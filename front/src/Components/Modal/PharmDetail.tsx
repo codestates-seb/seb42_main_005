@@ -9,7 +9,7 @@ import { zIndex_Modal } from "../../Util/z-index";
 import { HiXMark } from "react-icons/hi2";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import axios from "axios";
-import { getReviewListActions } from "../../Redux/slice/getReviewSlice";
+import { getReviewListAction } from "../../Redux/slice/getReviewSlice";
 
 interface Props {
   setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,7 +28,7 @@ export default function PharmDetail({ setIsModalUp, like, setLike, pharmListDeta
         const response = await axios.get("http://localhost:3003/response");
         // console.log(response.data);
 
-        dispatch(getReviewListActions.getReviewList(response.data));
+        dispatch(getReviewListAction.getReviewList(response.data));
       } catch (error) {
         console.log(error);
       }
