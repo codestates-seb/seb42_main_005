@@ -70,25 +70,13 @@ export default function PharmLists({ hidden, setHidden }: Props) {
                 <ButtonSort>별점높은순</ButtonSort>
               </SortContainer>
             </ButtonContainer>
-<<<<<<< HEAD
           </ListHead>
           <ListBody>
-            <PharmItem />
-            <PharmItem />
-            <PharmItem />
-            <PharmItem />
-            <PharmItem />
-          </ListBody>
-        </PharmList>
-=======
-          </PharmHeadContainer>
-          <PharmItemContainer>
             {totalPharmList.map((el: any) => (
               <PharmItem totalPharmList={el} key={el.storeIdx} />
             ))}
-          </PharmItemContainer>
-        </PharmContainer>
->>>>>>> dev
+          </ListBody>
+        </PharmList>
       </ContainerWrap>
     </ContainerList>
   );

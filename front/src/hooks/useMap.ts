@@ -70,15 +70,16 @@ export function useMap() {
 
   useEffect(() => {
     if (_map) {
-      kakao.maps.event.addListener(_map, "center_changed", () => {
+      kakao.maps.event.addListener(_map, "idle", () => {
         const center = _map.getCenter();
         setMapCenter({ latitude: center.getLat(), longitude: center.getLng() });
+        setMap(_map);
       });
     }
   }, [_map]);
 
   useEffect(() => {
-    if (_map && _map.getLevel() < 6) {
+    if (_map) {
       const bounds = _map.getBounds();
       const ne = bounds.getNorthEast();
       const sw = bounds.getSouthWest();
@@ -88,19 +89,73 @@ export function useMap() {
         return lat > sw.getLat() && lat < ne.getLat() && lng > sw.getLng() && lng < ne.getLng();
       });
 
-      filteredPharmacies.map((pharmacy: { wgs84Lat: any; wgs84Lon: any; dutyName: any }) => {
+      const markers = filteredPharmacies.map((pharmacy: { wgs84Lat: any; wgs84Lon: any; dutyName: any }) => {
         const PositionPharmacy = new kakao.maps.LatLng(pharmacy.wgs84Lat, pharmacy.wgs84Lon);
         const content = '<div class="customoverlay">' + `<span class="title">${pharmacy.dutyName}</span>` + "</div>";
         const MarkerPharmacy = new kakao.maps.CustomOverlay({
-          map: _map,
           position: PositionPharmacy,
           content: content,
           yAnchor: 1,
           title: pharmacy.dutyName,
         });
-        console.log(filteredPharmacies);
+        return MarkerPharmacy;
+      });
 
-        MarkerPharmacy.setMap(_map);
+      const clusterer = new kakao.maps.MarkerClusterer({
+        map: _map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+        minLevel: 7, // 클러스터 할 최소 지도 레벨
+        minClusterSize: 1,
+        calculator: [10, 30, 50],
+        styles: [
+          {
+            // calculator 각 사이 값 마다 적용될 스타일을 지정한다
+            width: "70px",
+            height: "70px",
+            background: "hsla(241, 75%, 86%, 0.8)",
+            borderRadius: "50%",
+            color: "#000",
+            textAlign: "center",
+            fontWeight: "bold",
+            lineHeight: "71px",
+          },
+          {
+            width: "80px",
+            height: "80px",
+            background: "hsla(241, 80%, 80%, 0.75)",
+            borderRadius: "50%",
+            color: "#000",
+            textAlign: "center",
+            fontWeight: "bold",
+            lineHeight: "81px",
+          },
+          {
+            width: "90px",
+            height: "90px",
+            background: "hsla(241, 73%, 68%, 0.7)",
+            borderRadius: "50%",
+            color: "#000",
+            textAlign: "center",
+            fontWeight: "bold",
+            lineHeight: "91px",
+          },
+          {
+            width: "100px",
+            height: "100px",
+            background: "hsla(241, 88%, 67%, 0.65)",
+            borderRadius: "50%",
+            color: "#000",
+            textAlign: "center",
+            fontWeight: "bold",
+            lineHeight: "101px",
+          },
+        ],
+      });
+      clusterer.addMarkers(markers);
+      clusterer.setMap(_map);
+      kakao.maps.event.addListener(_map, "idle", function () {
+        clusterer.clear();
+        markers.forEach((marker) => marker.setMap(null));
       });
     }
   }, [location, _map, mapCenter]);
