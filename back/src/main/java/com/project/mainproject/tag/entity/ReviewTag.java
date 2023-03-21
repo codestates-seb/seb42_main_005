@@ -31,11 +31,4 @@ public class ReviewTag {
             this.review.getReviewTags().add(this);
         }
     }
-//
-//    public void setTag(Tag tag) {
-//        this.tag = tag;
-//        if (!this.tag.getReviewTags().contains(this)) {
-//            this.tag.setReviewTag(this);
-//        }
-//    }
 }
