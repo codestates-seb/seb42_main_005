@@ -30,10 +30,4 @@ public class ReviewTag {
     @JoinColumn(name = "REVIEW_IDX")
     private Review review;
 
-    public void setReview(Review review) {
-        this.review = review;
-        if (!this.review.getReviewTags().contains(this)) {
-            this.review.getReviewTags().add(this);
-        }
-    }
 }
