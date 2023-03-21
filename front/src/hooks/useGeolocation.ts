@@ -1,9 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 
 export default function useGeolocation() {
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | string>("");
 
-  useMemo(() => {
+  useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(success, error);
     }

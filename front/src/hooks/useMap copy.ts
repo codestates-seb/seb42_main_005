@@ -8,8 +8,6 @@ const { kakao } = window;
 export function useMap() {
   const location: any = useGeolocation();
   const [_map, setMap]: any = useState();
-  const [pharmacies, setPharmacies] = useState([]);
-  const [mapCenter, setMapCenter] = useState({ latitude: 0, longitude: 0 });
   const API_URL = "https://apis.data.go.kr/B552657";
 
   useEffect(() => {
@@ -60,7 +58,20 @@ export function useMap() {
             const items = body.items || {};
             const pharmacies = items.item || [];
 
-            setPharmacies(pharmacies);
+            pharmacies.map((pharmacy: { wgs84Lat: any; wgs84Lon: any; dutyName: any }) => {
+              const PositionPharmacy = new kakao.maps.LatLng(pharmacy.wgs84Lat, pharmacy.wgs84Lon);
+              const content =
+                '<div class="customoverlay">' + `<span class="title">${pharmacy.dutyName}</span>` + "</div>";
+              const MarkerPharmacy = new kakao.maps.CustomOverlay({
+                map: map,
+                position: PositionPharmacy,
+                content: content,
+                yAnchor: 1,
+                title: pharmacy.dutyName,
+              });
+              MarkerPharmacy.setMap(map);
+              return MarkerPharmacy;
+            });
           } catch (error) {
             console.error("문제 발생!", error);
           }
@@ -68,41 +79,5 @@ export function useMap() {
     }
   }, [location, kakao]);
 
-  useEffect(() => {
-    if (_map) {
-      kakao.maps.event.addListener(_map, "center_changed", () => {
-        const center = _map.getCenter();
-        setMapCenter({ latitude: center.getLat(), longitude: center.getLng() });
-      });
-    }
-  }, [_map]);
-
-  useEffect(() => {
-    if (_map && _map.getLevel() < 6) {
-      const bounds = _map.getBounds();
-      const ne = bounds.getNorthEast();
-      const sw = bounds.getSouthWest();
-      const filteredPharmacies = pharmacies.filter((pharmacy: any) => {
-        const lat = Number(pharmacy.wgs84Lat);
-        const lng = Number(pharmacy.wgs84Lon);
-        return lat > sw.getLat() && lat < ne.getLat() && lng > sw.getLng() && lng < ne.getLng();
-      });
-
-      filteredPharmacies.map((pharmacy: { wgs84Lat: any; wgs84Lon: any; dutyName: any }) => {
-        const PositionPharmacy = new kakao.maps.LatLng(pharmacy.wgs84Lat, pharmacy.wgs84Lon);
-        const content = '<div class="customoverlay">' + `<span class="title">${pharmacy.dutyName}</span>` + "</div>";
-        const MarkerPharmacy = new kakao.maps.CustomOverlay({
-          map: _map,
-          position: PositionPharmacy,
-          content: content,
-          yAnchor: 1,
-          title: pharmacy.dutyName,
-        });
-        console.log(filteredPharmacies);
-
-        MarkerPharmacy.setMap(_map);
-      });
-    }
-  }, [location, _map, mapCenter]);
   return { _map };
 }

@@ -8,8 +8,7 @@ const { kakao } = window;
 export function useMap() {
   const location: any = useGeolocation();
   const [_map, setMap]: any = useState();
-  const [pharmacies, setPharmacies] = useState([]);
-  const [mapCenter, setMapCenter] = useState({ latitude: 0, longitude: 0 });
+  const [pharmacies, setPharmacies]: any = useState([]);
   const API_URL = "https://apis.data.go.kr/B552657";
 
   useEffect(() => {
@@ -21,7 +20,7 @@ export function useMap() {
       };
       // 지도 객체 생성
       const map = new kakao.maps.Map(container as HTMLElement, options);
-      // 마커 생성
+
       const PositionCurrent = new kakao.maps.LatLng(location.latitude, location.longitude);
       const ImageSrcCurrent = "./Images/currentPos.png";
       const ImageSizeCurrent = new kakao.maps.Size(24, 35);
@@ -44,11 +43,19 @@ export function useMap() {
       MarkerMy.setMap(map);
       map.setMaxLevel(10);
       setMap(map);
+    }
+  }, [location, kakao]);
+
+  useEffect(() => {
+    if (_map && _map.getLevel() < 6) {
+      const bounds = _map.getBounds();
+      const ne = bounds.getNorthEast();
+      const sw = bounds.getSouthWest();
 
       axios
         .get(`${API_URL}/ErmctInsttInfoInqireService/getParmacyFullDown`, {
           params: {
-            ServiceKey: "LYki5UdYrhpVu5YPHg03MBzs3WoCetCv02paAeoaDrc01C9rKu5sVO02/i6dlkmA1+8rxI1HdSK/b8b5cgcTmQ==", // 배포 때 .env파일로
+            ServiceKey: "LYki5UdYrhpVu5YPHg03MBzs3WoCetCv02paAeoaDrc01C9rKu5sVO02/i6dlkmA1+8rxI1HdSK/b8b5cgcTmQ==",
             ServiceType: "json",
             numOfRows: 1000,
           },
@@ -60,49 +67,33 @@ export function useMap() {
             const items = body.items || {};
             const pharmacies = items.item || [];
 
-            setPharmacies(pharmacies);
+            const filteredPharmacies = pharmacies.filter((pharmacy: any) => {
+              const lat = Number(pharmacy.wgs84Lat);
+              const lng = Number(pharmacy.wgs84Lon);
+              return lat > sw.getLat() && lat < ne.getLat() && lng > sw.getLng() && lng < ne.getLng();
+            });
+            console.log(filteredPharmacies);
+            setPharmacies(filteredPharmacies);
           } catch (error) {
             console.error("문제 발생!", error);
           }
         });
     }
-  }, [location, kakao]);
+  }, [location, kakao, _map]);
 
   useEffect(() => {
-    if (_map) {
-      kakao.maps.event.addListener(_map, "center_changed", () => {
-        const center = _map.getCenter();
-        setMapCenter({ latitude: center.getLat(), longitude: center.getLng() });
+    pharmacies.map((pharmacy: { wgs84Lat: any; wgs84Lon: any; dutyName: any }) => {
+      const PositionPharmacy = new kakao.maps.LatLng(pharmacy.wgs84Lat, pharmacy.wgs84Lon);
+      const content = '<div class="customoverlay">' + `<span class="title">${pharmacy.dutyName}</span>` + "</div>";
+      const MarkerPharmacy = new kakao.maps.CustomOverlay({
+        map: _map,
+        position: PositionPharmacy,
+        content: content,
+        yAnchor: 1,
+        title: pharmacy.dutyName,
       });
-    }
-  }, [_map]);
-
-  useEffect(() => {
-    if (_map && _map.getLevel() < 6) {
-      const bounds = _map.getBounds();
-      const ne = bounds.getNorthEast();
-      const sw = bounds.getSouthWest();
-      const filteredPharmacies = pharmacies.filter((pharmacy: any) => {
-        const lat = Number(pharmacy.wgs84Lat);
-        const lng = Number(pharmacy.wgs84Lon);
-        return lat > sw.getLat() && lat < ne.getLat() && lng > sw.getLng() && lng < ne.getLng();
-      });
-
-      filteredPharmacies.map((pharmacy: { wgs84Lat: any; wgs84Lon: any; dutyName: any }) => {
-        const PositionPharmacy = new kakao.maps.LatLng(pharmacy.wgs84Lat, pharmacy.wgs84Lon);
-        const content = '<div class="customoverlay">' + `<span class="title">${pharmacy.dutyName}</span>` + "</div>";
-        const MarkerPharmacy = new kakao.maps.CustomOverlay({
-          map: _map,
-          position: PositionPharmacy,
-          content: content,
-          yAnchor: 1,
-          title: pharmacy.dutyName,
-        });
-        console.log(filteredPharmacies);
-
-        MarkerPharmacy.setMap(_map);
-      });
-    }
-  }, [location, _map, mapCenter]);
+      MarkerPharmacy.setMap(_map);
+    });
+  }, [pharmacies, _map]);
   return { _map };
 }
