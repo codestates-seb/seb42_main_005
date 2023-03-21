@@ -146,4 +146,15 @@ public class UserService {
                 user -> new BusinessLogicException(UserExceptionCode.USER_EXIST)
         );
     }
+
+    /*
+     * 약사인지 검증하는 로직
+     * */
+    public Pharmacy checkIsPharmacy(Long userIdx) {
+        User user = validUser(userIdx);
+        if (!(user instanceof Pharmacy)) {
+            throw new BusinessLogicException(UserExceptionCode.USER_IS_NOT_PHARMACY);
+        }
+        return (Pharmacy) user;
+    }
 }

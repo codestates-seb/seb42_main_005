@@ -47,5 +47,17 @@ public class FileUploader {
             if (!isSuccess) throw new RuntimeException("파일 삭제 실패");
         }
     }
+    public static void deleteImage(String imagePath) {
+        File deleteFile = new File(imagePath);
+        if (!deleteFile.delete()) {
+            throw new RuntimeException("파일 삭제 실패");
+        }
 
+    }
+
+    public static String deleteAndSaveImage(MultipartFile uploadFile , String imagePath) {
+        deleteImage(imagePath);
+        String uploadFilePath = saveImage(uploadFile);
+        return uploadFilePath;
+    }
 }
