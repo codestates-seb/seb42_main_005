@@ -1,5 +1,5 @@
 import { useDaumPostcodePopup } from "react-daum-postcode";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import SignUpInput from "../../Components/SignUpForm/SignUpInput";

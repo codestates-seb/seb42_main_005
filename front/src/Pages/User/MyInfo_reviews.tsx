@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import MyReview from "../User/MyInfo_MyReview";
 import { IoMdAddCircleOutline } from "react-icons/io";

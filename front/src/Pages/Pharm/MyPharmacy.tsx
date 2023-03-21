@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import React, { Link } from "react-router-dom";
 import styled from "styled-components";
 import PharmacistInformation from "./Pharmacist_Information";
 import PharmacyInformation from "./Pharmacy_Information";

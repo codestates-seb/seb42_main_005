@@ -34,7 +34,7 @@ export const API_WriteReviewForm = {
 };
 // 비밀번호 찾기 
 export const API_FindPW = {
-  DUMMY_API: "",
+  DUMMY_API: "http://localhost:3050/response",
   REAL_API: `${API}/users/password`,
 };
 // 일반계정 마이페이지 (myinfo) -> user_myInfo.json

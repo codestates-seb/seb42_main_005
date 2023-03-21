@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import WriteReviewForm from "./WriteReviewForm";
@@ -40,6 +40,7 @@ export default function PharmDetail({ setIsModalUp, like, setLike, pharmDetail }
         //* dummy data 일때 -> Review.json
         const response = await axios.get(API_PharmDetail.DUMMY_API);
         //TODO 실제 url 일때 -> /api/store/{storeIdx}/review
+        //? storeIdx 는 리덕스 툴킷에서 가져오기
         // const response = await axios.get(`${API_PharmDetail.REAL_API}/store/${storeIdx}/review`);
         setReviewList(response.data.storeReview);
       } catch (error) {

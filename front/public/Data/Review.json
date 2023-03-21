@@ -58,6 +58,39 @@
         ]
       }
     ],
-    "content": "약은 약사에게. 뿡뿡뿡"
+    "content": "내공 얌얌얀",
+    "reviewIdx": 1,
+    "name": "박은정",
+    "userImage": "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTIy/MDAxNTIzMDI3MjQ1Nzk3.k5nYScR4RH3Tx2JVS6pQiqoKRakgtsjJnBvRSg1VfD8g.SYovJeXlx8Am487HAc9RSJ_4gNpbnhuQVPPh24_N568g.JPEG.monday20000/1522512872270.jpg?type=w800",
+    "reviewImage": "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTcz/MDAxNTIzMDI3MjQ1NDU4.uP9jhQMTNwQSSUGZcDRlddU5E11r4Kl4QRTnaSrrqKkg.OX4yCUKh3wbhgF0zGlxOT6TNIaDa3vvd9S3bMDvHfEwg.JPEG.monday20000/1522493493318.jpg?type=w800",
+    "rating": 3,
+    "createdAt": "2023-03-14T11:40:15.518532",
+    "modifiedAt": "2023-03-14T11:40:15.518527",
+    "comments": [
+      {
+        "commentIdx": 1,
+        "userIdx": 2,
+        "name": "김영재 약사",
+        "userImage": "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTIy/MDAxNTIzMDI3MjQ1Nzk3.k5nYScR4RH3Tx2JVS6pQiqoKRakgtsjJnBvRSg1VfD8g.SYovJeXlx8Am487HAc9RSJ_4gNpbnhuQVPPh24_N568g.JPEG.monday20000/1522512872270.jpg?type=w800",
+        "createdAt": "2023-03-14T11:40:15.518532",
+        "content": "약은 약사에게. 뿡뿡"
+      },
+      {
+        "commentIdx": 2,
+        "userIdx": 2,
+        "name": "김영재 약사",
+        "userImage": "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTIy/MDAxNTIzMDI3MjQ1Nzk3.k5nYScR4RH3Tx2JVS6pQiqoKRakgtsjJnBvRSg1VfD8g.SYovJeXlx8Am487HAc9RSJ_4gNpbnhuQVPPh24_N568g.JPEG.monday20000/1522512872270.jpg?type=w800",
+        "createdAt": "2023-03-14T11:40:15.518532",
+        "content": "영양제 신상많아요. 뿡뿡"
+      },
+      {
+        "commentIdx": 3,
+        "userIdx": 2,
+        "name": "김영재 약사",
+        "userImage": "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTIy/MDAxNTIzMDI3MjQ1Nzk3.k5nYScR4RH3Tx2JVS6pQiqoKRakgtsjJnBvRSg1VfD8g.SYovJeXlx8Am487HAc9RSJ_4gNpbnhuQVPPh24_N568g.JPEG.monday20000/1522512872270.jpg?type=w800",
+        "createdAt": "2023-03-14T11:40:15.518532",
+        "content": "비타500할인합니다. 뿡뿡"
+      }
+    ]
   }
 }

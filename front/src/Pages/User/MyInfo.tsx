@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import React from "react"
 import styled from "styled-components";
 import MyInfoInformation from "./MyInfo_Information";
 import Button from "../../Components/Ul/Button";
