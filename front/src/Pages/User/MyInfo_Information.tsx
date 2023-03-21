@@ -1,28 +1,51 @@
-import { useState } from "react";
-import styled from "styled-components";
 import { useDaumPostcodePopup } from "react-daum-postcode";
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import axios from "axios";
 import SignUpInput from "../../Components/SignUpForm/SignUpInput";
-import { validators } from "../../Components/SignUpForm/Validation";
-import Button from "../../Components/Ul/Button";
-import { MdOutlineAddAPhoto } from "react-icons/md";
-import { AiOutlineExclamationCircle } from "react-icons/ai";
 import InputAlert from "./InputAlert";
+import Button from "../../Components/Ul/Button";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { MdOutlineAddAPhoto } from "react-icons/md";
+import { API_MyInfoInformation } from "../../Util/APIs";
+import { validators } from "../../Components/SignUpForm/Validation";
 
 interface Props {
   scriptUrl?: string;
 }
 
-let dummy = {
-  myInfo: {
-    joined: "2021.03.29",
-    name: "caffeine",
-    password: "caffeine1234!@#$",
-    email: "JudiPark0426@github.com",
-    address: "서울시 종로구 대학로 101",
-  },
-};
-
 export default function MyInfoInformation({ scriptUrl }: Props) {
+  const [myInfo, setMyInfo] = useState({
+    userIdx: 0,
+    createdAt: "",
+    name: "",
+    password: "",
+    email: "",
+    address: "",
+  });
+  const [myName, setMyName] = useState("");
+  // const [myPassword, setMyPassword] = useState(myInfo.password)
+  const [myAddress, setMyAddress] = useState("");
+
+  //! GET : 유저 정보
+  useEffect(() => {
+    const getReviews = async () => {
+      try {
+        //* dummy data 일때 -> Review.json
+        const response = await axios.get(API_MyInfoInformation.DUMMY_API);
+        //TODO 실제 url 일때 -> /api/users/{userIdx}
+        //? userIdx 는 리덕스 툴킷에서
+        // const response = await axios.get(`${API_PharmDetail.REAL_API}/${userIdx}`);
+        setMyInfo(response.data);
+        setMyName(response.data.name);
+        setMyAddress(response.data.address);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getReviews();
+  }, []);
+
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const onUpload = (e: any) => {
     const file = e.target.files[0];
@@ -37,11 +60,11 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
   };
   const [isEditing, setIsEditing] = useState(false);
   const [signForm, setSignForms] = useState({
-    name: dummy.myInfo.name,
+    name: myInfo.name,
     password: "",
     newPassword: "",
     confirmNewPassword: "",
-    address: dummy.myInfo.address,
+    address: myInfo.address,
   });
   const [error, setError] = useState({
     name: false,
@@ -60,6 +83,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
 
   const changeNameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    setMyName(value);
     setSignForms({
       ...signForm,
       [name]: value,
@@ -76,6 +100,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
 
   const changeAddressHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    setMyAddress(value);
     setSignForms({
       ...signForm,
       [name]: value,
@@ -91,7 +116,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     });
     let errors;
     if (name === FORM_FIELD_NAMES.PASSWORD) {
-      errors = validators.validatePasswordCheck(dummy.myInfo.password, value);
+      errors = validators.validatePasswordCheck(myInfo.password, value);
     }
     setError({
       ...error,
@@ -188,9 +213,9 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     <Wrapper onSubmit={onSubmit}>
       <ImgContainer>
         <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
-        {imageSrc ? <ReviewImg src={imageSrc as string} /> : <ReviewImg src="Images/User.png"  alt="user"/>}
+        {imageSrc ? <ReviewImg src={imageSrc as string} /> : <ReviewImg src="Images/User.png" alt="user" />}
         <Label htmlFor="img">
-          <MdOutlineAddAPhoto aria-hidden="true"/>
+          <MdOutlineAddAPhoto aria-hidden="true" />
           사진추가하기
         </Label>
       </ImgContainer>
@@ -198,7 +223,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
       <Content>
         <ContentSet>
           <ContentKey>가입일</ContentKey>
-          <ContentValue>{dummy.myInfo.joined}</ContentValue>
+          <ContentValue>{myInfo.createdAt}</ContentValue>
         </ContentSet>
         <ContentSet>
           <ContentKey>닉네임</ContentKey>
@@ -209,7 +234,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
                   type={"text"}
                   name={FORM_FIELD_NAMES.NAME}
                   placeholder={"닉네임을 입력하세요."}
-                  value={signForm.name}
+                  value={myName}
                   onChange={changeNameHandler}
                 />
               </InputWrapper>
@@ -220,29 +245,29 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
               </AlertMsg>
             </EditWrapper>
           ) : (
-            <ContentValue>{dummy.myInfo.name}</ContentValue>
+            <ContentValue>{myInfo.name}</ContentValue>
           )}
         </ContentSet>
         <ContentSet>
           <ContentKey>email</ContentKey>
-          <ContentValue>{dummy.myInfo.email}</ContentValue>
+          <ContentValue>{myInfo.email}</ContentValue>
         </ContentSet>
         <ContentSet>
           <ContentKey>주소</ContentKey>
           {isEditing ? (
             <InputWrapper>
               <SignUpInput
-                readOnly
+                // readOnly
                 type={"text"}
                 name={FORM_FIELD_NAMES.ADDRESS}
                 placeholder={"주소를 입력하세요."}
-                value={signForm.address}
+                value={myAddress}
                 onChange={changeAddressHandler}
               />
               <Button color="l_blue" size="sm" text="주소 찾기" onClick={handleClick} />
             </InputWrapper>
           ) : (
-            <ContentValue>{dummy.myInfo.address}</ContentValue>
+            <ContentValue>{myInfo.address}</ContentValue>
           )}
         </ContentSet>
         {isEditing ? (
@@ -261,7 +286,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
                 </InputWrapper>
                 <InputAlert value={signForm.password} />
                 <AlertMsg className={`${error.password ? "error" : null}`}>
-                  <AiOutlineExclamationCircle aria-hidden="true"/>
+                  <AiOutlineExclamationCircle aria-hidden="true" />
                   비밀번호가 일치하지 않습니다.
                 </AlertMsg>
               </EditWrapper>
@@ -279,7 +304,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
                   />
                 </InputWrapper>
                 <AlertMsg className={`${error.newPassword ? "error" : null}`}>
-                  <AiOutlineExclamationCircle aria-hidden="true"/>
+                  <AiOutlineExclamationCircle aria-hidden="true" />
                   문자 숫자 특수문자 조합 8자 이상으로 조합해주세요.
                 </AlertMsg>
               </EditWrapper>

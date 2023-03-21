@@ -1,54 +1,82 @@
+import React from "react"
 import styled from "styled-components";
 import { zIndex_Modal } from "../../Util/z-index";
 import { HiXMark } from "react-icons/hi2";
 
 interface Props {
   setIsDropDownDown: React.Dispatch<React.SetStateAction<boolean>>;
-  pharmDetail: any;
+  workingHours: any;
 }
 
-export default function AnyDropDown({ setIsDropDownDown, pharmDetail }: Props) {
-  // console.log(pharmDetail.operatingTime);
-  const week = pharmDetail.operatingTime;
+export default function AnyDropDown({ setIsDropDownDown, workingHours }: Props) {
   return (
     <DropDownContainer onClick={() => setIsDropDownDown(false)}>
       <CloseBtnContainer>
         <HiXMark id="close" onClick={() => setIsDropDownDown(false)} aria-hidden="true" />
       </CloseBtnContainer>
-
       <Unit>
         <Key>월요일</Key>
-        <Value>{`${week.monday.startTime} - ${week.monday.endTime}`}</Value>
+        {workingHours.monday ? (
+          <Value>{`${workingHours.monday.startTime.slice(0, -3)} - ${workingHours.monday.endTime.slice(0, -3)}`}</Value>
+        ) : (
+          <Value>휴무</Value>
+        )}
       </Unit>
-
       <Unit>
         <Key>화요일</Key>
-        <Value>{`${week.tuesday.startTime} - ${week.tuesday.endTime}`}</Value>
+        {workingHours.tuesday ? (
+          <Value>{`${workingHours.tuesday.startTime.slice(0, -3)} - ${workingHours.tuesday.endTime.slice(0, -3)}`}</Value>
+        ) : (
+          <Value>휴무</Value>
+        )}
       </Unit>
-
       <Unit>
         <Key>수요일</Key>
-        <Value>{`${week.wednesday.startTime} - ${week.wednesday.endTime}`}</Value>
+        {workingHours.wednesday ? (
+          <Value>{`${workingHours.wednesday.startTime.slice(0, -3)} - ${workingHours.wednesday.endTime.slice(0, -3)}`}</Value>
+        ) : (
+          <Value>휴무</Value>
+        )}
       </Unit>
       <Unit>
         <Key>목요일</Key>
-        <Value>{`${week.thursday.startTime} - ${week.thursday.endTime}`}</Value>
+        {workingHours.thursday ? (
+          <Value>{`${workingHours.thursday.startTime.slice(0, -3)} - ${workingHours.thursday.endTime.slice(0, -3)}`}</Value>
+        ) : (
+          <Value>휴무</Value>
+        )}
       </Unit>
       <Unit>
         <Key>금요일</Key>
-        <Value>{`${week.friday.startTime} - ${week.friday.endTime}`}</Value>
+        {workingHours.friday ? (
+          <Value>{`${workingHours.friday.startTime.slice(0, -3)} - ${workingHours.friday.endTime.slice(0, -3)}`}</Value>
+        ) : (
+          <Value>휴무</Value>
+        )}
       </Unit>
       <Unit>
         <Key>토요일</Key>
-        <Value>{`${week.saturday.startTime} - ${week.saturday.endTime}`}</Value>
+        {workingHours.saturday ? (
+          <Value>{`${workingHours.saturday.startTime.slice(0, -3)} - ${workingHours.saturday.endTime.slice(0, -3)}`}</Value>
+        ) : (
+          <Value>휴무</Value>
+        )}
       </Unit>
       <Unit>
         <Key>일요일</Key>
-        <Value>10:00 - 20:00</Value>
+        {workingHours.sunday ? (
+          <Value>{`${workingHours.sunday.startTime.slice(0, -3)} - ${workingHours.sunday.endTime.slice(0, -3)}`}</Value>
+        ) : (
+          <Value>휴무</Value>
+        )}
       </Unit>
       <Unit>
         <Key>공휴일</Key>
-        <Value>10:00 - 20:00</Value>
+        {workingHours.holiday ? (
+          <Value>{`${workingHours.holiday.startTime.slice(0, -3)} - ${workingHours.holiday.endTime.slice(0, -3)}`}</Value>
+        ) : (
+          <Value>휴무</Value>
+        )}
       </Unit>
     </DropDownContainer>
   );
@@ -61,11 +89,10 @@ const DropDownContainer = styled.section`
   justify-content: center;
   align-items: flex-start;
   padding: 8px 0;
-  bottom: -70px;
+  bottom: -175px;
   right: 30px;
   @media (max-width: 768px) {
-    right: 30px;
-    bottom: -80px;
+    right: 50px;
   }
   gap: 3px;
   background: var(--black-050);
@@ -77,7 +104,7 @@ const CloseBtnContainer = styled.header`
   cursor: pointer;
   display: flex;
   justify-content: flex-end;
-  margin-left: 29px;
+  margin-right: 5px;
   margin-bottom: 4px;
   height: 15px;
   width: 146px;
@@ -104,5 +131,4 @@ const Key = styled.h5`
 const Value = styled.span`
   font-weight: 400;
   font-size: 14px;
-  width: 130px;
 `;

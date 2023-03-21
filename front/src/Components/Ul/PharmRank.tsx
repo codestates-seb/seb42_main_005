@@ -1,14 +1,13 @@
 import styled from "styled-components";
 import { BsStar } from "react-icons/bs";
 import { BsStarFill } from "react-icons/bs";
-import { useAppSelector } from "../../Redux/hooks";
+
 interface Props {
   rating: number;
+  likes: number;
+  reviewCount: number
 }
-export default function PharmRank({ rating }: Props) {
-  /**별점: 나중에 데이터 받아왔을때 바꿔야함,
-   * 별점이 있을때는 꽉찬별,
-   * 별점 없는 신생약국 일때는 빈별 */
+export default function PharmRank({ rating, likes, reviewCount }: Props) {
   return (
     <Container>
       <div>{rating ? <BsStarFill className="select_star" /> : <BsStar className="unSelect_star" />}</div>
@@ -16,9 +15,9 @@ export default function PharmRank({ rating }: Props) {
         {rating}
         <span className="rest">/5</span>
       </Star>
-      <Selected>찜콩 45</Selected>
+      <Selected>찜콩 {likes}</Selected>
       <span className="partition" />
-      <TotalReview> 리뷰 113</TotalReview>
+      <TotalReview> 리뷰 {reviewCount}</TotalReview>
     </Container>
   );
 }

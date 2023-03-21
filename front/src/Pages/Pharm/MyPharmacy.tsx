@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import React, { Link } from "react-router-dom";
 import styled from "styled-components";
-import Button from "../../Components/Ul/Button";
 import PharmacistInformation from "./Pharmacist_Information";
 import PharmacyInformation from "./Pharmacy_Information";
+import Button from "../../Components/Ul/Button";
 
 export default function MyPharmacy() {
+
   return (
     <WholePage>
       <ContentsWrapper>

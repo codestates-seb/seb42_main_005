@@ -1,25 +1,23 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { BsArrowReturnRight } from "react-icons/bs";
+import axios from "axios";
 import Input from "../Ul/Input";
 import Button from "../Ul/Button";
-import { HiXMark } from "react-icons/hi2";
-import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../Redux/hooks";
 import { getReviewListActions } from "../../Redux/slice/getReviewSlice";
-import axios from "axios";
+import { BsArrowReturnRight } from "react-icons/bs";
+import { HiXMark } from "react-icons/hi2";
 
 interface Props {
-  el: any;
-  key: number;
+  comment: any;
+  id: number;
 }
-export default function ReviewOfReview({ el, key }: Props) {
+export default function ReviewOfReview({ comment, id }: Props) {
   const [isPatchFormShown, setIsPatchFormShown] = useState(false);
-  const [constent, setContsent] = useState(el.content);
+  const [content, setContent] = useState(comment.content);
   const dispatch = useDispatch();
   const a = dispatch(getReviewListActions.getReviewList);
-  // console.log(a);
 
   const reviewList = useAppSelector((state: any) => {
     return state.getReview.response.storeReview;
@@ -29,23 +27,38 @@ export default function ReviewOfReview({ el, key }: Props) {
   //  ))
 
   const handlerReviewOfReview = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setContsent(e.target.value);
+    setContent(e.target.value);
   };
-  const handleOnKeyPress = (e: any) => {
+
+  //! PATCH : 리뷰의 댓글수정
+  const editCommentKeyPress = (e: any) => {
     e.preventDefault();
     if (e.key === "Enter") {
-      // const formData = new FormData(e.target);
-      // const reviewOfReview = formData.get("reviewOfReview");
+      const formData = new FormData(e.target);
+      const reviewOfReview = formData.get("reviewOfReview");
+
+      //* dummy url 일때
+      //TODO url 받았을때
       const Data = {
-        content: constent,
+        //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
+        userIdx: 1,
+        content: reviewOfReview,
       };
+
       const submitReviewOfReview = async () => {
         try {
+          //* dummy url 일때 -> Review.json
           await axios({
             url: "http://localhost:3010/response",
             method: "patch",
             data: Data,
           });
+          //TODO url 받았을때 -> /api/store/{storeIdx}/review/{reviewIdx}
+          // await axios({
+          //   url: "http://localhost:3010/response",
+          //   method: "patch",
+          //   data: Data,
+          // });
         } catch (error) {
           console.log(error);
         }
@@ -53,15 +66,14 @@ export default function ReviewOfReview({ el, key }: Props) {
       dispatch(
         getReviewListActions.getReviewList(
           reviewList.map((review: any) =>
-            review.comments.map((comment: any) =>
-              comment.commentIdx === key ? (comment.content = constent) : comment,
-            ),
+            review.comments.map((comment: any) => (comment.commentIdx === id ? (comment.content = content) : comment)),
           ),
         ),
       );
       submitReviewOfReview();
     }
   };
+
   return (
     <CommentContainer>
       <Upper>
@@ -69,32 +81,32 @@ export default function ReviewOfReview({ el, key }: Props) {
           <span id="reply">
             <BsArrowReturnRight aria-hidden="true" />
           </span>
-          <UserIcon src={el.userImage} alt="pharmacist" />
-          <UserName>{el.name}</UserName>
-          <Created>{new Date(el.createdAt).toLocaleDateString()}</Created>
+          <UserIcon src={comment.userImage} alt="pharmacist" />
+          <UserName>{comment.name}</UserName>
+          <Created>{new Date(comment.createdAt).toLocaleDateString()}</Created>
         </UserInfo>
         <ButtonContainer>
-          {/* 약사계정이면 댓글 버튼이 보이고, 아닌경우에는 안보이는 로직 작성 필요 */}
+          {/* 약사계정이면 && 해당 약국의 storeIdx 와 리덕스 툴킷의 내 storeIdx 가 같을 때 => 버튼이 보임 */}
           <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsPatchFormShown(true)} />
           <Button color="l_red" size="sm" text="삭 제" />
         </ButtonContainer>
       </Upper>
-      <Comment>{el.content}</Comment>
+      <Comment>{comment.content}</Comment>
       {isPatchFormShown ? (
         <WriteCommentForm>
           <Instruction>
             <p>댓글을 수정해주세요. 작성 완료 시 'Enter'를 눌러주세요.</p>
             <HiXMark id="close" onClick={() => setIsPatchFormShown(false)} aria-hidden="true" />
           </Instruction>
-          <label htmlFor="review_patch" />
+          <label htmlFor="review_patch" id="hide" />
           <Input
             id="review_patch"
             name={"reviewOfReview"}
             isValid={true}
             icon={true}
-            value={constent}
+            value={content}
             onChange={handlerReviewOfReview}
-            onKeyPress={handleOnKeyPress}
+            onKeyPress={editCommentKeyPress}
           />
         </WriteCommentForm>
       ) : null}
@@ -158,16 +170,20 @@ const WriteCommentForm = styled.form`
   margin: 10px 2px 0px 6px;
   padding: 10px;
   gap: 5px;
-  height: 80px;
+  height: 85px;
   border-radius: 10px;
   background-color: var(--white);
   border: 0.5px solid var(--blue-300);
   box-shadow: 0px 0px 5px var(--black-200);
+  &#hide {
+    display: none;
+  }
 `;
 const Instruction = styled.header`
   font-size: 12px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   #close {
     font-size: 17px;
     color: var(--black-400);

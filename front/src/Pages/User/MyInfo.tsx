@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import React from "react"
 import styled from "styled-components";
 import MyInfoInformation from "./MyInfo_Information";
 import Button from "../../Components/Ul/Button";
@@ -24,7 +25,7 @@ export default function MyInfo() {
         </Information>
         <QuitBtnWrapper>
           <Link to="/sign_out">
-          <Button text="탈퇴하기" color="red" size="lg" />
+            <Button text="탈퇴하기" color="red" size="lg" />
           </Link>
         </QuitBtnWrapper>
       </ContentsWrapper>

@@ -10,9 +10,10 @@ interface InputProps {
   isValid?: boolean;
   icon?: boolean;
   onChange?: any;
+  onKeyPress?: any
 }
 
-export default function Textarea({ id, name, placeholder, value, rows, icon, isValid, onChange }: InputProps) {
+export default function Textarea({ id, name, placeholder, value, rows, icon, isValid, onChange, onKeyPress }: InputProps) {
   return (
     <StyledInput>
       {icon && (
@@ -28,6 +29,7 @@ export default function Textarea({ id, name, placeholder, value, rows, icon, isV
         rows={rows}
         className={`${isValid ? null : "error"}`}
         onChange={onChange}
+        onKeyPress={onKeyPress}
       />
     </StyledInput>
   );
