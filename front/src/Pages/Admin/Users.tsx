@@ -1,62 +1,30 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import AdminTabs from "./AdminTabs";
 import Button from "../../Components/Ul/Button";
 import CheckBox from "../../Components/Ul/CheckBox";
+import { API_Users } from "../../Util/APIs";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Users() {
-  const dummy = [
-    {
-      classification: "약사",
-      accountStatus: "active",
-      nickname: "johnsFavourite",
-      email: "papa@johns.com",
-      returnAt: "2023.02.25",
-      subscription: "2023.02.13",
-      reviewCount: 4,
-      reportCount: 0,
-    },
-    {
-      classification: "일반",
-      accountStatus: "suspended",
-      nickname: "MarchApril",
-      email: "papa@johns.com",
-      returnAt: "1996.04.13",
-      subscription: "1996.04.25",
-      reviewCount: 6,
-      reportCount: 99,
-    },
-    {
-      classification: "약사",
-      accountStatus: "active",
-      nickname: "February",
-      email: "painting@landscape.com",
-      returnAt: "2019.02.13",
-      subscription: "2019.02.24",
-      reviewCount: 3,
-      reportCount: 0,
-    },
-    {
-      classification: "일반",
-      accountStatus: "active",
-      nickname: "JuneJuly",
-      email: "surfing@hawaii.com",
-      returnAt: "2021.07.13",
-      subscription: "2021.07.24",
-      reviewCount: 20,
-      reportCount: 0,
-    },
-    {
-      classification: "일반",
-      accountStatus: "suspended",
-      nickname: "McMorning",
-      email: "Mcdonalds@maccas.com",
-      returnAt: "2023.03.25",
-      subscription: "2023.03.07",
-      reviewCount: 45,
-      reportCount: 20,
-    },
-  ];
+  const [users, setUsers] = useState([])
+
+  //! GET : 전체회원 리스트
+  useEffect(() => {
+    const getReviews = async () => {
+      try {
+        //* dummy data 일때 -> Review.json
+        const response = await axios.get(API_Users.DUMMY_API);
+        //TODO 실제 url 일때 -> /api/users
+        // const response = await axios.get(API_Users.REAL_API);
+        setUsers(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getReviews();
+  }, []);
 
   return (
     <WholePage>
@@ -91,21 +59,21 @@ export default function Users() {
               <Values className="reviewCount">리뷰 수</Values>
               <Values className="reportCount">신고 수</Values>
             </Label>
-            {dummy.length ? (
+            {users.length ? (
               <BelowLable>
-                {dummy.map((data, i) => (
-                  <Content key={i} className={data.accountStatus === "suspended" ? "suspended" : ""}>
+                {users.map((user: any, i) => (
+                  <Content key={i} className={user.accountStatus === "suspended" ? "suspended" : ""}>
                     <Values className="checkBox">
                       <CheckBox />
                     </Values>
-                    <Values className="classification">{data.classification}</Values>
-                    <Values className="accountStatus">{data.accountStatus}</Values>
-                    <Values className="nickname">{data.nickname}</Values>
-                    <Values className="email">{data.email}</Values>
-                    <Values className="returnAt">{data.returnAt}</Values>
-                    <Values className="subscription">{data.subscription}</Values>
-                    <Values className="reviewCount">{data.reviewCount}</Values>
-                    <Values className="reportCount">{data.reportCount}</Values>
+                    <Values className="classification">{user.classification}</Values>
+                    <Values className="accountStatus">{user.accountStatus}</Values>
+                    <Values className="nickname">{user.nickname}</Values>
+                    <Values className="email">{user.email}</Values>
+                    <Values className="returnAt">{user.returnAt}</Values>
+                    <Values className="subscription">{user.subscription}</Values>
+                    <Values className="reviewCount">{user.reviewCount}</Values>
+                    <Values className="reportCount">{user.reportCount}</Values>
                   </Content>
                 ))}
               </BelowLable>

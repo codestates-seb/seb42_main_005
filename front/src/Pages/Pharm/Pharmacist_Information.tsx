@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import styled from "styled-components";
 import SignUpInput from "../../Components/SignUpForm/SignUpInput";
