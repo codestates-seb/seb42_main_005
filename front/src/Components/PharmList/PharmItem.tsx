@@ -1,22 +1,34 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import PharmRank from "../Ul/PharmRank";
 import PharmDetail from "../Modal/PharmDetail";
-import axios from "axios";
+import { API_PharmItem } from "../../Util/APIs"; // PharmDetail.json
 
+//* dummy 일때
 interface Props {
   totalPharmList: any;
 }
+//TODO 실제 url 일때
+// interface Props {
+//   storeIdx: number;
+// }
 
+//TODO 실제 url 일때
+// export default function PharmItem({ storeIdx }: Props) {
 export default function PharmItem({ totalPharmList }: Props) {
   const [isModalUp, setIsModalUp] = useState(false);
+  const [pharmDetail, setPharmDetail] = useState();
   const [like, setLike] = useState(false);
-  const [pharmDetail, setPharmDetail]: any = useState();
 
+  //! GET : 약국상세정보
   useEffect(() => {
     const getPharmDetail = async () => {
       try {
-        const response = await axios.get("http://localhost:3020/response");
+        //* dummy data 일때 -> Pharm.json
+        const response = await axios.get(API_PharmItem.DUMMY_API);
+        //TODO 실제 url 일때 -> /api/store/{storeIdx}
+        // const response = await axios.get(`${API_PharmItem.REAL_API}/store${storeIdx}`);
         setPharmDetail(response.data);
       } catch (error) {
         console.log(error);
@@ -37,12 +49,22 @@ export default function PharmItem({ totalPharmList }: Props) {
           <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." onClick={() => setIsModalUp(true)} />
         )}
         <LikeButton onClick={() => setLike(!like)}>
-          {like ? <img src="./Images/Heart.png" alt="좋아요가 선택된 상태의 꽉 찬 하트모양입니다." /> : <img src="./Images/UnHeart.png" alt="좋아요 하기 전의 빈 하트모양입니다." />}
+          {like ? (
+            <img src="./Images/Heart.png" alt="좋아요가 선택된 상태의 꽉 찬 하트모양입니다." />
+          ) : (
+            <img src="./Images/UnHeart.png" alt="좋아요 하기 전의 빈 하트모양입니다." />
+          )}
         </LikeButton>
       </InfoImgContainer>
       <PharmTitleBox>
         <PharmName onClick={() => setIsModalUp(true)}>{totalPharmList && totalPharmList.name}</PharmName>
-        {totalPharmList && <PharmRank rating={totalPharmList.rating} />}
+        {totalPharmList && (
+          <PharmRank
+            rating={totalPharmList.rating}
+            likes={totalPharmList.pickedStoreCount}
+            reviewCount={totalPharmList.reviewCount}
+          />
+        )}
       </PharmTitleBox>
     </PharmCard>
   );

@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
-// import PharmDetail from "../../Components/Modal/PharmDetail";
+import PharmDetail from "../../Components/Modal/PharmDetail";
 import PharmRank from "../../Components/Ul/PharmRank";
+import DropDown from "./DropDown";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { IoIosArrowDropright } from "react-icons/io";
 import { IoIosArrowDropdown } from "react-icons/io";
-import DropDown from "./DropDown";
+import { API_PharmacyInformation } from "../../Util/APIs";
 
+//TODO 실제 url 일때
+// export default function PharmacyInformation() {
 export default function PharmacyInformation() {
+  const [pharmDetail, setPharmDetail]: any = useState();
   const [isModalUp, setIsModalUp] = useState(false);
-  const [isDropDownDown, setIsDropDownDown] = useState(false);
   const [like, setLike] = useState(false);
+  const [isDropDownDown, setIsDropDownDown] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const onUpload = (e: any) => {
     const file = e.target.files[0];
@@ -24,15 +29,40 @@ export default function PharmacyInformation() {
     });
   };
 
+  //! GET : 약국상세정보
+  useEffect(() => {
+    const getPharmDetail = async () => {
+      try {
+        //* dummy data 일때 -> Pharm.json
+        const response = await axios.get(API_PharmacyInformation.DUMMY_API);
+        //TODO 실제 url 일때 -> /api/store/{storeIdx}
+        //? storeIdx 는 약사 계정으로 로그인 시 리덕스 툴킷에서 받아올 수 있음
+        // const response = await axios.get(`${API_PharmacyInformation.REAL_API}/store${storeIdx}`);
+        setPharmDetail(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPharmDetail();
+  }, []);
+
   return (
     <Content>
+      //* dummy data 일때
       {isModalUp ? (
-        // <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
-        ""
+        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} pharmDetail={pharmDetail} />
       ) : null}
+      //TODO 실제 url 일때
+      {/* {isModalUp ? (
+        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} storeIdx={storeIdx} />
+      ) : null} */}
       <ImgContainer>
         <ImgInput id="pharmImg" type="file" onChange={(e) => onUpload(e)} accept="image/*" />
-        {imageSrc ? <PharmImg src={imageSrc as string} /> : <PharmImg src="Images/ImgPreparing.png"  alt="image preparing"/>}
+        {imageSrc ? (
+          <PharmImg src={imageSrc as string} />
+        ) : (
+          <PharmImg src="Images/ImgPreparing.png" alt="image preparing" />
+        )}
         <Label htmlFor="pharmImg">
           <MdOutlineAddAPhoto aria-hidden="true" />
           우리 약국 사진추가하기
@@ -41,7 +71,11 @@ export default function PharmacyInformation() {
       <InfomationContainer>
         <Header>
           <PharmName onClick={() => setIsModalUp(!isModalUp)}>킹갓약국</PharmName>
-          {/* <PharmRank /> */}
+          <PharmRank
+            rating={pharmDetail.rating}
+            likes={pharmDetail.pickedStoreCount}
+            reviewCount={pharmDetail.reviewCount}
+          />
         </Header>
         <Unit>
           <Key>주소</Key>
@@ -55,18 +89,22 @@ export default function PharmacyInformation() {
           <Key>영업시간</Key>
           <Value>
             {isDropDownDown ? (
-              <IoIosArrowDropdown aria-hidden="true"
+              <IoIosArrowDropdown
+                aria-hidden="true"
                 id={`dropDown ${isDropDownDown ? "close" : "open"}`}
                 onClick={() => setIsDropDownDown(!isDropDownDown)}
               />
             ) : (
-              <IoIosArrowDropright aria-hidden="true"
+              <IoIosArrowDropright
+                aria-hidden="true"
                 id={`dropDown ${isDropDownDown ? "close" : "open"}`}
                 onClick={() => setIsDropDownDown(!isDropDownDown)}
               />
             )}
             09:00-21:00
-            {isDropDownDown ? <DropDown /> : null}
+            {isDropDownDown ? (
+              <DropDown setIsDropDownDown={setIsDropDownDown} workingHours={pharmDetail.operatingTime} />
+            ) : null}
           </Value>
         </Unit>
       </InfomationContainer>

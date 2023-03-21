@@ -24,7 +24,7 @@ export default function MyInfo() {
         </Information>
         <QuitBtnWrapper>
           <Link to="/sign_out">
-          <Button text="탈퇴하기" color="red" size="lg" />
+            <Button text="탈퇴하기" color="red" size="lg" />
           </Link>
         </QuitBtnWrapper>
       </ContentsWrapper>

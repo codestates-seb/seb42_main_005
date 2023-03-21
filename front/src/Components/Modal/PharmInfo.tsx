@@ -1,5 +1,4 @@
-//! 모달 컴포넌트 오른편 약국 정보 부분입니다
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import PharmRank from "../Ul/PharmRank";
 import AnyDropDown from "./AnyDropDown";
@@ -17,34 +16,47 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
     <InfoContainer>
       <InfoHeader>
         <InfoTitle>{pharmDetail.name}</InfoTitle>
-        {pharmDetail && <PharmRank rating={pharmDetail.rating} />}
+        {pharmDetail && <PharmRank rating={pharmDetail.rating} likes={pharmDetail.pickedStoreCount} reviewCount={pharmDetail.reviewCount}/>}
       </InfoHeader>
       <InfoImgContainer>
-        {pharmListDetail.image ? (
-          <PharmImg src={pharmDetail.image as string}/>
+        {pharmDetail.image ? (
+          <PharmImg src={pharmDetail.image as string} />
         ) : (
-          <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다."/>
+          <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." />
         )}
-        <LikeButton onClick={() => setLike(!like)}>
-          {like ? <img src="./Images/Heart.png" alt="like" /> : <img src="./Images/UnHeart.png" alt="unlike" />}
-        </LikeButton>
+        {like ? (
+          <LikeButton onClick={() => setLike(!like)}>
+            <img src="./Images/Heart.png" alt="좋아요 상태의 꽉찬 하트입니다." />
+          </LikeButton>
+        ) : (
+          <LikeButton onClick={() => setLike(!like)}>
+            <img src="./Images/UnHeart.png" alt="좋아요 전 상태의 빈 하트입니다." />
+          </LikeButton>
+        )}
       </InfoImgContainer>
       <InfoInfo>
         <InfoUnit>
           <InfoInfoTitle>영업시간</InfoInfoTitle>
           <InfoInfoContent>
-            09:00 ~ 21:00
+            {pharmDetail.todayOperatingTime
+              ? `${pharmDetail.todayOperatingTime.operatingTime.startTime.slice(
+                  0,
+                  -3,
+                )} - ${pharmDetail.todayOperatingTime.operatingTime.endTime.slice(0, -3)}`
+              : "정보가 없습니다."}
             {!isDropDownDown ? (
               <More id={`dropDown ${isDropDownDown ? "close" : "open"}`} onClick={() => setIsDropDownDown(true)}>
                 영업시간 더보기
               </More>
             ) : null}
-            {isDropDownDown ? <AnyDropDown setIsDropDownDown={setIsDropDownDown} pharmDetail={pharmDetail} /> : null}
+            {isDropDownDown ? (
+              <AnyDropDown setIsDropDownDown={setIsDropDownDown} workingHours={pharmDetail.operatingTime} />
+            ) : null}
           </InfoInfoContent>
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>주소</InfoInfoTitle>
-          <InfoInfoContent>{pharmDetail.address}</InfoInfoContent>
+          <InfoInfoContent className="address">{pharmDetail.address}</InfoInfoContent>
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>전화번호</InfoInfoTitle>
@@ -98,12 +110,6 @@ const InfoImgContainer = styled.section`
   padding: 15px 5px;
   border-bottom: 1px solid var(--black-100);
 `;
-const Img = styled.img`
-  object-fit: cover;
-  width: 23.75rem;
-  height: 15.625rem;
-  border-radius: 5px;
-`;
 const LikeButton = styled.button`
   position: absolute;
   right: 51px;
@@ -135,15 +141,22 @@ const InfoUnit = styled.article`
 const InfoInfoTitle = styled.h2`
   width: 70px;
   color: var(--black-350);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
 `;
 const InfoInfoContent = styled.span`
+  position: relative;
   display: flex;
   align-items: center;
   height: 25px;
+  width: 350px;
   gap: 3px;
-  font-size: 19px;
+  font-size: 17px;
+  &.address {
+    padding: 30px 0;
+    white-space: normal;
+    word-break: normal;
+  }
 `;
 const More = styled.button`
   cursor: pointer;

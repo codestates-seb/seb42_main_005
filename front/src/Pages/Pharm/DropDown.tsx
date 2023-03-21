@@ -1,40 +1,81 @@
 import styled from "styled-components";
 import { zIndex_MyPage } from "../../Util/z-index";
+import { HiXMark } from "react-icons/hi2";
 
-export default function DropDown() {
+interface Props {
+  setIsDropDownDown: React.Dispatch<React.SetStateAction<boolean>>;
+  workingHours: any;
+}
+
+export default function DropDown({ setIsDropDownDown, workingHours }: Props) {
   return (
     <DropDownContainer onClick={(event) => event.stopPropagation()}>
-      <Unit>
+      <CloseBtnContainer>
+        <HiXMark id="close" onClick={() => setIsDropDownDown(false)} aria-hidden="true" />
+      </CloseBtnContainer>
+            <Unit>
         <Key>월요일</Key>
-        <Value>10:00 - 20:00</Value>
+        {workingHours.monday ? (
+          <Value>{`${workingHours.monday.startTime.slice(0, -3)} - ${workingHours.monday.endTime.slice(0, -3)}`}</Value>
+        ) : (
+          <Value>휴무</Value>
+        )}
       </Unit>
       <Unit>
         <Key>화요일</Key>
-        <Value>10:00 - 20:00</Value>
+        {workingHours.tuesday ? (
+          <Value>{`${workingHours.tuesday.startTime.slice(0, -3)} - ${workingHours.tuesday.endTime.slice(0, -3)}`}</Value>
+        ) : (
+          <Value>휴무</Value>
+        )}
       </Unit>
       <Unit>
         <Key>수요일</Key>
-        <Value>10:00 - 20:00</Value>
+        {workingHours.wednesday ? (
+          <Value>{`${workingHours.wednesday.startTime.slice(0, -3)} - ${workingHours.wednesday.endTime.slice(0, -3)}`}</Value>
+        ) : (
+          <Value>휴무</Value>
+        )}
       </Unit>
       <Unit>
         <Key>목요일</Key>
-        <Value>둘째, 넷째주 휴무</Value>
+        {workingHours.thursday ? (
+          <Value>{`${workingHours.thursday.startTime.slice(0, -3)} - ${workingHours.thursday.endTime.slice(0, -3)}`}</Value>
+        ) : (
+          <Value>휴무</Value>
+        )}
       </Unit>
       <Unit>
         <Key>금요일</Key>
-        <Value>10:00 - 20:00</Value>
+        {workingHours.friday ? (
+          <Value>{`${workingHours.friday.startTime.slice(0, -3)} - ${workingHours.friday.endTime.slice(0, -3)}`}</Value>
+        ) : (
+          <Value>휴무</Value>
+        )}
       </Unit>
       <Unit>
         <Key>토요일</Key>
-        <Value>10:00 - 20:00</Value>
+        {workingHours.saturday ? (
+          <Value>{`${workingHours.saturday.startTime.slice(0, -3)} - ${workingHours.saturday.endTime.slice(0, -3)}`}</Value>
+        ) : (
+          <Value>휴무</Value>
+        )}
       </Unit>
       <Unit>
         <Key>일요일</Key>
-        <Value>10:00 - 20:00</Value>
+        {workingHours.sunday ? (
+          <Value>{`${workingHours.sunday.startTime.slice(0, -3)} - ${workingHours.sunday.endTime.slice(0, -3)}`}</Value>
+        ) : (
+          <Value>휴무</Value>
+        )}
       </Unit>
       <Unit>
         <Key>공휴일</Key>
-        <Value>10:00 - 20:00</Value>
+        {workingHours.holiday ? (
+          <Value>{`${workingHours.holiday.startTime.slice(0, -3)} - ${workingHours.holiday.endTime.slice(0, -3)}`}</Value>
+        ) : (
+          <Value>휴무</Value>
+        )}
       </Unit>
     </DropDownContainer>
   );
@@ -72,4 +113,21 @@ const Key = styled.h5`
 const Value = styled.span`
   font-weight: 400;
   font-size: 15px;
+`;
+const CloseBtnContainer = styled.header`
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 5px;
+  margin-bottom: 4px;
+  height: 15px;
+  width: 146px;
+  font-size: 19px;
+  color: var(--black-300);
+  transition: 0.2s;
+  #close:hover {
+    color: var(--black-600);
+    transition: 0.2s;
+    transition: 0.2s;
+  }
 `;

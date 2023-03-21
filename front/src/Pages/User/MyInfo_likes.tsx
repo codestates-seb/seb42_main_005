@@ -1,30 +1,30 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import styled from "styled-components";
-import LikedPharmacy from "./MyInfo_likedPharmacy"
-import { IoMdAddCircleOutline } from "react-icons/io";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import axios from "axios";
-import { getLikedPharmListAction } from "../../Redux/slice/getLikedPharmListSlice";
+import styled from "styled-components";
+import LikedPharmacyUnit from "../User/MyInfo_likedPharmacy"
+import { API_MyInfoLikes } from "../../Util/APIs";
+import { IoMdAddCircleOutline } from "react-icons/io";
 
 export default function MyInfoLikes() {
-  const dispatch = useAppDispatch();
+  const [likedPharmacies, setLikedPharmacies] = useState([])
 
+  //! GET : 내가 찜한 약국 리스트
   useEffect(() => {
     const getLikedPharmList = async () => {
       try {
-        const response = await axios.get("http://localhost:3004/response");
-        dispatch(getLikedPharmListAction(response.data));
+        //* dummy url 일때
+        const response = await axios.get(API_MyInfoLikes.DUMMY_API);
+        //TODO url 받았을때 -> /api/users/{userIdx}/store
+        //? userIdx 는 리덕스 툴킷에서
+        // const response = await axios.get(`${API_MyInfoLikes.REAL_API}/${userIdx}/store`);
+        setLikedPharmacies(response.data)
       } catch (error) {
         console.log(error);
       }
     };
     getLikedPharmList();
   }, []);
-
-  const LikedPharmacies = useAppSelector((state: any) => {
-    return state.getLikedPharmList.response.stores;
-  });
 
   return (
     <Content>
@@ -35,9 +35,9 @@ export default function MyInfoLikes() {
         <Text className="number">전화번호</Text>
         <Text className="single" />
       </TableHead>
-      {LikedPharmacies.length ? (
+      {likedPharmacies.length ? (
         <Rest>
-          {LikedPharmacies.map((likedPharmacy: any) => <LikedPharmacy likedPharmacy={likedPharmacy}/>)}
+          {likedPharmacies.map((likedPharmacy: any) => <LikedPharmacyUnit likedPharmacy={likedPharmacy}/>)}
         </Rest>
       ) : (
         <WhenEmpty>

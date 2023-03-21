@@ -1,31 +1,29 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import MyReview from "../User/MyInfo_MyReview"
+import MyReview from "../User/MyInfo_MyReview";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import axios from "axios";
-import { getReviewListAction } from "../../Redux/slice/getReviewSlice";
+import { API_MyPharmacy } from "../../Util/APIs";
 
 export default function MyInfoReviews() {
-  const dispatch = useAppDispatch();
+  const [reviews, setReviews] = useState([]);
 
+  //! GET : 내가 작성한 리뷰 리스트
   useEffect(() => {
     const getMyReviews = async () => {
       try {
-        const response = await axios.get("http://localhost:3005/response");
-        dispatch(getReviewListAction(response.data));
+        //* dummy data 일때 -> Review.json
+        const response = await axios.get(API_MyPharmacy.DUMMY_API);
+        //TODO 실제 url 일때 -> /api/users/{userIdx}/review
+        // const response = await axios.get(`${API_MyPharmacy.REAL_API}/${userIdx}/review`);
+        setReviews(response.data);
       } catch (error) {
         console.log(error);
       }
     };
     getMyReviews();
   }, []);
-
-  const Reviews = useAppSelector((state: any) => {
-    return state.getMyReviews.response.reviews;
-  });
-
 
   return (
     <Content>
@@ -36,10 +34,10 @@ export default function MyInfoReviews() {
         <Text className="number">작성일</Text>
         <Text className="single" />
       </TableHead>
-      {Reviews.length ? (
+      {reviews.length ? (
         <Rest>
-          {Reviews.map((review: any, i: number )=> (
-            <MyReview review={review} key={i}/>
+          {reviews.map((review: any, i: number) => (
+            <MyReview review={review} key={review.reviewIdx} idx={i} storeIdx={review.storeIdx} reviewIdx={review.reviewIdx}/>
           ))}
         </Rest>
       ) : (

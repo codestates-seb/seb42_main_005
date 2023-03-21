@@ -1,32 +1,49 @@
 import { useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import PharmDetail from "../../Components/Modal/PharmDetail";
+import { API_MyInfoReviews } from "../../Util/APIs";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 const API_URL = "http://localhost:3005/response";
 
 interface Props {
   review: any;
-  key: number;
+  storeIdx: number;
+  reviewIdx: number;
+  idx: number;
 }
 
-export default function MyReview({ review, key }: Props) {
+export default function MyReview({ review, storeIdx, reviewIdx, idx }: Props) {
   const [isModalUp, setIsModalUp] = useState(false);
   const [like, setLike] = useState(false);
 
+  //! DELETE : 리뷰삭제
+  const deleteReview = async () => {
+    //* dummy data 일때 -> Review.json
+    await axios.delete(`${API_MyInfoReviews.DUMMY_API}`);
+    //TODO url 받았을때 -> /api/store/{storeIdx}/review/{reviewIdx}
+    // await axios.delete(`${API_MyInfoReviews.REAL_API}/${storeIdx}/review/${reviewIdx}`)
+  };
+
   return (
     <TableBody>
+      //* dummy data 일때
       {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} storeIdx={review.storeIdx} />
+        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} pharmDetail={review} />
       ) : null}
-      <Text className="single">{key + 1}</Text>
+      //TODO 실제 url 일때
+      {/* {isModalUp ? (
+        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} storeIdx={storeIdx} />
+      ) : null} */}
+      <Text className="single">{idx + 1}</Text>
       <Text className="pharm" onClick={() => setIsModalUp(true)}>
         {review.storeName}
       </Text>
       <Text className="review">{review.content}</Text>
       <Text className="number">{review.createdAt}</Text>
       <Text className="single icon">
-        <RiDeleteBin6Line aria-hidden="true" />
+        <RiDeleteBin6Line aria-hidden="true" onClick={()=>deleteReview}/>
       </Text>
     </TableBody>
   );

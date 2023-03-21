@@ -1,21 +1,20 @@
 import { useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import Textarea from "../Ul/Textarea";
 import Button from "../Ul/Button";
-import { zIndex_Modal } from "../../Util/z-index";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BiPhotoAlbum } from "react-icons/bi";
 import { HiXMark } from "react-icons/hi2";
-import axios from "axios";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
-import { getReviewListActions } from "../../Redux/slice/getReviewSlice";
-import { useNavigate } from "react-router-dom";
+import { zIndex_Modal } from "../../Util/z-index";
+import { API_WriteReviewForm } from "../../Util/APIs"; // Review.json
 
 interface Props {
   setIsReviewFormShown: React.Dispatch<React.SetStateAction<boolean>>;
+  storeIdx: number;
 }
 
-export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
+export default function WriteReviewForm({ setIsReviewFormShown, storeIdx }: Props) {
   const [imageSrc, setImageSrc]: any = useState(null);
   const onUpload = (e: any) => {
     const file = e.target.files[0];
@@ -44,7 +43,6 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
       [name]: value,
     });
   };
-
   const handlerRate = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setReviewList({
@@ -52,17 +50,13 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
       [name]: value,
     });
   };
-  const reviewLists = useAppSelector((state: any) => {
-    return state.getReview.response;
-  });
-  const dispatch = useAppDispatch();
   const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const review = formData.get("content");
     const star = formData.get("rating");
 
-    //나중에 수정 , 화면에 뜨는지 확인하려고 한것
+    //* dummy data 일때 -> 나중에 수정 , 화면에 뜨는지 확인하려고 한것
     let newData: any = {
       storeReview: [
         {
@@ -79,19 +73,33 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
         },
       ],
     };
+    //TODO url 받았을때 : formData 를 이용한 대대적인 수정 필요 ㅠㅠ
+    // let newData: any = {
+    //   userIdx: 1,
+    //   content: "리뷰 본문 약사가 맛있고 제품이 친절해요",
+    //   image: "사진 파일이 들어갈 것이다.",
+    //   rating: 4,
+    // };
 
+    //! POST : 리뷰작성
     const postReview = async () => {
       try {
+        //* dummy url 일때 -> Review.json
         await axios({
-          url: "http://localhost:3010/response",
+          url: API_WriteReviewForm.DUMMY_API,
           method: "post",
           data: newData,
         });
+        //TODO url 받았을때 -> /api/store/{storeIdx}/review
+        // await axios({
+        //   url: `${API_WriteReviewForm.REAL_API}/${storeIdx}/review`,
+        //   method: "post",
+        //   data: newData,
+        // });
       } catch (error) {
         console.log(error);
       }
     };
-    dispatch(getReviewListActions.getReviewList(newData));
     setReviewList({ reviewIdx: 0, content: "", rating: 0, createdAt: "" });
     postReview();
   };
@@ -114,12 +122,12 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
           onChange={handlerText}
         />
         <ReviewImgContainer>
-          <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"/>
+          <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*" />
           {imageSrc ? (
             <ReviewImg src={imageSrc} />
           ) : (
             <Instead>
-              <BiPhotoAlbum aria-hidden="true"/>
+              <BiPhotoAlbum aria-hidden="true" />
             </Instead>
           )}
           <Label htmlFor="img">

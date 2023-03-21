@@ -1,30 +1,31 @@
 //홈화면 옆에 약국 리스트
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import PharmItem from "./PharmItem";
 import { zIndex_PharmList } from "../../Util/z-index";
+import { SELECT_HIDDEN } from "../../Util/type";
+import { API_PharmLists } from "../../Util/APIs";
 import { BsSearch } from "react-icons/bs";
 import { RiHomeLine } from "react-icons/ri";
 import { VscTriangleLeft } from "react-icons/vsc";
-import { SELECT_HIDDEN } from "../../Util/type";
-import axios from "axios";
-import { useEffect } from "react";
-import { useState } from "react";
 
 interface Props {
   hidden: SELECT_HIDDEN;
   setHidden: Dispatch<SetStateAction<SELECT_HIDDEN>>;
 }
 export default function PharmLists({ hidden, setHidden }: Props) {
-  const [totalPharmList, settotalPharmList] = useState([]);
+  const [totalPharmList, setTotalPharmList] = useState([]);
 
+  //! GET : 약국리스트
   useEffect(() => {
     const getPharmLists = async () => {
       try {
-        const response = await axios.get("http://localhost:3002/response");
-        // console.log(response.data.storeHome);
-
-        settotalPharmList(response.data.storeHome);
+        //* dummy data 일때 -> PharmList.json
+        const response = await axios.get(API_PharmLists.DUMMY_API);
+        //TODO 실제 url 일때 -> /api/store?page=1&size=1
+        // const response = await axios.get(`${API_PharmLists.REAL_API}?page=1&size=1`);
+        setTotalPharmList(response.data.storeHome);
       } catch (error) {
         console.log(error);
       }
@@ -72,8 +73,8 @@ export default function PharmLists({ hidden, setHidden }: Props) {
             </ButtonContainer>
           </PharmHeadContainer>
           <PharmItemContainer>
-            {totalPharmList.map((el: any) => (
-              <PharmItem totalPharmList={el} key={el.storeIdx} />
+            {totalPharmList.map((Pharm: any) => (
+              <PharmItem totalPharmList={Pharm} key={Pharm.storeIdx} />
             ))}
           </PharmItemContainer>
         </PharmContainer>

@@ -1,29 +1,37 @@
 import { useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import PharmDetail from "../../Components/Modal/PharmDetail";
+import { API_MyInfoReviews } from "../../Util/APIs";
 import { IoIosArrowDropright } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import axios from "axios";
-
-const API_URL = "http://localhost:3005/response"
 
 interface Props {
   likedPharmacy: any;
 }
 
-export default function LikedPharmacy({ likedPharmacy }: Props) {
+export default function LikedPharmacyUnit({ likedPharmacy }: Props) {
   const [isModalUp, setIsModalUp] = useState(false);
   const [like, setLike] = useState(false);
 
+  //! ??? : 찜 취소
   const DeleteLikedPharmacy = (storeIdx: number) => {
-    axios.delete(`${API_URL}/post/like`);
-  }
+    //* dummy data 일때
+    axios.delete(API_MyInfoReviews.DUMMY_API);
+    //TODO 실제 url 일때 ?????? API 필요
+    // axios.delete(`${API_MyInfoReviews.REAL_API}/post/like`);
+  };
 
   return (
     <TableBody key={likedPharmacy.storeIdx}>
+      //* dummy data 일 때
       {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} storeIdx={likedPharmacy.storeIdx}/>
+        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} pharmDetail={likedPharmacy} />
       ) : null}
+      //TODO 실제 url 일때
+      {/* {isModalUp ? (
+        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} storeIdx={likedPharmacy.storeIdx}/>
+      ) : null} */}
       <Text className="single icon">
         <IoIosArrowDropright onClick={() => setIsModalUp(true)} aria-hidden="true" />
       </Text>

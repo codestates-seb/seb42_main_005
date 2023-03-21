@@ -1,15 +1,23 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
-import PharmInfo from "./PharmInfo";
-import ReviewUnit from "./ReviewUnit";
 import WriteReviewForm from "./WriteReviewForm";
+import ReviewUnit from "./ReviewUnit";
+import PharmInfo from "./PharmInfo";
 import PharmRank from "../Ul/PharmRank";
 import Button from "../Ul/Button";
+import { API_PharmDetail } from "../../Util/APIs";
 import { zIndex_Modal } from "../../Util/z-index";
 import { HiXMark } from "react-icons/hi2";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
-import axios from "axios";
-import { getReviewListAction } from "../../Redux/slice/getReviewSlice";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
+
+//TODO 실제 url 일때
+// interface Props {
+//   setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
+//   like?: boolean;
+//   setLike?: React.Dispatch<React.SetStateAction<boolean>>;
+//   storeIdx: number;
+// }
 
 interface Props {
   setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
@@ -17,39 +25,29 @@ interface Props {
   setLike: React.Dispatch<React.SetStateAction<boolean>>;
   pharmDetail: any;
 }
-//storeIdx 받아서 파라미터로 쓰는걸로 수정!
+
+//* dummy data 일때
 export default function PharmDetail({ setIsModalUp, like, setLike, pharmDetail }: Props) {
+  //TODO 실제 url 일때
+  // export default function PharmDetail({ setIsModalUp, like, setLike, storeIdx }: Props) {
   const [isReviewFormShown, setIsReviewFormShown] = useState(false);
+  const [reviewList, setReviewList] = useState([]);
 
-  const dispatch = useAppDispatch();
-
+  //! GET : 리뷰리스트
   useEffect(() => {
     const getReviews = async () => {
       try {
-        const response = await axios.get("http://localhost:3010/response");
-        dispatch(getReviewListActions.getReviewList(response.data));
+        //* dummy data 일때 -> Review.json
+        const response = await axios.get(API_PharmDetail.DUMMY_API);
+        //TODO 실제 url 일때 -> /api/store/{storeIdx}/review
+        // const response = await axios.get(`${API_PharmDetail.REAL_API}/store/${storeIdx}/review`);
+        setReviewList(response.data.storeReview);
       } catch (error) {
         console.log(error);
       }
     };
     getReviews();
   }, []);
-
-  // useEffect(() => {
-  //   axios
-  //     .all([axios.get("http://localhost:3010/response"), axios.get("http://localhost:3020/response")])
-  //     .then(
-  //       axios.spread((res1, res2) => {
-  //         setPharmDetail(res2.data);
-  //         dispatch(getReviewListActions.getReviewList(res1.data));
-  //       }),
-  //     )
-  //     .catch((err) => console.log(err));
-  // }, []);
-
-  const reviewList = useAppSelector((state: any) => {
-    return state.getReview.storeReview;
-  });
 
   return (
     <ModalBackDrop onClick={() => setIsModalUp(false)}>
@@ -59,20 +57,40 @@ export default function PharmDetail({ setIsModalUp, like, setLike, pharmDetail }
         </CloseBtnContainer>
         <InfoHeader>
           <InfoTitle>{pharmDetail.name}</InfoTitle>
-          <PharmRank rating={pharmDetail.rating} />
+          <PharmRank
+            rating={pharmDetail.rating}
+            likes={pharmDetail.pickedStoreCount}
+            reviewCount={pharmDetail.reviewCount}
+          />
         </InfoHeader>
         <Constant>
           <PharmInfo like={like} setLike={setLike} pharmDetail={pharmDetail} />
           <ReviewContainer>
             <ReviewTitle>리뷰</ReviewTitle>
-            <Reviews>
-              {reviewList?.map((el: any) => (
-                <ReviewUnit reviewList={el} key={el.reviewIdx} />
-              ))}
-            </Reviews>
+            {reviewList ? (
+              <Reviews>
+                {reviewList.map((review: any) => (
+                  <ReviewUnit
+                    review={review}
+                    key={review.reviewIdx}
+                    reviewIdx={review.reviewIdx}
+                    storeIdx={pharmDetail.storeIdx}
+                  />
+                ))}
+              </Reviews>
+            ) : (
+              <Instead>
+                <AiOutlineExclamationCircle className="bigger" onClick={() => setIsReviewFormShown(true)} />
+                <p>작성된 리뷰가 없습니다.</p>
+                <p>지금 리뷰를 작성해 보세요!</p>
+              </Instead>
+            )}
           </ReviewContainer>
         </Constant>
-        {isReviewFormShown ? <WriteReviewForm setIsReviewFormShown={setIsReviewFormShown} /> : null}
+        {isReviewFormShown ? (
+          <WriteReviewForm setIsReviewFormShown={setIsReviewFormShown} storeIdx={pharmDetail.storeIdx} />
+        ) : null}
+        {/* 로그인이 안된 상태일 경우, 이 부분이 없어야 합니다 */}
         {isReviewFormShown ? null : (
           <WriteReviewBtnContainer>
             <Button onClick={() => setIsReviewFormShown(true)} color="mint" size="md" text="리뷰쓰기" />
@@ -150,7 +168,7 @@ const WriteReviewBtnContainer = styled.footer`
   justify-content: flex-end;
   right: 20px;
   bottom: 25px;
-  width: 450px;
+  width: 400px;
   padding-top: 10px;
   background-color: var(--white);
   @media (max-width: 768px) {
@@ -224,4 +242,27 @@ const CloseBtnContainer = styled.div`
   font-size: 40px;
   color: var(--black-100);
   z-index: ${zIndex_Modal.CloseBtnContainer};
+`;
+const Instead = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  width: 420px;
+  height: 500px;
+  font-weight: 700;
+  color: var(--black-300);
+  border-radius: 5px;
+  background-color: var(--black-050);
+  .bigger {
+    font-size: 40px;
+    margin-bottom: 10px;
+    :hover {
+      color: var(--black-500);
+    }
+  }
+  @media (max-width: 768px) {
+    height: 200px;
+  }
 `;
