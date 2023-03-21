@@ -29,7 +29,7 @@ public class StoreService {
 
         for (PickedStore pickedStore : findPickedStores) {
             if (pickedStore.getNormal().getUserIdx().equals(userIdx)) {
-                pickedStore.removePickedStore(findUser, findStore);      //처리 로직
+                pickedStore.removePickedStore(findUser, findStore);
                 findPickedStores.remove(pickedStore);
                 pickedStoreRepository.delete(pickedStore);
 
@@ -55,5 +55,6 @@ public class StoreService {
                 .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
                 .build();
     }
+
 
 }
