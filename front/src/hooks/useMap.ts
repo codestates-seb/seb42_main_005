@@ -104,7 +104,7 @@ export function useMap() {
       const clusterer = new kakao.maps.MarkerClusterer({
         map: _map,
         averageCenter: true,
-        minLevel: 7,
+        minLevel: 6,
         minClusterSize: 1,
         calculator: [10, 30, 50],
         styles: [
