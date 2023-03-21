@@ -5,10 +5,14 @@ import com.project.mainproject.store.dto.GetStoreListRequestDto;
 import com.project.mainproject.store.dto.StoreSearchStoreDto;
 import com.project.mainproject.store.service.StoreGetService;
 import com.project.mainproject.store.service.StoreService;
+import com.project.mainproject.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.net.URI;
 
 @Slf4j
 @RestController
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class StoreController {
     private final StoreGetService storeGetService;
     private final StoreService storeService;
+
     /*
      *  약국 목록_페이지 리스트
      * */
@@ -41,7 +46,7 @@ public class StoreController {
      *  찜하기
      * */
     @PostMapping("/{storeIdx}/pick")
-    public ResponseEntity pickedStore(@PathVariable Long storeIdx,@RequestParam Long userIdx) {
+    public ResponseEntity pickedStore(@PathVariable Long storeIdx, @RequestParam Long userIdx) {
         SingleResponseDto responseDto = storeService.pickStore(userIdx, storeIdx);
         //TODO : 로그인 기능 구현 완료 시 SecurityContext에서 UserIdx를 따로 뽑아 사용하게 변경해야한다.
         if (responseDto.getHttpCode() == 200) {
@@ -51,8 +56,8 @@ public class StoreController {
     }
 
     /*
-    *  찜한 약국 보여주기
-    * */
+     *  찜한 약국 보여주기
+     * */
     @GetMapping("/user/{userIdx}/pick/")
     public ResponseEntity getPickedStoreList(@PathVariable Long userIdx) {
         SingleResponseDto pickedStoreList = storeGetService.getPickedStoreList(userIdx);
@@ -69,5 +74,15 @@ public class StoreController {
 
         return ResponseEntity.ok(searchResult);
     }
-}
 
+    /*
+    * 약국 사진 변경 
+    * */
+    @PatchMapping("/image")
+    public ResponseEntity updateImage(@RequestPart MultipartFile storeImage , @RequestParam Long userIdx) {
+        SingleResponseDto updateImageResult = storeService.updateImage(userIdx, storeImage);
+        URI location = UriCreator.createUri("/api/user/{storeIdx}", userIdx);
+        return ResponseEntity.ok().header("location",location.toString()).body(updateImageResult);
+    }
+
+}

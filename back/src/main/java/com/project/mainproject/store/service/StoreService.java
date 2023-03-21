@@ -3,14 +3,18 @@ package com.project.mainproject.store.service;
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.enums.ResultStatus;
 import com.project.mainproject.store.entity.Store;
+import com.project.mainproject.store.entity.StoreImage;
 import com.project.mainproject.store.repository.StoreQueryRepository;
 import com.project.mainproject.user.entity.Normal;
+import com.project.mainproject.user.entity.Pharmacy;
 import com.project.mainproject.user.entity.PickedStore;
 import com.project.mainproject.user.repository.PickedStoreRepository;
 import com.project.mainproject.user.service.UserService;
+import com.project.mainproject.utils.FileUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -56,5 +60,29 @@ public class StoreService {
                 .build();
     }
 
+    /*
+     * UserIdx를 이용해서 Store -> StoreImage를 저장하는 로직 수행
+     * 1. User단에서 약사인지 Check -> Store 존재하는지 Check
+     * */
+    public SingleResponseDto updateImage(Long userIdx, MultipartFile multipartFile) {
+        Pharmacy pharmacy = userService.checkIsPharmacy(userIdx);
+        StoreImage storeImages = pharmacy.getStore().getStoreImages();
+        String uploadImagePath = null;
+        if (storeImages == null) {
+            uploadImagePath = FileUploader.saveImage(multipartFile);
+        } else {
+            String deleteImagePath = storeImages.getImagePath();
+            uploadImagePath = FileUploader.deleteAndSaveImage(multipartFile, deleteImagePath);
+        }
+
+        StoreImage storeImage = StoreImage.builder().imagePath(uploadImagePath).store(pharmacy.getStore()).build();
+
+        pharmacy.getStore().addStoreImage(storeImage);
+
+        return SingleResponseDto.builder()
+                .message(ResultStatus.CREATE_COMPLETED.getMessage())
+                .httpCode(ResultStatus.CREATE_COMPLETED.getHttpCode())
+                .build();
+    }
 
 }
