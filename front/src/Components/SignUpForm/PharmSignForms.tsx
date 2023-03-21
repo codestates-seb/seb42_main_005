@@ -8,13 +8,16 @@ import { BsPersonCircle } from "react-icons/bs";
 import { AiOutlineLock, AiOutlineCamera } from "react-icons/ai";
 import { FaUserEdit, FaMapMarkerAlt } from "react-icons/fa";
 import ErrorAlert from "./ErrorAlert";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function PharmSignForms() {
-  const [businessImg, setBusinessImg] = useState<string>("");
-  const [pharmImg, setPharmImg] = useState<string>("");
-  const [businessImgFile, setbusinessImgFile] = useState<File | null>(null);
-  const [pharmImgFile, setPharmImgFile] = useState<File | null>(null);
-  //나중에 파일 넘겨줄때 businessImgFile, pharmImgFile 넘겨주면 돼!
+  const [businessImgName, setBusinessImgName] = useState<string>("");
+  const [pharmImgName, setPharmImgName] = useState<string>("");
+  //에러날때를 대비해서 남겨둠!
+  // const [businessImgFile, setbusinessImgFile]: any = useState(null);
+  // const [pharmImgFile, setPharmImgFile]: any = useState(null);
+  // 나중에 파일 넘겨줄때 businessImgFile, pharmImgFile 넘겨주면 돼!
 
   const [pSignForm, setpSignForms] = useState({
     email: "",
@@ -36,6 +39,8 @@ export default function PharmSignForms() {
     PASSWORD: "password",
     NAME: "name",
     ADDRESS: "address",
+    BUSINESSIMG: "businessImg",
+    PHARMIMG: "pharmImg",
   };
 
   const changeEmailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,16 +98,18 @@ export default function PharmSignForms() {
       [name]: value,
     });
   };
-
-  const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
+  const navigate = useNavigate();
+  const onSubmit: any = (e: { preventDefault: () => void; target: any }) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const email = formData.get(FORM_FIELD_NAMES.EMAIL);
     const password = formData.get(FORM_FIELD_NAMES.PASSWORD);
     const name = formData.get(FORM_FIELD_NAMES.NAME);
     const address = formData.get(FORM_FIELD_NAMES.ADDRESS);
+    const businessImg: any = formData.get(FORM_FIELD_NAMES.BUSINESSIMG);
+    const pharmImg: any = formData.get(FORM_FIELD_NAMES.PHARMIMG);
 
-    if (!email || !password || !name || !address || !businessImg || !pharmImg) {
+    if (!email || !password || !name || !address || !businessImg.name || !pharmImg.name) {
       return alert("모든 항목을 입력해주세요");
     }
     if (error.email === true || error.password === true || error.name === true) {
@@ -111,8 +118,32 @@ export default function PharmSignForms() {
     if (checks === false) {
       return alert("회원가입시, 사용자의 현재 위치를 사용하는 것에 동의해주세요");
     }
+    const data = {
+      name: name,
+      email: email,
+      password: password,
+      address: address,
+    };
 
-    console.log(businessImgFile);
+    const formDataForsubmit = new FormData();
+    formDataForsubmit.append("businessCertificate", businessImg);
+    formDataForsubmit.append("pharmacistCertificate", pharmImg);
+    formDataForsubmit.append("userSignUpDto", new Blob([JSON.stringify(data)], { type: "application/json" }));
+
+    const postSignUp = async () => {
+      try {
+        await axios({
+          //! url수정
+          url: "/api/users/store",
+          method: "post",
+          data: formDataForsubmit,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    postSignUp();
+    navigate("/login");
   };
 
   const BusinessImg = useRef<HTMLInputElement>(null);
@@ -194,7 +225,7 @@ export default function PharmSignForms() {
         <InputContainer>
           <AiOutlineCamera className="inputImage" aria-hidden="true" />
           <label htmlFor="business-img"></label>
-          <ImgInput readOnly value={businessImg} placeholder="사업자 등록증을 올려주세요" />
+          <ImgInput readOnly value={businessImgName} placeholder="사업자 등록증을 올려주세요" />
           <div className="photo_upload">
             <Button color="l_blue" size="sm" text="사진업로드" onClick={onClickBusinessImg} />
           </div>
@@ -202,17 +233,17 @@ export default function PharmSignForms() {
           <Img
             type="file"
             ref={BusinessImg}
-            name="fileName"
+            name="businessImg"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              e.target.files && setBusinessImg(e.target.files[0].name);
-              e.target.files && setbusinessImgFile(e.target.files[0]);
+              e.target.files && setBusinessImgName(e.target.files[0].name);
+              // e.target.files && setbusinessImgFile(e.target.files[0]);
             }}
           />
         </InputContainer>
         <InputContainer>
           <AiOutlineCamera className="inputImage" aria-hidden="true" />
           <label htmlFor="pharm-img"></label>
-          <ImgInput readOnly value={pharmImg} placeholder="약사면허증 사진을 올려주세요" />
+          <ImgInput readOnly value={pharmImgName} placeholder="약사면허증 사진을 올려주세요" />
           <div className="photo_upload">
             <Button color="l_blue" size="sm" text="사진업로드" onClick={onClickPharmImg} />
           </div>
@@ -220,10 +251,10 @@ export default function PharmSignForms() {
           <Img
             type="file"
             ref={PharmImg}
-            name="fileName"
+            name="pharmImg"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              e.target.files && setPharmImg(e.target.files[0].name);
-              e.target.files && setPharmImgFile(e.target.files[0]);
+              e.target.files && setPharmImgName(e.target.files[0].name);
+              // e.target.files && setPharmImgFile(e.target.files[0]);
             }}
           />
         </InputContainer>

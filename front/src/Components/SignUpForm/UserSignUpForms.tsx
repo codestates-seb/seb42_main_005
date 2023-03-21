@@ -7,6 +7,8 @@ import { BsPersonCircle } from "react-icons/bs";
 import { FaUserEdit, FaMapMarkerAlt } from "react-icons/fa";
 import { AiOutlineLock } from "react-icons/ai";
 import ErrorAlert from "./ErrorAlert";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function UserSignUpForms() {
   const [signForm, setSignForms] = useState({
@@ -90,7 +92,7 @@ export default function UserSignUpForms() {
   const checkHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChecks(e.target.checked);
   };
-
+  const navigate = useNavigate();
   const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -108,6 +110,28 @@ export default function UserSignUpForms() {
     if (checks === false) {
       return alert("회원가입시, 사용자의 현재 위치를 사용하는 것에 동의해주세요");
     }
+
+    const data = {
+      name: name,
+      email: email,
+      password: password,
+      address: address,
+    };
+
+    const postSignUp = async () => {
+      try {
+        await axios({
+          //! url수정
+          url: "/api/users/normal",
+          method: "post",
+          data: data,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    postSignUp();
+    navigate("/login");
   };
   return (
     <Container>
