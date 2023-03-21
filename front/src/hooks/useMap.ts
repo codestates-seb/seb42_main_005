@@ -21,7 +21,7 @@ export function useMap() {
       };
       // 지도 객체 생성
       const map = new kakao.maps.Map(container as HTMLElement, options);
-      // 마커 생성
+
       const PositionCurrent = new kakao.maps.LatLng(location.latitude, location.longitude);
       const ImageSrcCurrent = "./Images/currentPos.png";
       const ImageSizeCurrent = new kakao.maps.Size(24, 35);
@@ -102,9 +102,9 @@ export function useMap() {
       });
 
       const clusterer = new kakao.maps.MarkerClusterer({
-        map: _map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
-        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-        minLevel: 7, // 클러스터 할 최소 지도 레벨
+        map: _map,
+        averageCenter: true,
+        minLevel: 7,
         minClusterSize: 1,
         calculator: [10, 30, 50],
         styles: [
