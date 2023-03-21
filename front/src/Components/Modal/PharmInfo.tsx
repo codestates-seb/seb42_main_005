@@ -3,27 +3,25 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import PharmRank from "../Ul/PharmRank";
 import AnyDropDown from "./AnyDropDown";
-import axios from "axios";
-import { getPharmDActions } from "../../Redux/slice/getPharmSlice";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+
 interface Props {
   like: boolean;
   setLike: React.Dispatch<React.SetStateAction<boolean>>;
-  pharmListDetail: any;
+  pharmDetail: any;
 }
 
-export default function PharmInfo({ like, setLike, pharmListDetail }: Props) {
+export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
   const [isDropDownDown, setIsDropDownDown] = useState(false);
 
   return (
     <InfoContainer>
       <InfoHeader>
-        <InfoTitle>{pharmListDetail.name}</InfoTitle>
-        {pharmListDetail && <PharmRank rating={pharmListDetail.rating} />}
+        <InfoTitle>{pharmDetail.name}</InfoTitle>
+        {pharmDetail && <PharmRank rating={pharmDetail.rating} />}
       </InfoHeader>
       <InfoImgContainer>
         {pharmListDetail.image ? (
-          <PharmImg src={pharmListDetail.image as string}/>
+          <PharmImg src={pharmDetail.image as string}/>
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다."/>
         )}
@@ -41,16 +39,16 @@ export default function PharmInfo({ like, setLike, pharmListDetail }: Props) {
                 영업시간 더보기
               </More>
             ) : null}
-            {isDropDownDown ? <AnyDropDown setIsDropDownDown={setIsDropDownDown} /> : null}
+            {isDropDownDown ? <AnyDropDown setIsDropDownDown={setIsDropDownDown} pharmDetail={pharmDetail} /> : null}
           </InfoInfoContent>
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>주소</InfoInfoTitle>
-          <InfoInfoContent>{pharmListDetail.address}</InfoInfoContent>
+          <InfoInfoContent>{pharmDetail.address}</InfoInfoContent>
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>전화번호</InfoInfoTitle>
-          <InfoInfoContent>{pharmListDetail.tel}</InfoInfoContent>
+          <InfoInfoContent>{pharmDetail.tel}</InfoInfoContent>
         </InfoUnit>
       </InfoInfo>
     </InfoContainer>

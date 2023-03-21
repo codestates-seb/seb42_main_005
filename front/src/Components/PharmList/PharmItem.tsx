@@ -1,24 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import PharmRank from "../Ul/PharmRank";
 import PharmDetail from "../Modal/PharmDetail";
+import axios from "axios";
 
 interface Props {
-  pharmListDetail: any;
+  totalPharmList: any;
 }
 
-export default function PharmItem({ pharmListDetail }: Props) {
+export default function PharmItem({ totalPharmList }: Props) {
   const [isModalUp, setIsModalUp] = useState(false);
   const [like, setLike] = useState(false);
+  const [pharmDetail, setPharmDetail]: any = useState();
+
+  useEffect(() => {
+    const getPharmDetail = async () => {
+      try {
+        const response = await axios.get("http://localhost:3020/response");
+        setPharmDetail(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPharmDetail();
+  }, []);
 
   return (
     <PharmCard>
       {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} pharmListDetail={pharmListDetail} />
+        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} pharmDetail={pharmDetail} />
       ) : null}
       <InfoImgContainer>
-        {pharmListDetail.image ? (
-          <PharmImg src={pharmListDetail.image as string} onClick={() => setIsModalUp(true)} />
+        {totalPharmList.image ? (
+          <PharmImg src={totalPharmList.image as string} onClick={() => setIsModalUp(true)} />
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." onClick={() => setIsModalUp(true)} />
         )}
@@ -27,8 +41,8 @@ export default function PharmItem({ pharmListDetail }: Props) {
         </LikeButton>
       </InfoImgContainer>
       <PharmTitleBox>
-        <PharmName onClick={() => setIsModalUp(true)}>{pharmListDetail && pharmListDetail.name}</PharmName>
-        {pharmListDetail && <PharmRank rating={pharmListDetail.rating} />}
+        <PharmName onClick={() => setIsModalUp(true)}>{totalPharmList && totalPharmList.name}</PharmName>
+        {totalPharmList && <PharmRank rating={totalPharmList.rating} />}
       </PharmTitleBox>
     </PharmCard>
   );

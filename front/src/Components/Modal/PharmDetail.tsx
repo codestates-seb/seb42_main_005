@@ -15,20 +15,19 @@ interface Props {
   setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
   like: boolean;
   setLike: React.Dispatch<React.SetStateAction<boolean>>;
-  pharmListDetail: any;
+  pharmDetail: any;
 }
-
-export default function PharmDetail({ setIsModalUp, like, setLike, pharmListDetail }: Props) {
+//storeIdx 받아서 파라미터로 쓰는걸로 수정!
+export default function PharmDetail({ setIsModalUp, like, setLike, pharmDetail }: Props) {
   const [isReviewFormShown, setIsReviewFormShown] = useState(false);
 
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     const getReviews = async () => {
       try {
-        const response = await axios.get("http://localhost:3003/response");
-        // console.log(response.data);
-
-        dispatch(getReviewListAction.getReviewList(response.data));
+        const response = await axios.get("http://localhost:3010/response");
+        dispatch(getReviewListActions.getReviewList(response.data));
       } catch (error) {
         console.log(error);
       }
@@ -36,41 +35,51 @@ export default function PharmDetail({ setIsModalUp, like, setLike, pharmListDeta
     getReviews();
   }, []);
 
+  // useEffect(() => {
+  //   axios
+  //     .all([axios.get("http://localhost:3010/response"), axios.get("http://localhost:3020/response")])
+  //     .then(
+  //       axios.spread((res1, res2) => {
+  //         setPharmDetail(res2.data);
+  //         dispatch(getReviewListActions.getReviewList(res1.data));
+  //       }),
+  //     )
+  //     .catch((err) => console.log(err));
+  // }, []);
+
   const reviewList = useAppSelector((state: any) => {
     return state.getReview.storeReview;
   });
 
   return (
-    <>
-      <ModalBackDrop onClick={() => setIsModalUp(false)}>
-        <ModalContainer onClick={(event) => event.stopPropagation()}>
-          <CloseBtnContainer>
-            <HiXMark id="close" onClick={() => setIsModalUp(false)} aria-hidden="true" />
-          </CloseBtnContainer>
-          <InfoHeader>
-            <InfoTitle>{pharmListDetail.storeName}</InfoTitle>
-            <PharmRank rating={pharmListDetail.rating} />
-          </InfoHeader>
-          <Constant>
-            <PharmInfo like={like} setLike={setLike} pharmListDetail={pharmListDetail} />
-            <ReviewContainer>
-              <ReviewTitle>리뷰</ReviewTitle>
-              <Reviews>
-                {reviewList?.map((el: any) => (
-                  <ReviewUnit reviewList={el} key={el.reviewIdx} />
-                ))}
-              </Reviews>
-            </ReviewContainer>
-          </Constant>
-          {isReviewFormShown ? <WriteReviewForm setIsReviewFormShown={setIsReviewFormShown} /> : null}
-          {isReviewFormShown ? null : (
-            <WriteReviewBtnContainer>
-              <Button onClick={() => setIsReviewFormShown(true)} color="mint" size="md" text="리뷰쓰기" />
-            </WriteReviewBtnContainer>
-          )}
-        </ModalContainer>
-      </ModalBackDrop>
-    </>
+    <ModalBackDrop onClick={() => setIsModalUp(false)}>
+      <ModalContainer onClick={(event) => event.stopPropagation()}>
+        <CloseBtnContainer>
+          <HiXMark id="close" onClick={() => setIsModalUp(false)} aria-hidden="true" />
+        </CloseBtnContainer>
+        <InfoHeader>
+          <InfoTitle>{pharmDetail.name}</InfoTitle>
+          <PharmRank rating={pharmDetail.rating} />
+        </InfoHeader>
+        <Constant>
+          <PharmInfo like={like} setLike={setLike} pharmDetail={pharmDetail} />
+          <ReviewContainer>
+            <ReviewTitle>리뷰</ReviewTitle>
+            <Reviews>
+              {reviewList?.map((el: any) => (
+                <ReviewUnit reviewList={el} key={el.reviewIdx} />
+              ))}
+            </Reviews>
+          </ReviewContainer>
+        </Constant>
+        {isReviewFormShown ? <WriteReviewForm setIsReviewFormShown={setIsReviewFormShown} /> : null}
+        {isReviewFormShown ? null : (
+          <WriteReviewBtnContainer>
+            <Button onClick={() => setIsReviewFormShown(true)} color="mint" size="md" text="리뷰쓰기" />
+          </WriteReviewBtnContainer>
+        )}
+      </ModalContainer>
+    </ModalBackDrop>
   );
 }
 

@@ -3,6 +3,7 @@ import { FaPencilAlt } from "react-icons/fa";
 
 interface InputProps {
   id?: string;
+  name?: string;
   placeholder?: string;
   value?: string;
   rows: number;
@@ -11,7 +12,7 @@ interface InputProps {
   onChange?: any;
 }
 
-export default function Textarea({ id, placeholder, value, rows, icon, isValid, onChange }: InputProps) {
+export default function Textarea({ id, name, placeholder, value, rows, icon, isValid, onChange }: InputProps) {
   return (
     <StyledInput>
       {icon && (
@@ -21,6 +22,7 @@ export default function Textarea({ id, placeholder, value, rows, icon, isValid, 
       )}
       <textarea
         id={id}
+        name={name}
         placeholder={placeholder}
         value={value}
         rows={rows}

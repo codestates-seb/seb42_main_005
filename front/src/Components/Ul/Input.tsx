@@ -2,14 +2,16 @@ import styled from "styled-components";
 import { FaPencilAlt } from "react-icons/fa";
 interface InputProps {
   id?: string;
+  name?: string;
   placeholder?: string;
   value?: string;
   isValid?: boolean;
   icon?: boolean;
-  onChange?: () => void;
+  onChange?: any;
+  onKeyPress?: any;
 }
 
-export default function Input({ id, placeholder, value, icon, isValid, onChange }: InputProps) {
+export default function Input({ id, placeholder, value, icon, isValid, onChange, onKeyPress, name }: InputProps) {
   return (
     <StyledInput>
       {icon && (
@@ -19,11 +21,13 @@ export default function Input({ id, placeholder, value, icon, isValid, onChange 
       )}
       <input
         id={id}
+        name={name}
         type="text"
         placeholder={placeholder}
         value={value}
         className={`${isValid ? null : "error"}`}
         onChange={onChange}
+        onKeyPress={onKeyPress}
       />
     </StyledInput>
   );
