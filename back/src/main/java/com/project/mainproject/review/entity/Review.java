@@ -3,16 +3,16 @@ package com.project.mainproject.review.entity;
 import com.project.mainproject.audit.Auditable;
 import com.project.mainproject.review.enums.ReviewStatus;
 import com.project.mainproject.store.entity.Store;
-import com.project.mainproject.tag.entity.ReviewTag;
 import com.project.mainproject.user.entity.User;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
@@ -23,7 +23,6 @@ import static lombok.Builder.Default;
 
 @Entity
 @Getter
-@Setter
 @Table(name = "REVIEW")
 @Builder
 @AllArgsConstructor
@@ -35,7 +34,7 @@ public class Review extends Auditable {
     private String content;
     private int rating;
 
-    @Formula("(SELECT count(1) FROM review_report r WHERE r.review_idx = review_idx)")
+    @Formula("(SELECT count(1) FROM report r WHERE r.review_idx = review_idx)")
     private int reportCnt;
 
     @Default
@@ -49,10 +48,6 @@ public class Review extends Auditable {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "STORE_IDX")
     private Store store;
-
-    @Default
-    @OneToMany(mappedBy = "review", fetch = LAZY, cascade = {ALL}, orphanRemoval = true)
-    private Set<ReviewTag> reviewTags = new HashSet<>();
 
     @Default
     @OneToMany(mappedBy = "review", fetch = LAZY, cascade = {ALL}, orphanRemoval = true)
