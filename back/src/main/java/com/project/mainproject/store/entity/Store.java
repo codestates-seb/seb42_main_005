@@ -13,6 +13,7 @@ import javax.persistence.*;
 import java.util.List;
 
 import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -100,6 +101,6 @@ public class Store extends Auditable {
     @OneToMany(mappedBy = "store", cascade = REMOVE, orphanRemoval = true)
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "store")
+    @OneToMany(mappedBy = "store",fetch = LAZY)
     private List<PickedStore> pickedStores;
 }
