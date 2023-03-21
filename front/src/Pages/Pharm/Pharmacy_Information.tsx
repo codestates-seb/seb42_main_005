@@ -7,7 +7,7 @@ import DropDown from "./DropDown";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { IoIosArrowDropright } from "react-icons/io";
 import { IoIosArrowDropdown } from "react-icons/io";
-import { API_PharmacyInformation } from "../../Util/APIs";
+import { API_PharmacyInformation } from "../../Api/APIs";
 
 //TODO 실제 url 일때
 // export default function PharmacyInformation() {

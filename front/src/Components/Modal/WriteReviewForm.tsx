@@ -7,7 +7,7 @@ import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BiPhotoAlbum } from "react-icons/bi";
 import { HiXMark } from "react-icons/hi2";
 import { zIndex_Modal } from "../../Util/z-index";
-import { API_WriteReviewForm } from "../../Util/APIs"; // Review.json
+import { API_WriteReviewForm } from "../../Api/APIs"; // Review.json
 
 interface Props {
   setIsReviewFormShown: React.Dispatch<React.SetStateAction<boolean>>;

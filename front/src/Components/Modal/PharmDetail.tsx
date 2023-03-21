@@ -6,7 +6,7 @@ import ReviewUnit from "./ReviewUnit";
 import PharmInfo from "./PharmInfo";
 import PharmRank from "../Ul/PharmRank";
 import Button from "../Ul/Button";
-import { API_PharmDetail } from "../../Util/APIs";
+import { API_PharmDetail } from "../../Api/APIs";
 import { zIndex_Modal } from "../../Util/z-index";
 import { HiXMark } from "react-icons/hi2";
 import { AiOutlineExclamationCircle } from "react-icons/ai";

@@ -3,7 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import PharmRank from "../Ul/PharmRank";
 import PharmDetail from "../Modal/PharmDetail";
-import { API_PharmItem } from "../../Util/APIs"; // PharmDetail.json
+import { API_PharmItem } from "../../Api/APIs"; // PharmDetail.json
 
 //* dummy 일때
 interface Props {

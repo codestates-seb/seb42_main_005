@@ -5,7 +5,7 @@ import Button from "../Components/Ul/Button";
 import SignUpInput from "../Components/SignUpForm/SignUpInput";
 import ErrorAlert from "../Components/SignUpForm/ErrorAlert";
 import { BsPersonCircle } from "react-icons/bs";
-import { API_FindPW } from "../Util/APIs";
+import { API_FindPW } from "../Api/APIs";
 import { validators } from "../Components/SignUpForm/Validation";
 
 export default function FindPW() {
@@ -32,14 +32,14 @@ export default function FindPW() {
     }
     if (error === true) {
       return alert("항목을 다시 확인해주세요");
-    }
-    else await axios({
-      url: API_FindPW.DUMMY_API,
-      method: "patch",
-      data: {
-        email,
-      },
-    });
+    } else
+      await axios({
+        url: API_FindPW.DUMMY_API,
+        method: "patch",
+        data: {
+          email,
+        },
+      });
     //TODO url 받았을때 -> api/users/password/{userIdx}
     // else await axios({
     //   url: `${API_FindPW.REAL_API}/${userIdx}`,
