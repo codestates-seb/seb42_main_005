@@ -103,4 +103,8 @@ public class Store extends Auditable {
 
     @OneToMany(mappedBy = "store",fetch = LAZY)
     private List<PickedStore> pickedStores;
+
+    public void addStoreImage(StoreImage storeImages) {
+        this.storeImages = storeImages;
+    }
 }
