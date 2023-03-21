@@ -20,30 +20,30 @@ export default function MapFilter({
   onClickBookmarks,
 }: FilterProps) {
   return (
-    <CtrlContainer>
-      <FillterBtn title={"map_home"} selected={selected} onClick={onClickMapHome}>
+    <ContainerFillter>
+      <ButtonFillter title={"map_home"} selected={selected} onClick={onClickMapHome}>
         <HiOutlineHome className="icon" />
         <div className="label">지도 홈</div>
-      </FillterBtn>
+      </ButtonFillter>
       <span className="partition" />
-      <FillterBtn title={"in_business"} selected={selected} onClick={onClickInBusiness}>
+      <ButtonFillter title={"in_business"} selected={selected} onClick={onClickInBusiness}>
         <AiOutlineMedicineBox className="icon" />
         <div className="label">영업 중</div>
-      </FillterBtn>
+      </ButtonFillter>
       <span className="partition" />
-      <FillterBtn title={"midnight"} selected={selected} onClick={onClickMidnight}>
+      <ButtonFillter title={"midnight"} selected={selected} onClick={onClickMidnight}>
         <IoCloudyNightOutline className="icon" />
         <div className="label">심 야</div>
-      </FillterBtn>
+      </ButtonFillter>
       <span className="partition" />
-      <FillterBtn title={"bookmarks"} selected={selected} onClick={onClickBookmarks}>
+      <ButtonFillter title={"bookmarks"} selected={selected} onClick={onClickBookmarks}>
         <RiHeartsLine className="icon" />
         <div className="label">찜 콩</div>
-      </FillterBtn>
-    </CtrlContainer>
+      </ButtonFillter>
+    </ContainerFillter>
   );
 }
-const CtrlContainer = styled.nav`
+const ContainerFillter = styled.nav`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -70,7 +70,7 @@ const CtrlContainer = styled.nav`
     }
   }
 `;
-const FillterBtn = styled.button<{ title: string; selected: string }>`
+const ButtonFillter = styled.button<{ title: string; selected: string }>`
   cursor: pointer;
   display: block;
   width: 65px;

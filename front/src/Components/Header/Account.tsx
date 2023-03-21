@@ -22,7 +22,7 @@ export default function Account({ isLogin, account }: AccountProps) {
 
   if (isLogin && account === "User") {
     return (
-      <AccountContainer>
+      <ContainerAccount>
         <Link to="/user-my_info" className="profile">
           <img
             // 임시 이미지 URL
@@ -32,9 +32,9 @@ export default function Account({ isLogin, account }: AccountProps) {
         </Link>
         <span className="name">킹갓 제너럴</span>
         <span className="identity">님</span>
-        <DropdownBtn onClick={DropdownHandler}>
+        <DropdownButton onClick={DropdownHandler}>
           <IoIosArrowBack className={isOpen ? "close" : "open"} />
-        </DropdownBtn>
+        </DropdownButton>
         {isOpen ? (
           <DropdownBackdrop onClick={DropdownHandler}>
             <Content>
@@ -50,11 +50,11 @@ export default function Account({ isLogin, account }: AccountProps) {
             </Content>
           </DropdownBackdrop>
         ) : null}
-      </AccountContainer>
+      </ContainerAccount>
     );
   } else if (isLogin && account === "Pharm") {
     return (
-      <AccountContainer>
+      <ContainerAccount>
         <Link to="/user-my_info" className="profile">
           <img
             // 임시 이미지 URL
@@ -64,9 +64,9 @@ export default function Account({ isLogin, account }: AccountProps) {
         </Link>
         <span className="name">킹갓</span>
         <span className="identity">약사님</span>
-        <DropdownBtn onClick={DropdownHandler}>
+        <DropdownButton onClick={DropdownHandler}>
           <IoIosArrowBack className={isOpen ? "close" : "open"} />
-        </DropdownBtn>
+        </DropdownButton>
         {isOpen ? (
           <DropdownBackdrop onClick={DropdownHandler}>
             <Content>
@@ -82,11 +82,11 @@ export default function Account({ isLogin, account }: AccountProps) {
             </Content>
           </DropdownBackdrop>
         ) : null}
-      </AccountContainer>
+      </ContainerAccount>
     );
   } else if (isLogin && account === "Admin") {
     return (
-      <AccountContainer>
+      <ContainerAccount>
         <Link to="/user-my_info" className="profile">
           <img
             // 임시 이미지 URL
@@ -96,9 +96,9 @@ export default function Account({ isLogin, account }: AccountProps) {
         </Link>
         <span className="name">특수기호</span>
         <span className="identity">관리자님</span>
-        <DropdownBtn onClick={DropdownHandler}>
+        <DropdownButton onClick={DropdownHandler}>
           <IoIosArrowBack className={isOpen ? "close" : "open"} />
-        </DropdownBtn>
+        </DropdownButton>
         {isOpen ? (
           <DropdownBackdrop onClick={DropdownHandler}>
             <Content>
@@ -114,19 +114,19 @@ export default function Account({ isLogin, account }: AccountProps) {
             </Content>
           </DropdownBackdrop>
         ) : null}
-      </AccountContainer>
+      </ContainerAccount>
     );
   } else
     return (
-      <AccountContainer className="main_nav">
-        <LinkButton to="/login">로그인</LinkButton>
+      <ContainerAccount className="main_nav">
+        <ButtonLink to="/login">로그인</ButtonLink>
         <Partition />
-        <LinkButton to="/sign_up">회원가입</LinkButton>
-      </AccountContainer>
+        <ButtonLink to="/sign_up">회원가입</ButtonLink>
+      </ContainerAccount>
     );
 }
 
-const AccountContainer = styled.section`
+const ContainerAccount = styled.section`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -163,7 +163,7 @@ const AccountContainer = styled.section`
     color: var(--white);
   }
 `;
-const DropdownBtn = styled.button`
+const DropdownButton = styled.button`
   cursor: pointer;
   position: inherit;
   padding-top: 4px;
@@ -229,7 +229,7 @@ const DropdownBackdrop = styled.div`
   z-index: ${zIndex_Header.Dropdown};
 `;
 
-const LinkButton = styled(Link)`
+const ButtonLink = styled(Link)`
   border: none;
   background-color: transparent;
   font-size: 1rem;
