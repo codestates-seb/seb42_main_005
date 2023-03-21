@@ -16,7 +16,7 @@ public class DBStoreListDto {
     private double distance;
     private Long pickedStoreCount;
     private Long reviewCount;
-    private String image;
+    private String imagePath;
     private LocalDateTime modifiedAt;
 
     @QueryProjection
@@ -30,7 +30,7 @@ public class DBStoreListDto {
         this.distance = distance;
         this.pickedStoreCount = pickedStoreCount;
         this.reviewCount = reviewCount;
-        this.image = image;
+        this.imagePath = image;
         this.modifiedAt = modifiedAt;
     }
 }
