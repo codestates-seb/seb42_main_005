@@ -7,7 +7,7 @@ import InputAlert from "./InputAlert";
 import Button from "../../Components/Ul/Button";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { MdOutlineAddAPhoto } from "react-icons/md";
-import { API_MyInfoInformation } from "../../Util/APIs";
+import { API_MyInfoInformation } from "../../Api/APIs";
 import { validators } from "../../Components/SignUpForm/Validation";
 
 interface Props {

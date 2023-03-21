@@ -4,7 +4,7 @@ import styled from "styled-components";
 import MyReview from "../User/MyInfo_MyReview";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import axios from "axios";
-import { API_MyPharmacy } from "../../Util/APIs";
+import { API_MyPharmacy } from "../../Api/APIs";
 
 export default function MyInfoReviews() {
   const [reviews, setReviews] = useState([]);
@@ -37,7 +37,13 @@ export default function MyInfoReviews() {
       {reviews.length ? (
         <Rest>
           {reviews.map((review: any, i: number) => (
-            <MyReview review={review} key={review.reviewIdx} idx={i} storeIdx={review.storeIdx} reviewIdx={review.reviewIdx}/>
+            <MyReview
+              review={review}
+              key={review.reviewIdx}
+              idx={i}
+              storeIdx={review.storeIdx}
+              reviewIdx={review.reviewIdx}
+            />
           ))}
         </Rest>
       ) : (

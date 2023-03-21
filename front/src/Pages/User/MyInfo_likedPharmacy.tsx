@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import PharmDetail from "../../Components/Modal/PharmDetail";
-import { API_MyInfoReviews } from "../../Util/APIs";
+import { API_MyInfoReviews } from "../../Api/APIs";
 import { IoIosArrowDropright } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
 

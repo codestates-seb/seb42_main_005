@@ -4,11 +4,11 @@ import styled from "styled-components";
 import AdminTabs from "./AdminTabs";
 import Button from "../../Components/Ul/Button";
 import CheckBox from "../../Components/Ul/CheckBox";
-import { API_Users } from "../../Util/APIs";
+import { API_Users } from "../../Api/APIs";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Users() {
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState([]);
 
   //! GET : 전체회원 리스트
   useEffect(() => {
@@ -79,7 +79,7 @@ export default function Users() {
               </BelowLable>
             ) : (
               <Instead>
-                <AiOutlineExclamationCircle aria-hidden="true"/>
+                <AiOutlineExclamationCircle aria-hidden="true" />
                 <span>가입된 회원이 없습니다.</span>
               </Instead>
             )}

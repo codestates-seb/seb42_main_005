@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import PharmDetail from "../../Components/Modal/PharmDetail";
-import { API_MyInfoReviews } from "../../Util/APIs";
+import { API_MyInfoReviews } from "../../Api/APIs";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 const API_URL = "http://localhost:3005/response";
@@ -43,12 +43,11 @@ export default function MyReview({ review, storeIdx, reviewIdx, idx }: Props) {
       <Text className="review">{review.content}</Text>
       <Text className="number">{review.createdAt}</Text>
       <Text className="single icon">
-        <RiDeleteBin6Line aria-hidden="true" onClick={()=>deleteReview}/>
+        <RiDeleteBin6Line aria-hidden="true" onClick={() => deleteReview} />
       </Text>
     </TableBody>
   );
 }
-
 
 const TableBody = styled.div`
   display: flex;

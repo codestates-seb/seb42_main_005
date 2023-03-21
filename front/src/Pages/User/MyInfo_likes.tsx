@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
-import LikedPharmacyUnit from "../User/MyInfo_likedPharmacy"
-import { API_MyInfoLikes } from "../../Util/APIs";
+import LikedPharmacyUnit from "../User/MyInfo_likedPharmacy";
+import { API_MyInfoLikes } from "../../Api/APIs";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
 export default function MyInfoLikes() {
-  const [likedPharmacies, setLikedPharmacies] = useState([])
+  const [likedPharmacies, setLikedPharmacies] = useState([]);
 
   //! GET : 내가 찜한 약국 리스트
   useEffect(() => {
@@ -18,7 +18,7 @@ export default function MyInfoLikes() {
         //TODO url 받았을때 -> /api/users/{userIdx}/store
         //? userIdx 는 리덕스 툴킷에서
         // const response = await axios.get(`${API_MyInfoLikes.REAL_API}/${userIdx}/store`);
-        setLikedPharmacies(response.data)
+        setLikedPharmacies(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -37,7 +37,9 @@ export default function MyInfoLikes() {
       </TableHead>
       {likedPharmacies.length ? (
         <Rest>
-          {likedPharmacies.map((likedPharmacy: any) => <LikedPharmacyUnit likedPharmacy={likedPharmacy}/>)}
+          {likedPharmacies.map((likedPharmacy: any) => (
+            <LikedPharmacyUnit likedPharmacy={likedPharmacy} />
+          ))}
         </Rest>
       ) : (
         <WhenEmpty>

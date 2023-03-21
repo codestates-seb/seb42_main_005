@@ -3,9 +3,11 @@ import styled from "styled-components";
 import { BsPersonCircle } from "react-icons/bs";
 import SignUpInput from "../Components/SignUpForm/SignUpInput";
 import { AiOutlineLock } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { validators } from "../Components/SignUpForm/Validation";
 import ErrorAlert from "../Components/SignUpForm/ErrorAlert";
+import axios from "axios";
+import { setLocalStorage } from "../Api/localStorage";
 
 export default function Login() {
   const [loginForm, setLoginForms] = useState({
@@ -55,7 +57,7 @@ export default function Login() {
       [name]: errors,
     });
   };
-
+  const navigate = useNavigate();
   const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -68,6 +70,37 @@ export default function Login() {
     if (error.email === true || error.password === true) {
       return alert("항목을 다시 확인해주세요");
     }
+
+    const postLogin = async () => {
+      await axios
+        .post("url쓰기", { email: email, password: password }, { withCredentials: true })
+        .then((res) => {
+          //! accessToken어떤 키로 주는지 보고, 잘들어오는지 확인하기
+          let accessToken = res.headers.authorization;
+          let refreshToken = res.headers.refresh;
+          // console.log('access 토큰 :', accessToken);
+          // console.log('refresh 토큰 :', refreshToken);
+
+          //localStorage에 토큰 넣음
+          setLocalStorage("access_token", accessToken);
+          setLocalStorage("refresh_token", refreshToken);
+
+          // API 요청마다 헤더에 access토큰 담아서 요청보냄
+          axios.defaults.headers.common["Authorization"] = `${accessToken}`;
+
+          //dispatch써야해
+        })
+        .then(() => {
+          navigate("/");
+        })
+        .catch((err) => {
+          //! 상태코드 물어봐서 고치기
+          if (err.response.status === 401) {
+            alert("ID 또는 비밀번호가 일치하지 않습니다.");
+          }
+        });
+    };
+    postLogin();
   };
 
   return (
