@@ -1,6 +1,8 @@
 package com.project.mainproject.store.repository;
 
 import com.project.mainproject.store.dto.DBdto.*;
+import com.project.mainproject.store.entity.Store;
+import com.project.mainproject.user.entity.PickedStore;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.OrderSpecifier;
@@ -101,6 +103,21 @@ public class StoreQueryRepository {
                 .fetch();
     }
 
+    public List<PickedStore> findPickedStoreById(Long storeIdx) {
+        return queryFactory
+                .selectFrom(pickedStore)
+                .where(pickedStore.store.storeIdx.eq(storeIdx))
+                .fetch();
+    }
+
+    public Store findStoreById(Long storeIdx) {
+        return queryFactory
+                .selectFrom(store)
+                .where(store.storeIdx.eq(storeIdx))
+                .fetchOne();
+    }
+
+
 
 
 
@@ -108,8 +125,8 @@ public class StoreQueryRepository {
     private OrderSpecifier orderByCondition(String sortCondition) {
                 return Expressions.stringPath(sortCondition).asc();
     }
-
     //내부동작 쿼리 where 절
+
     private BooleanExpression getDistanceCondition(Expression<Double> latitude, Expression<Double> longitude, Expression<Double> distanceCond) {
         return acos(sin(radians(store.latitude))
                 .multiply(sin(radians(latitude)))
@@ -165,5 +182,4 @@ public class StoreQueryRepository {
         return store.holidayOperating.startTime.before(currentTime)
                 .and(store.holidayOperating.endTime.after(currentTime));
     }
-
 }

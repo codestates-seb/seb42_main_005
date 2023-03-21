@@ -1,11 +1,13 @@
 package com.project.mainproject.user.service;
 
+import com.project.mainproject.exception.BusinessLogicException;
 import com.project.mainproject.user.dto.UserInfoDto;
 import com.project.mainproject.user.dto.UserPatchDto;
 import com.project.mainproject.user.entity.Normal;
 import com.project.mainproject.user.entity.Pharmacy;
 import com.project.mainproject.user.entity.User;
 import com.project.mainproject.user.enums.UserStatus;
+import com.project.mainproject.user.exception.UserExceptionCode;
 import com.project.mainproject.user.mapper.UserMapper;
 import com.project.mainproject.user.repository.PharmacyRepository;
 import com.project.mainproject.user.repository.UserRepository;
@@ -21,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -120,5 +123,27 @@ public class UserService {
         User user = userRepository.findById(userIdx).get();
         user.setUserStatus(UserStatus.WITHDRAWN);
         userRepository.save(user);
+    }
+
+    /*
+    * User가 존재하지 않으면 예외 처리를 수행한다.
+    * */
+    public User validUser(Long userIdx) {
+        Optional<User> findUser = userRepository.findById(userIdx);
+
+        if (findUser.isPresent()) {
+            return findUser.get();
+        }
+        throw new BusinessLogicException(UserExceptionCode.USER_NOT_FOUND);
+    }
+
+    /*
+     * User가 존재하면 예외 처리를 수행한다.
+     * */
+    public void checkUserExist(Long userIdx) {
+        Optional<User> findUser = userRepository.findById(userIdx);
+        findUser.ifPresent(
+                user -> new BusinessLogicException(UserExceptionCode.USER_EXIST)
+        );
     }
 }
