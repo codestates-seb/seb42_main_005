@@ -4,37 +4,43 @@ import { HiXMark } from "react-icons/hi2";
 
 interface Props {
   setIsDropDownDown: React.Dispatch<React.SetStateAction<boolean>>;
+  pharmDetail: any;
 }
 
-export default function AnyDropDown({ setIsDropDownDown }: Props) {
+export default function AnyDropDown({ setIsDropDownDown, pharmDetail }: Props) {
+  // console.log(pharmDetail.operatingTime);
+  const week = pharmDetail.operatingTime;
   return (
     <DropDownContainer onClick={() => setIsDropDownDown(false)}>
       <CloseBtnContainer>
         <HiXMark id="close" onClick={() => setIsDropDownDown(false)} aria-hidden="true" />
       </CloseBtnContainer>
+
       <Unit>
         <Key>월요일</Key>
-        <Value>10:00 - 20:00</Value>
+        <Value>{`${week.monday.startTime} - ${week.monday.endTime}`}</Value>
       </Unit>
+
       <Unit>
         <Key>화요일</Key>
-        <Value>10:00 - 20:00</Value>
+        <Value>{`${week.tuesday.startTime} - ${week.tuesday.endTime}`}</Value>
       </Unit>
+
       <Unit>
         <Key>수요일</Key>
-        <Value>10:00 - 20:00</Value>
+        <Value>{`${week.wednesday.startTime} - ${week.wednesday.endTime}`}</Value>
       </Unit>
       <Unit>
         <Key>목요일</Key>
-        <Value>둘째, 넷째주 휴무</Value>
+        <Value>{`${week.thursday.startTime} - ${week.thursday.endTime}`}</Value>
       </Unit>
       <Unit>
         <Key>금요일</Key>
-        <Value>10:00 - 20:00</Value>
+        <Value>{`${week.friday.startTime} - ${week.friday.endTime}`}</Value>
       </Unit>
       <Unit>
         <Key>토요일</Key>
-        <Value>10:00 - 20:00</Value>
+        <Value>{`${week.saturday.startTime} - ${week.saturday.endTime}`}</Value>
       </Unit>
       <Unit>
         <Key>일요일</Key>
@@ -56,9 +62,9 @@ const DropDownContainer = styled.section`
   align-items: flex-start;
   padding: 8px 0;
   bottom: -70px;
-  right: 60px;
+  right: 30px;
   @media (max-width: 768px) {
-    right: 65px;
+    right: 30px;
     bottom: -80px;
   }
   gap: 3px;
@@ -71,8 +77,8 @@ const CloseBtnContainer = styled.header`
   cursor: pointer;
   display: flex;
   justify-content: flex-end;
-  margin-right: 7px;
-  margin-bottom: 2px;
+  margin-left: 29px;
+  margin-bottom: 4px;
   height: 15px;
   width: 146px;
   font-size: 19px;
@@ -98,5 +104,5 @@ const Key = styled.h5`
 const Value = styled.span`
   font-weight: 400;
   font-size: 14px;
-  font-weight: 400;
+  width: 130px;
 `;

@@ -7,37 +7,30 @@ import { BsSearch } from "react-icons/bs";
 import { RiHomeLine } from "react-icons/ri";
 import { VscTriangleLeft } from "react-icons/vsc";
 import { SELECT_HIDDEN } from "../../Util/type";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import axios from "axios";
-import { getPharmDListActions } from "../../Redux/slice/getPharmListSlice";
 import { useEffect } from "react";
+import { useState } from "react";
 
 interface Props {
   hidden: SELECT_HIDDEN;
   setHidden: Dispatch<SetStateAction<SELECT_HIDDEN>>;
 }
-
 export default function PharmLists({ hidden, setHidden }: Props) {
-  const dispatch = useAppDispatch();
+  const [totalPharmList, settotalPharmList] = useState([]);
 
   useEffect(() => {
     const getPharmLists = async () => {
       try {
         const response = await axios.get("http://localhost:3002/response");
-        // console.log(response.data);
+        // console.log(response.data.storeHome);
 
-        dispatch(getPharmDListActions.getPharmListD(response.data));
+        settotalPharmList(response.data.storeHome);
       } catch (error) {
         console.log(error);
       }
     };
     getPharmLists();
   }, []);
-
-  const pharmListDetail = useAppSelector((state: any) => {
-    return state.getPharmListDetail.response.storeHome;
-  });
-  // console.log(pharmListDetail);
 
   return (
     <ListContainer className={hidden ? "hide" : ""}>
@@ -79,8 +72,8 @@ export default function PharmLists({ hidden, setHidden }: Props) {
             </ButtonContainer>
           </PharmHeadContainer>
           <PharmItemContainer>
-            {pharmListDetail?.map((el: any) => (
-              <PharmItem pharmListDetail={el} key={el.storeIdx} />
+            {totalPharmList.map((el: any) => (
+              <PharmItem totalPharmList={el} key={el.storeIdx} />
             ))}
           </PharmItemContainer>
         </PharmContainer>

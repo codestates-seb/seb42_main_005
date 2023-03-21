@@ -6,6 +6,10 @@ import { zIndex_Modal } from "../../Util/z-index";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BiPhotoAlbum } from "react-icons/bi";
 import { HiXMark } from "react-icons/hi2";
+import axios from "axios";
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import { getReviewListActions } from "../../Redux/slice/getReviewSlice";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   setIsReviewFormShown: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,15 +29,75 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
       };
     });
   };
-  const [rate, setRate] = useState(0);
-  const [text, setText] = useState("");
 
-  const handlerText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value);
+  const [reviewList, setReviewList]: any = useState({
+    reviewIdx: 0,
+    content: "",
+    rating: 0,
+    createdAt: "",
+  });
+
+  const handlerText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setReviewList({
+      ...reviewList,
+      [name]: value,
+    });
+  };
+
+  const handlerRate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setReviewList({
+      ...reviewList,
+      [name]: value,
+    });
+  };
+  const reviewLists = useAppSelector((state: any) => {
+    return state.getReview.response;
+  });
+  const dispatch = useAppDispatch();
+  const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const review = formData.get("content");
+    const star = formData.get("rating");
+
+    //나중에 수정 , 화면에 뜨는지 확인하려고 한것
+    let newData: any = {
+      storeReview: [
+        {
+          reviewIdx: 53,
+          name: "이성은",
+          userImage:
+            "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTIy/MDAxNTIzMDI3MjQ1Nzk3.k5nYScR4RH3Tx2JVS6pQiqoKRakgtsjJnBvRSg1VfD8g.SYovJeXlx8Am487HAc9RSJ_4gNpbnhuQVPPh24_N568g.JPEG.monday20000/1522512872270.jpg?type=w800",
+          reviewImage:
+            "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTcz/MDAxNTIzMDI3MjQ1NDU4.uP9jhQMTNwQSSUGZcDRlddU5E11r4Kl4QRTnaSrrqKkg.OX4yCUKh3wbhgF0zGlxOT6TNIaDa3vvd9S3bMDvHfEwg.JPEG.monday20000/1522493493318.jpg?type=w800",
+          content: review,
+          rating: star,
+          createdAt: new Date(),
+          modifiedAt: new Date(),
+        },
+      ],
+    };
+
+    const postReview = async () => {
+      try {
+        await axios({
+          url: "http://localhost:3010/response",
+          method: "post",
+          data: newData,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    dispatch(getReviewListActions.getReviewList(newData));
+    setReviewList({ reviewIdx: 0, content: "", rating: 0, createdAt: "" });
+    postReview();
   };
 
   return (
-    <WriteReviewContainer>
+    <WriteReviewContainer onSubmit={onSubmit}>
       <InputTop className="wide">
         <HiXMark aria-hidden="true" className="except" onClick={() => setIsReviewFormShown(false)} />
       </InputTop>
@@ -41,11 +105,12 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
         <HiddenLabel htmlFor="review" />
         <Textarea
           id="review"
+          name="content"
           placeholder="무분별한 비방, 비하, 욕설은 지양해주세요 :)"
           isValid={true}
           rows={3}
           icon={false}
-          value={text}
+          value={reviewList.content}
           onChange={handlerText}
         />
         <ReviewImgContainer>
@@ -65,21 +130,61 @@ export default function WriteReviewForm({ setIsReviewFormShown }: Props) {
       <InputBot>
         <Rating>
           <StarContainer>
-            <Star src={`${rate > 0 ? "./Images/fillstar.png" : "./Images/emstar.png"}`} onClick={(e) => setRate(1)} />
-            <Star src={`${rate > 1 ? "./Images/fillstar.png" : "./Images/emstar.png"}`} onClick={(e) => setRate(2)} />
-            <Star src={`${rate > 2 ? "./Images/fillstar.png" : "./Images/emstar.png"}`} onClick={(e) => setRate(3)} />
-            <Star src={`${rate > 3 ? "./Images/fillstar.png" : "./Images/emstar.png"}`} onClick={(e) => setRate(4)} />
-            <Star src={`${rate > 4 ? "./Images/fillstar.png" : "./Images/emstar.png"}`} onClick={(e) => setRate(5)} />
+            <Star
+              src={`${reviewList.rating > 0 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+              onClick={() =>
+                setReviewList({
+                  ...reviewList,
+                  rating: 1,
+                })
+              }
+            />
+            <Star
+              src={`${reviewList.rating > 1 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+              onClick={() =>
+                setReviewList({
+                  ...reviewList,
+                  rating: 2,
+                })
+              }
+            />
+            <Star
+              src={`${reviewList.rating > 2 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+              onClick={() =>
+                setReviewList({
+                  ...reviewList,
+                  rating: 3,
+                })
+              }
+            />
+            <Star
+              src={`${reviewList.rating > 3 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+              onClick={() =>
+                setReviewList({
+                  ...reviewList,
+                  rating: 4,
+                })
+              }
+            />
+            <Star
+              src={`${reviewList.rating > 4 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+              onClick={(e) =>
+                setReviewList({
+                  ...reviewList,
+                  rating: 5,
+                })
+              }
+            />
           </StarContainer>
-          <RateNum>{rate} / 5</RateNum>
+          <RateNum readOnly type="text" name="rating" value={`${reviewList.rating}`} onChange={handlerRate}></RateNum>
         </Rating>
-        <Button color="blue" size="md" text="작성완료" icon={true} />
+        <Button type="submit" color="blue" size="md" text="작성완료" icon={true} />
       </InputBot>
     </WriteReviewContainer>
   );
 }
 
-const WriteReviewContainer = styled.section`
+const WriteReviewContainer = styled.form`
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -186,8 +291,16 @@ const StarContainer = styled.span`
 const Star = styled.img`
   width: 20px;
 `;
-const RateNum = styled.span`
-  margin-right: 5px;
+const RateNum = styled.input`
+  display: none;
+  margin-left: 3px;
+  width: 4rem;
   color: var(--black-300);
+  font-size: 23px;
   font-weight: bold;
+  border: none;
+  &:focus {
+    border: none;
+    outline: none;
+  }
 `;
