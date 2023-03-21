@@ -91,8 +91,6 @@ public class Store extends Auditable {
     private Boolean isOperatingHoliday;
 
     private String etc;
-//    @Formula("SELECT round(AVG(rating), 2) AS rating FROM review GROUP BY store_idx")
-//    private Double rating;
 
     //연관관계 매핑
     @OneToOne(mappedBy = "store",cascade = CascadeType.ALL)
