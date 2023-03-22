@@ -3,10 +3,15 @@ package com.project.mainproject.review.controller;
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.dummy.CommonStub;
-import com.project.mainproject.review.dto.ListGetReportedReviewDto;
-import com.project.mainproject.review.dummy.ReviewStub;
+import com.project.mainproject.review.dto.ListGetStoreReviewDto;
+import com.project.mainproject.review.dto.ListReportedReviewDto;
+import com.project.mainproject.review.entity.Review;
+import com.project.mainproject.review.mapper.ReviewMapper;
+import com.project.mainproject.review.service.ReviewService;
 import com.project.mainproject.user.dto.BannedReviewsDto;
+import com.project.mainproject.utils.ResponseBuilder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +21,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/admin")
 @RestController
 public class AdminReviewController {
+
+    private final ReviewMapper reviewMapper;
+    private final ReviewService reviewService;
+    private final ResponseBuilder responseBuilder;
+
     /*
      *  신고된 리뷰들 조회
      * */
@@ -23,10 +33,16 @@ public class AdminReviewController {
     public ResponseEntity getReportedReview(Pageable pageable) {
         //TODO: 서비스단 구현
 
-        PageResponseDto build = CommonStub.getPageResponseStub();
-        build.setResponse(ListGetReportedReviewDto.builder().reportedReview(ReviewStub.getReportedReviewDtoListStub()).build());
+        Page<Review> reviews = reviewService.getReportedReviews(pageable);
 
-        return ResponseEntity.status(HttpStatus.OK).body(build);
+        ListReportedReviewDto responseData = ListReportedReviewDto.builder()
+                .reportedReviews(reviewMapper.reviewsToReportedReviewsDto(reviews.getContent()))
+                .build();
+
+        PageResponseDto<ListGetStoreReviewDto> response =
+                responseBuilder.buildPageResponse(reviews, responseData);
+
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/banned")
