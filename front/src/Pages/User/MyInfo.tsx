@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import React from "react"
 import styled from "styled-components";
 import MyInfoInformation from "./MyInfo_Information";
 import Button from "../../Components/Ul/Button";
@@ -22,15 +23,17 @@ export default function MyInfo() {
           <Title>내가 남긴 리뷰</Title>
           <MyInfoReviews />
         </Information>
-        <QuitBtnWrapper to="/sign_out">
-          <Button text="탈퇴하기" color="red" size="lg" />
+        <QuitBtnWrapper>
+          <Link to="/sign_out">
+            <Button text="탈퇴하기" color="red" size="lg" />
+          </Link>
         </QuitBtnWrapper>
       </ContentsWrapper>
     </WholePage>
   );
 }
 
-const WholePage = styled.main`
+const WholePage = styled.section`
   height: 100vh;
   width: 100%;
   display: flex;
@@ -44,7 +47,8 @@ const ContentsWrapper = styled.section`
     width: 700px;
   }
 `;
-const QuitBtnWrapper = styled(Link)`
+const QuitBtnWrapper = styled.div`
+  cursor: default;
   display: flex;
   justify-content: flex-end;
   margin: 20px 20px 100px 0;

@@ -10,9 +10,10 @@ interface BtnProps {
   icon?: boolean;
   disabled?: boolean;
   onClick?: any;
+  type?: "button" | "submit" | "reset" | undefined;
 }
 
-export default function Button({ text, icon, color, size, url, disabled, onClick }: BtnProps) {
+export default function Button({ text, icon, color, size, url, disabled, onClick, type }: BtnProps) {
   // A tag
   if (url) {
     return (
@@ -24,8 +25,8 @@ export default function Button({ text, icon, color, size, url, disabled, onClick
 
   // Button tag
   return (
-    <BasicButton className={`${color} ${size}`} onClick={onClick}>
-      {icon ? <TbNotebook className="icon" /> : null}
+    <BasicButton className={`${color} ${size}`} onClick={onClick} type={type}>
+      {icon ? <TbNotebook className="icon" aria-hidden="true" /> : null}
       {text}
     </BasicButton>
   );
@@ -72,8 +73,8 @@ const LinkButton = styled(Link)`
     line-height: 1.1;
     padding: 0.5rem 1rem;
     /* 버튼 위 라인 효과 */
-    box-shadow: inset 0 1px 0 0 hsl(0, 0%, 100%, 0.4);
     border: 1px solid transparent;
+    box-shadow: inset 0 1px 0 0 hsl(0, 0%, 100%, 0.4);
     text-decoration: none;
   }
   &.lg {
@@ -81,8 +82,8 @@ const LinkButton = styled(Link)`
     padding: 0.5rem 2rem;
     font-weight: 700;
     /* 버튼 위 라인 효과 */
-    box-shadow: inset 0 1px 0 0 hsl(0, 0%, 100%, 0.4);
     border: 1px solid transparent;
+    box-shadow: inset 0 1px 0 0 hsl(0, 0%, 100%, 0.4);
     text-decoration: none;
   }
 
@@ -94,20 +95,20 @@ const LinkButton = styled(Link)`
 `;
 
 const BasicButton = styled.button`
+  cursor: pointer;
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  cursor: pointer;
   margin: 0;
   padding: 0.5rem;
   font-family: inherit;
   font-size: 0.9rem;
-  white-space: nowrap;
   color: var(--white);
-  background-color: var(--white);
+  white-space: nowrap;
   border: none;
   border-radius: 3px;
+  background-color: var(--white);
 
   /* color */
   &.l_black {
@@ -189,8 +190,8 @@ const BasicButton = styled.button`
     text-decoration: none;
   }
   & .icon {
-    margin: 0 5px 0 0;
     position: relative;
+    margin: 0 5px 0 0;
     font-size: 1rem;
   }
 `;

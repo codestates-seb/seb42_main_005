@@ -1,39 +1,32 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import PharmDetail from "../../Components/Modal/PharmDetail";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import MyReview from "../User/MyInfo_MyReview";
 import { IoMdAddCircleOutline } from "react-icons/io";
-
-let dummy = {
-  myReviews: [
-    {
-      pharm: "킹갓약국",
-      review: "내꿈은 늘 너였어 박연진",
-      writtenAt: "2012.02.14",
-    },
-    {
-      pharm: "제너럴 약국",
-      review: "졸려 ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ",
-      writtenAt: "2012.02.14",
-    },
-    {
-      pharm: "텐텐좋아약국",
-      review: "텐텐 사러 갔는데 여기에는 노마밖에 안팜 ㅠ",
-      writtenAt: "2012.02.14",
-    },
-  ],
-};
+import axios from "axios";
+import { API_MyPharmacy } from "../../Api/APIs";
 
 export default function MyInfoReviews() {
-  const [isModalUp, setIsModalUp] = useState(false);
-  const [like, setLike] = useState(false);
+  const [reviews, setReviews] = useState([]);
+
+  //! GET : 내가 작성한 리뷰 리스트
+  useEffect(() => {
+    const getMyReviews = async () => {
+      try {
+        //* dummy data 일때 -> Review.json
+        const response = await axios.get(API_MyPharmacy.DUMMY_API);
+        //TODO 실제 url 일때 -> /api/users/{userIdx}/review
+        // const response = await axios.get(`${API_MyPharmacy.REAL_API}/${userIdx}/review`);
+        setReviews(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getMyReviews();
+  }, []);
 
   return (
     <Content>
-      {isModalUp ? (
-        <PharmDetail isModalUp={isModalUp} setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
-      ) : null}
       <TableHead>
         <Text className="single" />
         <Text className="pharm">약국명</Text>
@@ -41,26 +34,22 @@ export default function MyInfoReviews() {
         <Text className="number">작성일</Text>
         <Text className="single" />
       </TableHead>
-      {dummy.myReviews.length ? (
+      {reviews.length ? (
         <Rest>
-          {dummy.myReviews.map((data, i) => (
-            <TableBody>
-              <Text className="single">{i + 1}</Text>
-              <Text className="pharm" onClick={() => setIsModalUp(!isModalUp)}>
-                {data.pharm}
-              </Text>
-              <Text className="review">{data.review}</Text>
-              <Text className="number">{data.writtenAt}</Text>
-              <Text className="single icon">
-                <RiDeleteBin6Line />
-              </Text>
-            </TableBody>
+          {reviews.map((review: any, i: number) => (
+            <MyReview
+              review={review}
+              key={review.reviewIdx}
+              idx={i}
+              storeIdx={review.storeIdx}
+              reviewIdx={review.reviewIdx}
+            />
           ))}
         </Rest>
       ) : (
         <WhenEmpty>
           <Add to="/">
-            <IoMdAddCircleOutline id="icon" />
+            <IoMdAddCircleOutline id="icon" aria-hidden="true" />
           </Add>
           <span>
             <p>현재 찜한 약국이 없습니다.</p>

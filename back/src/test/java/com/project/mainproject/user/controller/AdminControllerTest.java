@@ -1,7 +1,7 @@
 package com.project.mainproject.user.controller;
 
 import com.project.mainproject.helper.user.AdminControllerTestHelper;
-import com.project.mainproject.user.dto.AdminUsersDto;
+import com.project.mainproject.user.dto.AdminUsersStoreDto;
 import com.project.mainproject.user.dummy.AdminStub;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class AdminControllerTest implements AdminControllerTestHelper {
     @Test
     void approvalPharmacyTest() throws Exception {
         //given
-        AdminUsersDto post = AdminStub.getAdminUsers();
+        AdminUsersStoreDto post = AdminStub.getAdminUsers();
         String content = toJsonContent(post);
 
         //when
@@ -59,7 +59,7 @@ public class AdminControllerTest implements AdminControllerTestHelper {
     @Test
     void rejectPharmacyTest() throws Exception {
         //given
-        AdminUsersDto post = AdminStub.getAdminUsers();
+        AdminUsersStoreDto post = AdminStub.getAdminUsers();
         String content = toJsonContent(post);
 
         //when
@@ -82,7 +82,7 @@ public class AdminControllerTest implements AdminControllerTestHelper {
     @Test
     void blockUsersTest() throws Exception {
         //given
-        AdminUsersDto post = AdminStub.getAdminUsers();
+        AdminUsersStoreDto post = AdminStub.getAdminUsers();
         String content = toJsonContent(post);
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
@@ -109,7 +109,7 @@ public class AdminControllerTest implements AdminControllerTestHelper {
     @Test
     void banishUsersTest() throws Exception {
         //given
-        AdminUsersDto post = AdminStub.getAdminUsers();
+        AdminUsersStoreDto post = AdminStub.getAdminUsers();
         String content = toJsonContent(post);
         //when
         ResultActions actions = mockMvc.perform(postRequestBuilder("/api/admin/fired", content));

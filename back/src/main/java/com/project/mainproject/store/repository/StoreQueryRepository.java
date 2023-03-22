@@ -1,9 +1,8 @@
 package com.project.mainproject.store.repository;
 
-import com.project.mainproject.store.dto.DBdto.DBStoreDetailDto;
-import com.project.mainproject.store.dto.DBdto.DBStoreListDto;
-import com.project.mainproject.store.dto.DBdto.QDBStoreDetailDto;
-import com.project.mainproject.store.dto.DBdto.QDBStoreListDto;
+import com.project.mainproject.store.dto.DBdto.*;
+import com.project.mainproject.store.entity.Store;
+import com.project.mainproject.user.entity.PickedStore;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.OrderSpecifier;
@@ -94,7 +93,55 @@ public class StoreQueryRepository {
                 .fetch();
     }
 
+    public List<DBPickedStoredListDto> getPickedStoreList(Long userIdx) {
+        return queryFactory
+                .select(new QDBPickedStoredListDto(
+                        store.storeIdx, store.name, store.address, store.tel))
+                .from(pickedStore)
+                .join(pickedStore.store, store)
+                .where(pickedStore.normal.userIdx.eq(userIdx))
+                .fetch();
+    }
 
+    public List<PickedStore> findPickedStoreById(Long storeIdx) {
+        return queryFactory
+                .selectFrom(pickedStore)
+                .where(pickedStore.store.storeIdx.eq(storeIdx))
+                .fetch();
+    }
+
+    public Store findStoreById(Long storeIdx) {
+        return queryFactory
+                .selectFrom(store)
+                .where(store.storeIdx.eq(storeIdx))
+                .fetchOne();
+    }
+
+    public List<DBStoreSearchDto> searchStoreByNameOrAddress(String name, String address) {
+        return queryFactory
+                .select(new QDBStoreSearchDto(
+                        store.storeIdx,store.name,store.address,store.latitude,store.longitude,
+                        review.rating.avg(),
+                        pickedStore.storeId.count(),
+                        review.reviewIdx.count(),
+                        storeImage.imagePath,
+                        store._super.modifiedAt
+                ))
+                .from(store)
+                .leftJoin(store.reviews, review)
+                .leftJoin(store.pickedStores, pickedStore)
+                .leftJoin(store.storeImages, storeImage)
+                .where(searchCondition(name,address))
+                .fetch();
+    }
+
+
+    public List<Store> findByIdxs(List<Long> storeIdx) {
+        return queryFactory
+                .selectFrom(store)
+                .where(store.storeIdx.in(storeIdx))
+                .fetch();
+    }
 
     //내부 동작 쿼리 orderBy
     private OrderSpecifier orderByCondition(String sortCondition) {
@@ -110,7 +157,7 @@ public class StoreQueryRepository {
                         .multiply(cos(radians(store.longitude.subtract(longitude)))))).multiply(RADIUS_EARTH_KM).loe(distanceCond);
     }
 
-    private BooleanExpression getOperatingCondition(boolean isHoliday, String filterCond) {     //operating여부
+    private BooleanExpression getOperatingCondition(boolean isHoliday, String filterCond) {     //operating
 
         if (filterCond==null ||!filterCond.equals("holiday")) {
             return null;
@@ -121,6 +168,13 @@ public class StoreQueryRepository {
         }
 
         return getHolidayOperatingCondition();
+    }
+
+    private BooleanExpression searchCondition(String name, String address) {
+        if (name == null) {
+            return searchWithAddress(address);
+        }
+        return searchWithName(name);
     }
 
     private BooleanExpression getNormalOperatingCondition() {
@@ -158,4 +212,11 @@ public class StoreQueryRepository {
                 .and(store.holidayOperating.endTime.after(currentTime));
     }
 
+    private BooleanExpression searchWithName(String name) {
+        return store.name.eq(name);
+    }
+
+    private BooleanExpression searchWithAddress(String address) {
+        return store.address.like(address);
+    }
 }

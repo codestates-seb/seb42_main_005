@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "../Components/Ul/Button";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
@@ -31,15 +31,15 @@ export default function SignOut() {
             <span id="checkBoxWrapper">
               <Check
                 type="checkbox"
-                onClick={() => {
-                  setIsChecked(!isChecked);
+                onChange={(event) => {
+                  setIsChecked(event.target.checked);
                   setErrMsg(false);
                 }}
               />
             </span>
             <div>
               <p id="alert" className={errMsg ? "show" : ""}>
-                <AiOutlineExclamationCircle />
+                <AiOutlineExclamationCircle aria-hidden="true"/>
                 체크박스에 동의가 필요합니다
               </p>
               <p>
@@ -64,7 +64,7 @@ export default function SignOut() {
   );
 }
 
-const Wrapper = styled.main`
+const Wrapper = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;

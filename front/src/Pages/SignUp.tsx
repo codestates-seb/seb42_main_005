@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PharmSignForms from "../Components/SignUpForm/PharmSignForms";
 import SignUpFormTab from "../Components/SignUpForm/SignUpFormTab";
 import UserSignUpForms from "../Components/SignUpForm/UserSignUpForms";
+import { SELECT_OPTIONS_TAP } from "../Util/type";
 
 export interface Form {
   email: string;
@@ -12,7 +13,7 @@ export interface Form {
 }
 
 export default function SignUp() {
-  const [tab, setTab] = useState<"user" | "pharm">("user");
+  const [tab, setTab] = useState<SELECT_OPTIONS_TAP>("user");
 
   return (
     <Total>
@@ -21,32 +22,32 @@ export default function SignUp() {
           <img alt="logo" src="Images/Logo.png" />
           <h1>회원가입</h1>
         </Title>
-        <SignUpFormTab tab={tab} setTab={setTab} />
+        <SignUpFormTab tab={tab} onClickPharm={() => setTab("pharm")} onClickUser={() => setTab("user")} />
         {tab === "user" ? <UserSignUpForms /> : <PharmSignForms />}
       </Container>
     </Total>
   );
 }
-const Total = styled.div`
+const Total = styled.section`
   display: flex;
   justify-content: center;
+  height: 100vh;
+  width: 100%;
+  overflow-y: scroll;
 `;
-const Container = styled.div`
+const Container = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100%;
-  width: 40rem;
+  width: 35rem;
 `;
-
-const Title = styled.div`
+const Title = styled.header`
   display: flex;
   justify-content: center;
-  padding-top: 6rem;
+  align-items: center;
+  gap: 10px;
   img {
-    padding-right: 1rem;
     width: 3.5rem;
-    height: 3rem;
   }
   h1 {
     color: var(--blue-600);

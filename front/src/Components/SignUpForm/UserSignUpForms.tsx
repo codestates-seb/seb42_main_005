@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import UserAdress from "./UserAdress";
 import SignUpInput from "./SignUpInput";
-import { Validate } from "./Validation";
+import { validators } from "./Validation";
 import { BsPersonCircle } from "react-icons/bs";
 import { FaUserEdit, FaMapMarkerAlt } from "react-icons/fa";
 import { AiOutlineLock } from "react-icons/ai";
 import ErrorAlert from "./ErrorAlert";
-//!  name, address, email, password
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 export default function UserSignUpForms() {
   const [signForm, setSignForms] = useState({
     email: "",
@@ -15,6 +17,7 @@ export default function UserSignUpForms() {
     name: "",
     address: "",
   });
+
   const [error, setError] = useState({
     email: false,
     password: false,
@@ -23,33 +26,80 @@ export default function UserSignUpForms() {
 
   const [checks, setChecks] = useState(false);
 
-  const { email, password, name, address } = signForm;
+  const FORM_FIELD_NAMES = {
+    EMAIL: "email",
+    PASSWORD: "password",
+    NAME: "name",
+    ADDRESS: "address",
+  };
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let errors = false;
+  const changeEmailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSignForms({
       ...signForm,
       [name]: value,
     });
 
-    if (name === "email") {
-      errors = Validate.emailValidation(value);
-    }
-    if (name === "password") {
-      errors = Validate.passwordValidation(value);
-    }
-    if (name === "name") {
-      errors = Validate.nameValidation(value);
+    let errors;
+    if (name === FORM_FIELD_NAMES.EMAIL) {
+      errors = validators.validateEmail(value);
     }
     setError({
       ...error,
       [name]: errors,
     });
   };
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+  const changePasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSignForms({
+      ...signForm,
+      [name]: value,
+    });
+    let errors;
+    if (name === FORM_FIELD_NAMES.PASSWORD) {
+      errors = validators.validatePassword(value);
+    }
+    setError({
+      ...error,
+      [name]: errors,
+    });
+  };
+
+  const changeNameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSignForms({
+      ...signForm,
+      [name]: value,
+    });
+    let errors;
+    if (name === FORM_FIELD_NAMES.NAME) {
+      errors = validators.validateName(value);
+    }
+    setError({
+      ...error,
+      [name]: errors,
+    });
+  };
+
+  const changeAddressHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSignForms({
+      ...signForm,
+      [name]: value,
+    });
+  };
+  const checkHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setChecks(e.target.checked);
+  };
+  const navigate = useNavigate();
+  const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
-    const { email, password, name, address } = signForm;
+    const formData = new FormData(e.target);
+    const email = formData.get(FORM_FIELD_NAMES.EMAIL);
+    const password = formData.get(FORM_FIELD_NAMES.PASSWORD);
+    const name = formData.get(FORM_FIELD_NAMES.NAME);
+    const address = formData.get(FORM_FIELD_NAMES.ADDRESS);
 
     if (!email || !password || !name || !address) {
       return alert("모든 항목을 입력해주세요");
@@ -60,6 +110,28 @@ export default function UserSignUpForms() {
     if (checks === false) {
       return alert("회원가입시, 사용자의 현재 위치를 사용하는 것에 동의해주세요");
     }
+
+    const data = {
+      name: name,
+      email: email,
+      password: password,
+      address: address,
+    };
+
+    const postSignUp = async () => {
+      try {
+        await axios({
+          //! url수정
+          url: "/api/users/normal",
+          method: "post",
+          data: data,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    postSignUp();
+    navigate("/login");
   };
   return (
     <Container>
@@ -72,65 +144,74 @@ export default function UserSignUpForms() {
         </button>
       </Google>
       <SignUpForm onSubmit={onSubmit}>
-        <InputContainer className={`email ${error.email ? "error" : "success"}`}>
-          <BsPersonCircle className="inputimage" />
+        <InputContainer className={`${error.email ? "red" : null}`}>
+          <BsPersonCircle className="inputImage" aria-hidden="true" />
+          <label htmlFor="useremail-input"></label>
           <SignUpInput
             type={"email"}
-            name={"email"}
+            name={FORM_FIELD_NAMES.EMAIL}
             placeholder={"이메일을 입력하세요."}
-            value={email}
-            onChange={onChange}
+            value={signForm.email}
+            onChange={changeEmailHandler}
           />
         </InputContainer>
         <ErrorAlert Error={error.email} ErrorText={"이메일 형식이 올바르지 않습니다."} />
-        <InputContainer className={`${error.password ? "error" : "success"}`}>
-          <AiOutlineLock className="inputimage" />
+        <InputContainer className={`${error.password ? "red" : null}`}>
+          <AiOutlineLock className="inputImage" aria-hidden="true" />
+          <label htmlFor="userpassword-input"></label>
           <SignUpInput
             type={"password"}
-            name={"password"}
+            name={FORM_FIELD_NAMES.PASSWORD}
             placeholder={"비밀번호를 입력하세요."}
-            value={password}
-            onChange={onChange}
+            value={signForm.password}
+            onChange={changePasswordHandler}
           />
         </InputContainer>
         <ErrorAlert Error={error.password} ErrorText={"문자 숫자 특수문자 조합 8자 이상으로 조합해주세요."} />
-        <InputContainer className={`${error.name ? "error" : "success"}`}>
-          <FaUserEdit className="inputimage" />
+        <InputContainer className={`${error.name ? "red" : null}`}>
+          <FaUserEdit className="inputImage" aria-hidden="true" />
+          <label htmlFor="username-input"></label>
           <SignUpInput
             type={"text"}
-            name={"name"}
+            name={FORM_FIELD_NAMES.NAME}
             placeholder={"닉네임을 입력하세요."}
-            value={name}
-            onChange={onChange}
+            value={signForm.name}
+            onChange={changeNameHandler}
           />
         </InputContainer>
         <ErrorAlert Error={error.name} ErrorText={"이름에는 공백이 들어갈 수 없습니다."} />
         <InputContainer>
-          <FaMapMarkerAlt className="inputimage" />
+          <FaMapMarkerAlt className="inputImage" aria-hidden="true" />
+          <label htmlFor="useraddress-input"></label>
           <SignUpInput
             readOnly
             type={"text"}
-            name={"address"}
+            name={FORM_FIELD_NAMES.ADDRESS}
             placeholder={"주소를 입력하세요."}
-            value={address as string}
-            onChange={onChange}
+            value={signForm.address}
+            onChange={changeAddressHandler}
           />
           <UserAdress setSignForms={setSignForms} />
         </InputContainer>
         <CheckContainer>
-          <Check type="checkbox" onClick={() => setChecks(!checks)} />
+          <Check type="checkbox" onChange={checkHandler} checked={checks} />
           <span className="checkbox_content">
             회원가입시, 사용자의 현재 위치를 사용하는 것에 동의하는 것으로 간주됩니다.
           </span>
         </CheckContainer>
-        <button className="signup_button">회원가입</button>
+        <button className="signup_button" type="submit">
+          회원가입
+        </button>
       </SignUpForm>
     </Container>
   );
 }
-const Container = styled.div`
-  padding: 3rem 1rem 1.5rem 1rem;
-  width: 40rem;
+const Container = styled.section`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 2rem;
+  width: 35rem;
   border: 1px solid var(--black-200);
   border-top: none;
   border-bottom-left-radius: 18px;
@@ -138,11 +219,11 @@ const Container = styled.div`
   box-shadow: 0 1px 4px -3px hsla(0, 0%, 0%, 0.09), 0 3px 8px -3px hsla(0, 0%, 0%, 0.1),
     0 4px 13px -3px hsla(0, 0%, 0%, 0.13);
 `;
-const Google = styled.div`
+const Google = styled.article`
   padding-bottom: 1rem;
   .google_button {
     height: 3.3rem;
-    width: 37.875rem;
+    width: 31rem;
     border: 1px solid var(--black-200);
     border-radius: 10px;
     background-color: transparent;
@@ -170,6 +251,7 @@ const SignUpForm = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 5px;
   .signup_button {
     background-color: var(--blue-500);
     border: none;
@@ -186,15 +268,16 @@ const SignUpForm = styled.form`
     }
   }
 `;
-const InputContainer = styled.div`
+const InputContainer = styled.article`
   display: flex;
   flex-direction: row;
+  border: 1px solid var(--black-150);
   border: 1px solid var(--black-150);
   margin-bottom: 0.5rem;
   border-radius: 10px;
   box-shadow: var(--bs-sm);
   padding: 0 10px;
-  .inputimage {
+  .inputImage {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -210,15 +293,19 @@ const InputContainer = styled.div`
   &:focus-within {
     box-shadow: var(--wrapped-shadow);
   }
-  &.error {
+  &.red {
     box-shadow: var(--wrapped-shadow-red);
+    border: 1px solid hsl(359, 46%, 66%);
   }
 `;
 
-const CheckContainer = styled.div`
+const CheckContainer = styled.article`
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  margin: 20px 0;
   .checkbox_content {
+    font-size: 15px;
+    font-size: 15px;
     color: var(--black-500);
   }
 `;

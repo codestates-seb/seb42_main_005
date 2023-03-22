@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { zIndex_MapFilter } from "../../Util/z-index";
 import { IoCloudyNightOutline } from "react-icons/io5";
 import { HiOutlineHome } from "react-icons/hi2";
 import { AiOutlineMedicineBox } from "react-icons/ai";
@@ -21,37 +20,33 @@ export default function MapFilter({
   onClickBookmarks,
 }: FilterProps) {
   return (
-    <CtrlContainer>
-      <FillterBtn title={"map_home"} selected={selected} onClick={onClickMapHome}>
+    <ContainerFillter>
+      <ButtonFillter title={"map_home"} selected={selected} onClick={onClickMapHome}>
         <HiOutlineHome className="icon" />
         <div className="label">지도 홈</div>
-      </FillterBtn>
+      </ButtonFillter>
       <span className="partition" />
-      <FillterBtn title={"in_business"} selected={selected} onClick={onClickInBusiness}>
+      <ButtonFillter title={"in_business"} selected={selected} onClick={onClickInBusiness}>
         <AiOutlineMedicineBox className="icon" />
         <div className="label">영업 중</div>
-      </FillterBtn>
+      </ButtonFillter>
       <span className="partition" />
-      <FillterBtn title={"midnight"} selected={selected} onClick={onClickMidnight}>
+      <ButtonFillter title={"midnight"} selected={selected} onClick={onClickMidnight}>
         <IoCloudyNightOutline className="icon" />
         <div className="label">심 야</div>
-      </FillterBtn>
+      </ButtonFillter>
       <span className="partition" />
-      <FillterBtn title={"bookmarks"} selected={selected} onClick={onClickBookmarks}>
+      <ButtonFillter title={"bookmarks"} selected={selected} onClick={onClickBookmarks}>
         <RiHeartsLine className="icon" />
         <div className="label">찜 콩</div>
-      </FillterBtn>
-    </CtrlContainer>
+      </ButtonFillter>
+    </ContainerFillter>
   );
 }
-const CtrlContainer = styled.nav`
+const ContainerFillter = styled.nav`
   display: flex;
   justify-content: center;
   align-items: center;
-  position: fixed;
-  top: 70px;
-  left: 850px;
-  z-index: ${zIndex_MapFilter.CtrlContainer};
   padding: 6px 10px 4px 10px;
   border-radius: 8px;
   background-color: var(--white);
@@ -63,13 +58,8 @@ const CtrlContainer = styled.nav`
     margin: 0 10px;
     background-color: var(--black-100);
   }
-  @media (max-width: 1200px) {
-    left: 650px;
-    transition: 0.2s;
-  }
   @media (max-width: 768px) {
     flex-direction: column;
-    left: 490px;
     padding: 10px 6px 10px 6px;
     transition: 0.2s;
     .partition {
@@ -80,14 +70,14 @@ const CtrlContainer = styled.nav`
     }
   }
 `;
-const FillterBtn = styled.button<{ title: string; selected: string }>`
+const ButtonFillter = styled.button<{ title: string; selected: string }>`
   cursor: pointer;
   display: block;
   width: 65px;
   height: 65px;
   text-align: center;
-  background-color: transparent;
   border: none;
+  background-color: transparent;
   .icon {
     align-items: center;
     font-size: 2.6rem;
@@ -103,13 +93,13 @@ const FillterBtn = styled.button<{ title: string; selected: string }>`
   }
   &:hover {
     .icon {
-      color: var(--blue-400);
       font-size: 2.62rem;
+      color: var(--blue-400);
       transition: 0.2s;
     }
     .label {
-      color: var(--black-400);
       font-size: 0.76rem;
+      color: var(--black-400);
       transition: 0.2s;
     }
   }

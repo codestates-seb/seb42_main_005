@@ -1,60 +1,108 @@
-//! 모달 컴포넌트 본 창입니다
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
-import PharmInfo from "./PharmInfo";
-import ReviewUnit from "./ReviewUnit";
 import WriteReviewForm from "./WriteReviewForm";
+import ReviewUnit from "./ReviewUnit";
+import PharmInfo from "./PharmInfo";
 import PharmRank from "../Ul/PharmRank";
 import Button from "../Ul/Button";
+import { API_PharmDetail } from "../../Api/APIs";
+import { zIndex_Modal } from "../../Util/z-index";
+import { HiXMark } from "react-icons/hi2";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
+
+//TODO 실제 url 일때
+// interface Props {
+//   setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
+//   like?: boolean;
+//   setLike?: React.Dispatch<React.SetStateAction<boolean>>;
+//   storeIdx: number;
+// }
 
 interface Props {
-  isModalUp: boolean;
   setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
   like: boolean;
   setLike: React.Dispatch<React.SetStateAction<boolean>>;
+  pharmDetail: any;
 }
 
-export default function PharmDetail({ isModalUp, setIsModalUp, like, setLike }: Props) {
+//* dummy data 일때
+export default function PharmDetail({ setIsModalUp, like, setLike, pharmDetail }: Props) {
+  //TODO 실제 url 일때
+  // export default function PharmDetail({ setIsModalUp, like, setLike, storeIdx }: Props) {
   const [isReviewFormShown, setIsReviewFormShown] = useState(false);
+  const [reviewList, setReviewList] = useState([]);
+
+  //! GET : 리뷰리스트
+  useEffect(() => {
+    const getReviews = async () => {
+      try {
+        //* dummy data 일때 -> Review.json
+        const response = await axios.get(API_PharmDetail.DUMMY_API);
+        //TODO 실제 url 일때 -> /api/store/{storeIdx}/review
+        //? storeIdx 는 리덕스 툴킷에서 가져오기
+        // const response = await axios.get(`${API_PharmDetail.REAL_API}/store/${storeIdx}/review`);
+        setReviewList(response.data.storeReview);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getReviews();
+  }, []);
 
   return (
-    <>
-      <ModalBackDrop onClick={() => setIsModalUp(!isModalUp)}>
-        <ModalContainer onClick={(event) => event.stopPropagation()}>
-          <InfoHeader>
-            <InfoTitle>킹갓약국</InfoTitle>
-            <PharmRank />
-          </InfoHeader>
-          <Constant>
-            <PharmInfo like={like} setLike={setLike} />
-            <ReviewContainer>
-              <ReviewTitle>리뷰</ReviewTitle>
+    <ModalBackDrop onClick={() => setIsModalUp(false)}>
+      <ModalContainer onClick={(event) => event.stopPropagation()}>
+        <CloseBtnContainer>
+          <HiXMark id="close" onClick={() => setIsModalUp(false)} aria-hidden="true" />
+        </CloseBtnContainer>
+        <InfoHeader>
+          <InfoTitle>{pharmDetail.name}</InfoTitle>
+          <PharmRank
+            rating={pharmDetail.rating}
+            likes={pharmDetail.pickedStoreCount}
+            reviewCount={pharmDetail.reviewCount}
+          />
+        </InfoHeader>
+        <Constant>
+          <PharmInfo like={like} setLike={setLike} pharmDetail={pharmDetail} />
+          <ReviewContainer>
+            <ReviewTitle>리뷰</ReviewTitle>
+            {reviewList ? (
               <Reviews>
-                <ReviewUnit />
+                {reviewList.map((review: any) => (
+                  <ReviewUnit
+                    review={review}
+                    key={review.reviewIdx}
+                    reviewIdx={review.reviewIdx}
+                    storeIdx={pharmDetail.storeIdx}
+                  />
+                ))}
               </Reviews>
-            </ReviewContainer>
-            {isReviewFormShown ? (
-              <WriteReviewForm isReviewFormShown={isReviewFormShown} setIsReviewFormShown={setIsReviewFormShown} />
-            ) : null}
-            {isReviewFormShown ? null : (
-              <WriteReviewBtnContainer>
-                <Button
-                  onClick={() => setIsReviewFormShown(!isReviewFormShown)}
-                  color="mint"
-                  size="md"
-                  text="리뷰쓰기"
-                />
-              </WriteReviewBtnContainer>
+            ) : (
+              <Instead>
+                <AiOutlineExclamationCircle className="bigger" onClick={() => setIsReviewFormShown(true)} />
+                <p>작성된 리뷰가 없습니다.</p>
+                <p>지금 리뷰를 작성해 보세요!</p>
+              </Instead>
             )}
-          </Constant>
-        </ModalContainer>
-      </ModalBackDrop>
-    </>
+          </ReviewContainer>
+        </Constant>
+        {isReviewFormShown ? (
+          <WriteReviewForm setIsReviewFormShown={setIsReviewFormShown} storeIdx={pharmDetail.storeIdx} />
+        ) : null}
+        {/* 로그인이 안된 상태일 경우, 이 부분이 없어야 합니다 */}
+        {isReviewFormShown ? null : (
+          <WriteReviewBtnContainer>
+            <Button onClick={() => setIsReviewFormShown(true)} color="mint" size="md" text="리뷰쓰기" />
+          </WriteReviewBtnContainer>
+        )}
+      </ModalContainer>
+    </ModalBackDrop>
   );
 }
 
-const ModalBackDrop = styled.div`
-  z-index: 1;
+const ModalBackDrop = styled.section`
   position: fixed;
   display: flex;
   justify-content: center;
@@ -64,8 +112,9 @@ const ModalBackDrop = styled.div`
   top: 0;
   left: 0;
   background-color: var(--modal-backdrop);
+  z-index: ${zIndex_Modal.ModalBackDrop};
 `;
-const ModalContainer = styled.div`
+const ModalContainer = styled.section`
   position: relative;
   display: flex;
   flex-direction: row;
@@ -86,40 +135,7 @@ const ModalContainer = styled.div`
     background-color: var(--white);
     border-radius: 10px;
   }
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  height: 600px;
-  width: 940px;
-  background-color: var(--white);
-  border-radius: 10px;
-  @media (max-width: 768px) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-bottom: 20px;
-    height: 700px;
-    width: 500px;
-    background-color: var(--white);
-    border-radius: 10px;
-  }
-`;
-const Constant = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  @media (max-width: 768px) {
-    flex-direction: column;
-    overflow-y: scroll;
-    height: 580px;
-    padding-top: calc(100% - 180px);
-  }
-  ::-webkit-scrollbar-track {
-    background-color: var(--black-075);
-    border-radius: 0px 5px 5px 0px;
-  }
+  z-index: ${zIndex_Modal.ModalContainer};
 `;
 const InfoHeader = styled.header`
   display: none;
@@ -134,19 +150,47 @@ const InfoHeader = styled.header`
     border-bottom: 1px solid var(--black-100);
   }
 `;
-const InfoTitle = styled.div`
+const Constant = styled.section`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  ::-webkit-scrollbar-track {
+    background-color: var(--black-075);
+    border-radius: 0px 5px 5px 0px;
+  }
+  @media (max-width: 768px) {
+    display: block;
+    overflow-y: scroll;
+  }
+`;
+const WriteReviewBtnContainer = styled.footer`
+  position: absolute;
+  display: flex;
+  justify-content: flex-end;
+  right: 20px;
+  bottom: 25px;
+  width: 400px;
+  padding-top: 10px;
+  background-color: var(--white);
+  @media (max-width: 768px) {
+    position: static;
+    bottom: 20px;
+    background-color: var(--white);
+  }
+`;
+const InfoTitle = styled.h1`
   font-weight: bold;
   font-size: 30px;
   @media (max-width: 768px) {
     margin-top: 30px;
   }
 `;
-const ReviewContainer = styled.main`
+const ReviewContainer = styled.section`
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  height: 550px;
+  height: 510px;
   width: 450px;
   padding: 10px 0px 0px 20px;
   @media (max-width: 768px) {
@@ -155,34 +199,30 @@ const ReviewContainer = styled.main`
     align-items: center;
     height: auto;
     padding: 20px 10px 10px 10px;
-    margin-bottom: 60px;
     border-bottom: 1px solid var(--black-100);
   }
 `;
-const ReviewTitle = styled.div`
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--black-100);
-  color: var(--black-500);
-  font-weight: bold;
+const ReviewTitle = styled.h2`
+  padding: 10px;
   font-size: 25px;
+  font-weight: bold;
+  color: var(--black-500);
+  border-bottom: 1px solid var(--black-100);
   @media (max-width: 768px) {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 450px;
     padding-left: 10px;
     gap: 100px;
+    width: 450px;
   }
 `;
-const Reviews = styled.div`
+const Reviews = styled.section`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   overflow-y: scroll;
-  border-bottom: 0.5px solid var(--black-100);
-  ::-webkit-scrollbar-track {
-    visibility: hidden;
-  }
+  padding: 10px 10px 0 0;
   :active::-webkit-scrollbar-track {
     width: 0.6rem;
     visibility: visible;
@@ -192,20 +232,38 @@ const Reviews = styled.div`
     overflow: visible;
   }
 `;
-const WriteReviewBtnContainer = styled.span`
-  z-index: 2;
+const CloseBtnContainer = styled.div`
+  cursor: pointer;
   position: absolute;
-  right: 55px;
-  bottom: 25px;
-  width: 50px;
+  display: flex;
+  justify-content: flex-end;
+  top: 15px;
+  right: 20px;
+  width: 500px;
+  font-size: 40px;
+  color: var(--black-100);
+  z-index: ${zIndex_Modal.CloseBtnContainer};
+`;
+const Instead = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  width: 420px;
+  height: 500px;
+  font-weight: 700;
+  color: var(--black-300);
+  border-radius: 5px;
+  background-color: var(--black-050);
+  .bigger {
+    font-size: 40px;
+    margin-bottom: 10px;
+    :hover {
+      color: var(--black-500);
+    }
+  }
   @media (max-width: 768px) {
-    z-index: 2;
-    position: absolute;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    right: 20px;
-    bottom: 20px;
-    width: 490px;
+    height: 200px;
   }
 `;

@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 
 interface CheckProps {
@@ -14,10 +15,10 @@ const Check = styled.input`
   appearance: none;
   width: 20px;
   height: 20px;
-  border: 1px solid var(--black-100);
-  box-shadow: var(--bs-btn);
   margin-right: 7px;
+  border: 1px solid var(--black-100);
   border-radius: 3.5px;
+  box-shadow: var(--bs-btn);
   transition: 0.1s;
   :active {
     box-shadow: var(--bs-btn-click);
