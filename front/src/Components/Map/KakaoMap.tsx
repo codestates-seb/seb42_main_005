@@ -60,22 +60,18 @@ const ContainerMap = styled.div`
 const ControllerTop = styled.div`
   position: fixed;
   top: 70px;
-  left: calc(50vw - 3rem);
+  left: 37rem;
   z-index: ${zIndex_KakaoMap.MapFilter};
   transition: 0.2s;
-  @media (max-width: 1200px) {
-    left: 650px;
+  &.close {
+    left: 6rem;
     transition: 0.2s;
-    &.close {
-      left: 280px;
-      transition: 0.2s;
-    }
   }
   @media (max-width: 768px) {
-    left: 540px;
+    left: 35rem;
     transition: 0.2s;
     &.close {
-      left: 60px;
+      left: 4rem;
       transition: 0.2s;
     }
   }
