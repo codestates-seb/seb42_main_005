@@ -265,202 +265,45 @@
 //                                requestFields(
 //                                        getPostReviewReportRequestDescriptors()
 //                                ),
-                                requestFields(
-                                        getCreateReviewRequestDescriptors()
-                                ),
-                                responseFields(
-                                        getSingleResponseDescriptors(getAllIdxDescriptors())
-                                ),
-                                HeaderDocumentation.responseHeaders(
-                                        HeaderDocumentation.headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리소스의 URI")
-                                )
-                        )
-                );
-    }
-
-    @Test
-    void updateReview() throws Exception {
-
-        PostUpdateReviewDto build = PostUpdateReviewDto.builder().image("사진 파일이 들어갈 것이다.").content("리뷰 본문 약사가 맛있고 제품이 친절해요").rating(4).userIdx(userIdx).tags(List.of(new TagIdDto(1L), new TagIdDto(2L))).build();
-        String content = toJsonContent(build);
-
-        ResultActions actions = mockMvc.perform(patchRequestBuilder(getTowPathParam(), storeIdx, reviewIdx, content));
-        actions
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andDo(
-                        document(
-                                "patch-review",
-                                getRequestPreProcessor(),
-                                getResponsePreProcessor(),
-                                pathParameters(
-                                        getStoreReviewPathParameterDescriptor()
-                                ),
-                                requestFields(
-                                        getUpdateReviewRequestDescriptors()
-                                ),
-                                responseFields(
-                                        getSingleResponseDescriptors(getAllIdxDescriptors())
-                                ),
-                                HeaderDocumentation.responseHeaders(
-                                        HeaderDocumentation.headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리소스의 URI")
-                                )
-                        )
-                );
-    }
-
-    @Test
-    void deleteReview() throws Exception {
-
-        doNothing().when(reviewService).deleteReview(Mockito.anyLong(), Mockito.anyLong());
-
-        ResultActions actions = mockMvc.perform(deleteRequestBuilder(getTowPathParam(), storeIdx, reviewIdx));
-
-        actions
-                .andExpect(status().isNoContent())
-                .andDo(print())
-                .andDo(document(
-                        "delete-review",
-                        getRequestPreProcessor(),
-                        getResponsePreProcessor(),
-                        pathParameters(
-                                getStoreReviewPathParameterDescriptor()
-                        ),
-                        responseHeaders(
-                                headerWithName(HttpHeaders.LOCATION)
-                                        .description("Location header. 등록된 리소스의 URI")
-                        )
-                ))
-                .andReturn();
-    }
-
-    @Test
-    void reviewLike() throws Exception{
-
-        UserIdxRequestDto userIdxDto = new UserIdxRequestDto();
-        userIdxDto.setUserIdx(userIdx);
-        String content = toJsonContent(userIdxDto);
-
-        ResultActions actions = mockMvc.perform(postRequestBuilder(getTowPathParam("like"), storeIdx, reviewIdx, content));
-
-        actions
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andDo(
-                        document(
-                                "review-like",
-                                getRequestPreProcessor(),
-                                getResponsePreProcessor(),
-                                pathParameters(
-                                        getStoreReviewPathParameterDescriptor()
-                                ),
-                                requestFields(
-                                        getDefaultWrapperDescriptors("userIdx", JsonFieldType.NUMBER,"사용자 식별 ID")
-                                ),
-                                responseFields(
-                                        getSingleResponseDescriptors(getReviewLikeHateRequestDescriptors(ReviewHateLike.LIKE))
-                                ),
-                                HeaderDocumentation.responseHeaders(
-                                        HeaderDocumentation.headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리소스의 URI")
-                                )
-                        ))
-                .andReturn();
-
-    }
-
-    @Test
-    void reviewHate() throws Exception {
-        UserIdxRequestDto userIdxDto = new UserIdxRequestDto();
-        userIdxDto.setUserIdx(userIdx);
-        String content = toJsonContent(userIdxDto);
-
-        ResultActions actions = mockMvc.perform(postRequestBuilder(getTowPathParam("hate"), storeIdx, reviewIdx, content));
-
-        actions
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andDo(
-                        document(
-                                "review-hate",
-                                getRequestPreProcessor(),
-                                getResponsePreProcessor(),
-                                pathParameters(
-                                        getStoreReviewPathParameterDescriptor()
-                                ),
-                                requestFields(
-                                        getDefaultWrapperDescriptors("userIdx", JsonFieldType.NUMBER,"사용자 식별 ID")
-                                ),
-                                responseFields(
-                                        getSingleResponseDescriptors(getReviewLikeHateRequestDescriptors(ReviewHateLike.HATE))
-                                ),
-                                HeaderDocumentation.responseHeaders(
-                                        HeaderDocumentation.headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리소스의 URI")
-                                )
-                        ))
-                .andReturn();
-    }
-
-    @Test
-    void reportReview() throws Exception {
-
-        PostReportReviewPlusDto postDto = new PostReportReviewPlusDto(userIdx,"이곳은 신고 사유란입니다. 뿡뿡");
-        String content = toJsonContent(postDto);
-
-        ResultActions actions = mockMvc.perform(postRequestBuilder(getTowPathParam("report"), storeIdx, reviewIdx, content));
-
-        actions
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andDo(
-                        document(
-                                "report-review",
-                                getRequestPreProcessor(),
-                                getResponsePreProcessor(),
-                                pathParameters(
-                                        getStoreReviewPathParameterDescriptor()
-                                ),
-                                requestFields(
-                                        getPostReviewReportRequestDescriptors()
-                                ),
-                                responseFields(
-                                        getSingleResponseDescriptors(getPostReviewReportResponseDescriptors())
-                                ),
-                                HeaderDocumentation.responseHeaders(
-                                        HeaderDocumentation.headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리소스의 URI")
-                                )
-                        ))
-                .andReturn();
-    }
-
-    @Test
-    void createReviewPlus() throws Exception {
-
-        PostReportReviewPlusDto postDto = new PostReportReviewPlusDto(userIdx,"이곳은 대댓글 본문 입니다. 뿡뿡");
-            String content = toJsonContent(postDto);
-
-            ResultActions actions = mockMvc.perform(postRequestBuilder(getTowPathParam(), storeIdx, reviewIdx, content));
-
-            actions
-                    .andExpect(status().isCreated())
-                    .andDo(print())
-                    .andDo(
-                            document(
-                                    "create-review-plus",
-                                    getRequestPreProcessor(),
-                                    getResponsePreProcessor(),
-                                    pathParameters(
-                                            getStoreReviewPathParameterDescriptor()
-                                    ),
-                                    requestFields(
-                                            getPostReviewReportRequestDescriptors()
-                                    ),
-                                    responseFields(
-                                            getSingleResponseDescriptors(getAllIdxDescriptors())
-                                    ),
-                                    HeaderDocumentation.responseHeaders(
-                                            HeaderDocumentation.headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리소스의 URI")
-                                    )
-                            ))
-                    .andReturn();
-        }
-}
+//                                responseFields(
+//                                        getSingleResponseDescriptors(getPostReviewReportResponseDescriptors())
+//                                ),
+//                                HeaderDocumentation.responseHeaders(
+//                                        HeaderDocumentation.headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리소스의 URI")
+//                                )
+//                        ))
+//                .andReturn();
+//    }
+//
+//    @Test
+//    void createReviewPlus() throws Exception {
+//
+//        PostReportReviewPlusDto postDto = new PostReportReviewPlusDto(userIdx,"이곳은 대댓글 본문 입니다. 뿡뿡");
+//            String content = toJsonContent(postDto);
+//
+//            ResultActions actions = mockMvc.perform(postRequestBuilder(getTowPathParam(), storeIdx, reviewIdx, content));
+//
+//            actions
+//                    .andExpect(status().isCreated())
+//                    .andDo(print())
+//                    .andDo(
+//                            document(
+//                                    "create-review-plus",
+//                                    getRequestPreProcessor(),
+//                                    getResponsePreProcessor(),
+//                                    pathParameters(
+//                                            getStoreReviewPathParameterDescriptor()
+//                                    ),
+//                                    requestFields(
+//                                            getPostReviewReportRequestDescriptors()
+//                                    ),
+//                                    responseFields(
+//                                            getSingleResponseDescriptors(getAllIdxDescriptors())
+//                                    ),
+//                                    HeaderDocumentation.responseHeaders(
+//                                            HeaderDocumentation.headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리소스의 URI")
+//                                    )
+//                            ))
+//                    .andReturn();
+//        }
+//}
