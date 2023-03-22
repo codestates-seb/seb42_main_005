@@ -10,11 +10,14 @@ import com.project.mainproject.user.entity.User;
 import com.project.mainproject.user.exception.UserExceptionCode;
 import com.project.mainproject.user.repository.UserRepository;
 import com.project.mainproject.user.service.UserService;
+import com.project.mainproject.utils.FileUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.project.mainproject.enums.ResultStatus.*;
 
 @Service
 @Transactional
@@ -37,8 +40,17 @@ public class AdminService {
         }
 
         return SingleResponseDto.builder()
-                .message(ResultStatus.PROCESS_COMPLETED.getMessage())
-                .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
+                .message(PROCESS_COMPLETED.getMessage())
+                .httpCode(PROCESS_COMPLETED.getHttpCode())
+                .build();
+    }
+
+    public SingleResponseDto rejectPharmacy(List<Long> userIdx) {
+        userRepository.deleteUserByIdList(userIdx);
+
+        return SingleResponseDto.builder()
+                .message(REJECT_PHARMACY.getMessage())
+                .httpCode(REJECT_PHARMACY.getHttpCode())
                 .build();
     }
 }
