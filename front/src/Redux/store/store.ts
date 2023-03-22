@@ -1,8 +1,8 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import getReviewSlice from "../slice/getReviewSlice";
+
 
 const rootReducer = combineReducers({
-  getReview: getReviewSlice,
+
 });
 
 const store = configureStore({

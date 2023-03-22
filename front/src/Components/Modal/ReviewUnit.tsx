@@ -13,9 +13,11 @@ interface Props {
   review: any;
   reviewIdx: number;
   storeIdx: number;
+  reviewList: any;
+  setReviewList: any;
 }
 
-export default function ReviewUnit({ review, reviewIdx, storeIdx }: Props) {
+export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, setReviewList }: Props) {
   const [isCommentFormShown, setIsCommentFormShown] = useState(false);
   const [isOnEdit, setIsOnEdit] = useState(false);
   const [reviewContent, setReviewContent] = useState(review.content);
@@ -29,50 +31,51 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx }: Props) {
   };
 
   //! PATCH : 리뷰수정
-  const editReviewKeyPress = (e: any) => {
+  const editReview = (e: any) => {
     e.preventDefault();
     if (e.key === "Enter") {
       // const formData = new FormData(e.target);
       // const review = formData.get("review");
 
       //* dummy url 일때
-      const ReviewData = {
-        ...review,
-        content:reviewContent,
-      };
-      //TODO url 받았을때
-      // const Data = {
-      //   content,
+      // const ReviewData = {
+      //   ...review,
+      //   content:reviewContent,
       // };
+      //TODO url 받았을때
+      // patchDto {
+      //   userIdx
+      //   content
+      //   rating
+      // }
+      // image
+      const data :any = {
+          userIdx: 1,
+          content: reviewContent,
+          rating: review.rating,
+        }
+        // const formDataForsubmit = new FormData();
+        // formDataForsubmit.append("postDto", new Blob([JSON.stringify(data)], { type: "application/json" }));
+        // formDataForsubmit.append("image", );
 
       const submitReview = async () => {
         try {
-          //* dummy url 일때 -> Review.json
           await axios({
-            url: API_ReviewUnit.DUMMY_API,
+            url: `${API_ReviewUnit.REAL_API}/${storeIdx}/review/${reviewIdx}`,
             method: "patch",
-            data: ReviewData,
+            data,
           }).then(() => setIsOnEdit(false));
-          //TODO url 받았을때 -> /api/store/{storeIdx}/review/{reviewIdx}
-          // await axios({
-          //   url: `${API_ReviewUnit.REAL_API}/${storeIdx}/review/${reviewIdx}`,
-          //   method: "patch",
-          //   data: ReviewData,
-          // }).then(()=>setIsOnEdit(false))
         } catch (error) {
           console.log(error);
         }
       };
-        submitReview();
+      submitReview();
     }
   };
-
-  //! DELETE : 리뷰삭제
+  // ! DELETE : 리뷰삭제
   const deleteReview = async () => {
-    //* dummy data 일때 -> Review.json
-    await axios.delete(`${API_ReviewUnit.DUMMY_API}`);
-    //TODO url 받았을때 -> /api/store/{storeIdx}/review/{reviewIdx}
-    // await axios.delete(`${API_ReviewUnit.REAL_API}/${storeIdx}/review/${reviewIdx}`)
+    setReviewList([...reviewList].filter((review: any) => review.reviewIdx !== reviewIdx));
+    await axios.delete(`${API_ReviewUnit.REAL_API}/${storeIdx}/review/${reviewIdx}`);
   };
 
   const newComment = {
@@ -85,17 +88,17 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx }: Props) {
   const submitCommentKeyPress = async (e: any) => {
     try {
       //* dummy url 일때 -> Review.json
-      await axios({
-        url: "http://localhost:3010/response",
-        method: "post",
-        data: newComment,
-      });
-      //TODO url 받았을때 -> /api/store/{storeIdx}/review/{reviewIdx}
       // await axios({
-      //   url: `${API_ReviewUnit.REAL_API}/${storeIdx}/review/${reviewIdx}`,
+      //   url: "http://localhost:3010/response",
       //   method: "post",
       //   data: newComment,
       // });
+      //TODO url 받았을때 -> /api/store/{storeIdx}/review/{reviewIdx}
+      await axios({
+        url: `${API_ReviewUnit.REAL_API}/${storeIdx}/review/${reviewIdx}`,
+        method: "post",
+        data: newComment,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -119,7 +122,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx }: Props) {
           <ButtonContainer>
             {/* 일반계정이면 && 해당 리뷰의 userIdx 와 리덕스 툴킷의 내 userIdx 가 같을 때 => 수정 + 삭제 버튼이 보임 */}
             <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsOnEdit(true)} />
-            <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReview} />
+            <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReview()} />
             {/* 약사계정이면 && 해당 약국의 storIdx 와 리덕스 툴킷의 내 storeIdx 가 같을 때 => 댓글 + 신고 버튼이 보임 */}
             <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsCommentFormShown(true)} />
             {/* 로그인 상태여야 함 */}
@@ -138,7 +141,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx }: Props) {
                 icon={false}
                 value={reviewContent}
                 onChange={handleReview}
-                onKeyPress={editReviewKeyPress}
+                onKeyPress={editReview}
               />
             </EditRest>
           ) : (
@@ -147,8 +150,14 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx }: Props) {
           <ReviewImg src={review.reviewImage} />
         </Lower>
       </section>
-      {review.comments.map((comment: any) => (
-        <ReviewOfReview comment={comment} key={comment.commentIdx} id={comment.commentIdx} />
+      {review.reply?.map((reply: any) => (
+        <ReviewOfReview
+          key={reply.replyIdx}
+          reply={reply}
+          reviewIdx={review.reviewIdx}
+          userIdx={1}
+          replyIdx={reply.reply}
+        />
       ))}
       {isCommentFormShown ? (
         <WriteCommentForm>

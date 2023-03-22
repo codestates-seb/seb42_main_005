@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import PharmDetail from "../../Components/Modal/PharmDetail";
 import { API_MyInfoReviews } from "../../Api/APIs";
+import { API_MyReview } from "../../Api/APIs";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 const API_URL = "http://localhost:3005/response";
@@ -15,22 +16,39 @@ interface Props {
 }
 
 export default function MyReview({ review, storeIdx, reviewIdx, idx }: Props) {
+  const [pharmDetail, setPharmDetail] = useState();
   const [isModalUp, setIsModalUp] = useState(false);
   const [like, setLike] = useState(false);
+
+    //! GET : 약국상세정보
+    useEffect(() => {
+      const getPharmDetail = async () => {
+        try {
+          //* dummy data 일때 -> Pharm.json
+          // const response = await axios.get(API_MyReview.DUMMY_API);
+          //TODO 실제 url 일때 -> /api/store/{storeIdx}
+          const response = await axios.get(`${API_MyReview.REAL_API}/${storeIdx}`);
+          setPharmDetail(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getPharmDetail();
+    }, []);
 
   //! DELETE : 리뷰삭제
   const deleteReview = async () => {
     //* dummy data 일때 -> Review.json
-    await axios.delete(`${API_MyInfoReviews.DUMMY_API}`);
+    // await axios.delete(`${API_MyInfoReviews.DUMMY_API}`);
     //TODO url 받았을때 -> /api/store/{storeIdx}/review/{reviewIdx}
-    // await axios.delete(`${API_MyInfoReviews.REAL_API}/${storeIdx}/review/${reviewIdx}`)
+    await axios.delete(`${API_MyInfoReviews.REAL_API}/${storeIdx}/review/${reviewIdx}`)
   };
 
   return (
     <TableBody>
       //* dummy data 일때
       {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} pharmDetail={review} />
+        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} storeIdx={storeIdx} Pharm={pharmDetail} />
       ) : null}
       //TODO 실제 url 일때
       {/* {isModalUp ? (

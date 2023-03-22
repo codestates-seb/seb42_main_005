@@ -11,25 +11,15 @@ import { zIndex_Modal } from "../../Util/z-index";
 import { HiXMark } from "react-icons/hi2";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
-//TODO 실제 url 일때
-// interface Props {
-//   setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
-//   like?: boolean;
-//   setLike?: React.Dispatch<React.SetStateAction<boolean>>;
-//   storeIdx: number;
-// }
-
 interface Props {
   setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
-  like: boolean;
-  setLike: React.Dispatch<React.SetStateAction<boolean>>;
-  pharmDetail: any;
+  like?: boolean;
+  setLike?: React.Dispatch<React.SetStateAction<boolean>>;
+  storeIdx: number;
+  Pharm: any;
 }
 
-//* dummy data 일때
-export default function PharmDetail({ setIsModalUp, like, setLike, pharmDetail }: Props) {
-  //TODO 실제 url 일때
-  // export default function PharmDetail({ setIsModalUp, like, setLike, storeIdx }: Props) {
+export default function PharmDetail({ setIsModalUp, like, setLike, storeIdx, Pharm }: Props) {
   const [isReviewFormShown, setIsReviewFormShown] = useState(false);
   const [reviewList, setReviewList] = useState([]);
 
@@ -37,12 +27,8 @@ export default function PharmDetail({ setIsModalUp, like, setLike, pharmDetail }
   useEffect(() => {
     const getReviews = async () => {
       try {
-        //* dummy data 일때 -> Review.json
-        const response = await axios.get(API_PharmDetail.DUMMY_API);
-        //TODO 실제 url 일때 -> /api/store/{storeIdx}/review
-        //? storeIdx 는 리덕스 툴킷에서 가져오기
-        // const response = await axios.get(`${API_PharmDetail.REAL_API}/store/${storeIdx}/review`);
-        setReviewList(response.data.storeReview);
+        const response = await axios.get(`${API_PharmDetail.REAL_API}/${storeIdx}/review`);
+        setReviewList(response.data.response.storeReviews);
       } catch (error) {
         console.log(error);
       }
@@ -57,25 +43,23 @@ export default function PharmDetail({ setIsModalUp, like, setLike, pharmDetail }
           <HiXMark id="close" onClick={() => setIsModalUp(false)} aria-hidden="true" />
         </CloseBtnContainer>
         <InfoHeader>
-          <InfoTitle>{pharmDetail.name}</InfoTitle>
-          <PharmRank
-            rating={pharmDetail.rating}
-            likes={pharmDetail.pickedStoreCount}
-            reviewCount={pharmDetail.reviewCount}
-          />
+          <InfoTitle>{Pharm.name}</InfoTitle>
+          <PharmRank rating={Pharm.rating} likes={Pharm.pickedStoreCount} reviewCount={Pharm.reviewCount} />
         </InfoHeader>
         <Constant>
-          <PharmInfo like={like} setLike={setLike} pharmDetail={pharmDetail} />
+          <PharmInfo like={like} setLike={setLike} Pharm={Pharm} />
           <ReviewContainer>
             <ReviewTitle>리뷰</ReviewTitle>
-            {reviewList ? (
+            {reviewList.length ? (
               <Reviews>
                 {reviewList.map((review: any) => (
                   <ReviewUnit
                     review={review}
                     key={review.reviewIdx}
                     reviewIdx={review.reviewIdx}
-                    storeIdx={pharmDetail.storeIdx}
+                    storeIdx={Pharm.storeIdx}
+                    setReviewList={setReviewList}
+                    reviewList={reviewList}
                   />
                 ))}
               </Reviews>
@@ -89,7 +73,7 @@ export default function PharmDetail({ setIsModalUp, like, setLike, pharmDetail }
           </ReviewContainer>
         </Constant>
         {isReviewFormShown ? (
-          <WriteReviewForm setIsReviewFormShown={setIsReviewFormShown} storeIdx={pharmDetail.storeIdx} />
+          <WriteReviewForm setIsReviewFormShown={setIsReviewFormShown} storeIdx={Pharm.storeIdx} reviewList={reviewList} setReviewList={setReviewList}/>
         ) : null}
         {/* 로그인이 안된 상태일 경우, 이 부분이 없어야 합니다 */}
         {isReviewFormShown ? null : (

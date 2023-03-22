@@ -1,12 +1,12 @@
-import React, { useState } from "react";
 import { useDaumPostcodePopup } from "react-daum-postcode";
+import React, { useState } from "react";
 import styled from "styled-components";
+import Button from "../../Components/Ul/Button";
+import InputAlert from "../User/InputAlert";
 import SignUpInput from "../../Components/SignUpForm/SignUpInput";
 import { validators } from "../../Components/SignUpForm/Validation";
-import Button from "../../Components/Ul/Button";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
-import InputAlert from "../User/InputAlert";
 
 interface Props {
   scriptUrl?: string;
@@ -23,6 +23,8 @@ let dummy = {
 };
 
 export default function PharmacistInformation({ scriptUrl }: Props) {
+  //! GET : 유저 정보
+
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const onUpload = (e: any) => {
     const file = e.target.files[0];
@@ -277,7 +279,7 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
                   />
                 </InputWrapper>
                 <AlertMsg className={`${error.newPassword ? "error" : null}`}>
-                  <AiOutlineExclamationCircle aria-hidden="true"/>
+                  <AiOutlineExclamationCircle aria-hidden="true" />
                   문자 숫자 특수문자 조합 8자 이상으로 조합해주세요.
                 </AlertMsg>
               </EditWrapper>
@@ -295,7 +297,7 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
                   />
                 </InputWrapper>
                 <AlertMsg className={`${error.confirmNewPassword ? "error" : null}`}>
-                  <AiOutlineExclamationCircle aria-hidden="true"/>새 비밀번호와 일치하지 않습니다.
+                  <AiOutlineExclamationCircle aria-hidden="true" />새 비밀번호와 일치하지 않습니다.
                 </AlertMsg>
               </EditWrapper>
             </ContentSet>

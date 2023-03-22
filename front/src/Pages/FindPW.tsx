@@ -34,20 +34,24 @@ export default function FindPW() {
       return alert("항목을 다시 확인해주세요");
     } else
       await axios({
-        url: API_FindPW.DUMMY_API,
+        //TODO url 받았을때 -> api/users/password/{userIdx}
+        //? userIdx 가 없는데 어떻게 보내지? 지금은 일단 임의로 1
+        url: `${API_FindPW.REAL_API}/${1}`,
         method: "patch",
         data: {
           email,
         },
       });
-    //TODO url 받았을때 -> api/users/password/{userIdx}
-    // else await axios({
-    //   url: `${API_FindPW.REAL_API}/${userIdx}`,
-    //   method: "patch",
-    //   data: {
-    //      email,
-    //    },
-    // })
+
+    // else
+    // // * dummy data 일때
+    //   await axios({
+    //     url: API_FindPW.DUMMY_API,
+    //     method: "patch",
+    //     data: {
+    //       email,
+    //     },
+    //   });
   };
 
   return (

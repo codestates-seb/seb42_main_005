@@ -1,68 +1,69 @@
-import React from "react"
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import AdminTabs from "./AdminTabs";
+import Report from "./Report";
 import Button from "../../Components/Ul/Button";
 import CheckBox from "../../Components/Ul/CheckBox";
+import { API_Reports } from "../../Api/APIs";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Reports() {
-  const dummy = [
-    {
-      content: "약사 대머리임 ㅋㅋㅋㅋㅋ",
-      email: "waiting@kbs.com",
-      writtenAt: "2023.02.01",
-      reports: 12,
+  const [reports, setReports] = useState([]);
+  const [checkedList, setCheckedList]: any = useState([]);
+
+  //! GET : 신고리뷰관리 리스트 불러오기
+  useEffect(() => {
+    const getReports = async () => {
+      try {
+        //TODO /api/admin/reports
+        const response = await axios.get(API_Reports.GET_REAL_API);
+        setReports(response.data.storeReview);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getReports();
+  }, []);
+
+  //! DELETE : 신고누적리뷰 삭제
+  const deleteReview = async () => {
+    try {
+      //TODO /api/admin/access/success
+      await axios({
+        url: API_Reports.DELETE_REAL_API,
+        method: "delete",
+        data: setCheckedList,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //! POST : 신고누적리뷰 복구
+  const restoreReview = async () => {
+    try {
+      //TODO /api/admin/access/failure
+      await axios({
+        url: API_Reports.POST_REAL_API,
+        method: "post",
+        data: setCheckedList,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onCheckedItem = useCallback(
+    (checked: boolean, item: string) => {
+      if (checked) {
+        setCheckedList([...checkedList, item]);
+      } else if (!checked) {
+        setCheckedList(checkedList.filter((el: any) => el !== item));
+      }
     },
-    {
-      content: "잘되면 재밌고 잘안되면 재미없고",
-      email: "boring@coding.com",
-      writtenAt: "2023.02.01",
-      reports: 13,
-    },
-    {
-      content:
-        "얼마안남았다존버얼마안남았다존버얼마안남았다존버얼마안남았다존버얼마안남았다존버얼마안남았다존버얼마안남았다존버얼마안남았다존버얼마안남았다존버얼마안남았다존버얼마안남았다존버얼마안남았다존버얼마안남았다존버얼마안남았다존버얼마안남았다존버얼마안남았다존버얼마안남았다존버",
-      email: "codestates@bootcamp.com",
-      writtenAt: "2023.02.01",
-      reports: 2,
-    },
-    {
-      content: "자바칩프라푸치노 자몽허니블랙티 아이스시그니처초콜릿",
-      email: "starbucks@gyeongju.com",
-      writtenAt: "2023.02.01",
-      reports: 6,
-    },
-    {
-      content: "토피넛라떼 바닐라크림콜드브루 아이스카푸치노",
-      email: "starbucks@gyeongju.com",
-      writtenAt: "2023.02.01",
-      reports: 8,
-    },
-    {
-      content: "sfgsfdgshdfgjhkhjkdghjdghsgsdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfgdfgsdfgsdf",
-      email: "waiting@kbs.com",
-      writtenAt: "2023.02.01",
-      reports: 36,
-    },
-    {
-      content: "오늘은 미세먼지가 아주 많습니다.",
-      email: "yeonjinPArk@giKae.com",
-      writtenAt: "2023.02.01",
-      reports: 2,
-    },
-    {
-      content: "할렐루야",
-      email: "powerDrugger@weeeeeed.com",
-      writtenAt: "2023.02.01",
-      reports: 3,
-    },
-    {
-      content: "전예솔!!!!!!!!!!!!!!!!!!!!!!!!!!",
-      email: "colorBlind@yesolDad.com",
-      writtenAt: "2023.02.01",
-      reports: 1,
-    },
-  ];
+    [checkedList]
+  );
 
   return (
     <WholePage>
@@ -72,37 +73,34 @@ export default function Reports() {
           <Header>
             <span>신고리뷰관리</span>
             <ButtonContainer>
-              <Button color="blue" size="md" text="선택삭제" />
-              <Button color="blue" size="md" text="선택복구" />
+              <Button color="blue" size="md" text="선택삭제" onClick={() => deleteReview()} />
+              <Button color="blue" size="md" text="선택복구" onClick={() => restoreReview()} />
             </ButtonContainer>
           </Header>
           <Table>
             <Label>
               <Values className="checkBox">
-                <CheckBox />
+                <CheckBox onChange={(e: any) => onCheckedItem(e.target.checked, e.target.id)}/>
               </Values>
               <Values className="content">내용</Values>
               <Values className="email">email</Values>
               <Values className="writtenAt">작성일</Values>
               <Values className="reports">신고 수</Values>
             </Label>
-            {dummy.length ? (
+            {reports.length ? (
               <BelowLable>
-                {dummy.map((data, i) => (
+                {reports.map((report: any, i: number) => (
                   <Content key={i}>
                     <Values className="checkBox">
-                      <CheckBox />
+                      <CheckBox id={report.reportIdx} onChange={(e: any) => onCheckedItem(e.target.checked, e.target.id)} />
                     </Values>
-                    <Values className="content">{data.content}</Values>
-                    <Values className="email">{data.email}</Values>
-                    <Values className="writtenAt">{data.writtenAt}</Values>
-                    <Values className="reports">{data.reports}</Values>
+                    <Report key={i} report={report} />
                   </Content>
                 ))}
               </BelowLable>
             ) : (
               <Instead>
-                <AiOutlineExclamationCircle aria-hidden="true"/>
+                <AiOutlineExclamationCircle aria-hidden="true" />
                 <span>신고된 리뷰가 없습니다.</span>
               </Instead>
             )}
