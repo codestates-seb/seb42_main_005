@@ -49,7 +49,7 @@ public class WebConfig {
                     .antMatchers("/api/users/normal").permitAll()
                     .antMatchers("/api/users/store").permitAll()
                     .antMatchers("/login").permitAll()
-                    .anyRequest().authenticated()
+                    .anyRequest().permitAll()
             ;
 //            http
 //                    //.oauth2Login();
