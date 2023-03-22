@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { BiTargetLock } from "react-icons/bi";
+import { MdReplayCircleFilled } from "react-icons/md";
 
 interface ButtonProps {
   _map: any;
@@ -50,6 +51,16 @@ export default function MapButtons({ _map }: ButtonProps) {
 
   return (
     <ContainerButtons>
+      <ControllerReMap>
+        <ButtonReMap onClick={getCurrentLocBtn}>
+          <MdReplayCircleFilled className="icon" />
+          <div className="label">
+            현 지도로
+            <br />
+            재검색
+          </div>
+        </ButtonReMap>
+      </ControllerReMap>
       <ControllerLocation>
         <ButtonLocation onClick={getCurrentLocBtn}>
           <BiTargetLock className="icon" />
@@ -73,7 +84,39 @@ const ContainerButtons = styled.div`
   justify-content: center;
   align-items: center;
 `;
+const ControllerReMap = styled.div`
+  padding: 4px;
+  border-radius: 30px;
+  background-color: var(--blue-400);
+  box-shadow: var(--bs-lg);
+  transition: 0.2s;
+  &:hover {
+    background-color: var(--blue-600);
+    transition: 0.2s;
+  }
+`;
+const ButtonReMap = styled.button`
+  cursor: pointer;
+  width: 42px;
+  height: 80px;
+  background-color: transparent;
+  border: none;
+  text-align: center;
+  .icon {
+    align-items: center;
+    margin-bottom: 6px;
+    font-size: 1.6rem;
+    color: var(--white);
+  }
+  .label {
+    align-items: center;
+    font-size: 0.7rem;
+    color: var(--white);
+    transition: 0.2s;
+  }
+`;
 const ControllerLocation = styled.div`
+  margin: 10px 0;
   padding: 4px;
   border-radius: 8px;
   background-color: var(--white);
@@ -103,7 +146,6 @@ const ControllerZoom = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
   padding: 4px;
   border-radius: 8px;
   background-color: var(--white);
