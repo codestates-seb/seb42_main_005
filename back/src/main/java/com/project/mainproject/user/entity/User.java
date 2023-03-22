@@ -71,6 +71,21 @@ public class User extends Auditable{
 
 
     //### 간단한 동작메서드 ###//
+    public String getRole() {
+        String role = "";
+        if (role.contains("ADMIN")) role = "관리자";
+        else if (role.contains("PHARMACY")) role = "약국회원";
+        else role = "일반회원";
+        return role;
+    }
+
+    public Integer getReportCount() {
+        return this.reviews.stream().map(Review::getReportCnt).reduce(Integer::sum).orElse(0);
+    }
+
+    public long getReviewCount() {
+        return Optional.of(this.reviews.size()).orElse(0);
+    }
 
     // ###연관관계  편의 메서드 ###//
 

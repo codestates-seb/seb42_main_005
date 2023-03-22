@@ -47,6 +47,8 @@ public class UserService implements UserDetailsService {
     private UserMapper userMapper;
     private PharmacyRepository pharmacyRepository;
     private PasswordEncoder encoder;
+    private CustomAuthorityUtils authorityUtils;
+    private StoreRepository storeRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
