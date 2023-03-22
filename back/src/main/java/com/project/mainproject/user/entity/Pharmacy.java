@@ -1,38 +1,24 @@
 package com.project.mainproject.user.entity;
 
-import com.project.mainproject.user.enums.PharmacyStatus;
+import com.project.mainproject.store.entity.Store;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 
-import static javax.persistence.EnumType.STRING;
-import static lombok.AccessLevel.PROTECTED;
-
+@SuperBuilder
 @Entity
 @Getter
-@NoArgsConstructor(access = PROTECTED)
+@Setter
+@NoArgsConstructor
+@Table(name = "USER_STORE")
 public class Pharmacy extends User {
     private String businessCertificate;
-
     private String pharmacistCertificate;
 
-    @Enumerated(value = STRING)
-    private PharmacyStatus pharmacyStatus;
-
-//    @Builder
-    public Pharmacy(String userId,
-                    String password,
-                    String email,
-                    String name,
-                    String businessCertificate,
-                    String pharmacistCertificate,
-                    PharmacyStatus pharmacyStatus) {
-        super(userId, password, email, name);
-        this.businessCertificate = businessCertificate;
-        this.pharmacistCertificate = pharmacistCertificate;
-        this.pharmacyStatus = pharmacyStatus;
-    }
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_Idx")
+    private Store store;
 }

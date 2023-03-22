@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor // For Test
+@AllArgsConstructor
 public class UserPatchDto {
     private String name;
     private String address;

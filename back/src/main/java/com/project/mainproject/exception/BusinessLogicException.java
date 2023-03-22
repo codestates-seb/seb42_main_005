@@ -1,7 +1,6 @@
 package com.project.mainproject.exception;
 
 import lombok.Getter;
-import org.springframework.validation.BindingResult;
 
 @Getter
 public class BusinessLogicException extends RuntimeException {

@@ -1,21 +1,31 @@
 package com.project.mainproject.store.entity;
 
 import com.project.mainproject.VO.OperatingTime;
+import com.project.mainproject.audit.Auditable;
+import com.project.mainproject.review.entity.Review;
+import com.project.mainproject.user.entity.PickedStore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.util.List;
 
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@Table(name = "STORE")
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-public class Store {
+public class Store extends Auditable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     private Long storeIdx;
     @Column(name = "STORE_HPID")
     private String hpid;
@@ -79,15 +89,22 @@ public class Store {
     })
     private OperatingTime holidayOperating;
 
-
     //추 후 변경 필요
     private Boolean isOperatingHoliday;
 
     private String etc;
-    @Formula("SELECT round(AVG(rating), 2) AS rating FROM review GROUP BY store_idx")
-    private Double rating;
 
     //연관관계 매핑
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StoreImage> storeImages;
+    @OneToOne(mappedBy = "store",cascade = CascadeType.ALL)
+    private StoreImage storeImages;
+
+    @OneToMany(mappedBy = "store", cascade = REMOVE, orphanRemoval = true)
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "store",fetch = LAZY)
+    private List<PickedStore> pickedStores;
+
+    public void addStoreImage(StoreImage storeImages) {
+        this.storeImages = storeImages;
+    }
 }
