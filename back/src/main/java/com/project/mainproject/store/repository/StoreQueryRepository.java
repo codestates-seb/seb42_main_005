@@ -67,11 +67,11 @@ public class StoreQueryRepository {
      * neLat : 3시
      * neLng : 12시
      * */
-    public List<DBStoreListDto> getStoreList(double swLat, double swLng, double neLat, double neLng, double lat, double lng, String sortCondition, String operatingFilterCond, boolean isHoliday) {
-        Expression<Double> swLatitude = Expressions.constant(swLat);   //9
-        Expression<Double> swLongitude = Expressions.constant(swLng);   //6
-        Expression<Double> neLatitude = Expressions.constant(neLat);    //3
-        Expression<Double> neLongitude = Expressions.constant(neLng);   //12
+    public List<DBStoreListDto> getStoreList(double maxLat, double minLat, double maxLng, double minLng, double lat, double lng, String sortCondition, String operatingFilterCond, boolean isHoliday) {
+        Expression<Double> maxLatitude = Expressions.constant(maxLat);   //9
+        Expression<Double> maxLongitude = Expressions.constant(maxLng);   //6
+        Expression<Double> minLatitude = Expressions.constant(minLat);    //3
+        Expression<Double> minLongitude = Expressions.constant(minLng);   //12
         Expression<Double> latitude = Expressions.constant(lat);
         Expression<Double> longitude = Expressions.constant(lng);
 
@@ -79,7 +79,7 @@ public class StoreQueryRepository {
         return queryFactory
                 .select(new QDBStoreListDto(
                         store.storeIdx, store.name, store.address, store.latitude, store.longitude,
-                        review.rating.avg(),
+                        round(review.rating.avg(),2),
                         ExpressionUtils.as((
                                 acos(sin(radians(store.latitude))
                                         .multiply(sin(radians(latitude)))
@@ -97,7 +97,8 @@ public class StoreQueryRepository {
                 .leftJoin(store.reviews, review)
                 .leftJoin(store.pickedStores, pickedStore)
                 .leftJoin(store.storeImages, storeImage)
-                .where(store.longitude.between(swLongitude, neLongitude), store.latitude.between(swLatitude, neLatitude), getOperatingCondition(isHoliday, operatingFilterCond))
+//                .where(store.longitude.between(minLongitude, maxLongitude), store.latitude.between(minLatitude, maxLatitude), getOperatingCondition(isHoliday, operatingFilterCond))
+                .where(store.longitude.goe(minLongitude), store.longitude.loe(maxLongitude), store.latitude.goe(minLatitude),store.latitude.loe(maxLatitude), getOperatingCondition(isHoliday, operatingFilterCond))
                 .orderBy(orderByCondition(sortCondition))
                 .groupBy(store.storeIdx, storeImage.imagePath)
                 .fetch();
@@ -287,10 +288,10 @@ public class StoreQueryRepository {
     }
 
     private BooleanExpression searchWithName(String name) {
-        return store.name.eq(name);
+        return store.name.contains(name);
     }
 
     private BooleanExpression searchWithAddress(String address) {
-        return store.address.like(address);
+        return store.address.contains(address);
     }
 }

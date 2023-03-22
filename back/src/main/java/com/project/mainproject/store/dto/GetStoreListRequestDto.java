@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GetStoreListRequestDto {
-    private Long storeIdx;
     private Double lat;
     private Double lng;
     private Double swLat;
