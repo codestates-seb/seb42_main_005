@@ -1,5 +1,6 @@
 package com.project.mainproject.store.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,4 +23,10 @@ public class StoreImage {
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "STORE_IDX")
     private Store store;
+
+    @Builder
+    public StoreImage( String imagePath, Store store) {
+        this.imagePath = imagePath;
+        this.store = store;
+    }
 }
