@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import useGeolocation from "./useGeolocation";
 import "./PharmacyOverlay.css";
+// import { API_PharmLists } from "../Api/APIs";
 
 const { kakao } = window;
 
@@ -11,6 +12,7 @@ export function useMap() {
   const [pharmacies, setPharmacies] = useState([]);
   const [mapCenter, setMapCenter] = useState({ latitude: 0, longitude: 0 });
   const API_URL = "https://apis.data.go.kr/B552657";
+  // const API_URL = API_PharmLists.REAL_API;
 
   useEffect(() => {
     if (typeof location != "string" && kakao) {
@@ -31,6 +33,8 @@ export function useMap() {
         title: "현 위치",
         image: MarkerImageCurrent,
       });
+
+      //! user가 가입할때 쓴 주소를 위도,경도를 get해주는 거 필요한
       const PositionMyPlace = new kakao.maps.LatLng(37.33370506366528, 127.09738924623072); // 추후에 유저가 설정한 좌표 들어감
       const ImageSrcMy = "./Images/myPlace.png";
       const ImageSizeMy = new kakao.maps.Size(24, 35);

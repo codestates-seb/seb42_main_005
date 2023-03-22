@@ -5,18 +5,13 @@ import PharmRank from "../Ul/PharmRank";
 import PharmDetail from "../Modal/PharmDetail";
 import { API_PharmItem } from "../../Api/APIs"; // PharmDetail.json
 
-//* dummy 일때
+//TODO 실제 url 일때
 interface Props {
-  totalPharmList: any;
+  Pharm: any;
+  storeIdx: number;
 }
-//TODO 실제 url 일때
-// interface Props {
-//   storeIdx: number;
-// }
 
-//TODO 실제 url 일때
-// export default function PharmItem({ storeIdx }: Props) {
-export default function PharmItem({ totalPharmList }: Props) {
+export default function PharmItem({ Pharm, storeIdx }: Props) {
   const [isModalUp, setIsModalUp] = useState(false);
   const [pharmDetail, setPharmDetail] = useState();
   const [like, setLike] = useState(false);
@@ -25,11 +20,8 @@ export default function PharmItem({ totalPharmList }: Props) {
   useEffect(() => {
     const getPharmDetail = async () => {
       try {
-        //* dummy data 일때 -> Pharm.json
-        const response = await axios.get(API_PharmItem.DUMMY_API);
-        //TODO 실제 url 일때 -> /api/store/{storeIdx}
-        // const response = await axios.get(`${API_PharmItem.REAL_API}/store${storeIdx}`);
-        setPharmDetail(response.data);
+        const response = await axios.get(`${API_PharmItem.REAL_API}/${storeIdx}`);
+        setPharmDetail(response.data.response);
       } catch (error) {
         console.log(error);
       }
@@ -40,11 +32,17 @@ export default function PharmItem({ totalPharmList }: Props) {
   return (
     <PharmCard>
       {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} pharmDetail={pharmDetail} />
+        <PharmDetail
+          setIsModalUp={setIsModalUp}
+          like={like}
+          setLike={setLike}
+          Pharm={pharmDetail}
+          storeIdx={Pharm.storeIdx}
+        />
       ) : null}
       <InfoImgContainer>
-        {totalPharmList.image ? (
-          <PharmImg src={totalPharmList.image as string} onClick={() => setIsModalUp(true)} />
+        {Pharm.image ? (
+          <PharmImg src={Pharm.image as string} onClick={() => setIsModalUp(true)} />
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." onClick={() => setIsModalUp(true)} />
         )}
@@ -57,14 +55,8 @@ export default function PharmItem({ totalPharmList }: Props) {
         </LikeButton>
       </InfoImgContainer>
       <PharmTitleBox>
-        <PharmName onClick={() => setIsModalUp(true)}>{totalPharmList && totalPharmList.name}</PharmName>
-        {totalPharmList && (
-          <PharmRank
-            rating={totalPharmList.rating}
-            likes={totalPharmList.pickedStoreCount}
-            reviewCount={totalPharmList.reviewCount}
-          />
-        )}
+        <PharmName onClick={() => setIsModalUp(true)}>{Pharm && Pharm.name}</PharmName>
+        {Pharm && <PharmRank rating={Pharm.rating} likes={Pharm.pickedStoreCount} reviewCount={Pharm.reviewCount} />}
       </PharmTitleBox>
     </PharmCard>
   );
