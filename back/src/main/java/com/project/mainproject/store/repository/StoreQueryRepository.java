@@ -136,6 +136,12 @@ public class StoreQueryRepository {
     }
 
 
+    public List<Store> findByIdxs(List<Long> storeIdx) {
+        return queryFactory
+                .selectFrom(store)
+                .where(store.storeIdx.in(storeIdx))
+                .fetch();
+    }
 
     //내부 동작 쿼리 orderBy
     private OrderSpecifier orderByCondition(String sortCondition) {
@@ -151,7 +157,7 @@ public class StoreQueryRepository {
                         .multiply(cos(radians(store.longitude.subtract(longitude)))))).multiply(RADIUS_EARTH_KM).loe(distanceCond);
     }
 
-    private BooleanExpression getOperatingCondition(boolean isHoliday, String filterCond) {     //operating여부
+    private BooleanExpression getOperatingCondition(boolean isHoliday, String filterCond) {     //operating
 
         if (filterCond==null ||!filterCond.equals("holiday")) {
             return null;

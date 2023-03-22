@@ -14,11 +14,16 @@ import java.util.List;
 public class AdminUsersDto {
 
     private List<UserIdx> users;
+    private List<StoreIdx> stores;
 
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
     public static class UserIdx {
         private Long userIdx;
+    }
+    @Getter
+    public static class StoreIdx {
+        private Long storeIdx;
     }
 }
