@@ -1,12 +1,12 @@
 package com.project.mainproject.store.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -16,6 +16,17 @@ import static lombok.AccessLevel.PROTECTED;
 public class StoreImage {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long stareImageIdx;
+    private Long storeImageIdx;
+
     private String imagePath;
+
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "STORE_IDX")
+    private Store store;
+
+    @Builder
+    public StoreImage( String imagePath, Store store) {
+        this.imagePath = imagePath;
+        this.store = store;
+    }
 }

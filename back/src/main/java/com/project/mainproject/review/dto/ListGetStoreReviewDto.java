@@ -8,5 +8,5 @@ import java.util.List;
 @Getter
 @Builder
 public class ListGetStoreReviewDto {
-    private List<StoreReviewPageDto> storeReview;
+    private List<StoreReviewPageDto> storeReviews;
 }

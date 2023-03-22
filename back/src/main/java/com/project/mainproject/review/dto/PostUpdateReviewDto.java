@@ -1,17 +1,22 @@
 package com.project.mainproject.review.dto;
 
-import com.project.mainproject.tag.dto.TagIdDto;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
+import org.springframework.util.Assert;
 
 @Getter
 @Builder
 public class PostUpdateReviewDto {
     private Long userIdx;
-    private List<TagIdDto> tags;
+    private Long storeIdx;
     private String content;
     private String image;
     private int rating;
+
+    public PostUpdateReviewDto setStoreIdx(Long storeIdx) {
+        Assert.notNull(storeIdx, "store_idx must not be null.");
+        this.storeIdx = storeIdx;
+
+        return this;
+    }
 }
