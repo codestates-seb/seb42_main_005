@@ -45,7 +45,7 @@ public class StoreGetService {
     }
 
     /*
-    * 거리기준으로 필터링 할 때 출력되는 데이터
+    * 거리기준 랭킹기준 찜 기준
     * */
     public SingleResponseDto getStoreListDto(GetStoreListRequestDto request) {
         Boolean isHoliday = getIsHoliday();

@@ -202,16 +202,46 @@ public class StoreQueryRepository {
 
 
     private BooleanExpression getOperatingCondition(boolean isHoliday, String filterCond) {     //operating
-
-        if (filterCond == null || !filterCond.equals("holiday")) {
+        //holliday인가 ? null ->  정렬하지 않는다.
+        if (filterCond == null ) {
             return null;
         }
 
-        if (!isHoliday) {
+        //holiday 일 경우
+        if (!isHoliday && filterCond.equals("operating")) {
             return getNormalOperatingCondition();
+        } else if (isHoliday && filterCond.equals("operating")) {
+            return getHolidayOperatingCondition();
+        } else if (!isHoliday && filterCond.equals("nightOperating")) {
+            return getNormalNightOperating();
+        } else {
+            return getHolidayOperating();
         }
 
-        return getHolidayOperatingCondition();
+    }
+
+    private BooleanExpression getNormalNightOperating() {
+        DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();
+        switch (dayOfWeek) {
+            case MONDAY:
+                return store.mondayOperating.endTime.after(LocalTime.of(22,0,0));
+            case THURSDAY:
+                return store.thursdayOperating.endTime.after(LocalTime.of(22,0,0));
+            case WEDNESDAY:
+                return store.wednesdayOperating.endTime.after(LocalTime.of(22,0,0));
+            case TUESDAY:
+                return store.tuesdayOperating.endTime.after(LocalTime.of(22,0,0));
+            case FRIDAY:
+                return store.fridayOperating.endTime.after(LocalTime.of(22,0,0));
+            case SATURDAY:
+                return store.saturdayOperating.endTime.after(LocalTime.of(22,0,0));
+            default:
+                return store.sundayOperating.endTime.after(LocalTime.of(22,0,0));
+        }
+    }
+
+    private BooleanExpression getHolidayOperating() {
+        return store.holidayOperating.endTime.after(LocalTime.of(22,0,0));
     }
 
     private BooleanExpression searchCondition(String name, String address) {
