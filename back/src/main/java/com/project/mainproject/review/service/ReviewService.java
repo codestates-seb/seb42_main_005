@@ -97,4 +97,9 @@ public class ReviewService {
                 userIdx, POSTED, pageable);
     }
 
+    public Page<Review> getReportedReviews(Pageable pageable) {
+        int reportCnt = 3;
+        return reviewRepository.findByReportCntGreaterThan(reportCnt, pageable);
+    }
+
 }
