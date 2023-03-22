@@ -113,10 +113,10 @@ export default function UserSignUpForms() {
     }
 
     const data = {
-      name: name,
-      address: address,
-      email: email,
-      password: password,
+      name,
+      address,
+      email,
+      password,
     };
 
     //! POST : 일반회원 회원가입 - JWT
