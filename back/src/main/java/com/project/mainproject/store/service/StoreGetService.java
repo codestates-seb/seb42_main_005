@@ -49,7 +49,7 @@ public class StoreGetService {
     * */
     public SingleResponseDto getStoreListDto(GetStoreListRequestDto request) {
         Boolean isHoliday = getIsHoliday();
-        List<DBStoreListDto> findStores = storeQueryRepository.getStoreList(request.getLat(), request.getLng(), request.getDistance(), request.getSortCondition(),request.getFilterCondition(),isHoliday);
+        List<DBStoreListDto> findStores = storeQueryRepository.getStoreList(request.getSwLat(), request.getSwLng(), request.getNeLat(),request.getNeLng(), request.getLat(), request.getLng(),request.getSortCondition(),request.getFilterCondition(),isHoliday);
 
         return SingleResponseDto
                 .<List<DBStoreListDto>>builder()

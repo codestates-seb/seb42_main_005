@@ -61,33 +61,76 @@ public class StoreQueryRepository {
         return dbStoreDetailDto;
     }
 
-    public List<DBStoreListDto> getStoreList(double lat, double lng, double distanceCondition, String sortCondition, String operatingFilterCond, boolean isHoliday) {
-        Expression<Double> latitude  = Expressions.constant(lat);
+    /*
+     * swLat : 9시 위도 가로
+     * swLng : 6시 경도 세경 세로
+     * neLat : 3시
+     * neLng : 12시
+     * */
+    public List<DBStoreListDto> getStoreList(double swLat, double swLng, double neLat, double neLng, double lat, double lng, String sortCondition, String operatingFilterCond, boolean isHoliday) {
+        Expression<Double> swLatitude = Expressions.constant(swLat);   //9
+        Expression<Double> swLongitude = Expressions.constant(swLng);   //6
+        Expression<Double> neLatitude = Expressions.constant(neLat);    //3
+        Expression<Double> neLongitude = Expressions.constant(neLng);   //12
+        Expression<Double> latitude = Expressions.constant(lat);
         Expression<Double> longitude = Expressions.constant(lng);
-        Expression<Double> distanceCond = Expressions.constant(distanceCondition);
+
 
         return queryFactory
                 .select(new QDBStoreListDto(
-                        store.storeIdx,store.name,store.address,store.latitude,store.longitude,
+                        store.storeIdx, store.name, store.address, store.latitude, store.longitude,
                         review.rating.avg(),
-                        ExpressionUtils.as( (
-                                        acos(sin(radians(store.latitude))
-                                                .multiply(sin(radians(latitude)))
-                                                .add(cos(radians(store.latitude))
-                                                        .multiply(cos(radians(latitude)))
-                                                        .multiply(cos(radians(store.longitude.subtract(longitude)))))
-                                        ).multiply(RADIUS_EARTH_KM)
-                                ), "distance"),
+                        ExpressionUtils.as((
+                                acos(sin(radians(store.latitude))
+                                        .multiply(sin(radians(latitude)))
+                                        .add(cos(radians(store.latitude))
+                                                .multiply(cos(radians(latitude)))
+                                                .multiply(cos(radians(store.longitude.subtract(longitude)))))
+                                ).multiply(RADIUS_EARTH_KM)
+                        ), "distance"),
                         pickedStore.storeId.count(),
                         review.reviewIdx.count(),
                         store.storeImages.imagePath,
                         store._super.modifiedAt
                 )).distinct()
                 .from(store)
-                .leftJoin(store.reviews,review)
+                .leftJoin(store.reviews, review)
                 .leftJoin(store.pickedStores, pickedStore)
                 .leftJoin(store.storeImages, storeImage)
-                .where(getDistanceCondition(latitude, longitude, distanceCond),getOperatingCondition(isHoliday,operatingFilterCond))
+                .where(store.longitude.between(swLongitude, neLongitude), store.latitude.between(swLatitude, neLatitude), getOperatingCondition(isHoliday, operatingFilterCond))
+                .orderBy(orderByCondition(sortCondition))
+                .groupBy(store.storeIdx, storeImage.imagePath)
+                .fetch();
+    }
+
+
+    public List<DBStoreListDto> getStoreList(double lat, double lng, double distanceCondition, String sortCondition, String operatingFilterCond, boolean isHoliday) {
+        Expression<Double> latitude = Expressions.constant(lat);
+        Expression<Double> longitude = Expressions.constant(lng);
+        Expression<Double> distanceCond = Expressions.constant(distanceCondition);
+
+        return queryFactory
+                .select(new QDBStoreListDto(
+                        store.storeIdx, store.name, store.address, store.latitude, store.longitude,
+                        review.rating.avg(),
+                        ExpressionUtils.as((
+                                acos(sin(radians(store.latitude))
+                                        .multiply(sin(radians(latitude)))
+                                        .add(cos(radians(store.latitude))
+                                                .multiply(cos(radians(latitude)))
+                                                .multiply(cos(radians(store.longitude.subtract(longitude)))))
+                                ).multiply(RADIUS_EARTH_KM)
+                        ), "distance"),
+                        pickedStore.storeId.count(),
+                        review.reviewIdx.count(),
+                        store.storeImages.imagePath,
+                        store._super.modifiedAt
+                )).distinct()
+                .from(store)
+                .leftJoin(store.reviews, review)
+                .leftJoin(store.pickedStores, pickedStore)
+                .leftJoin(store.storeImages, storeImage)
+                .where(getDistanceCondition(latitude, longitude, distanceCond), getOperatingCondition(isHoliday, operatingFilterCond))
                 .orderBy(orderByCondition(sortCondition))
                 .groupBy(store.storeIdx, storeImage.imagePath)
                 .fetch();
@@ -120,7 +163,7 @@ public class StoreQueryRepository {
     public List<DBStoreSearchDto> searchStoreByNameOrAddress(String name, String address) {
         return queryFactory
                 .select(new QDBStoreSearchDto(
-                        store.storeIdx,store.name,store.address,store.latitude,store.longitude,
+                        store.storeIdx, store.name, store.address, store.latitude, store.longitude,
                         review.rating.avg(),
                         pickedStore.storeId.count(),
                         review.reviewIdx.count(),
@@ -131,7 +174,7 @@ public class StoreQueryRepository {
                 .leftJoin(store.reviews, review)
                 .leftJoin(store.pickedStores, pickedStore)
                 .leftJoin(store.storeImages, storeImage)
-                .where(searchCondition(name,address))
+                .where(searchCondition(name, address))
                 .fetch();
     }
 
@@ -145,7 +188,7 @@ public class StoreQueryRepository {
 
     //내부 동작 쿼리 orderBy
     private OrderSpecifier orderByCondition(String sortCondition) {
-                return Expressions.stringPath(sortCondition).asc();
+        return Expressions.stringPath(sortCondition).asc();
     }
 
     //내부동작 쿼리 where 절
@@ -157,9 +200,10 @@ public class StoreQueryRepository {
                         .multiply(cos(radians(store.longitude.subtract(longitude)))))).multiply(RADIUS_EARTH_KM).loe(distanceCond);
     }
 
+
     private BooleanExpression getOperatingCondition(boolean isHoliday, String filterCond) {     //operating
 
-        if (filterCond==null ||!filterCond.equals("holiday")) {
+        if (filterCond == null || !filterCond.equals("holiday")) {
             return null;
         }
 
