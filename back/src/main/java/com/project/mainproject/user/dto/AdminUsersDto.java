@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class AdminUsersDto {
 
-    private List<UserIdx> users;
+    private List<UserIdx> userIdxs;
 
     @AllArgsConstructor
     @NoArgsConstructor

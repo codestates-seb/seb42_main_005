@@ -7,6 +7,7 @@ import com.project.mainproject.store.entity.Store;
 import com.project.mainproject.store.repository.StoreQueryRepository;
 import com.project.mainproject.user.entity.Pharmacy;
 import com.project.mainproject.user.entity.User;
+import com.project.mainproject.user.enums.UserStatus;
 import com.project.mainproject.user.exception.UserExceptionCode;
 import com.project.mainproject.user.repository.UserRepository;
 import com.project.mainproject.user.service.UserService;
@@ -27,16 +28,18 @@ public class AdminService {
     private final UserService userService;
     private final StoreQueryRepository storeQueryRepository;
 
-    public SingleResponseDto approvalPharmacy(List<Long> userIdxs, List<Long> storeIdxs) {
+    public SingleResponseDto approvalPharmacy(List<Long> userIdxs) {
         List<User> findUsers = userRepository.findByIds(userIdxs);
-        List<Store> findStores = storeQueryRepository.findByIdxs(storeIdxs);
-        if (findUsers.size() != findStores.size()) {
+
+
+        if (findUsers.size() != userIdxs.size()) {
             throw new BusinessLogicException(UserExceptionCode.USER_NOT_FOUND);
         }
         for (int i = 0; i < findUsers.size(); i++) {
             User user = findUsers.get(i);
             userService.checkIstPharmacy(user);
-            ((Pharmacy) user).setStore(findStores.get(i));
+            user.setUserStatus(UserStatus.ACTIVE);
+            //TODO: user.setUserType 찍어야한다.
         }
 
         return SingleResponseDto.builder()
@@ -52,5 +55,10 @@ public class AdminService {
                 .message(REJECT_PHARMACY.getMessage())
                 .httpCode(REJECT_PHARMACY.getHttpCode())
                 .build();
+    }
+
+    public SingleResponseDto blockUsers(int period, List<Long> userIdxs) {
+
+        return null;
     }
 }

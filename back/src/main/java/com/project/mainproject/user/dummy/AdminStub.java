@@ -14,7 +14,7 @@ public class AdminStub {
         for(Long l = 1L; l < 11; l++) {
             users.add(new AdminUsersStoreDto.UserIdx(l));
         }
-        return AdminUsersStoreDto.builder().users(users).build();
+        return AdminUsersStoreDto.builder().userIdxs(users).build();
     }
 
     public static BannedReviewsDto getBannedReviewsStub() {
