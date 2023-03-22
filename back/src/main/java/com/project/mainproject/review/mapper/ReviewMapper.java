@@ -1,7 +1,11 @@
 package com.project.mainproject.review.mapper;
 
-import com.project.mainproject.review.dto.*;
+import com.project.mainproject.review.dto.ListGetUserReviewDto.GetUserReviewDto;
 import com.project.mainproject.review.dto.ListReportedReviewDto.ReportedReviewDto;
+import com.project.mainproject.review.dto.PostCreateReviewDto;
+import com.project.mainproject.review.dto.PostUpdateReviewDto;
+import com.project.mainproject.review.dto.SimpleReviewDto;
+import com.project.mainproject.review.dto.StoreReviewPageDto;
 import com.project.mainproject.review.entity.Review;
 import com.project.mainproject.review.entity.ReviewReply;
 import org.mapstruct.Mapper;
@@ -41,11 +45,10 @@ public interface ReviewMapper {
     @Mapping(target = "profileImage", source = "user.imagePath")
     ReplyDto replyToReplyDto(ReviewReply reply);
 
-    List<GetReviewDto> reviewsToUserReviewsDto(List<Review> reviews);
+    List<GetUserReviewDto> reviewsToUserReviewsDto(List<Review> reviews);
 
-    @Mapping(target = "storeIdx", source = "store.storeIdx")
     @Mapping(target = "storeName", source = "store.name")
-    GetReviewDto reviewToGetReviewDto(Review reviews);
+    GetUserReviewDto reviewToGetReviewDto(Review reviews);
 
     List<ReportedReviewDto> reviewsToReportedReviewsDto(List<Review> reviews);
 

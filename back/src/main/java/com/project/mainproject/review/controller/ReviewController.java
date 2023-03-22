@@ -9,7 +9,6 @@ import com.project.mainproject.review.mapper.ReviewMapper;
 import com.project.mainproject.review.mapper.ReviewReportMapper;
 import com.project.mainproject.review.service.ReviewReportService;
 import com.project.mainproject.review.service.ReviewService;
-import com.project.mainproject.user.dto.UserReviewDto;
 import com.project.mainproject.utils.ResponseBuilder;
 import com.project.mainproject.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
+import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -140,17 +140,17 @@ public class ReviewController {
     회원 정보 조회_작성 리뷰
     */
     @GetMapping("review/user/{userIdx}")
-    public ResponseEntity<PageResponseDto<ListGetStoreReviewDto>> getUserReviews(
-            @PathVariable("userIdx") Long userIdx, Pageable pageable
+    public ResponseEntity<SingleResponseDto<ListGetUserReviewDto>> getUserReviews(
+            @PathVariable("userIdx") Long userIdx
     ) {
-        Page<Review> reviews = reviewService.getUserReviews(userIdx, pageable);
+        List<Review> reviews = reviewService.getUserReviews(userIdx);
 
-        UserReviewDto responseData = UserReviewDto.builder()
-                .reviews(reviewMapper.reviewsToUserReviewsDto(reviews.getContent()))
+        ListGetUserReviewDto responseData = ListGetUserReviewDto.builder()
+                .reviews(reviewMapper.reviewsToUserReviewsDto(reviews))
                 .build();
 
-        PageResponseDto<ListGetStoreReviewDto> response =
-                responseBuilder.buildPageResponse(reviews, responseData);
+        SingleResponseDto<ListGetUserReviewDto> response =
+                responseBuilder.buildSingleOkResponse(responseData);
 
         return ResponseEntity.ok().body(response);
     }

@@ -91,10 +91,10 @@ public class ReviewService {
         if (existImages.size() != 0) FileUploader.deleteImages(existImages);
     }
 
-    public Page<Review> getUserReviews(Long userIdx, Pageable pageable) {
+    public List<Review> getUserReviews(Long userIdx) {
         // TODO: 유저 검증 추가 (StoreService)
         return reviewRepository.findAllByUserUserIdxAndReviewStatusOrderByCreatedAtDesc(
-                userIdx, POSTED, pageable);
+                userIdx, POSTED);
     }
 
     public Page<Review> getReportedReviews(Pageable pageable) {
