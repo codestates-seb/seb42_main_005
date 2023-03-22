@@ -31,8 +31,6 @@ public class AdminReviewController {
      * */
     @GetMapping("/reports")
     public ResponseEntity getReportedReview(Pageable pageable) {
-        //TODO: 서비스단 구현
-
         Page<Review> reviews = reviewService.getReportedReviews(pageable);
 
         ListReportedReviewDto responseData = ListReportedReviewDto.builder()
@@ -41,7 +39,6 @@ public class AdminReviewController {
 
         PageResponseDto<ListGetStoreReviewDto> response =
                 responseBuilder.buildPageResponse(reviews, responseData);
-
         return ResponseEntity.ok().body(response);
     }
 
