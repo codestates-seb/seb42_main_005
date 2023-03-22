@@ -43,11 +43,11 @@ public class StoreGetService {
     }
 
     /*
-    * 거리기준으로 필터링 할 때 출력되는 데이터
-    * */
+     * 거리기준으로 필터링 할 때 출력되는 데이터
+     * */
     public SingleResponseDto getStoreListDto(GetStoreListRequestDto request) {
         Boolean isHoliday = getIsHoliday();
-        List<DBStoreListDto> findStores = storeQueryRepository.getStoreList(request.getLat(), request.getLng(), request.getDistance(), request.getSortCondition(),request.getFilterCondition(),isHoliday);
+        List<DBStoreListDto> findStores = storeQueryRepository.getStoreList(request.getLat(), request.getLng(), request.getDistance(), request.getSortCondition(), request.getFilterCondition(), isHoliday);
 
         return SingleResponseDto
                 .<List<DBStoreListDto>>builder()
@@ -58,8 +58,8 @@ public class StoreGetService {
     }
 
     /*
-    * 찜한 약국 리스트 보내주는 메서드
-    * */
+     * 찜한 약국 리스트 보내주는 메서드
+     * */
     public SingleResponseDto getPickedStoreList(Long userIdx) {
         List<DBPickedStoredListDto> findPickedList = storeQueryRepository.getPickedStoreList(userIdx);
         return SingleResponseDto.<List<DBPickedStoredListDto>>builder()
@@ -67,6 +67,14 @@ public class StoreGetService {
                 .message(ResultStatus.PROCESS_COMPLETED.getMessage())
                 .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
                 .build();
+    }
+
+    /*
+     * 테스트용 전체 약국 전달 메서드
+     * */
+    public SingleResponseDto getStoreList() {
+        List<DBStoreListDto> storeList = storeQueryRepository.getStoreList();
+        return SingleResponseDto.builder().response(storeList).httpCode(200).message("요청이 완료되었습니다.").build();
     }
 
     //내부 동작 메서드

@@ -20,8 +20,13 @@ public class StoreController {
      *  약국 목록_페이지 리스트
      * */
     @GetMapping
-    public ResponseEntity getStoreList(@RequestBody GetStoreListRequestDto requestDto) {
-        SingleResponseDto response = storeGetService.getStoreListDto(requestDto);
+//    public ResponseEntity getStoreList(@RequestBody GetStoreListRequestDto requestDto) {
+//        SingleResponseDto response = storeGetService.getStoreListDto(requestDto);
+//
+//        return ResponseEntity.ok().body(response);
+//    }
+    public ResponseEntity getStoreList() {
+        SingleResponseDto response = storeGetService.getStoreList();
 
         return ResponseEntity.ok().body(response);
     }

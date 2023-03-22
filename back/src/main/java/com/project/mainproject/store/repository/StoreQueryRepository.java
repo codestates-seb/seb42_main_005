@@ -93,6 +93,24 @@ public class StoreQueryRepository {
                 .fetch();
     }
 
+    public List<DBStoreListDto> getStoreList() {
+        return queryFactory
+                .select(new QDBStoreListDto(
+                        store.storeIdx,store.name,store.address,store.latitude,store.longitude,
+                        review.rating.avg(),
+                        store.latitude,
+                        pickedStore.storeId.count(),
+                        review.reviewIdx.count(),
+                        store.storeImages.imagePath,
+                        store._super.modifiedAt
+                )).distinct()
+                .from(store)
+                .leftJoin(store.reviews,review)
+                .leftJoin(store.pickedStores, pickedStore)
+                .leftJoin(store.storeImages, storeImage)
+                .groupBy(store.storeIdx, storeImage.imagePath)
+                .fetch();
+    }
     public List<DBPickedStoredListDto> getPickedStoreList(Long userIdx) {
         return queryFactory
                 .select(new QDBPickedStoredListDto(
@@ -128,6 +146,9 @@ public class StoreQueryRepository {
     //내부동작 쿼리 where 절
 
     private BooleanExpression getDistanceCondition(Expression<Double> latitude, Expression<Double> longitude, Expression<Double> distanceCond) {
+        if(latitude != null || longitude != null || distanceCond != null)
+            return null;
+
         return acos(sin(radians(store.latitude))
                 .multiply(sin(radians(latitude)))
                 .add(cos(radians(store.latitude))
