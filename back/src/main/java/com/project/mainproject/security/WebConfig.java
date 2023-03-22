@@ -1,5 +1,6 @@
 package com.project.mainproject.security;
 
+import com.project.mainproject.user.repository.UserRepository;
 import com.project.mainproject.user.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,12 +22,14 @@ public class WebConfig {
     private JwtAuthenticationFilter jwtAuthenticationFilter;
     private JwtHelper jwtHelper;
     private AuthenticationManager authenticationManager;
+    private UserRepository userRepository;
 
-    public WebConfig(Environment env, UserService userService, JwtAuthenticationFilter jwtAuthenticationFilter, JwtHelper jwtHelper) {
+    public WebConfig(Environment env, UserService userService, JwtAuthenticationFilter jwtAuthenticationFilter, JwtHelper jwtHelper, UserRepository userRepository) {
         this.env = env;
         this.userService = userService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.jwtHelper = jwtHelper;
+        this.userRepository = userRepository;
     }
 
     @Bean
@@ -73,7 +76,7 @@ public class WebConfig {
     }
 
     private AuthenticationFilter getAuthenticationFilter(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter(getAuthenticationManager(authenticationConfiguration), jwtHelper);
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(getAuthenticationManager(authenticationConfiguration), jwtHelper, userRepository);
         authenticationFilter.setAuthenticationManager(getAuthenticationManager(authenticationConfiguration));
         return authenticationFilter;
     }
