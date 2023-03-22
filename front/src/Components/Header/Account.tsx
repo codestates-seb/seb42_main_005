@@ -41,7 +41,7 @@ export default function Account({ isLogin, account }: AccountProps) {
               <ul>
                 {menuArr.map((item, idx) => {
                   return (
-                    <Link to={item.link} key={idx} style={{ textDecoration: "none" }} onClick={SignOut}>
+                    <Link to={item.link} key={idx} style={{ textDecoration: "none" }}>
                       <li>{item.type}</li>
                     </Link>
                   );

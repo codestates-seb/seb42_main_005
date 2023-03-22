@@ -14,11 +14,12 @@ export default function Users() {
   useEffect(() => {
     const getReviews = async () => {
       try {
-        //* dummy data 일때 -> Review.json
-        const response = await axios.get(API_Users.DUMMY_API);
+        // //* dummy data 일때 -> Review.json
+        // const response = await axios.get(API_Users.DUMMY_API);
         //TODO 실제 url 일때 -> /api/users
-        // const response = await axios.get(API_Users.REAL_API);
-        setUsers(response.data);
+        const response = await axios.get(API_Users.REAL_API);
+        setUsers(response.data.response.content);
+        // setUsers(response.data);
       } catch (error) {
         console.log(error);
       }
