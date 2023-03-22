@@ -1,6 +1,9 @@
 package com.project.mainproject.user.service;
 
 import com.project.mainproject.exception.BusinessLogicException;
+import com.project.mainproject.security.CustomAuthorityUtils;
+import com.project.mainproject.store.entity.Store;
+import com.project.mainproject.store.repository.StoreRepository;
 import com.project.mainproject.user.dto.UserInfoDto;
 import com.project.mainproject.user.dto.UserPatchDto;
 import com.project.mainproject.user.entity.Normal;
@@ -12,6 +15,7 @@ import com.project.mainproject.user.mapper.UserMapper;
 import com.project.mainproject.user.repository.PharmacyRepository;
 import com.project.mainproject.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,6 +40,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserService implements UserDetailsService {
 
     private UserRepository userRepository;
@@ -55,47 +60,60 @@ public class UserService implements UserDetailsService {
     }
 
     public void saveNormal(Normal normal) {
+        normal.setUserType("일반회원");
         normal.setPassword(encoder.encode(normal.getPassword()));
+        assignRole(normal);
         userRepository.save(normal);
     }
 
+    public void assignRole(Normal user) {
+        List<String> roles = authorityUtils.createNormalRoles(user.getEmail());
+    }
+
     public void savePharmacy(Pharmacy pharmacy, MultipartFile businessCertificate, MultipartFile pharmacistCertificate) {
-        Pharmacy save = userRepository.save(pharmacy);
-        File businessFile = new File("/Users/gimjihyeong/businessCertificate");
-        if(!businessFile.exists()) businessFile.mkdirs();
+        Optional<Store> store = storeRepository.findByNameContainingAndAddressContaining(pharmacy.getName(), pharmacy.getAddress());
+        if(store.isPresent()) {
+            pharmacy.setPassword(encoder.encode(pharmacy.getPassword()));
+            pharmacy.setStore(store.get());
+            pharmacy.setUserType("약국회원");
+            Pharmacy save = userRepository.save(pharmacy);
+            File businessFile = new File("/Users/gimjihyeong/businessCertificate");
+            if(!businessFile.exists()) businessFile.mkdirs();
 
-        Path businessLocation = Paths.get("/Users/gimjihyeong/businessCertificate").toAbsolutePath().normalize();
-        String businessName = UUID.randomUUID().toString();
-        try {
-            Path targetLocation = businessLocation.resolve(businessName);
-            Files.copy(businessCertificate.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            String path = targetLocation.toString();
+            Path businessLocation = Paths.get("/Users/gimjihyeong/businessCertificate").toAbsolutePath().normalize();
+            String businessName = UUID.randomUUID().toString();
+            try {
+                Path targetLocation = businessLocation.resolve(businessName);
+                Files.copy(businessCertificate.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+                String path = targetLocation.toString();
 
-            Pharmacy pharmacyPath = pharmacyRepository.findById(save.getUserIdx()).get();
-            pharmacyPath.setBusinessCertificate(path);
+                Pharmacy pharmacyPath = pharmacyRepository.findById(save.getUserIdx()).get();
+                pharmacyPath.setBusinessCertificate(path);
 
-            pharmacyRepository.save(pharmacyPath);
-        } catch (Exception e) {
-            e.printStackTrace();
+                pharmacyRepository.save(pharmacyPath);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            File pharmacistFile = new File("/Users/gimjihyeong/pharmacistCertificate");
+            if(!pharmacistFile.exists()) pharmacistFile.mkdirs();
+
+            Path pharmacistLocation = Paths.get("/Users/gimjihyeong/pharmacistCertificate").toAbsolutePath().normalize();
+            String pharmacistName = UUID.randomUUID().toString();
+            try {
+                Path targetLocation = pharmacistLocation.resolve(pharmacistName);
+                Files.copy(pharmacistCertificate.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+                String path = targetLocation.toString();
+
+                Pharmacy pharmacyPath = pharmacyRepository.findById(save.getUserIdx()).get();
+                pharmacyPath.setPharmacistCertificate(path);
+
+                pharmacyRepository.save(pharmacyPath);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
-        File pharmacistFile = new File("/Users/gimjihyeong/pharmacistCertificate");
-        if(!pharmacistFile.exists()) pharmacistFile.mkdirs();
-
-        Path pharmacistLocation = Paths.get("/Users/gimjihyeong/pharmacistCertificate").toAbsolutePath().normalize();
-        String pharmacistName = UUID.randomUUID().toString();
-        try {
-            Path targetLocation = pharmacistLocation.resolve(pharmacistName);
-            Files.copy(pharmacistCertificate.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            String path = targetLocation.toString();
-
-            Pharmacy pharmacyPath = pharmacyRepository.findById(save.getUserIdx()).get();
-            pharmacyPath.setPharmacistCertificate(path);
-
-            pharmacyRepository.save(pharmacyPath);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        return ; //TODO
 
     }
 
@@ -109,6 +127,11 @@ public class UserService implements UserDetailsService {
     @Transactional(readOnly = true)
     public Page<User> findUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
+
+    }
+
+    public Page<Pharmacy> findPharmacyRequest(Pageable pageable) {
+        return pharmacyRepository.findAllByUserStatusIs(UserStatus.TEMPORARY, pageable);
     }
 
     public void patchUser(Long userIdx, UserPatchDto userPatchDto) {

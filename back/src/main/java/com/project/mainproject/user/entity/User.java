@@ -1,13 +1,16 @@
 package com.project.mainproject.user.entity;
 
 import com.project.mainproject.audit.Auditable;
+import com.project.mainproject.review.entity.Review;
 import com.project.mainproject.user.enums.UserStatus;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.EAGER;
@@ -35,6 +38,7 @@ public class User extends Auditable{
     @Column(name = "USER_ADDRESS")
     private String address;
     private String imagePath;
+    private String userType;
     @Enumerated(value = STRING)
     @Builder.Default
     private UserStatus userStatus = UserStatus.TEMPORARY;
@@ -42,7 +46,8 @@ public class User extends Auditable{
     @ElementCollection(fetch = EAGER)
     @CollectionTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "USER_IDX"))
     private List<String> role;
-
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews = new ArrayList<>();
 
     @Builder // For Mapper
     public User(Long userIdx) {
