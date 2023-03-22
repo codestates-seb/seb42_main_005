@@ -21,11 +21,11 @@ export default function PharmLists({ hidden, setHidden }: Props) {
   useEffect(() => {
     const getPharmLists = async () => {
       try {
-        //* dummy data 일때 -> PharmList.json
-        const response = await axios.get(API_PharmLists.DUMMY_API);
-        //TODO 실제 url 일때 -> /api/store?page=1&size=1
-        // const response = await axios.get(`${API_PharmLists.REAL_API}?page=1&size=1`);
-        setTotalPharmList(response.data.storeHome);
+        const response = await axios.get(`${API_PharmLists.REAL_API}?page=1&size=1`, {
+          params: {},
+          headers: { "Content-Type": "application/json" },
+        });
+        setTotalPharmList(response.data.response);
       } catch (error) {
         console.log(error);
       }
@@ -69,8 +69,8 @@ export default function PharmLists({ hidden, setHidden }: Props) {
             </ButtonContainer>
           </ListHead>
           <ListBody>
-            {totalPharmList.map((el: any) => (
-              <PharmItem totalPharmList={el} key={el.storeIdx} />
+            {totalPharmList?.map((pharm: any) => (
+              <PharmItem Pharm={pharm} key={pharm.storeIdx} storeIdx={pharm.storeIdx} />
             ))}
           </ListBody>
         </PharmList>

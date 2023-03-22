@@ -1,14 +1,15 @@
+import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import UserAdress from "./UserAdress";
+import ErrorAlert from "./ErrorAlert";
 import SignUpInput from "./SignUpInput";
 import { validators } from "./Validation";
+import { API_UserSignUpForms } from "../../Api/APIs";
+import { AiOutlineLock } from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
 import { FaUserEdit, FaMapMarkerAlt } from "react-icons/fa";
-import { AiOutlineLock } from "react-icons/ai";
-import ErrorAlert from "./ErrorAlert";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 export default function UserSignUpForms() {
   const [signForm, setSignForms] = useState({
@@ -113,16 +114,17 @@ export default function UserSignUpForms() {
 
     const data = {
       name: name,
+      address: address,
       email: email,
       password: password,
-      address: address,
     };
 
+    //! POST : 일반회원 회원가입 - JWT
     const postSignUp = async () => {
       try {
+        //TODO api/users/normal
         await axios({
-          //! url수정
-          url: "/api/users/normal",
+          url: API_UserSignUpForms.REAL_API,
           method: "post",
           data: data,
         });
@@ -133,6 +135,7 @@ export default function UserSignUpForms() {
     postSignUp();
     navigate("/login");
   };
+
   return (
     <Container>
       <Google>

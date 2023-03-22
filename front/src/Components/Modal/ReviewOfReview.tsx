@@ -1,23 +1,22 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import axios from "axios";
 import Input from "../Ul/Input";
 import Button from "../Ul/Button";
+import { API_ReviewOfReview } from "../../Api/APIs";
 import { useAppSelector } from "../../Redux/hooks";
-import { getReviewListActions } from "../../Redux/slice/getReviewSlice";
 import { BsArrowReturnRight } from "react-icons/bs";
 import { HiXMark } from "react-icons/hi2";
 
 interface Props {
-  comment: any;
-  id: number;
+  reply: any;
+  reviewIdx: number;
+  userIdx: number;
+  replyIdx: number;
 }
-export default function ReviewOfReview({ comment, id }: Props) {
+export default function ReviewOfReview({ reviewIdx, reply, userIdx, replyIdx }: Props) {
   const [isPatchFormShown, setIsPatchFormShown] = useState(false);
-  const [content, setContent] = useState(comment.content);
-  const dispatch = useDispatch();
-  const a = dispatch(getReviewListActions.getReviewList);
+  const [content, setContent] = useState(reply.content);
 
   const reviewList = useAppSelector((state: any) => {
     return state.getReview.response.storeReview;
@@ -41,35 +40,30 @@ export default function ReviewOfReview({ comment, id }: Props) {
       //TODO url 받았을때
       const Data = {
         //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
-        userIdx: 1,
+        replyIdx,
+        userIdx,
         content: reviewOfReview,
       };
 
       const submitReviewOfReview = async () => {
         try {
           //* dummy url 일때 -> Review.json
-          await axios({
-            url: "http://localhost:3010/response",
-            method: "patch",
-            data: Data,
-          });
-          //TODO url 받았을때 -> /api/store/{storeIdx}/review/{reviewIdx}
           // await axios({
-          //   url: "http://localhost:3010/response",
+          //   url: API_ReviewOfReview.DUMMY_API,
           //   method: "patch",
           //   data: Data,
           // });
+          //TODO url 받았을때 -> /api/store/{storeIdx}/review/{reviewIdx}
+          await axios({
+            url: `${API_ReviewOfReview.REAL_API}/${reviewIdx}/reply/${reply.replyIdx}`,
+            method: "patch",
+            data: Data,
+          });
         } catch (error) {
           console.log(error);
         }
       };
-      dispatch(
-        getReviewListActions.getReviewList(
-          reviewList.map((review: any) =>
-            review.comments.map((comment: any) => (comment.commentIdx === id ? (comment.content = content) : comment)),
-          ),
-        ),
-      );
+
       submitReviewOfReview();
     }
   };
@@ -81,9 +75,9 @@ export default function ReviewOfReview({ comment, id }: Props) {
           <span id="reply">
             <BsArrowReturnRight aria-hidden="true" />
           </span>
-          <UserIcon src={comment.userImage} alt="pharmacist" />
-          <UserName>{comment.name}</UserName>
-          <Created>{new Date(comment.createdAt).toLocaleDateString()}</Created>
+          <UserIcon src={reply.userImage} alt="pharmacist" />
+          <UserName>{reply.name}</UserName>
+          <Created>{new Date(reply.createdAt).toLocaleDateString()}</Created>
         </UserInfo>
         <ButtonContainer>
           {/* 약사계정이면 && 해당 약국의 storeIdx 와 리덕스 툴킷의 내 storeIdx 가 같을 때 => 버튼이 보임 */}
@@ -91,7 +85,7 @@ export default function ReviewOfReview({ comment, id }: Props) {
           <Button color="l_red" size="sm" text="삭 제" />
         </ButtonContainer>
       </Upper>
-      <Comment>{comment.content}</Comment>
+      <Comment>{reply.content}</Comment>
       {isPatchFormShown ? (
         <WriteCommentForm>
           <Instruction>

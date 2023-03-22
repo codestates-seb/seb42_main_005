@@ -9,8 +9,6 @@ import { IoIosArrowDropright } from "react-icons/io";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { API_PharmacyInformation } from "../../Api/APIs";
 
-//TODO 실제 url 일때
-// export default function PharmacyInformation() {
 export default function PharmacyInformation() {
   const [pharmDetail, setPharmDetail]: any = useState();
   const [isModalUp, setIsModalUp] = useState(false);
@@ -34,10 +32,10 @@ export default function PharmacyInformation() {
     const getPharmDetail = async () => {
       try {
         //* dummy data 일때 -> Pharm.json
-        const response = await axios.get(API_PharmacyInformation.DUMMY_API);
+        // const response = await axios.get(API_PharmacyInformation.DUMMY_API);
         //TODO 실제 url 일때 -> /api/store/{storeIdx}
-        //? storeIdx 는 약사 계정으로 로그인 시 리덕스 툴킷에서 받아올 수 있음
-        // const response = await axios.get(`${API_PharmacyInformation.REAL_API}/store${storeIdx}`);
+        //? storeIdx 는 약사 계정으로 로그인 시 리덕스 툴킷에서 받아올 수 있음 일단 임의로 2
+        const response = await axios.get(`${API_PharmacyInformation.REAL_API}/store${2}`);
         setPharmDetail(response.data);
       } catch (error) {
         console.log(error);
@@ -49,13 +47,13 @@ export default function PharmacyInformation() {
   return (
     <Content>
       //* dummy data 일때
-      {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} pharmDetail={pharmDetail} />
-      ) : null}
-      //TODO 실제 url 일때
       {/* {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} storeIdx={storeIdx} />
+        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} pharmDetail={pharmDetail} />
       ) : null} */}
+      //TODO 실제 url 일때
+      {isModalUp ? (
+        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} storeIdx={pharmDetail.storeIdx} Pharm={pharmDetail}/>
+      ) : null}
       <ImgContainer>
         <ImgInput id="pharmImg" type="file" onChange={(e) => onUpload(e)} accept="image/*" />
         {imageSrc ? (
