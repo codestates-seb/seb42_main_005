@@ -39,7 +39,7 @@ public class AdminController {
     }
 
     @PostMapping("/block")
-    public ResponseEntity blockUsers(@RequestParam("period") int period, @RequestBody AdminUsersStoreDto adminUsersStoreDto) {
+    public ResponseEntity blockUsers(@RequestParam("period") int period, @RequestBody AdminUsersDto adminUsersDto) {
         //TODO
 
         SingleResponseDto tmpResponse = CommonStub.getSingleResponseStub();
@@ -48,9 +48,10 @@ public class AdminController {
     }
 
     @PostMapping("/fired")
-    public ResponseEntity banishUsers(@RequestBody AdminUsersStoreDto adminUsersStoreDto) {
+    public ResponseEntity banishUsers(@RequestBody AdminUsersDto adminUsersDto) {
         //TODO
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 }
