@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import AdminTabs from "./AdminTabs";
 import ImageUp from "./ImageUp";
@@ -49,7 +49,7 @@ export default function Certify() {
                 {dummy.map((data, i) => (
                   <Content key={i}>
                     <Values className="checkBox">
-                      <CheckBox />
+                      <CheckBox/>
                     </Values>
                     <Values className="nickname">{data.nickname}</Values>
                     <Values className="email">{data.email}</Values>
@@ -77,7 +77,7 @@ export default function Certify() {
               </BelowLable>
             ) : (
               <Instead>
-                <AiOutlineExclamationCircle />
+                <AiOutlineExclamationCircle aria-hidden="true"/>
                 <span>약사인증요청이 없습니다.</span>
               </Instead>
             )}
@@ -95,7 +95,7 @@ const WholePage = styled.section`
   width: 100vw;
   height: calc(100vh - 52px);
 `;
-const Wrapper = styled.main`
+const Wrapper = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -171,7 +171,7 @@ const BelowLable = styled.section`
   overflow-y: scroll;
   background-color: var(--black-050);
 `;
-const Instead = styled.main`
+const Instead = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;

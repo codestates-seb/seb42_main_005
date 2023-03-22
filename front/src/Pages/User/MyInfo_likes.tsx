@@ -1,35 +1,33 @@
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
-import PharmDetail from "../../Components/Modal/PharmDetail";
-import { IoIosArrowDropright } from "react-icons/io";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import LikedPharmacyUnit from "../User/MyInfo_likedPharmacy";
+import { API_MyInfoLikes } from "../../Api/APIs";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
-let dummy = {
-  myLikes: [
-    {
-      pharm: "킹갓약국",
-      address: "서울시 종로구 대학로 101",
-      tel: "1588-5700",
-    },
-    {
-      pharm: "제너럴 약국",
-      address: "서울시 중랑구 신내로 156",
-      tel: "02-2276-7000",
-    },
-  ],
-};
-
 export default function MyInfoLikes() {
-  const [isModalUp, setIsModalUp] = useState(false);
-  const [like, setLike] = useState(false);
+  const [likedPharmacies, setLikedPharmacies] = useState([]);
+
+  //! GET : 내가 찜한 약국 리스트
+  useEffect(() => {
+    const getLikedPharmList = async () => {
+      try {
+        //* dummy url 일때
+        const response = await axios.get(API_MyInfoLikes.DUMMY_API);
+        //TODO url 받았을때 -> /api/users/{userIdx}/store
+        //? userIdx 는 리덕스 툴킷에서
+        // const response = await axios.get(`${API_MyInfoLikes.REAL_API}/${userIdx}/store`);
+        setLikedPharmacies(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getLikedPharmList();
+  }, []);
 
   return (
     <Content>
-      {isModalUp ? (
-        <PharmDetail isModalUp={isModalUp} setIsModalUp={setIsModalUp} like={like} setLike={setLike} />
-      ) : null}
       <TableHead>
         <Text className="single" />
         <Text className="pharm">약국명</Text>
@@ -37,28 +35,16 @@ export default function MyInfoLikes() {
         <Text className="number">전화번호</Text>
         <Text className="single" />
       </TableHead>
-      {dummy.myLikes.length ? (
+      {likedPharmacies.length ? (
         <Rest>
-          {dummy.myLikes.map((data, i) => {
-            return (
-              <TableBody key={i}>
-                <Text className="single icon">
-                  <IoIosArrowDropright onClick={() => setIsModalUp(!isModalUp)} />
-                </Text>
-                <Text className="pharm">{data.pharm}</Text>
-                <Text className="address">{data.address}</Text>
-                <Text className="number">{data.tel}</Text>
-                <Text className="single icon">
-                  <RiDeleteBin6Line />
-                </Text>
-              </TableBody>
-            );
-          })}
+          {likedPharmacies.map((likedPharmacy: any) => (
+            <LikedPharmacyUnit likedPharmacy={likedPharmacy} />
+          ))}
         </Rest>
       ) : (
         <WhenEmpty>
           <Add to="/">
-            <IoMdAddCircleOutline id="icon" />
+            <IoMdAddCircleOutline id="icon" aria-hidden="true" />
           </Add>
           <span>
             <p>현재 찜한 약국이 없습니다.</p>
@@ -75,7 +61,6 @@ const Content = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  /* flex-grow: 1; */
   height: 300px;
   background-color: var(--black-025);
   @media (max-width: 768px) {

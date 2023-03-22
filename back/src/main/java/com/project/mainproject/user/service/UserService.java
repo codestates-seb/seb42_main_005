@@ -14,6 +14,12 @@ import com.project.mainproject.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,19 +29,33 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private UserRepository userRepository;
     private UserMapper userMapper;
     private PharmacyRepository pharmacyRepository;
+    private PasswordEncoder encoder;
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println(username);
+        User user = userRepository.findByEmail(username).get();
+        List<GrantedAuthority> authority = new ArrayList<>();
+        authority.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(), user.getPassword(), authority);
+    }
 
     public void saveNormal(Normal normal) {
+        normal.setPassword(encoder.encode(normal.getPassword()));
         userRepository.save(normal);
     }
 
@@ -145,5 +165,16 @@ public class UserService {
         findUser.ifPresent(
                 user -> new BusinessLogicException(UserExceptionCode.USER_EXIST)
         );
+    }
+
+    /*
+     * 약사인지 검증하는 로직
+     * */
+    public Pharmacy checkIsPharmacy(Long userIdx) {
+        User user = validUser(userIdx);
+        if (!(user instanceof Pharmacy)) {
+            throw new BusinessLogicException(UserExceptionCode.USER_IS_NOT_PHARMACY);
+        }
+        return (Pharmacy) user;
     }
 }

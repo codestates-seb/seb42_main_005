@@ -1,0 +1,60 @@
+{
+  "response": {
+    "storeIdx": 1,
+    "name": "성은약국",
+    "address": "서울특별시 영등포구 도신로15길 40, 103호 (도림동)",
+    "longitude": 126.89658350722264,
+    "latitude": 37.50861408155009,
+    "tel": "02-831-9630",
+    "etc": null,
+    "rating": 3.0,
+    "pickedStoreCount": 1,
+    "reviewCount": 1,
+    "image": "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTIy/MDAxNTIzMDI3MjQ1Nzk3.k5nYScR4RH3Tx2JVS6pQiqoKRakgtsjJnBvRSg1VfD8g.SYovJeXlx8Am487HAc9RSJ_4gNpbnhuQVPPh24_N568g.JPEG.monday20000/1522512872270.jpg?type=w800",
+    "todayOperatingTime": {
+      "operatingTime": {
+        "startTime": "09:00:00",
+        "endTime": "20:00:00",
+        "nightOperating": false
+      }
+    },
+    "operatingTime": {
+      "monday": {
+        "startTime": "09:00:00",
+        "endTime": "20:00:00",
+        "nightOperating": false
+      },
+      "tuesday": {
+        "startTime": "09:00:00",
+        "endTime": "20:00:00",
+        "nightOperating": false
+      },
+      "wednesday": {
+        "startTime": "09:00:00",
+        "endTime": "20:00:00",
+        "nightOperating": false
+      },
+      "thursday": {
+        "startTime": "09:00:00",
+        "endTime": "17:00:00",
+        "nightOperating": false
+      },
+      "friday": {
+        "startTime": "09:00:00",
+        "endTime": "20:00:00",
+        "nightOperating": false
+      },
+      "saturday": {
+        "startTime": "09:00:00",
+        "endTime": "13:00:00",
+        "nightOperating": false
+      },
+      "sunday": null,
+      "holiday": null
+    },
+    "isOperating": false,
+    "isOperatingNight": false,
+    "createdAt": "2023-03-21T02:16:05",
+    "modifiedAt": "2023-03-21T02:16:05"
+  }
+}

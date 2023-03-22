@@ -135,7 +135,23 @@ public class StoreQueryRepository {
                 .fetchOne();
     }
 
-
+    public List<DBStoreSearchDto> searchStoreByNameOrAddress(String name, String address) {
+        return queryFactory
+                .select(new QDBStoreSearchDto(
+                        store.storeIdx,store.name,store.address,store.latitude,store.longitude,
+                        review.rating.avg(),
+                        pickedStore.storeId.count(),
+                        review.reviewIdx.count(),
+                        storeImage.imagePath,
+                        store._super.modifiedAt
+                ))
+                .from(store)
+                .leftJoin(store.reviews, review)
+                .leftJoin(store.pickedStores, pickedStore)
+                .leftJoin(store.storeImages, storeImage)
+                .where(searchCondition(name,address))
+                .fetch();
+    }
 
 
 
@@ -143,8 +159,8 @@ public class StoreQueryRepository {
     private OrderSpecifier orderByCondition(String sortCondition) {
                 return Expressions.stringPath(sortCondition).asc();
     }
-    //내부동작 쿼리 where 절
 
+    //내부동작 쿼리 where 절
     private BooleanExpression getDistanceCondition(Expression<Double> latitude, Expression<Double> longitude, Expression<Double> distanceCond) {
         if(latitude != null || longitude != null || distanceCond != null)
             return null;
@@ -167,6 +183,13 @@ public class StoreQueryRepository {
         }
 
         return getHolidayOperatingCondition();
+    }
+
+    private BooleanExpression searchCondition(String name, String address) {
+        if (name == null) {
+            return searchWithAddress(address);
+        }
+        return searchWithName(name);
     }
 
     private BooleanExpression getNormalOperatingCondition() {
@@ -202,5 +225,13 @@ public class StoreQueryRepository {
 
         return store.holidayOperating.startTime.before(currentTime)
                 .and(store.holidayOperating.endTime.after(currentTime));
+    }
+
+    private BooleanExpression searchWithName(String name) {
+        return store.name.eq(name);
+    }
+
+    private BooleanExpression searchWithAddress(String address) {
+        return store.address.like(address);
     }
 }
