@@ -52,7 +52,7 @@ public class AdminReviewController {
     public ResponseEntity restoreReviews(@RequestBody ReviewIdxDto recoverReviewsDto) {
         reviewService.recoverReportedReviews(recoverReviewsDto);
 
-        SingleResponseDto repsonse = responseBuilder.buildSingleOkResponse(null);
+        SingleResponseDto repsonse = responseBuilder.buildSingleCreatedResponse(null);
 
         return ResponseEntity.status(HttpStatus.OK).body(repsonse);
     }

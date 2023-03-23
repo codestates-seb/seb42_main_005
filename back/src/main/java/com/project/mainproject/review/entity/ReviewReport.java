@@ -45,8 +45,10 @@ public class ReviewReport extends AuditableWithBy {
         this.review = review;
     }
 
-
     //### 간단한 동작메서드 ###//
+    public void changeReportStatus(ReportStatus reportStatus) {
+        this.reportStatus = reportStatus;
+    }
 
     // ###연관관계  편의 메서드 ###//
 
