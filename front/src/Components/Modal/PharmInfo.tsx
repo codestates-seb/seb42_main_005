@@ -1,35 +1,43 @@
 import React, { useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import PharmRank from "../Ul/PharmRank";
 import AnyDropDown from "./AnyDropDown";
+import { API_PharmInfo } from "../../Api/APIs";
 
 interface Props {
-  like: boolean;
-  setLike: React.Dispatch<React.SetStateAction<boolean>>;
-  pharmDetail: any;
+  like: any;
+  setLike: any;
+  Pharm: any;
 }
 
-export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
+export default function PharmInfo({ like, setLike, Pharm }: Props) {
   const [isDropDownDown, setIsDropDownDown] = useState(false);
+
+  //! POST : 찜하기, 찜취소
+  const LikePharmacy = (storeIdx: number) => {
+    //TODO 실제 url 일때 -> /api/store/{storeIdx}/pick
+    axios.delete(`${API_PharmInfo.REAL_API}/${storeIdx}/pick`);
+  };
 
   return (
     <InfoContainer>
       <InfoHeader>
-        <InfoTitle>{pharmDetail.name}</InfoTitle>
-        {pharmDetail && <PharmRank rating={pharmDetail.rating} likes={pharmDetail.pickedStoreCount} reviewCount={pharmDetail.reviewCount}/>}
+        <InfoTitle>{Pharm.name}</InfoTitle>
+        {Pharm && <PharmRank rating={Pharm.rating} likes={Pharm.pickedStoreCount} reviewCount={Pharm.reviewCount} />}
       </InfoHeader>
       <InfoImgContainer>
-        {pharmDetail.image ? (
-          <PharmImg src={pharmDetail.image as string} />
+        {Pharm.image ? (
+          <PharmImg src={Pharm.image as string} />
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." />
         )}
         {like ? (
-          <LikeButton onClick={() => setLike(!like)}>
+          <LikeButton onClick={() => LikePharmacy(Pharm.storeIdx)}>
             <img src="./Images/Heart.png" alt="좋아요 상태의 꽉찬 하트입니다." />
           </LikeButton>
         ) : (
-          <LikeButton onClick={() => setLike(!like)}>
+          <LikeButton onClick={() => LikePharmacy(Pharm.storeIdx)}>
             <img src="./Images/UnHeart.png" alt="좋아요 전 상태의 빈 하트입니다." />
           </LikeButton>
         )}
@@ -38,11 +46,11 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
         <InfoUnit>
           <InfoInfoTitle>영업시간</InfoInfoTitle>
           <InfoInfoContent>
-            {pharmDetail.todayOperatingTime
-              ? `${pharmDetail.todayOperatingTime.operatingTime.startTime.slice(
+            {Pharm.todayOperatingTime
+              ? `${Pharm.todayOperatingTime.operatingTime.startTime.slice(
                   0,
                   -3,
-                )} - ${pharmDetail.todayOperatingTime.operatingTime.endTime.slice(0, -3)}`
+                )} - ${Pharm.todayOperatingTime.operatingTime.endTime.slice(0, -3)}`
               : "정보가 없습니다."}
             {!isDropDownDown ? (
               <More id={`dropDown ${isDropDownDown ? "close" : "open"}`} onClick={() => setIsDropDownDown(true)}>
@@ -50,17 +58,17 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
               </More>
             ) : null}
             {isDropDownDown ? (
-              <AnyDropDown setIsDropDownDown={setIsDropDownDown} workingHours={pharmDetail.operatingTime} />
+              <AnyDropDown setIsDropDownDown={setIsDropDownDown} workingHours={Pharm.operatingTime} />
             ) : null}
           </InfoInfoContent>
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>주소</InfoInfoTitle>
-          <InfoInfoContent className="address">{pharmDetail.address}</InfoInfoContent>
+          <InfoInfoContent className="address">{Pharm.address}</InfoInfoContent>
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>전화번호</InfoInfoTitle>
-          <InfoInfoContent>{pharmDetail.tel}</InfoInfoContent>
+          <InfoInfoContent>{Pharm.tel}</InfoInfoContent>
         </InfoUnit>
       </InfoInfo>
     </InfoContainer>

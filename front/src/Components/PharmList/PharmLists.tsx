@@ -3,10 +3,10 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import PharmItem from "./PharmItem";
+import SearchBar from "./SearchBar";
 import { zIndex_PharmList } from "../../Util/z-index";
 import { SELECT_HIDDEN } from "../../Util/type";
 import { API_PharmLists } from "../../Api/APIs";
-import { BsSearch } from "react-icons/bs";
 import { RiHomeLine } from "react-icons/ri";
 import { VscTriangleLeft } from "react-icons/vsc";
 
@@ -21,11 +21,11 @@ export default function PharmLists({ hidden, setHidden }: Props) {
   useEffect(() => {
     const getPharmLists = async () => {
       try {
-        //* dummy data 일때 -> PharmList.json
-        const response = await axios.get(API_PharmLists.DUMMY_API);
-        //TODO 실제 url 일때 -> /api/store?page=1&size=1
-        // const response = await axios.get(`${API_PharmLists.REAL_API}?page=1&size=1`);
-        setTotalPharmList(response.data.storeHome);
+        const response = await axios.get(`${API_PharmLists.REAL_API}?page=1&size=1`, {
+          params: {},
+          headers: { "Content-Type": "application/json" },
+        });
+        setTotalPharmList(response.data.response);
       } catch (error) {
         console.log(error);
       }
@@ -43,11 +43,7 @@ export default function PharmLists({ hidden, setHidden }: Props) {
           <h2 hidden>약국 리스트</h2>
           <ListHead>
             <SearchContainer>
-              <div>
-                <BsSearch className="searchIcon" aria-hidden="true" />
-              </div>
-              <label htmlFor="search box" />
-              <SearchInput id="search box" placeholder="약국 검색.." />
+              <SearchBar />
               {hidden ? (
                 <ButtonShow className="folded">
                   <VscTriangleLeft className={hidden ? "open" : ""} onClick={() => setHidden(false)} />
@@ -73,8 +69,8 @@ export default function PharmLists({ hidden, setHidden }: Props) {
             </ButtonContainer>
           </ListHead>
           <ListBody>
-            {totalPharmList.map((el: any) => (
-              <PharmItem totalPharmList={el} key={el.storeIdx} />
+            {totalPharmList?.map((pharm: any) => (
+              <PharmItem Pharm={pharm} key={pharm.storeIdx} storeIdx={pharm.storeIdx} />
             ))}
           </ListBody>
         </PharmList>
@@ -163,30 +159,6 @@ const SearchContainer = styled.section`
   display: flex;
   justify-content: center;
   margin: 10px 0;
-  .searchIcon {
-    position: absolute;
-    display: inline-block;
-    width: 1.5rem;
-    height: 1.5rem;
-    margin: 0.8rem;
-    opacity: 0.4;
-  }
-`;
-const SearchInput = styled.input`
-  width: 26rem;
-  height: 3rem;
-  margin-right: 5px;
-  padding-left: 2.8rem;
-  border: 3px solid var(--blue-300);
-  border-radius: 10px;
-  outline: none;
-  font-size: 1.1rem;
-  transition: 0.2s;
-  :focus {
-    border-color: var(--blue-400);
-    box-shadow: var(--wrapped-shadow);
-    transition: 0.2s;
-  }
 `;
 const ButtonShow = styled.button`
   cursor: pointer;

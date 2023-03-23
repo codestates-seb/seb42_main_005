@@ -12,13 +12,16 @@ import { API_WriteReviewForm } from "../../Api/APIs"; // Review.json
 interface Props {
   setIsReviewFormShown: React.Dispatch<React.SetStateAction<boolean>>;
   storeIdx: number;
+  reviewList: any;
+  setReviewList: any;
 }
 
-export default function WriteReviewForm({ setIsReviewFormShown, storeIdx }: Props) {
+export default function WriteReviewForm({ setIsReviewFormShown, storeIdx, reviewList, setReviewList }: Props) {
   const [imageSrc, setImageSrc]: any = useState(null);
+  const [imgFile, setImgFile]: any = useState(null);
   const onUpload = (e: any) => {
     const file = e.target.files[0];
-    console.log(file);
+    setImgFile(file);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     return new Promise<void>((resolve) => {
@@ -29,7 +32,7 @@ export default function WriteReviewForm({ setIsReviewFormShown, storeIdx }: Prop
     });
   };
 
-  const [reviewList, setReviewList]: any = useState({
+  const [review, setReview]: any = useState({
     reviewIdx: 0,
     content: "",
     rating: 0,
@@ -38,69 +41,56 @@ export default function WriteReviewForm({ setIsReviewFormShown, storeIdx }: Prop
 
   const handlerText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setReviewList({
-      ...reviewList,
+    setReview({
+      ...review,
       [name]: value,
     });
   };
   const handlerRate = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setReviewList({
-      ...reviewList,
+    setReview({
+      ...review,
       [name]: value,
     });
   };
   const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const review = formData.get("content");
+    const reviewContent = formData.get("content");
     const star = formData.get("rating");
 
-    //* dummy data 일때 -> 나중에 수정 , 화면에 뜨는지 확인하려고 한것
-    let newData: any = {
-      storeReview: [
-        {
-          reviewIdx: 53,
-          name: "이성은",
-          userImage:
-            "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTIy/MDAxNTIzMDI3MjQ1Nzk3.k5nYScR4RH3Tx2JVS6pQiqoKRakgtsjJnBvRSg1VfD8g.SYovJeXlx8Am487HAc9RSJ_4gNpbnhuQVPPh24_N568g.JPEG.monday20000/1522512872270.jpg?type=w800",
-          reviewImage:
-            "https://mblogthumb-phinf.pstatic.net/MjAxODA0MDdfMTcz/MDAxNTIzMDI3MjQ1NDU4.uP9jhQMTNwQSSUGZcDRlddU5E11r4Kl4QRTnaSrrqKkg.OX4yCUKh3wbhgF0zGlxOT6TNIaDa3vvd9S3bMDvHfEwg.JPEG.monday20000/1522493493318.jpg?type=w800",
-          content: review,
-          rating: star,
-          createdAt: new Date(),
-          modifiedAt: new Date(),
-        },
-      ],
+    //TODO url 받았을때
+    let data: any = {
+      userIdx: 1,
+      content: review.content,
+      rating: review.rating,
     };
-    //TODO url 받았을때 : formData 를 이용한 대대적인 수정 필요 ㅠㅠ
-    // let newData: any = {
-    //   userIdx: 1,
-    //   content: "리뷰 본문 약사가 맛있고 제품이 친절해요",
-    //   image: "사진 파일이 들어갈 것이다.",
-    //   rating: 4,
-    // };
+
+    const formDataForsubmit = new FormData();
+    formDataForsubmit.append("postDto", new Blob([JSON.stringify(data)], { type: "application/json" }));
+    formDataForsubmit.append("image", imgFile);
 
     //! POST : 리뷰작성
     const postReview = async () => {
       try {
-        //* dummy url 일때 -> Review.json
         await axios({
-          url: API_WriteReviewForm.DUMMY_API,
+          url: `${API_WriteReviewForm.REAL_API}/${storeIdx}/review`,
           method: "post",
-          data: newData,
+          data: formDataForsubmit,
         });
-        //TODO url 받았을때 -> /api/store/{storeIdx}/review
-        // await axios({
-        //   url: `${API_WriteReviewForm.REAL_API}/${storeIdx}/review`,
-        //   method: "post",
-        //   data: newData,
-        // });
       } catch (error) {
         console.log(error);
       }
     };
-    setReviewList({ reviewIdx: 0, content: "", rating: 0, createdAt: "" });
+    // setReview({ reviewIdx: 0, content: "", rating: 0, createdAt: "" });
+    setReviewList([data, ...reviewList]);
+    setReview({
+      reviewIdx: 0,
+      content: "",
+      rating: 0,
+      createdAt: "",
+    });
+    setImageSrc("");
     postReview();
   };
 
@@ -118,7 +108,7 @@ export default function WriteReviewForm({ setIsReviewFormShown, storeIdx }: Prop
           isValid={true}
           rows={3}
           icon={false}
-          value={reviewList.content}
+          value={review.content}
           onChange={handlerText}
         />
         <ReviewImgContainer>
@@ -139,52 +129,52 @@ export default function WriteReviewForm({ setIsReviewFormShown, storeIdx }: Prop
         <Rating>
           <StarContainer>
             <Star
-              src={`${reviewList.rating > 0 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+              src={`${review.rating > 0 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
               onClick={() =>
-                setReviewList({
-                  ...reviewList,
+                setReview({
+                  ...review,
                   rating: 1,
                 })
               }
             />
             <Star
-              src={`${reviewList.rating > 1 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+              src={`${review.rating > 1 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
               onClick={() =>
-                setReviewList({
-                  ...reviewList,
+                setReview({
+                  ...review,
                   rating: 2,
                 })
               }
             />
             <Star
-              src={`${reviewList.rating > 2 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+              src={`${review.rating > 2 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
               onClick={() =>
-                setReviewList({
-                  ...reviewList,
+                setReview({
+                  ...review,
                   rating: 3,
                 })
               }
             />
             <Star
-              src={`${reviewList.rating > 3 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+              src={`${review.rating > 3 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
               onClick={() =>
-                setReviewList({
-                  ...reviewList,
+                setReview({
+                  ...review,
                   rating: 4,
                 })
               }
             />
             <Star
-              src={`${reviewList.rating > 4 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+              src={`${review.rating > 4 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
               onClick={(e) =>
-                setReviewList({
-                  ...reviewList,
+                setReview({
+                  ...review,
                   rating: 5,
                 })
               }
             />
           </StarContainer>
-          <RateNum readOnly type="text" name="rating" value={`${reviewList.rating}`} onChange={handlerRate}></RateNum>
+          <RateNum readOnly type="text" name="rating" value={`${review.rating}`} onChange={handlerRate}></RateNum>
         </Rating>
         <Button type="submit" color="blue" size="md" text="작성완료" icon={true} />
       </InputBot>

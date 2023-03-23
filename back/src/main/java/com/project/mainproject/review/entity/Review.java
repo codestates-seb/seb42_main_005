@@ -34,7 +34,7 @@ public class Review extends Auditable {
     private String content;
     private int rating;
 
-    @Formula("(SELECT count(1) FROM report r WHERE r.review_idx = review_idx)")
+    @Formula("(SELECT count(1) FROM review_report r WHERE r.review_idx = review_idx)")
     private int reportCnt;
 
     @Default

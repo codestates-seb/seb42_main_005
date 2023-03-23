@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface User {
   user?: any;
   userIdx?: number | undefined;
+  storeIdx?: number | undefined;
   userType?: string;
   isLogin?: boolean;
 }
@@ -10,11 +11,12 @@ interface User {
 const initialState: User = {
   user: {},
   userIdx: undefined,
+  storeIdx: undefined,
   userType: "",
   isLogin: false,
 };
 
-const userSlice = createSlice({
+export const userSlice = createSlice({
   name: "userInfo",
   initialState,
   reducers: {
@@ -26,6 +28,7 @@ const userSlice = createSlice({
     //로그인 됐을때, idx
     getUserIdx(state, action: PayloadAction<User>) {
       state.userIdx = action.payload.userIdx;
+      state.storeIdx = action.payload.storeIdx;
       state.isLogin = true;
     },
     //로그인 됐을때 유저인포

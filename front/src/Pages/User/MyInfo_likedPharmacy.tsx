@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import PharmDetail from "../../Components/Modal/PharmDetail";
-import { API_MyInfoReviews } from "../../Api/APIs";
+import { API_LikedPharmacyUnit } from "../../Api/APIs";
 import { IoIosArrowDropright } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
@@ -11,27 +11,45 @@ interface Props {
 }
 
 export default function LikedPharmacyUnit({ likedPharmacy }: Props) {
+  const [pharmDetail, setPharmDetail] = useState();
   const [isModalUp, setIsModalUp] = useState(false);
   const [like, setLike] = useState(false);
 
-  //! ??? : 찜 취소
-  const DeleteLikedPharmacy = (storeIdx: number) => {
+  //! GET : 약국상세정보
+  useEffect(() => {
+    const getPharmDetail = async () => {
+      try {
+        //* dummy data 일때 -> Pharm.json
+        // const response = await axios.get(API_LikedPharmacyUnit.GET_DUMMY_API_);
+        //TODO 실제 url 일때 -> /api/store/{storeIdx}
+        const response = await axios.get(`${API_LikedPharmacyUnit.GET_REAL_API}/store${likedPharmacy.storeIdx}`);
+        setPharmDetail(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPharmDetail();
+  }, []);
+
+  //! POST : 찜취소
+  const unLikePharmacy = (storeIdx: number) => {
     //* dummy data 일때
-    axios.delete(API_MyInfoReviews.DUMMY_API);
-    //TODO 실제 url 일때 ?????? API 필요
-    // axios.delete(`${API_MyInfoReviews.REAL_API}/post/like`);
+    // axios.delete(API_LikedPharmacyUnit.DELETE_DUMMY_API);
+    //TODO 실제 url 일때 -> /api/store/{storeIdx}/pick
+    axios.delete(`${API_LikedPharmacyUnit.DELETE_REAL_API}/${likedPharmacy.storeIdx}/pick`);
   };
 
   return (
     <TableBody key={likedPharmacy.storeIdx}>
-      //* dummy data 일 때
       {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} pharmDetail={likedPharmacy} />
+        <PharmDetail
+          setIsModalUp={setIsModalUp}
+          like={like}
+          setLike={setLike}
+          storeIdx={likedPharmacy.storeIdx}
+          Pharm={pharmDetail}
+        />
       ) : null}
-      //TODO 실제 url 일때
-      {/* {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} storeIdx={likedPharmacy.storeIdx}/>
-      ) : null} */}
       <Text className="single icon">
         <IoIosArrowDropright onClick={() => setIsModalUp(true)} aria-hidden="true" />
       </Text>
@@ -39,7 +57,7 @@ export default function LikedPharmacyUnit({ likedPharmacy }: Props) {
       <Text className="address">{likedPharmacy.address}</Text>
       <Text className="number">{likedPharmacy.tel}</Text>
       <Text className="single icon">
-        <RiDeleteBin6Line aria-hidden="true" onClick={(storeIdx: any) => DeleteLikedPharmacy(storeIdx)} />
+        <RiDeleteBin6Line aria-hidden="true" onClick={(storeIdx: any) => unLikePharmacy(storeIdx)} />
       </Text>
     </TableBody>
   );

@@ -1,11 +1,29 @@
 import React, { useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import Button from "../Components/Ul/Button";
+import { API_SignOut } from "../Api/APIs";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function SignOut() {
   const [isChecked, setIsChecked] = useState(false);
   const [errMsg, setErrMsg] = useState(false);
+
+  //! DELETE : 일반회원 회원가입 - JWT
+  //* 토큰 지우고 디스패치 날리기
+  const signOut = async () => {
+    isChecked ? setErrMsg(false) : setErrMsg(true);
+    try {
+      //TODO /api/users/{userIdx}
+      //? userIdx 는 리덕스 툴킷에서 가져오기 지금은 임의로 1
+      await axios({
+        url: `${API_SignOut.REAL_API}/${1}`,
+        method: "delete",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Wrapper>
@@ -39,7 +57,7 @@ export default function SignOut() {
             </span>
             <div>
               <p id="alert" className={errMsg ? "show" : ""}>
-                <AiOutlineExclamationCircle aria-hidden="true"/>
+                <AiOutlineExclamationCircle aria-hidden="true" />
                 체크박스에 동의가 필요합니다
               </p>
               <p>
@@ -56,7 +74,7 @@ export default function SignOut() {
             color="red"
             size="lg"
             disabled={!isChecked ? true : false}
-            onClick={!isChecked ? () => setErrMsg(true) : () => setErrMsg(false)}
+            onClick={() => signOut()}
           ></Button>
         </footer>
       </Container>

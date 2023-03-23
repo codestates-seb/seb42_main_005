@@ -1,36 +1,71 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import AdminTabs from "./AdminTabs";
-import ImageUp from "./ImageUp";
+import Cert from "./Cert";
 import Button from "../../Components/Ul/Button";
 import CheckBox from "../../Components/Ul/CheckBox";
+import { API_Certify } from "../../Api/APIs";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Certify() {
-  const [isImgUp, setIsImgUp] = useState(false);
-  const [imgUrl, setImgUrl] = useState("");
+  const [certificates, setCertificates] = useState([]);
+  const [checkList, setCheckList]: any = useState([]);
 
-  const dummy = [
-    {
-      nickname: "typescript",
-      email: "papa@johns.com",
-      requested: "2023.02.25",
-      businessCert: "Images/random.png",
-      licenceCert: "Images/random.png",
-    },
-  ];
+  //! GET : 약사인증신청 리스트 불러오기
+  useEffect(() => {
+    const getCertificates = async () => {
+      try {
+        //* dummy data 일때 -> Review.json
+        // const response = await axios.get(API_Certify.DUMMY_API);
+        //TODO 실제 url 일때 -> /api/admin/access/requests
+        const response = await axios.get(`${API_Certify.GET_REAL_API}/access/requests`);
+        setCertificates(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getCertificates();
+  }, []);
+
+  //! POST : 약사인증신청 승인
+  const successCertify = async () => {
+    try {
+      //TODO /api/admin/access/success
+      await axios({
+        url: API_Certify.POST_SUCCESS_REAL_API,
+        method: "post",
+        data: setCheckList,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //! POST : 약사인증신청 반려
+  const deniedCertify = async () => {
+    try {
+      //TODO /api/admin/access/failure
+      await axios({
+        url: API_Certify.POST_DENIED_REAL_API,
+        method: "post",
+        data: setCheckList,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <WholePage>
-      {isImgUp ? <ImageUp isImgUp={isImgUp} setIsImgUp={setIsImgUp} imgUrl={imgUrl} /> : null}
       <Wrapper>
         <AdminTabs current="certify" />
         <Page>
           <Header>
             <span>약사인증관리</span>
             <ButtonContainer>
-              <Button color="blue" size="md" text="신청승인" />
-              <Button color="blue" size="md" text="신청반려" />
+              <Button color="blue" size="md" text="신청승인" onClick={() => successCertify()} />
+              <Button color="blue" size="md" text="신청반려" onClick={() => deniedCertify()} />
             </ButtonContainer>
           </Header>
           <Table>
@@ -44,40 +79,20 @@ export default function Certify() {
               <Values className="businessCert">사업자등록증</Values>
               <Values className="licenceCert">약사면허증</Values>
             </Label>
-            {dummy.length ? (
+            {certificates.length ? (
               <BelowLable>
-                {dummy.map((data, i) => (
-                  <Content key={i}>
+                {certificates.map((cert: any, i) => (
+                  <Content>
                     <Values className="checkBox">
-                      <CheckBox/>
+                      <CheckBox onChange={() => setCheckList([...checkList, { userIdx: cert.userIdx }])} />
                     </Values>
-                    <Values className="nickname">{data.nickname}</Values>
-                    <Values className="email">{data.email}</Values>
-                    <Values className="requested">{data.requested}</Values>
-                    <Values
-                      className="businessCert link"
-                      onClick={() => {
-                        setIsImgUp(!isImgUp);
-                        setImgUrl(data.businessCert);
-                      }}
-                    >
-                      {data.businessCert}
-                    </Values>
-                    <Values
-                      className="licenceCert link"
-                      onClick={() => {
-                        setIsImgUp(!isImgUp);
-                        setImgUrl(data.licenceCert);
-                      }}
-                    >
-                      {data.licenceCert}
-                    </Values>
+                    <Cert key={i} cert={cert} />
                   </Content>
                 ))}
               </BelowLable>
             ) : (
               <Instead>
-                <AiOutlineExclamationCircle aria-hidden="true"/>
+                <AiOutlineExclamationCircle aria-hidden="true" />
                 <span>약사인증요청이 없습니다.</span>
               </Instead>
             )}
@@ -186,20 +201,6 @@ const Instead = styled.section`
     font-size: 2rem;
   }
 `;
-const Content = styled.article`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  border-bottom: 0.5px solid var(--black-075);
-  background-color: var(--white);
-  &.suspended {
-    color: var(--black-200);
-  }
-  :hover {
-    background-color: var(--black-050);
-  }
-`;
 const Values = styled.span`
   display: flex;
   justify-content: center;
@@ -228,5 +229,19 @@ const Values = styled.span`
     :hover {
       color: var(--blue-600);
     }
+  }
+`;
+const Content = styled.article`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 0.5px solid var(--black-075);
+  background-color: var(--white);
+  &.suspended {
+    color: var(--black-200);
+  }
+  :hover {
+    background-color: var(--black-050);
   }
 `;

@@ -15,6 +15,7 @@ interface Props {
 }
 
 export default function MyInfoInformation({ scriptUrl }: Props) {
+  //데이터
   const [myInfo, setMyInfo] = useState({
     userIdx: 0,
     createdAt: "",
@@ -32,10 +33,10 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     const getReviews = async () => {
       try {
         //* dummy data 일때 -> Review.json
-        const response = await axios.get(API_MyInfoInformation.DUMMY_API);
+        // const response = await axios.get(API_MyInfoInformation.DUMMY_API);
         //TODO 실제 url 일때 -> /api/users/{userIdx}
-        //? userIdx 는 리덕스 툴킷에서
-        // const response = await axios.get(`${API_PharmDetail.REAL_API}/${userIdx}`);
+        //? userIdx 는 리덕스 툴킷에서 -> 1
+        const response = await axios.get(`${API_MyInfoInformation.REAL_API}/${1}`);
         setMyInfo(response.data);
         setMyName(response.data.name);
         setMyAddress(response.data.address);
@@ -46,6 +47,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     getReviews();
   }, []);
 
+  //이미지를 미리보기 
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const onUpload = (e: any) => {
     const file = e.target.files[0];
@@ -58,7 +60,10 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
       };
     });
   };
+
   const [isEditing, setIsEditing] = useState(false);
+
+  //유효성검사
   const [signForm, setSignForms] = useState({
     name: myInfo.name,
     password: "",

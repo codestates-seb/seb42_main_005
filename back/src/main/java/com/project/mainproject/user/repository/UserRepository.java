@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("delete from User u WHERE u.userIdx in :userIdxs")
     void deleteUserByIdList(@Param("userIdx")List<Long> userIdxs);
+    Optional<User> findByEmail(String email);
+
 }
