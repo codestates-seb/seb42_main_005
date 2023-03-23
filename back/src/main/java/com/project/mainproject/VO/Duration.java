@@ -5,11 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
 import java.time.LocalDateTime;
 
-import static javax.persistence.AccessType.*;
+import static javax.persistence.AccessType.FIELD;
 
 @Embeddable
 @Getter

@@ -2,11 +2,7 @@ package com.project.mainproject.user.service.admin;
 
 import com.project.mainproject.VO.Duration;
 import com.project.mainproject.dto.SingleResponseDto;
-import com.project.mainproject.enums.ResultStatus;
 import com.project.mainproject.exception.BusinessLogicException;
-import com.project.mainproject.store.entity.Store;
-import com.project.mainproject.store.repository.StoreQueryRepository;
-import com.project.mainproject.user.entity.Pharmacy;
 import com.project.mainproject.user.entity.User;
 import com.project.mainproject.user.entity.UserBanned;
 import com.project.mainproject.user.enums.UserStatus;
@@ -14,7 +10,6 @@ import com.project.mainproject.user.exception.UserExceptionCode;
 import com.project.mainproject.user.repository.UserBannedRepository;
 import com.project.mainproject.user.repository.UserRepository;
 import com.project.mainproject.user.service.UserService;
-import com.project.mainproject.utils.FileUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.project.mainproject.enums.ResultStatus.*;
+import static com.project.mainproject.enums.ResultStatus.PROCESS_COMPLETED;
+import static com.project.mainproject.enums.ResultStatus.REJECT_PHARMACY;
 
 @Service
 @Transactional

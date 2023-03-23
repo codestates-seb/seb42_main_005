@@ -7,15 +7,13 @@ import lombok.Getter;
 @AllArgsConstructor
 public class UserLoginInfoResponse {
     private Long userIdx;
+    private String name;
     private String userRole;
     private Long StoreIdx;
-    private String latitude;
-    private String longitude;
 
-    public UserLoginInfoResponse(Long userIdx, String userRole, String latitude, String longitude) {
+    public UserLoginInfoResponse(Long userIdx, String name, String userRole) {
         this.userIdx = userIdx;
+        this.name = name;
         this.userRole = userRole;
-        this.latitude = latitude;
-        this.longitude = longitude;
     }
 }
