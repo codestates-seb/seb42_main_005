@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import styled from "styled-components";
 import MapFilter from "./MapFilter";
 import MapButtons from "./MapButtons";
-import { useMap } from "../../hooks/useMap";
+// import { useMap } from "../../hooks/useMap";
 import { zIndex_KakaoMap } from "../../Util/z-index";
 import { SELECT_HIDDEN, SELECT_OPTION_MAP } from "../../Util/type";
 
@@ -14,11 +14,14 @@ declare global {
 interface Props {
   hidden: SELECT_HIDDEN;
   setHidden: Dispatch<SetStateAction<SELECT_HIDDEN>>;
+  totalPharmList: any;
+  setTotalPharmList: any;
+  _map: any
 }
 
-export default function KakaoMap({ hidden, setHidden }: Props) {
+export default function KakaoMap({ hidden, setHidden, totalPharmList, setTotalPharmList, _map }: Props) {
   const [selected, setSelected] = useState<SELECT_OPTION_MAP>("map_home");
-  const { _map } = useMap();
+  // const { _map } = useMap( totalPharmList, setTotalPharmList );
 
   return (
     <ContainerMap id="map" className={hidden ? "close" : ""}>

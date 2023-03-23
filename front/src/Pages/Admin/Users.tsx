@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import AdminTabs from "./AdminTabs";
@@ -9,23 +9,78 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
+  const [time, setTime] = useState(0);
+  const [checkedList, setCheckedList] = useState<Array<any>>([]);
 
-  //! GET : 전체회원 리스트
   useEffect(() => {
-    const getReviews = async () => {
+    const getUsers = async () => {
       try {
-        // //* dummy data 일때 -> Review.json
-        // const response = await axios.get(API_Users.DUMMY_API);
-        //TODO 실제 url 일때 -> /api/users
-        const response = await axios.get(API_Users.REAL_API);
+        const response = await axios.get(API_Users.GET_REAL_API);
         setUsers(response.data.response.content);
-        // setUsers(response.data);
+        console.log(users)
       } catch (error) {
         console.log(error);
       }
     };
-    getReviews();
+    getUsers();
   }, []);
+
+  //* 체크된 항목을 하나씩 담아주는 부분
+  const onCheckedItem = useCallback(
+    (checked: boolean, id: string) => {
+      if (checked) {
+        setCheckedList((prev) => [...prev, { userIdx: id }]);
+      } else if (!checked) {
+        setCheckedList(checkedList.filter((check) => check.userIdx !== id));
+      }
+    },
+    [checkedList],
+  );
+
+  //! POST : 계정 정지
+  const blockUsers = async () => {
+    try {
+      //TODO /api/admin/block?period=XX
+      // console.log("time");
+      // console.log(time);
+      // console.log("");
+      // console.log("checkedList");
+      // console.log(checkedList);
+      // console.log("");
+      await axios({
+        url: `${API_Users.POST_REAL_API}/block?period=${time}`,
+        method: "post",
+        data: checkedList,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //! POST : 계정 강퇴
+  const fireUsers = async () => {
+    try {
+      //TODO /api/admin/fired
+      await axios({
+        url: `${API_Users.POST_REAL_API}/fired`,
+        method: "post",
+        data: checkedList,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  //! ???? : 계정 복구
+  const restoreUsers = async () => {
+    try {
+      //TODO --------------
+      await axios({
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <WholePage>
@@ -35,15 +90,15 @@ export default function Users() {
           <Header>
             <span>전체회원관리</span>
             <ButtonContainer>
-              <Select>
-                <Option>정지옵션</Option>
-                <option>3일</option>
-                <option>7일</option>
-                <option>30일</option>
+              <Select onChange={(e: any) => setTime(e.target.value)}>
+                <Option value={0}>정지옵션</Option>
+                <option value={3}>3일</option>
+                <option value={7}>7일</option>
+                <option value={30}>30일</option>
               </Select>
-              <Button color="blue" size="md" text="선택정지" />
-              <Button color="blue" size="md" text="선택강퇴" />
-              <Button color="blue" size="md" text="선택복구" />
+              <Button color="blue" size="md" text="선택정지" onClick={() => blockUsers()} />
+              <Button color="blue" size="md" text="선택강퇴" onClick={() => fireUsers()} />
+              <Button color="blue" size="md" text="선택복구" onClick={() => restoreUsers()} />
             </ButtonContainer>
           </Header>
           <Table>
@@ -65,14 +120,19 @@ export default function Users() {
                 {users.map((user: any, i) => (
                   <Content key={i} className={user.accountStatus === "suspended" ? "suspended" : ""}>
                     <Values className="checkBox">
-                      <CheckBox />
+                      <CheckBox
+                        id={user.userIdx}
+                        onChange={(e: any) => {
+                          onCheckedItem(e.target.checked, e.target.id);
+                        }}
+                      />
                     </Values>
                     <Values className="classification">{user.classification}</Values>
                     <Values className="accountStatus">{user.accountStatus}</Values>
-                    <Values className="nickname">{user.nickname}</Values>
+                    <Values className="nickname">{user.name}</Values>
                     <Values className="email">{user.email}</Values>
                     <Values className="returnAt">{user.returnAt}</Values>
-                    <Values className="subscription">{user.subscription}</Values>
+                    <Values className="subscription">{new Date(user.createdAt).toLocaleDateString()}</Values>
                     <Values className="reviewCount">{user.reviewCount}</Values>
                     <Values className="reportCount">{user.reportCount}</Values>
                   </Content>

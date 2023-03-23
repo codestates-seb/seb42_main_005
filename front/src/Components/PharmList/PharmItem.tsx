@@ -5,7 +5,6 @@ import PharmRank from "../Ul/PharmRank";
 import PharmDetail from "../Modal/PharmDetail";
 import { API_PharmItem } from "../../Api/APIs"; // PharmDetail.json
 
-//TODO 실제 url 일때
 interface Props {
   Pharm: any;
   storeIdx: number;
@@ -16,7 +15,6 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
   const [pharmDetail, setPharmDetail] = useState();
   const [like, setLike] = useState(false);
 
-  //! GET : 약국상세정보
   useEffect(() => {
     const getPharmDetail = async () => {
       try {
@@ -105,7 +103,11 @@ const PharmTitleBox = styled.header`
 `;
 const PharmName = styled.h1`
   cursor: pointer;
-  font-size: 1.56rem;
+  width: 170px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 1.4rem;
   font-weight: bold;
 `;
 const PharmImg = styled.img`

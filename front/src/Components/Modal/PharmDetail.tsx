@@ -36,6 +36,8 @@ export default function PharmDetail({ setIsModalUp, like, setLike, storeIdx, Pha
     getReviews();
   }, []);
 
+  console.log(reviewList)
+
   return (
     <ModalBackDrop onClick={() => setIsModalUp(false)}>
       <ModalContainer onClick={(event) => event.stopPropagation()}>

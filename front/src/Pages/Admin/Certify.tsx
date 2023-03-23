@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import AdminTabs from "./AdminTabs";
@@ -10,16 +10,15 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Certify() {
   const [certificates, setCertificates] = useState([]);
-  const [checkList, setCheckList]: any = useState([]);
+  const [checkedList, setCheckedList] = useState<Array<any>>([]);
 
   //! GET : 약사인증신청 리스트 불러오기
   useEffect(() => {
     const getCertificates = async () => {
       try {
-        //* dummy data 일때 -> Review.json
-        // const response = await axios.get(API_Certify.DUMMY_API);
         //TODO 실제 url 일때 -> /api/admin/access/requests
         const response = await axios.get(`${API_Certify.GET_REAL_API}/access/requests`);
+        console.log(response);
         setCertificates(response.data);
       } catch (error) {
         console.log(error);
@@ -28,6 +27,18 @@ export default function Certify() {
     getCertificates();
   }, []);
 
+  //* 체크된 항목을 하나씩 담아주는 부분
+  const onCheckedItem = useCallback(
+    (checked: boolean, id: string) => {
+      if (checked) {
+        setCheckedList((prev) => [...prev, { userIdx: id }]);
+      } else if (!checked) {
+        setCheckedList(checkedList.filter((check) => check.userIdx !== id));
+      }
+    },
+    [checkedList],
+  );
+
   //! POST : 약사인증신청 승인
   const successCertify = async () => {
     try {
@@ -35,7 +46,7 @@ export default function Certify() {
       await axios({
         url: API_Certify.POST_SUCCESS_REAL_API,
         method: "post",
-        data: setCheckList,
+        data: { userIdxs: checkedList },
       });
     } catch (error) {
       console.log(error);
@@ -49,7 +60,7 @@ export default function Certify() {
       await axios({
         url: API_Certify.POST_DENIED_REAL_API,
         method: "post",
-        data: setCheckList,
+        data: setCheckedList,
       });
     } catch (error) {
       console.log(error);
@@ -84,7 +95,7 @@ export default function Certify() {
                 {certificates.map((cert: any, i) => (
                   <Content>
                     <Values className="checkBox">
-                      <CheckBox onChange={() => setCheckList([...checkList, { userIdx: cert.userIdx }])} />
+                      <CheckBox onChange={(e: any) => onCheckedItem(e.target.checked, e.target.id)} />
                     </Values>
                     <Cert key={i} cert={cert} />
                   </Content>

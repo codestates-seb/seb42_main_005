@@ -13,6 +13,13 @@ import { validators } from "../../Components/SignUpForm/Validation";
 interface Props {
   scriptUrl?: string;
 }
+interface SignFormProps {
+  name: string;
+  password: string;
+  newPassword: string;
+  confirmNewPassword: string;
+  address: string;
+}
 
 export default function MyInfoInformation({ scriptUrl }: Props) {
   //데이터
@@ -37,9 +44,9 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
         //TODO 실제 url 일때 -> /api/users/{userIdx}
         //? userIdx 는 리덕스 툴킷에서 -> 1
         const response = await axios.get(`${API_MyInfoInformation.REAL_API}/${1}`);
-        setMyInfo(response.data);
-        setMyName(response.data.name);
-        setMyAddress(response.data.address);
+        setMyInfo(response.data.response);
+        setMyName(response.data.response.name);
+        setMyAddress(response.data.response.address);
       } catch (error) {
         console.log(error);
       }
@@ -47,7 +54,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     getReviews();
   }, []);
 
-  //이미지를 미리보기 
+  //이미지를 미리보기
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const onUpload = (e: any) => {
     const file = e.target.files[0];
@@ -64,7 +71,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
   const [isEditing, setIsEditing] = useState(false);
 
   //유효성검사
-  const [signForm, setSignForms] = useState({
+  const [signForm, setSignForms] = useState<SignFormProps>({
     name: myInfo.name,
     password: "",
     newPassword: "",
@@ -84,7 +91,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     NEWPASSWORD: "newPassword",
     CONFIRMNEWPASSWORD: "confirmNewPassword",
     ADDRESS: "address",
-  };
+  } as const;
 
   const changeNameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -180,7 +187,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
 
-    setSignForms((prev) => ({ ...prev, address: fullAddress }));
+    setSignForms((prev) => ({ ...prev, [FORM_FIELD_NAMES.ADDRESS]: fullAddress }));
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -228,7 +235,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
       <Content>
         <ContentSet>
           <ContentKey>가입일</ContentKey>
-          <ContentValue>{myInfo.createdAt}</ContentValue>
+          <ContentValue>{new Date(myInfo.createdAt).toLocaleDateString()}</ContentValue>
         </ContentSet>
         <ContentSet>
           <ContentKey>닉네임</ContentKey>
@@ -266,7 +273,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
                 type={"text"}
                 name={FORM_FIELD_NAMES.ADDRESS}
                 placeholder={"주소를 입력하세요."}
-                value={myAddress}
+                value={signForm[FORM_FIELD_NAMES.ADDRESS]}
                 onChange={changeAddressHandler}
               />
               <Button color="l_blue" size="sm" text="주소 찾기" onClick={handleClick} />
