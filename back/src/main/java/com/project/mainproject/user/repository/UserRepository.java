@@ -11,5 +11,8 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u where u.userIdx in :userIdxs")
-    List<User> findByIds(@Param("userIdxs")List<Long> userIdxs);
+    List<User> findByIds(@Param("userIdxs") List<Long> userIdxs);
+
+    @Query("delete from User u WHERE u.userIdx in :userIdxs")
+    void deleteUserByIdList(@Param("userIdx")List<Long> userIdxs);
 }

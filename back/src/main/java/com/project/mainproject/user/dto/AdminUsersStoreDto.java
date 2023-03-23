@@ -11,14 +11,19 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminUsersDto {
+public class AdminUsersStoreDto {
 
     private List<UserIdx> userIdxs;
+    private List<StoreIdx> storeIdxs;
 
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
     public static class UserIdx {
         private Long userIdx;
+    }
+    @Getter
+    public static class StoreIdx {
+        private Long storeIdx;
     }
 }
