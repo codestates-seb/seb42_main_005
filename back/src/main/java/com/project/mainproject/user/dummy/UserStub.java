@@ -56,7 +56,7 @@ public class UserStub {
         );
         stubRequestBody.put(
                 "patchUser",
-                new UserPatchDto("장호동", "서울특별시 강남구 삼성동", "abc123!")
+                new UserPatchDto("장호동", "서울특별시 강남구 삼성동", "abc123!", "sdgs")
         );
         stubRequestBody.put(
                 "findPassword",
