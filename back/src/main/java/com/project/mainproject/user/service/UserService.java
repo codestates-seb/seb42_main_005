@@ -209,8 +209,13 @@ public class UserService implements UserDetailsService {
     public Pharmacy checkIsPharmacy(Long userIdx) {
         User user = validUser(userIdx);
         if (!(user instanceof Pharmacy)) {
-            throw new BusinessLogicException(UserExceptionCode.USER_IS_NOT_PHARMACY);
+            throw new BusinessLogicException(UserExceptionCode.USER_NOT_PHARMACY);
         }
         return (Pharmacy) user;
+    }
+    public void checkIstPharmacy(User user) {
+        if (!(user instanceof Pharmacy)) {
+            throw new BusinessLogicException(UserExceptionCode.USER_NOT_PHARMACY);
+        }
     }
 }
