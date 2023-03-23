@@ -2,7 +2,6 @@ package com.project.mainproject.user.controller;
 
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.user.dto.AdminUsersDto;
-import com.project.mainproject.user.dto.AdminUsersStoreDto;
 import com.project.mainproject.user.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
