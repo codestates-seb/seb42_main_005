@@ -1,6 +1,7 @@
 package com.project.mainproject.user.entity;
 
 import com.project.mainproject.VO.Duration;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,10 @@ public class UserBanned {
 
     @ManyToOne(fetch = LAZY)
     private User user;
+
+    @Builder
+    public UserBanned(Duration duration, User user) {
+        this.duration = duration;
+        this.user = user;
+    }
 }

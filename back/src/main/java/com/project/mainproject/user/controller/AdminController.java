@@ -19,11 +19,10 @@ import java.util.stream.Collectors;
 public class AdminController {
     private final AdminService adminService;
     @PostMapping("/access/success")
-    public ResponseEntity approvalPharmacy(@RequestBody AdminUsersStoreDto adminUsersStoreDto) {
-        List<Long> userIdxs = adminUsersStoreDto.getUsers().stream().map(user -> user.getUserIdx()).collect(Collectors.toList());
-        List<Long> storeIdxs = adminUsersStoreDto.getStores().stream().map(store -> store.getStoreIdx()).collect(Collectors.toList());
+    public ResponseEntity approvalPharmacy(@RequestBody AdminUsersDto adminUsersDto) {
+        List<Long> userIdxs = adminUsersDto.getUserIdxs().stream().map(user -> user.getUserIdx()).collect(Collectors.toList());
 
-        SingleResponseDto responseDto = adminService.approvalPharmacy(userIdxs, storeIdxs);
+        SingleResponseDto responseDto = adminService.approvalPharmacy(userIdxs);
 
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
@@ -31,7 +30,7 @@ public class AdminController {
 
     @PostMapping("/access/failure")
     public ResponseEntity rejectPharmacy(@RequestBody AdminUsersDto adminUsersDto) {
-        List<Long> userIdx = adminUsersDto.getUsers().stream().map(user -> user.getUserIdx()).collect(Collectors.toList());
+        List<Long> userIdx = adminUsersDto.getUserIdxs().stream().map(user -> user.getUserIdx()).collect(Collectors.toList());
 
         SingleResponseDto responseDto = adminService.rejectPharmacy(userIdx);
 
@@ -40,11 +39,11 @@ public class AdminController {
 
     @PostMapping("/block")
     public ResponseEntity blockUsers(@RequestParam("period") int period, @RequestBody AdminUsersDto adminUsersDto) {
-        //TODO
+        List<Long> userIdx = adminUsersDto.getUserIdxs().stream().map(user -> user.getUserIdx()).collect(Collectors.toList());
 
-        SingleResponseDto tmpResponse = CommonStub.getSingleResponseStub();
+        SingleResponseDto responseDto = adminService.blockUsers(period, userIdx);
 
-        return ResponseEntity.status(HttpStatus.OK).body(tmpResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
     @PostMapping("/fired")
@@ -53,5 +52,4 @@ public class AdminController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }
