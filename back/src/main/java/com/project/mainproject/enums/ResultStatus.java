@@ -16,7 +16,8 @@ public enum ResultStatus {
 
     MEMBER_NOT_FOUND(NOT_FOUND, "Member Not Found"),
     MEMBER_EXIST(CONFLICT, "Member is already Exist!"),
-    MEMBER_JWT_EXIST(CONFLICT, "JWT Registry Member is Exist")
+    MEMBER_JWT_EXIST(CONFLICT, "JWT Registry Member is Exist"),
+    REJECT_PHARMACY(OK,"승인이 거절 되었습니다.")
     // TODO : 추가
     ;
 

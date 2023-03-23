@@ -78,7 +78,7 @@ public class StoreController {
     /*
     * 약국 사진 변경 
     * */
-    @PatchMapping("/image")
+    @PostMapping("/image")
     public ResponseEntity updateImage(@RequestPart MultipartFile storeImage , @RequestParam Long userIdx) {
         SingleResponseDto updateImageResult = storeService.updateImage(userIdx, storeImage);
         URI location = UriCreator.createUri("/api/user/{storeIdx}", userIdx);
