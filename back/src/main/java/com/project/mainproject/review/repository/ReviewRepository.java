@@ -16,5 +16,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
                                                                            Pageable pageable);
     List<Review> findAllByUserUserIdxAndReviewStatusOrderByCreatedAtDesc(Long userIdx,
                                                                          ReviewStatus reviewStatus);
-    Page<Review> findByReportCntGreaterThan(int reportCnt, Pageable pageable);
+    Page<Review> findByReviewStatusAndReportCntGreaterThan(ReviewStatus reviewStatus, int reportCnt, Pageable pageable);
 }

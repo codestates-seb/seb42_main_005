@@ -109,7 +109,7 @@ public class ReviewService {
 
     public Page<Review> getReportedReviews(Pageable pageable) {
         int reportCnt = 3; // TODO: 수정 필요 (테스트용)
-        return reviewRepository.findByReportCntGreaterThan(reportCnt, pageable);
+        return reviewRepository.findByReviewStatusAndReportCntGreaterThan(POSTED, reportCnt, pageable);
     }
 
     @Transactional
