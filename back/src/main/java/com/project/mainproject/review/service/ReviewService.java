@@ -1,7 +1,7 @@
 package com.project.mainproject.review.service;
 
 import com.project.mainproject.exception.BusinessLogicException;
-import com.project.mainproject.review.dto.DeleteReviewsDto;
+import com.project.mainproject.review.dto.ReviewIdxDto;
 import com.project.mainproject.review.entity.Review;
 import com.project.mainproject.review.entity.ReviewImage;
 import com.project.mainproject.review.repository.ReviewRepository;
@@ -109,11 +109,13 @@ public class ReviewService {
 
     public Page<Review> getReportedReviews(Pageable pageable) {
         int reportCnt = 3; // TODO: 수정 필요 (테스트용)
+
+        // TODO: 수정 필요(BLINDED)
         return reviewRepository.findByReviewStatusAndReportCntGreaterThan(POSTED, reportCnt, pageable);
     }
 
     @Transactional
-    public void deleteReportedReviews(DeleteReviewsDto deleteReviews) {
+    public void deleteReportedReviews(ReviewIdxDto deleteReviews) {
         List<Long> idxs =
                 deleteReviews.getReviews().stream().map(el -> el.getReviewIdx()).collect(Collectors.toList());
         List<Review> reviews = reviewRepository.findAllById(idxs);
@@ -121,6 +123,18 @@ public class ReviewService {
 
         // 어떻ㄱㅔ ,,
         reviews.stream().forEach(review -> review.setReviewStatus(DELETED));
+    }
+
+    @Transactional
+    public void recoverReportedReviews(ReviewIdxDto recoverReviews) {
+        List<Long> idxs =
+                recoverReviews.getReviews().stream().map(el -> el.getReviewIdx()).collect(Collectors.toList());
+        List<Review> reviews = reviewRepository.findAllById(idxs);
+        if (reviews.size() != recoverReviews.getReviews().size()) throw new RuntimeException("잘못된 리뷰 ID");
+//        reviews.stream().forEach(review -> review.initReports());
+
+        // 어떻게 ...
+        reviews.stream().forEach(review -> review.setReviewStatus(POSTED));
     }
 
 }

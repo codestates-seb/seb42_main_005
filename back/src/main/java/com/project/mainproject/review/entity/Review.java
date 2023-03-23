@@ -77,6 +77,10 @@ public class Review extends Auditable {
         }
     }
 
+    public void initReports() {
+        this.reviewReports.clear();
+    }
+
     public void deleteReviewImage() {
         reviewImages.clear();
     }
