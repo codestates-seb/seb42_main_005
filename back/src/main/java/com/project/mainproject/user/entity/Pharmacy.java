@@ -17,7 +17,6 @@ import javax.persistence.*;
 public class Pharmacy extends User {
     private String businessCertificate;
     private String pharmacistCertificate;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_Idx")
     private Store store;

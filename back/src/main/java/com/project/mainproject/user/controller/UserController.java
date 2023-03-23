@@ -4,10 +4,8 @@ import com.project.mainproject.dto.PageInfo;
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.dummy.CommonStub;
-import com.project.mainproject.user.dto.UserFindPasswordDto;
-import com.project.mainproject.user.dto.UserInfoDto;
-import com.project.mainproject.user.dto.UserPatchDto;
-import com.project.mainproject.user.dto.UserSignUpDto;
+import com.project.mainproject.user.dto.*;
+import com.project.mainproject.user.entity.Pharmacy;
 import com.project.mainproject.user.entity.User;
 import com.project.mainproject.user.mapper.UserMapper;
 import com.project.mainproject.user.service.UserService;
@@ -60,6 +58,25 @@ public class UserController {
                 .message(PROCESS_COMPLETED.getMessage()).httpCode(PROCESS_COMPLETED.getHttpCode()).build();
 
         return ResponseEntity.created(location).body(response);
+    }
+
+    /*
+        약사 가입신청 조회
+     */
+    @GetMapping("/store")
+    public ResponseEntity getStoreRequest(Pageable pageable) {
+        Page<Pharmacy> pharmacyPage = userService.findPharmacyRequest(pageable);
+        Page<PharmacyInfoDto> pharmacyInfoDtoPage = pharmacyPage.map(PharmacyInfoDto::new);
+
+        PageInfo pageInfo = PageInfo.builder()
+                .size(pageable.getPageSize()).page(pageable.getPageNumber())
+                .totalPage((int) pharmacyInfoDtoPage.getTotalElements()).totalPage(pharmacyInfoDtoPage.getTotalPages()).build();
+
+        PageResponseDto<Object> response = PageResponseDto.builder()
+                .response(pharmacyInfoDtoPage).pageInfo(pageInfo)
+                .message(PROCESS_COMPLETED.getMessage()).httpCode(PROCESS_COMPLETED.getHttpCode())
+                .build();
+        return ResponseEntity.ok().body(response);
     }
 
     /*
