@@ -30,7 +30,6 @@ import static com.project.mainproject.enums.ResultStatus.*;
 public class AdminService {
     private final UserRepository userRepository;
     private final UserService userService;
-    private final StoreQueryRepository storeQueryRepository;
     private final UserBannedRepository userBannedRepository;
 
     public SingleResponseDto approvalPharmacy(List<Long> userIdxs) {
@@ -76,6 +75,18 @@ public class AdminService {
                 .message(PROCESS_COMPLETED.getMessage())
                 .build();
     }
+
+    public SingleResponseDto banishUsers(List<Long> userIdxs) {
+        List<User> findUsers = userRepository.findByIds(userIdxs);
+        findUsers.iterator().forEachRemaining(findUser -> findUser.setUserStatus(UserStatus.KICKEDOUT));
+
+        return SingleResponseDto.builder()
+                .httpCode(PROCESS_COMPLETED.getHttpCode())
+                .message(PROCESS_COMPLETED.getMessage())
+                .build();
+    }
+
+    // 내부 동작 메서드
 
     private void checkUserExist(List<Long> userIdxs, List<User> findUsers) {
         if (findUsers.size() != userIdxs.size()) {

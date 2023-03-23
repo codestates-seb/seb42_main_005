@@ -24,7 +24,6 @@ public class AdminController {
 
         SingleResponseDto responseDto = adminService.approvalPharmacy(userIdxs);
 
-
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
@@ -47,9 +46,9 @@ public class AdminController {
     }
 
     @PostMapping("/fired")
-    public ResponseEntity banishUsers(@RequestBody AdminUsersDto adminUsersDto) {
-        //TODO
+    public void banishUsers(@RequestBody AdminUsersDto adminUsersDto) {
+        List<Long> userIdx = adminUsersDto.getUserIdxs().stream().map(user -> user.getUserIdx()).collect(Collectors.toList());
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        adminService.banishUsers(userIdx);
     }
 }
