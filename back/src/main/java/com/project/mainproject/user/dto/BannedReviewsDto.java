@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BannedReviewsDto {
+    // TODO: 삭제
 
     private List<ReviewIdx> reviews;
 

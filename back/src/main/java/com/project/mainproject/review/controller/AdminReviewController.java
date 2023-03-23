@@ -3,6 +3,7 @@ package com.project.mainproject.review.controller;
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.dummy.CommonStub;
+import com.project.mainproject.review.dto.DeleteReviewsDto;
 import com.project.mainproject.review.dto.ListGetStoreReviewDto;
 import com.project.mainproject.review.dto.ListReportedReviewDto;
 import com.project.mainproject.review.entity.Review;
@@ -42,14 +43,14 @@ public class AdminReviewController {
         return ResponseEntity.ok().body(response);
     }
 
-    @DeleteMapping("/banned")
-    public ResponseEntity deleteReviews(@RequestBody BannedReviewsDto bannedReviewsDto) {
-        //TODO
+    @DeleteMapping("/reports")
+    public ResponseEntity deleteReviews(@RequestBody DeleteReviewsDto deleteReviewsDto) {
+        reviewService.deleteReportedReviews(deleteReviewsDto);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping("/banned")
+    @PostMapping("/reports")
     public ResponseEntity restoreReviews(@RequestBody BannedReviewsDto bannedReviewsDto) {
         //TODO
 

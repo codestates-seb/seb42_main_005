@@ -1,6 +1,7 @@
 package com.project.mainproject.review.service;
 
 import com.project.mainproject.exception.BusinessLogicException;
+import com.project.mainproject.review.dto.DeleteReviewsDto;
 import com.project.mainproject.review.entity.Review;
 import com.project.mainproject.review.entity.ReviewImage;
 import com.project.mainproject.review.repository.ReviewRepository;
@@ -15,7 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static com.project.mainproject.review.enums.ReviewStatus.DELETED;
 import static com.project.mainproject.review.enums.ReviewStatus.POSTED;
 import static com.project.mainproject.review.exception.ReviewExceptionCode.REVIEW_NOT_EXIST;
 
@@ -105,8 +108,19 @@ public class ReviewService {
     }
 
     public Page<Review> getReportedReviews(Pageable pageable) {
-        int reportCnt = 3;
+        int reportCnt = 3; // TODO: 수정 필요 (테스트용)
         return reviewRepository.findByReportCntGreaterThan(reportCnt, pageable);
+    }
+
+    @Transactional
+    public void deleteReportedReviews(DeleteReviewsDto deleteReviews) {
+        List<Long> idxs =
+                deleteReviews.getReviews().stream().map(el -> el.getReviewIdx()).collect(Collectors.toList());
+        List<Review> reviews = reviewRepository.findAllById(idxs);
+        if (reviews.size() != deleteReviews.getReviews().size()) throw new RuntimeException("잘못된 리뷰 ID");
+
+        // 어떻ㄱㅔ ,,
+        reviews.stream().forEach(review -> review.setReviewStatus(DELETED));
     }
 
 }
