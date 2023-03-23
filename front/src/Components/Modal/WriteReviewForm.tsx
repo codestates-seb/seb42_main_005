@@ -8,6 +8,7 @@ import { BiPhotoAlbum } from "react-icons/bi";
 import { HiXMark } from "react-icons/hi2";
 import { zIndex_Modal } from "../../Util/z-index";
 import { API_WriteReviewForm } from "../../Api/APIs"; // Review.json
+import { useAppSelector, useAppDispatch } from "../../Redux/hooks";
 
 interface Props {
   setIsReviewFormShown: React.Dispatch<React.SetStateAction<boolean>>;
@@ -59,7 +60,6 @@ export default function WriteReviewForm({ setIsReviewFormShown, storeIdx, review
     const reviewContent = formData.get("content");
     const star = formData.get("rating");
 
-    //TODO url 받았을때
     let data: any = {
       userIdx: 1,
       content: review.content,
@@ -82,8 +82,18 @@ export default function WriteReviewForm({ setIsReviewFormShown, storeIdx, review
         console.log(error);
       }
     };
-    // setReview({ reviewIdx: 0, content: "", rating: 0, createdAt: "" });
-    setReviewList([data, ...reviewList]);
+
+    //* 새로고침 안되고 보여주는 로직
+    let show: any = {
+      userIdx: 1, //? 리덕스 툴킷에서 userIdx 가져오기
+      userImage: review.userImage,
+      userName: "회원", //? 리덕스 툴킷에서 name 가져오기
+      content: review.content,
+      rating: review.rating,
+      reviewImage: imageSrc,
+      createdAt: new Date().toLocaleDateString(),
+    };
+    setReviewList([show, ...reviewList]);
     setReview({
       reviewIdx: 0,
       content: "",

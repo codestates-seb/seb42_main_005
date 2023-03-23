@@ -49,14 +49,15 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
       //   rating
       // }
       // image
-      const data :any = {
-          userIdx: 1,
-          content: reviewContent,
-          rating: review.rating,
-        }
-        // const formDataForsubmit = new FormData();
-        // formDataForsubmit.append("postDto", new Blob([JSON.stringify(data)], { type: "application/json" }));
-        // formDataForsubmit.append("image", );
+      const data: any = {
+        //? userIdx 는 리덕스 툴킷에서 가져올거고 일단은 임의로 1
+        userIdx: 1,
+        content: reviewContent,
+        rating: review.rating,
+      };
+      // const formDataForsubmit = new FormData();
+      // formDataForsubmit.append("postDto", new Blob([JSON.stringify(data)], { type: "application/json" }));
+      // formDataForsubmit.append("image", );
 
       const submitReview = async () => {
         try {
@@ -82,6 +83,23 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
     //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
     userIdx: 1,
     content: commentContent,
+  };
+
+  //! POST : 리뷰신고
+  const reportReview = async () => {
+    try {
+      //TODO url 받았을때 -> /api/store/{storeIdx}/review/{reviewIdx}/report
+      await axios({
+        url: `${API_ReviewUnit.REAL_API}/${storeIdx}/review/${reviewIdx}/report`,
+        method: "post",
+        data: {
+          userIdx: 1, //? 리덕스 툴킷에서 가져오고 지금은 임의로 1
+          content: reviewContent,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   //! POST : 리뷰의 댓글작성
@@ -110,7 +128,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
         <Upper>
           <UserInfo>
             <UserIcon src={review.userImage} alt="일반계정 사용자의 이미지 입니다." />
-            <UserName>{review.name}</UserName>
+            <UserName>{review.userName}</UserName>
             <Created>{new Date(review.createdAt).toLocaleDateString()}</Created>
             <StarContainer>
               {new Array(review.rating).fill("").map((_, i) => (
@@ -126,7 +144,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
             {/* 약사계정이면 && 해당 약국의 storIdx 와 리덕스 툴킷의 내 storeIdx 가 같을 때 => 댓글 + 신고 버튼이 보임 */}
             <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsCommentFormShown(true)} />
             {/* 로그인 상태여야 함 */}
-            <Button color="l_black" size="sm" text="신 고" />
+            <Button color="l_black" size="sm" text="신 고" onClick={() => reportReview()} />
           </ButtonContainer>
         </Upper>
         <Lower>
@@ -243,6 +261,7 @@ const ReviewImg = styled.img`
   height: 80px;
   width: 100px;
   border-radius: 5px;
+  border: 1px solid var(--black-100);
 `;
 const Upper = styled.section`
   display: flex;

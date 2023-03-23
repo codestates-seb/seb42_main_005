@@ -1,37 +1,21 @@
 //홈화면 옆에 약국 리스트
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import axios from "axios";
 import styled from "styled-components";
 import PharmItem from "./PharmItem";
 import SearchBar from "./SearchBar";
 import { zIndex_PharmList } from "../../Util/z-index";
 import { SELECT_HIDDEN } from "../../Util/type";
-import { API_PharmLists } from "../../Api/APIs";
 import { RiHomeLine } from "react-icons/ri";
 import { VscTriangleLeft } from "react-icons/vsc";
 
 interface Props {
   hidden: SELECT_HIDDEN;
   setHidden: Dispatch<SetStateAction<SELECT_HIDDEN>>;
+  totalPharmList: object[];
+  setTotalPharmList: any;
 }
-export default function PharmLists({ hidden, setHidden }: Props) {
-  const [totalPharmList, setTotalPharmList] = useState([]);
 
-  //! GET : 약국리스트
-  useEffect(() => {
-    const getPharmLists = async () => {
-      try {
-        const response = await axios.get(`${API_PharmLists.REAL_API}?page=1&size=1`, {
-          params: {},
-          headers: { "Content-Type": "application/json" },
-        });
-        setTotalPharmList(response.data.response);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getPharmLists();
-  }, []);
+export default function PharmLists({ hidden, setHidden, totalPharmList, setTotalPharmList }: Props) {
 
   return (
     <ContainerList className={hidden ? "hide" : ""}>

@@ -4,7 +4,7 @@ export const API = "http://ec2-54-180-29-60.ap-northeast-2.compute.amazonaws.com
 // 로그인
 export const API_UserLogIn = {
   REAL_API: `http://ec2-54-180-29-60.ap-northeast-2.compute.amazonaws.com:8080/login`,
-  AUTH_REAL_API: `${API}/users/store`,
+  AUTH_REAL_API: `${API}/auth`,
 };
 // 약사계정 회원가입 : pharmSignUpForms.tsx
 export const API_PharmSignUpForms = {
@@ -53,7 +53,7 @@ export const API_WriteReviewForm = {
   DUMMY_API: "http://localhost:3010/response",
   REAL_API: `${API}/store`,
 };
-// 리뷰의 댓글 수정 
+// 리뷰의 댓글 수정
 export const API_ReviewOfReview = {
   DUMMY_API: "",
   REAL_API: `${API}/review`,
@@ -103,11 +103,13 @@ export const API_MyPharmacy = {
 // 관리자계정 전체회원관리 (Users) -> admin_users.json
 export const API_Users = {
   DUMMY_API: "http://localhost:3080/response",
-  REAL_API: `${API}/users`,
+  GET_REAL_API: `${API}/users`,
+  POST_REAL_API: `${API}/admin`,
 };
 // 관리자계정 약사인증관리 (Certify) -> admin_certify.json
 export const API_Certify = {
-  GET_REAL_API: `${API}/admin`,
+  // GET_REAL_API: `${API}/admin`,
+  GET_REAL_API: "http://ec2-54-180-29-60.ap-northeast-2.compute.amazonaws.com:8080/api/admin",
   POST_SUCCESS_REAL_API: `${API}/admin/access/success`,
   POST_DENIED_REAL_API: `${API}/admin/access/failure`,
 };
