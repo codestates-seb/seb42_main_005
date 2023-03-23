@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
@@ -13,8 +14,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Page<Review> findAllByStoreStoreIdxAndReviewStatusOrderByCreatedAtDesc(Long storeIdx,
                                                                            ReviewStatus reviewStatus,
                                                                            Pageable pageable);
-    Page<Review> findAllByUserUserIdxAndReviewStatusOrderByCreatedAtDesc(Long userIdx,
-                                                                     ReviewStatus reviewStatus,
-                                                                     Pageable pageable);
+    List<Review> findAllByUserUserIdxAndReviewStatusOrderByCreatedAtDesc(Long userIdx,
+                                                                         ReviewStatus reviewStatus);
     Page<Review> findByReportCntGreaterThan(int reportCnt, Pageable pageable);
 }
