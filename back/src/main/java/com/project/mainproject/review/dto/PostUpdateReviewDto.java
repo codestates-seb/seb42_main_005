@@ -10,7 +10,6 @@ public class PostUpdateReviewDto {
     private Long userIdx;
     private Long storeIdx;
     private String content;
-    private String image;
     private int rating;
 
     public PostUpdateReviewDto setStoreIdx(Long storeIdx) {

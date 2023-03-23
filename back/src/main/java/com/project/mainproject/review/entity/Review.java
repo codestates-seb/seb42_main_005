@@ -4,10 +4,7 @@ import com.project.mainproject.audit.Auditable;
 import com.project.mainproject.review.enums.ReviewStatus;
 import com.project.mainproject.store.entity.Store;
 import com.project.mainproject.user.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
@@ -23,6 +20,7 @@ import static lombok.Builder.Default;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "REVIEW")
 @Builder
 @AllArgsConstructor

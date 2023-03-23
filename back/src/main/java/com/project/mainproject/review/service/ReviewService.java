@@ -41,6 +41,13 @@ public class ReviewService {
     }
 
     @Transactional
+    public Review updateReview(Review review) {
+        Review updatedReview = reviewRepository.save(review);
+
+        return updatedReview;
+    }
+
+    @Transactional
     public Review updateReview(Review review, MultipartFile image) {
         Review updatedReview = reviewRepository.save(review);
         updateReviewImage(image, updatedReview);

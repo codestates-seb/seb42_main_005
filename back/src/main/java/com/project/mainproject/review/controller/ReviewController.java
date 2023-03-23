@@ -85,14 +85,14 @@ public class ReviewController {
     @PatchMapping("/store/{storeIdx}/review/{reviewIdx}")
     public ResponseEntity<SingleResponseDto<SimpleReviewDto>> updateReview(
             @PathVariable Long storeIdx, @PathVariable Long reviewIdx,
-            @RequestPart PostUpdateReviewDto patchDto,
-            @RequestPart(required = false) MultipartFile image
+            @RequestBody PostUpdateReviewDto patchDto
+//            @RequestPart(required = false) MultipartFile image
     ) {
         patchDto.setStoreIdx(storeIdx);
         Review targetReview = reviewService.findVerifiedReview(storeIdx, reviewIdx);
         Review review = reviewMapper.reviewDtoToReview(patchDto, targetReview);
 
-        Review updatedReview = reviewService.updateReview(review, image);
+        Review updatedReview = reviewService.updateReview(review);
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
 
