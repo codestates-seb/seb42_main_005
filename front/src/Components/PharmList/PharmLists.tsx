@@ -1,5 +1,5 @@
 //홈화면 옆에 약국 리스트
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import PharmItem from "./PharmItem";
 import SearchBar from "./SearchBar";
@@ -12,10 +12,9 @@ interface Props {
   hidden: SELECT_HIDDEN;
   setHidden: Dispatch<SetStateAction<SELECT_HIDDEN>>;
   totalPharmList: object[];
-  setTotalPharmList: any;
 }
 
-export default function PharmLists({ hidden, setHidden, totalPharmList, setTotalPharmList }: Props) {
+export default function PharmLists({ hidden, setHidden, totalPharmList }: Props) {
 
   return (
     <ContainerList className={hidden ? "hide" : ""}>

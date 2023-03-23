@@ -60,7 +60,7 @@ export default function Certify() {
       await axios({
         url: API_Certify.POST_DENIED_REAL_API,
         method: "post",
-        data: setCheckedList,
+        data: { userIdxs: checkedList },
       });
     } catch (error) {
       console.log(error);
@@ -204,6 +204,7 @@ const Instead = styled.section`
   align-items: center;
   gap: 20px;
   height: 26rem;
+  width: calc(1150px + 0.6rem);
   color: var(--black-100);
   font-size: 6rem;
   font-weight: bold;

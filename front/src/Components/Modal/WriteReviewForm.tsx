@@ -61,7 +61,7 @@ export default function WriteReviewForm({ setIsReviewFormShown, storeIdx, review
     const star = formData.get("rating");
 
     let data: any = {
-      userIdx: 1,
+      userIdx: 3,
       content: review.content,
       rating: review.rating,
     };
@@ -71,10 +71,11 @@ export default function WriteReviewForm({ setIsReviewFormShown, storeIdx, review
     formDataForsubmit.append("image", imgFile);
 
     //! POST : 리뷰작성
+    //TODO /api/store/{storeIdx}/review
     const postReview = async () => {
       try {
         await axios({
-          url: `${API_WriteReviewForm.REAL_API}/${storeIdx}/review`,
+          url: `${API_WriteReviewForm.POST_REAL_API}/${storeIdx}/review`,
           method: "post",
           data: formDataForsubmit,
         });
@@ -87,7 +88,7 @@ export default function WriteReviewForm({ setIsReviewFormShown, storeIdx, review
     let show: any = {
       userIdx: 1, //? 리덕스 툴킷에서 userIdx 가져오기
       userImage: review.userImage,
-      userName: "회원", //? 리덕스 툴킷에서 name 가져오기
+      userName: "나 회원 아니거든?", //? 리덕스 툴킷에서 name 가져오기
       content: review.content,
       rating: review.rating,
       reviewImage: imageSrc,

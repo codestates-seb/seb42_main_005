@@ -12,20 +12,7 @@ interface Props {
 
 export default function PharmItem({ Pharm, storeIdx }: Props) {
   const [isModalUp, setIsModalUp] = useState(false);
-  const [pharmDetail, setPharmDetail] = useState();
   const [like, setLike] = useState(false);
-
-  useEffect(() => {
-    const getPharmDetail = async () => {
-      try {
-        const response = await axios.get(`${API_PharmItem.REAL_API}/${storeIdx}`);
-        setPharmDetail(response.data.response);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getPharmDetail();
-  }, []);
 
   return (
     <PharmCard>
@@ -34,7 +21,7 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
           setIsModalUp={setIsModalUp}
           like={like}
           setLike={setLike}
-          Pharm={pharmDetail}
+          Pharm={Pharm}
           storeIdx={Pharm.storeIdx}
         />
       ) : null}

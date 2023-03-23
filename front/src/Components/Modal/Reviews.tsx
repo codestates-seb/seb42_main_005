@@ -1,0 +1,116 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import styled from "styled-components";
+import ReviewUnit from "./ReviewUnit";
+import { API_PharmDetail } from "../../Api/APIs";
+import { zIndex_Modal } from "../../Util/z-index";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
+
+interface Props {
+  reviewList: any;
+  setReviewList: any;
+  setIsReviewFormShown: any;
+  storeIdx: number;
+  Pharm: any;
+}
+
+export default function ReviewList({ reviewList, setReviewList, setIsReviewFormShown, storeIdx, Pharm }: Props) {
+
+  console.log(reviewList)
+  return (
+    <ReviewContainer>
+      <ReviewTitle>리뷰</ReviewTitle>
+      {reviewList.length ? (
+        <Reviews>
+          {reviewList.map((review: any) => (
+            <ReviewUnit
+              review={review}
+              key={review.reviewIdx}
+              reviewIdx={review.reviewIdx}
+              storeIdx={Pharm.storeIdx}
+              setReviewList={setReviewList}
+              reviewList={reviewList}
+            />
+          ))}
+        </Reviews>
+      ) : (
+        <Instead>
+          <AiOutlineExclamationCircle className="bigger" onClick={() => setIsReviewFormShown(true)} />
+          <p>작성된 리뷰가 없습니다.</p>
+          <p>지금 리뷰를 작성해 보세요!</p>
+        </Instead>
+      )}
+    </ReviewContainer>
+  );
+}
+
+const ReviewContainer = styled.section`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 510px;
+  width: 450px;
+  padding: 10px 0px 0px 20px;
+  @media (max-width: 768px) {
+    position: static;
+    display: flex;
+    align-items: center;
+    height: auto;
+    padding: 20px 10px 10px 10px;
+    border-bottom: 1px solid var(--black-100);
+  }
+`;
+const ReviewTitle = styled.h2`
+  padding: 10px;
+  font-size: 25px;
+  font-weight: bold;
+  color: var(--black-500);
+  border-bottom: 1px solid var(--black-100);
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 10px;
+    gap: 100px;
+    width: 450px;
+  }
+`;
+const Reviews = styled.section`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow-y: scroll;
+  padding: 10px 10px 0 0;
+  :active::-webkit-scrollbar-track {
+    width: 0.6rem;
+    visibility: visible;
+  }
+  @media (max-width: 768px) {
+    flex-grow: 0;
+    overflow: visible;
+  }
+`;
+const Instead = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  width: 420px;
+  height: 500px;
+  font-weight: 700;
+  color: var(--black-300);
+  border-radius: 5px;
+  background-color: var(--black-050);
+  .bigger {
+    font-size: 40px;
+    margin-bottom: 10px;
+    :hover {
+      color: var(--black-500);
+    }
+  }
+  @media (max-width: 768px) {
+    height: 200px;
+  }
+`;

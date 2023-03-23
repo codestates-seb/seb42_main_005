@@ -9,21 +9,18 @@ import { BsArrowReturnRight } from "react-icons/bs";
 import { HiXMark } from "react-icons/hi2";
 
 interface Props {
-  reply: any;
   reviewIdx: number;
-  userIdx: number;
-  replyIdx: number;
+  reply: any;
+  review: any;
+  storeIdx: any;
 }
-export default function ReviewOfReview({ reviewIdx, reply, userIdx, replyIdx }: Props) {
+export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx }: Props) {
   const [isPatchFormShown, setIsPatchFormShown] = useState(false);
-  const [content, setContent] = useState(reply.content);
+  const [content, setContent] = useState(review.content);
 
-  const reviewList = useAppSelector((state: any) => {
-    return state.getReview.response.storeReview;
-  });
-  //  const comment = reviewList.comments.filter((ele:any)=>(
-  //   ele.commentIdx
-  //  ))
+  // const reviewList = useAppSelector((state: any) => {
+  //   return state.getReview.response.storeReview;
+  // });
 
   const handlerReviewOfReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContent(e.target.value);
@@ -31,31 +28,25 @@ export default function ReviewOfReview({ reviewIdx, reply, userIdx, replyIdx }: 
 
   //! PATCH : 리뷰의 댓글수정
   const editCommentKeyPress = (e: any) => {
-    e.preventDefault();
-    if (e.key === "Enter") {
+    if (e.key === " " && e.getModifierState("Shift") === false) {
+      e.stopPropagation();
+    } else if (e.key === " " && e.target.value.slice(-1) === " ") {
+      e.stopPropagation();
+    } else if (e.key === "Enter") {
       const formData = new FormData(e.target);
       const reviewOfReview = formData.get("reviewOfReview");
-
-      //* dummy url 일때
       //TODO url 받았을때
       const Data = {
         //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
-        replyIdx,
-        userIdx,
+        storeIdx,
+        userIdx: 1,
         content: reviewOfReview,
       };
-
       const submitReviewOfReview = async () => {
         try {
-          //* dummy url 일때 -> Review.json
-          // await axios({
-          //   url: API_ReviewOfReview.DUMMY_API,
-          //   method: "patch",
-          //   data: Data,
-          // });
-          //TODO url 받았을때 -> /api/store/{storeIdx}/review/{reviewIdx}
+          //TODO url 받았을때 -> /api/review/{reviewIdx}/reply/{replyIdx}
           await axios({
-            url: `${API_ReviewOfReview.REAL_API}/${reviewIdx}/reply/${reply.replyIdx}`,
+            url: `${API_ReviewOfReview.REAL_API}/${reviewIdx}/reply/${review.replyIdx}`,
             method: "patch",
             data: Data,
           });
@@ -63,7 +54,6 @@ export default function ReviewOfReview({ reviewIdx, reply, userIdx, replyIdx }: 
           console.log(error);
         }
       };
-
       submitReviewOfReview();
     }
   };
@@ -76,7 +66,7 @@ export default function ReviewOfReview({ reviewIdx, reply, userIdx, replyIdx }: 
             <BsArrowReturnRight aria-hidden="true" />
           </span>
           <UserIcon src={reply.userImage} alt="pharmacist" />
-          <UserName>{reply.name}</UserName>
+          <UserName>{reply.userName}</UserName>
           <Created>{new Date(reply.createdAt).toLocaleDateString()}</Created>
         </UserInfo>
         <ButtonContainer>

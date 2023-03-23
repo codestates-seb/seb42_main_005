@@ -46,12 +46,15 @@ export const API_PharmacyInformation = {
 // 약국 리뷰 -> Review.json //
 export const API_ReviewUnit = {
   DUMMY_API: "http://localhost:3010/response",
-  REAL_API: `${API}/store`,
+  DELETE_REAL_API: `${API}/store`,
+  PATCH_REAL_API: `${API}/store`,
+  POST_REAL_API: `${API}/store`,
+  POST_COMMENT_REAL_API: `${API}`,
 };
 // 새 리뷰 작성 -> Review.json //
 export const API_WriteReviewForm = {
   DUMMY_API: "http://localhost:3010/response",
-  REAL_API: `${API}/store`,
+  POST_REAL_API: `${API}/store`,
 };
 // 리뷰의 댓글 수정
 export const API_ReviewOfReview = {
@@ -108,8 +111,7 @@ export const API_Users = {
 };
 // 관리자계정 약사인증관리 (Certify) -> admin_certify.json
 export const API_Certify = {
-  // GET_REAL_API: `${API}/admin`,
-  GET_REAL_API: "http://ec2-54-180-29-60.ap-northeast-2.compute.amazonaws.com:8080/api/admin",
+  GET_REAL_API: `${API}/admin`,
   POST_SUCCESS_REAL_API: `${API}/admin/access/success`,
   POST_DENIED_REAL_API: `${API}/admin/access/failure`,
 };

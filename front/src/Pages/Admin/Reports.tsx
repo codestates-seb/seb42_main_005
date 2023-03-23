@@ -17,8 +17,7 @@ export default function Reports() {
       try {
         //TODO /api/admin/reports
         const response = await axios.get(API_Reports.GET_REAL_API);
-        setReports(response.data.response.reportedReview);
-        console.log(reports);
+        setReports(response.data.response.reportedReviews);
       } catch (error) {
         console.log(error);
       }
@@ -30,9 +29,9 @@ export default function Reports() {
   const onCheckedItem = useCallback(
     (checked: boolean, id: string) => {
       if (checked) {
-        setCheckedList((prev) => [...prev, { userIdx: id }]);
+        setCheckedList((prev) => [...prev, { reviewIdx: id }]);
       } else if (!checked) {
-        setCheckedList(checkedList.filter((check) => check.userIdx !== id));
+        setCheckedList(checkedList.filter((check) => check.reviewIdx !== id));
       }
     },
     [checkedList],
@@ -41,12 +40,12 @@ export default function Reports() {
   //! DELETE : 신고누적리뷰 삭제
   const deleteReview = async () => {
     try {
-      //TODO /api/admin/access/success
+      //TODO /api/admin/reports
       await axios({
         url: API_Reports.DELETE_REAL_API,
         method: "delete",
-        data: setCheckedList,
-      });
+        data: { reviews: checkedList },
+      }).then(() => location.reload());
     } catch (error) {
       console.log(error);
     }
@@ -59,7 +58,9 @@ export default function Reports() {
       await axios({
         url: API_Reports.POST_REAL_API,
         method: "post",
-        data: setCheckedList,
+        data: { reviews: checkedList },
+      }).then(() => {
+        location.reload();
       });
     } catch (error) {
       console.log(error);
@@ -94,14 +95,14 @@ export default function Reports() {
                   <Content key={i}>
                     <Values className="checkBox">
                       <CheckBox
-                        id={report.reportIdx}
+                        id={report.reviewIdx}
                         onChange={(e: any) => onCheckedItem(e.target.checked, e.target.id)}
                       />
                     </Values>
-                    <Values className="content">{report.reviewContent}</Values>
+                    <Values className="content">{report.content}</Values>
                     <Values className="email">{report.email}</Values>
-                    <Values className="writtenAt">{new Date(report.reviewCreatedAt).toLocaleDateString()}</Values>
-                    <Values className="reports">{report.reportedCount}</Values>
+                    <Values className="writtenAt">{new Date(report.createdAt).toLocaleDateString()}</Values>
+                    <Values className="reports">{report.reportCnt}</Values>
                   </Content>
                 ))}
               </BelowLable>

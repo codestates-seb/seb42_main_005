@@ -209,6 +209,10 @@ export default function Home() {
       };
       getPharmLists();
 
+      // console.log("totalPharmList");
+      // console.log(totalPharmList);
+      // console.log("");
+
       // const markers = filteredPharmacies.map((pharmacy: { lat: any; lng: any; name: any }) => {
       //   const PositionPharmacy = new kakao.maps.LatLng(pharmacy.lat, pharmacy.lng);
       //   const content = '<div class="customoverlay">' + `<span class="title">${pharmacy.name}</span>` + "</div>";
@@ -289,12 +293,7 @@ export default function Home() {
         setTotalPharmList={setTotalPharmList}
         _map={_map}
       />
-      <PharmLists
-        hidden={hidden}
-        setHidden={setHidden}
-        totalPharmList={totalPharmList}
-        setTotalPharmList={setTotalPharmList}
-      />
+      <PharmLists hidden={hidden} setHidden={setHidden} totalPharmList={totalPharmList} />
     </>
   );
 }
