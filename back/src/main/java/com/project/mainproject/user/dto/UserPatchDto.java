@@ -9,4 +9,5 @@ public class UserPatchDto {
     private String name;
     private String address;
     private String password;
+    private String newPassword;
 }
