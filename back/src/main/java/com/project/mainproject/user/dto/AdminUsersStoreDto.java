@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminUsersStoreDto {
+public class AdminUsersDto {
 
     private List<UserIdx> userIdxs;
     private List<StoreIdx> storeIdxs;
