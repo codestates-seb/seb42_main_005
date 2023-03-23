@@ -19,7 +19,7 @@ export default function Account({ isLogin, account }: AccountProps) {
   const DropdownHandler = () => {
     setIsOpen(!isOpen);
   };
-
+  const logOut = () => {};
   if (isLogin && account === "User") {
     return (
       <ContainerAccount>
@@ -105,7 +105,7 @@ export default function Account({ isLogin, account }: AccountProps) {
               <ul>
                 {AdminArr.map((item, idx) => {
                   return (
-                    <Link to={item.link} key={idx} style={{ textDecoration: "none" }}>
+                    <Link to={item.link} key={idx} style={{ textDecoration: "none" }} onClick={logOut}>
                       <li>{item.type}</li>
                     </Link>
                   );

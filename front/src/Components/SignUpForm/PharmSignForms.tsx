@@ -205,7 +205,7 @@ export default function PharmSignForms() {
           <SignUpInput
             type={"text"}
             name={FORM_FIELD_NAMES.NAME}
-            placeholder={"닉네임을 입력하세요."}
+            placeholder={"약국 이름을 입력하세요."}
             value={pSignForm.name}
             onChange={changeNameHandler}
           />
@@ -218,7 +218,7 @@ export default function PharmSignForms() {
             readOnly
             type={"text"}
             name={"address"}
-            placeholder={"주소를 입력하세요."}
+            placeholder={"약국 주소를 입력하세요."}
             value={pSignForm.address}
             onChange={changeAddressHandler}
           />
@@ -262,9 +262,7 @@ export default function PharmSignForms() {
         </InputContainer>
         <CheckContainer>
           <Check type="checkbox" onChange={checkHandler} checked={checks} />
-          <span className="checkbox_content">
-            회원가입시, 사용자의 현재 위치를 사용하는 것에 동의하는 것으로 간주됩니다.
-          </span>
+          <span className="checkbox_content">회원가입시, 약국의 위치를 사용하는 것에 동의하는 것으로 간주됩니다.</span>
         </CheckContainer>
         <button className="signup_button" type="submit">
           회원가입

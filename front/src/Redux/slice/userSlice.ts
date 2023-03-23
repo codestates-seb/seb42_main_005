@@ -36,7 +36,7 @@ export const userSlice = createSlice({
       state.isLogin = true;
       state.user = action.payload;
     },
-    //로그인아웃
+    //로그아웃
     logOut(state) {
       state.isLogin = false;
       state.userIdx = undefined;

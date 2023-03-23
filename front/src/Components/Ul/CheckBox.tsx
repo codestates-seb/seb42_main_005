@@ -2,14 +2,15 @@ import React from "react";
 import styled from "styled-components";
 
 interface CheckProps {
+  name?: string;
   value?: any;
   id?: string;
   checked?: any;
   onChange?: any;
 }
 
-export default function CheckBox({ id, checked, onChange, value }: CheckProps) {
-  return <Check type="checkbox" id={id} checked={checked} onChange={onChange} value={value}></Check>;
+export default function CheckBox({ id, checked, onChange, value, name }: CheckProps) {
+  return <Check type="checkbox" name={name} id={id} checked={checked} onChange={onChange} value={value}></Check>;
 }
 
 const Check = styled.input`

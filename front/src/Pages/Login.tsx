@@ -10,7 +10,6 @@ import axios from "axios";
 import { API_UserLogIn } from "../Api/APIs";
 import { setLocalStorage } from "../Api/localStorage";
 
-
 export default function Login() {
   const [loginForm, setLoginForms] = useState({
     email: "",
@@ -112,7 +111,7 @@ export default function Login() {
     };
     postLogin();
   };
-  
+
   //! POST : 로그인 - Auth
   const postAuthSignUp = async () => {
     try {
@@ -136,7 +135,7 @@ export default function Login() {
         </Title>
         <ContentContainer>
           <Google>
-            <button className="google_button" onClick={()=>postAuthSignUp()}>
+            <button className="google_button" onClick={() => postAuthSignUp()}>
               <GoogleButton>
                 <img className="google_img" alt="google" src="Images/google.png" />
                 <span className="google">Sign up with Google</span>

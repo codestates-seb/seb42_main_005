@@ -1,10 +1,16 @@
 //! API
 export const API = "http://ec2-54-180-29-60.ap-northeast-2.compute.amazonaws.com:8080/api";
 
+//로그아웃
+export const API_UserLogOut = {
+  //!수정필요
+  REAL_API: `http://ec2-54-180-29-60.ap-northeast-2.compute.amazonaws.com:8080/logout`,
+};
+
 // 로그인
 export const API_UserLogIn = {
   REAL_API: `http://ec2-54-180-29-60.ap-northeast-2.compute.amazonaws.com:8080/login`,
-  AUTH_REAL_API: `${API}/users/store`,
+  AUTH_REAL_API: `${API}/oauth2/authorization`,
 };
 // 약사계정 회원가입 : pharmSignUpForms.tsx
 export const API_PharmSignUpForms = {
@@ -53,7 +59,7 @@ export const API_WriteReviewForm = {
   DUMMY_API: "http://localhost:3010/response",
   REAL_API: `${API}/store`,
 };
-// 리뷰의 댓글 수정 
+// 리뷰의 댓글 수정
 export const API_ReviewOfReview = {
   DUMMY_API: "",
   REAL_API: `${API}/review`,

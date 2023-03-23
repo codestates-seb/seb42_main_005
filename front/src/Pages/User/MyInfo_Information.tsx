@@ -15,31 +15,25 @@ interface Props {
 }
 
 export default function MyInfoInformation({ scriptUrl }: Props) {
-  //데이터
-  const [myInfo, setMyInfo] = useState({
-    userIdx: 0,
+  const [myInfo, setMyInfo]: any = useState({
     createdAt: "",
     name: "",
-    password: "",
     email: "",
     address: "",
   });
+  const [imgFile, setImgFlie]: any = useState(null);
   const [myName, setMyName] = useState("");
-  // const [myPassword, setMyPassword] = useState(myInfo.password)
   const [myAddress, setMyAddress] = useState("");
-
   //! GET : 유저 정보
   useEffect(() => {
     const getReviews = async () => {
       try {
-        //* dummy data 일때 -> Review.json
-        // const response = await axios.get(API_MyInfoInformation.DUMMY_API);
         //TODO 실제 url 일때 -> /api/users/{userIdx}
         //? userIdx 는 리덕스 툴킷에서 -> 1
         const response = await axios.get(`${API_MyInfoInformation.REAL_API}/${1}`);
-        setMyInfo(response.data);
-        setMyName(response.data.name);
-        setMyAddress(response.data.address);
+        setMyInfo(response.data.response);
+        setMyName(response.data.response.name);
+        setMyAddress(response.data.response.address);
       } catch (error) {
         console.log(error);
       }
@@ -47,10 +41,10 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     getReviews();
   }, []);
 
-  //이미지를 미리보기 
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const onUpload = (e: any) => {
     const file = e.target.files[0];
+    setImgFlie(file);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     return new Promise<void>((resolve) => {
@@ -63,7 +57,6 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
 
   const [isEditing, setIsEditing] = useState(false);
 
-  //유효성검사
   const [signForm, setSignForms] = useState({
     name: myInfo.name,
     password: "",
@@ -84,7 +77,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     NEWPASSWORD: "newPassword",
     CONFIRMNEWPASSWORD: "confirmNewPassword",
     ADDRESS: "address",
-  };
+  } as const;
 
   const changeNameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -112,7 +105,6 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     });
   };
 
-  //현재비밀번호
   const changeNowPasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSignForms({
@@ -121,7 +113,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     });
     let errors;
     if (name === FORM_FIELD_NAMES.PASSWORD) {
-      errors = validators.validatePasswordCheck(myInfo.password, value);
+      errors = validators.validatePassword(value);
     }
     setError({
       ...error,
@@ -129,13 +121,13 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     });
   };
 
-  //새비밀번호
   const changeNewPasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSignForms({
       ...signForm,
       [name]: value,
     });
+
     let errors;
     if (name === FORM_FIELD_NAMES.NEWPASSWORD) {
       errors = validators.validatePassword(value);
@@ -147,7 +139,6 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     });
   };
 
-  //새비밀번호 체크
   const changeNewConfirmPasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSignForms({
@@ -169,7 +160,6 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
   const handleComplete = (data: any) => {
     let fullAddress = data.address;
     let extraAddress = "";
-
     if (data.addressType === "R") {
       if (data.bname !== "") {
         extraAddress += data.bname;
@@ -179,10 +169,9 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
-
     setSignForms((prev) => ({ ...prev, address: fullAddress }));
+    setMyAddress(fullAddress);
   };
-
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     open({ onComplete: handleComplete });
     e.preventDefault();
@@ -212,23 +201,83 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     if (newPassword !== confirmNewPassword) {
       return alert("새 비밀번호를 한번 더 입력해주세요");
     }
+
+    const newUserData = {
+      name: name,
+      address: address,
+      password: password,
+      newPassword: newPassword,
+    };
+    const submitNewUserInfo: any = async () => {
+      try {
+        //? 수정 /api/users/{userIdx}=>리덕스에서 userIdx꺼내
+        await axios({
+          url: `${API_MyInfoInformation.REAL_API}/${1}`,
+          method: "patch",
+          data: newUserData,
+        }).then(() => setIsEditing(false));
+      } catch (err: any) {
+        if (err.response.status === 406) {
+          alert("현재비밀번호가 가입시 비밀번호와 다릅니다");
+        }
+      }
+    };
+    setMyInfo({ ...myInfo, ...newUserData });
+    submitNewUserInfo();
+  };
+
+  const submitUserImg = (e: any) => {
+    e.preventDefault();
+    const formDataImgsubmit = new FormData();
+    formDataImgsubmit.append("image", imgFile);
+
+    // TODO : 리덕스 툴킷에서 userIdx가져와 [JSON.stringify(userIdx)] 수정 => 아래주석 코드 지우면 안돼!
+    //   formDataForsubmit.append("userIdx", new Blob([JSON.stringify(userIdx)], { type: "application/json" }));
+    //
+
+    const submitNewImg: any = async () => {
+      try {
+        //? 수정 /api/users/{userIdx}=>리덕스에서 userIdx꺼내
+        await axios({
+          //TODO : {userIdx}/image 수정
+          url: `${API_MyInfoInformation.REAL_API}/${1}/image`,
+          method: "patch",
+          data: formDataImgsubmit,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    submitNewImg();
   };
 
   return (
     <Wrapper onSubmit={onSubmit}>
       <ImgContainer>
-        <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
+        <ReviewImgInput
+          name="reviewImg"
+          id="img"
+          type="file"
+          onChange={(e) => onUpload(e)}
+          accept="image/*"
+        ></ReviewImgInput>
         {imageSrc ? <ReviewImg src={imageSrc as string} /> : <ReviewImg src="Images/User.png" alt="user" />}
-        <Label htmlFor="img">
-          <MdOutlineAddAPhoto aria-hidden="true" />
-          사진추가하기
-        </Label>
+        {imageSrc ? (
+          <Label onClick={submitUserImg}>
+            <MdOutlineAddAPhoto aria-hidden="true" />
+            사진수정완료
+          </Label>
+        ) : (
+          <Label htmlFor="img">
+            <MdOutlineAddAPhoto aria-hidden="true" />
+            사진수정하기
+          </Label>
+        )}
       </ImgContainer>
-
       <Content>
         <ContentSet>
           <ContentKey>가입일</ContentKey>
-          <ContentValue>{myInfo.createdAt}</ContentValue>
+          <ContentValue>{new Date(myInfo.createdAt).toLocaleDateString()}</ContentValue>
         </ContentSet>
         <ContentSet>
           <ContentKey>닉네임</ContentKey>
@@ -262,7 +311,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
           {isEditing ? (
             <InputWrapper>
               <SignUpInput
-                // readOnly
+                readOnly
                 type={"text"}
                 name={FORM_FIELD_NAMES.ADDRESS}
                 placeholder={"주소를 입력하세요."}
@@ -310,7 +359,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
                 </InputWrapper>
                 <AlertMsg className={`${error.newPassword ? "error" : null}`}>
                   <AiOutlineExclamationCircle aria-hidden="true" />
-                  문자 숫자 특수문자 조합 8자 이상으로 조합해주세요.
+                  문자 숫자 특수문자 조합 8자 이상으로 조합으로 입력해주세요.
                 </AlertMsg>
               </EditWrapper>
             </ContentSet>
@@ -368,6 +417,7 @@ const AlertMsg = styled.div`
     color: var(--red);
   }
 `;
+
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;

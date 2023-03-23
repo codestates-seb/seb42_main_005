@@ -34,8 +34,8 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
   const editReview = (e: any) => {
     e.preventDefault();
     if (e.key === "Enter") {
-      // const formData = new FormData(e.target);
-      // const review = formData.get("review");
+      const formData = new FormData(e.target.value);
+      const reviewtextarea = formData.get("reviewtextarea");
 
       //* dummy url 일때
       // const ReviewData = {
@@ -43,21 +43,12 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
       //   content:reviewContent,
       // };
       //TODO url 받았을때
-      // patchDto {
-      //   userIdx
-      //   content
-      //   rating
-      // }
-      // image
-      const data :any = {
-          userIdx: 1,
-          content: reviewContent,
-          rating: review.rating,
-        }
-        // const formDataForsubmit = new FormData();
-        // formDataForsubmit.append("postDto", new Blob([JSON.stringify(data)], { type: "application/json" }));
-        // formDataForsubmit.append("image", );
 
+      const data: any = {
+        userIdx: 1,
+        content: reviewtextarea,
+        rating: review.rating,
+      };
       const submitReview = async () => {
         try {
           await axios({
@@ -136,6 +127,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
               <label htmlFor="editReview" id="hide" />
               <Textarea
                 id="editReview"
+                name="reviewtextarea"
                 rows={2}
                 isValid={true}
                 icon={false}

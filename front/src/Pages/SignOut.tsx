@@ -4,6 +4,10 @@ import styled from "styled-components";
 import Button from "../Components/Ul/Button";
 import { API_SignOut } from "../Api/APIs";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { useAppSelector } from "../Redux/hooks";
+import { useDispatch } from "react-redux";
+import { removeLocalStorage } from "../Api/localStorage";
+import { useNavigate } from "react-router-dom";
 
 export default function SignOut() {
   const [isChecked, setIsChecked] = useState(false);
@@ -11,18 +15,28 @@ export default function SignOut() {
 
   //! DELETE : 일반회원 회원가입 - JWT
   //* 토큰 지우고 디스패치 날리기
-  const signOut = async () => {
-    isChecked ? setErrMsg(false) : setErrMsg(true);
-    try {
-      //TODO /api/users/{userIdx}
-      //? userIdx 는 리덕스 툴킷에서 가져오기 지금은 임의로 1
-      await axios({
-        url: `${API_SignOut.REAL_API}/${1}`,
-        method: "delete",
-      });
-    } catch (error) {
-      console.log(error);
+
+  const navigate = useNavigate();
+
+  const signOut = () => {
+    if (!isChecked) {
+      return setErrMsg(true);
     }
+
+    const signOutDelete = async () => {
+      await axios
+        .delete(`${API_SignOut.REAL_API}/${1}`)
+        .then(() => {
+          removeLocalStorage("access_token");
+          removeLocalStorage("refresh_token");
+          //디스패치로 유저인덱스랑, 스토어 인덱스 지우기
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    navigate("/");
+    signOutDelete();
   };
 
   return (
@@ -48,6 +62,7 @@ export default function SignOut() {
           <span>
             <span id="checkBoxWrapper">
               <Check
+                name={"checkbox"}
                 type="checkbox"
                 onChange={(event) => {
                   setIsChecked(event.target.checked);
@@ -56,7 +71,7 @@ export default function SignOut() {
               />
             </span>
             <div>
-              <p id="alert" className={errMsg ? "show" : ""}>
+              <p id="alert" className={errMsg ? "show" : undefined}>
                 <AiOutlineExclamationCircle aria-hidden="true" />
                 체크박스에 동의가 필요합니다
               </p>
@@ -69,13 +84,7 @@ export default function SignOut() {
           </span>
         </ExceptButton>
         <footer>
-          <Button
-            text="탈퇴하기"
-            color="red"
-            size="lg"
-            disabled={!isChecked ? true : false}
-            onClick={() => signOut()}
-          ></Button>
+          <Button text="탈퇴하기" color="red" size="lg" onClick={signOut}></Button>
         </footer>
       </Container>
     </Wrapper>
