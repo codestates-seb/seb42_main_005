@@ -122,7 +122,6 @@ export default function UserSignUpForms() {
     //! POST : 일반회원 회원가입 - JWT
     const postSignUp = async () => {
       try {
-        //TODO api/users/normal
         await axios({
           url: API_UserSignUpForms.REAL_API,
           method: "post",

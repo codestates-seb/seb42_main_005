@@ -4,68 +4,89 @@ import axios from "axios";
 import Input from "../Ul/Input";
 import Button from "../Ul/Button";
 import { API_ReviewOfReview } from "../../Api/APIs";
-import { useAppSelector } from "../../Redux/hooks";
 import { BsArrowReturnRight } from "react-icons/bs";
 import { HiXMark } from "react-icons/hi2";
 
 interface Props {
-  reply: any;
   reviewIdx: number;
-  userIdx: number;
-  replyIdx: number;
+  reply: any;
+  review: any;
+  storeIdx: any;
+  reviewList: any;
+  setReviewList: any;
 }
-export default function ReviewOfReview({ reviewIdx, reply, userIdx, replyIdx }: Props) {
+export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, reviewList, setReviewList }: Props) {
   const [isPatchFormShown, setIsPatchFormShown] = useState(false);
   const [content, setContent] = useState(reply.content);
-
-  const reviewList = useAppSelector((state: any) => {
-    return state.getReview.response.storeReview;
-  });
-  //  const comment = reviewList.comments.filter((ele:any)=>(
-  //   ele.commentIdx
-  //  ))
 
   const handlerReviewOfReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContent(e.target.value);
   };
 
+  const data = {
+    //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
+    storeIdx,
+    userIdx: 1,
+    content,
+  };
   //! PATCH : 리뷰의 댓글수정
   const editCommentKeyPress = (e: any) => {
-    e.preventDefault();
-    if (e.key === "Enter") {
-      const formData = new FormData(e.target);
-      const reviewOfReview = formData.get("reviewOfReview");
-
-      //* dummy url 일때
-      //TODO url 받았을때
-      const Data = {
-        //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
-        replyIdx,
-        userIdx,
-        content: reviewOfReview,
-      };
-
+    if (e.key === " " && e.getModifierState("Shift") === false) {
+      e.stopPropagation();
+    } else if (e.key === " " && e.target.value.slice(-1) === " ") {
+      e.stopPropagation();
+    } else if (e.key === "Enter") {
+      e.preventDefault();
       const submitReviewOfReview = async () => {
         try {
-          //* dummy url 일때 -> Review.json
-          // await axios({
-          //   url: API_ReviewOfReview.DUMMY_API,
-          //   method: "patch",
-          //   data: Data,
-          // });
-          //TODO url 받았을때 -> /api/store/{storeIdx}/review/{reviewIdx}
           await axios({
             url: `${API_ReviewOfReview.REAL_API}/${reviewIdx}/reply/${reply.replyIdx}`,
             method: "patch",
-            data: Data,
-          });
+            data,
+          }).then(() => setIsPatchFormShown(false));
         } catch (error) {
           console.log(error);
         }
       };
-
+      const show = {
+        ...reply,
+        content,
+        createdAt: new Date().toLocaleDateString(),
+      };
+      setReviewList(
+        [...reviewList].map((rev) =>
+          rev.reviewIdx === reviewIdx
+            ? {
+                ...rev,
+                replies: [...review.replies].map((rep) => (rep.replyIdx === reply.replyIdx ? show : rep)),
+              }
+            : rev,
+        ),
+      );
       submitReviewOfReview();
     }
+  };
+
+  // ! DELETE : 리뷰의 댓글삭제
+  const deleteComment = async () => {
+    try {
+      await axios({
+        url: `${API_ReviewOfReview.REAL_API}/${reviewIdx}/reply/${reply.replyIdx}`,
+        method: "delete",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    setReviewList(
+      [...reviewList].map((rev) =>
+        rev.reviewIdx === reviewIdx
+          ? {
+              ...rev,
+              replies: [...review.replies].filter((rep) => rep.replyIdx !== reply.replyIdx),
+            }
+          : rev,
+      ),
+    );
   };
 
   return (
@@ -76,13 +97,13 @@ export default function ReviewOfReview({ reviewIdx, reply, userIdx, replyIdx }: 
             <BsArrowReturnRight aria-hidden="true" />
           </span>
           <UserIcon src={reply.userImage} alt="pharmacist" />
-          <UserName>{reply.name}</UserName>
+          <UserName>{reply.userName}</UserName>
           <Created>{new Date(reply.createdAt).toLocaleDateString()}</Created>
         </UserInfo>
         <ButtonContainer>
           {/* 약사계정이면 && 해당 약국의 storeIdx 와 리덕스 툴킷의 내 storeIdx 가 같을 때 => 버튼이 보임 */}
           <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsPatchFormShown(true)} />
-          <Button color="l_red" size="sm" text="삭 제" />
+          <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteComment()} />
         </ButtonContainer>
       </Upper>
       <Comment>{reply.content}</Comment>
