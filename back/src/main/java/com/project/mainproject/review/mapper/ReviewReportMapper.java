@@ -1,7 +1,6 @@
 package com.project.mainproject.review.mapper;
 
 import com.project.mainproject.review.dto.PostReviewReportDto;
-import com.project.mainproject.review.dto.SimpleReportDto;
 import com.project.mainproject.review.entity.ReviewReport;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,7 +13,7 @@ public interface ReviewReportMapper {
     @Mapping(target = "review.reviewIdx", source = "reviewIdx")
     ReviewReport postReportDtoToReviewReport(PostReviewReportDto postReportDto);
 
-    @Mapping(target = "userIdx", source = "user.userIdx")
-    SimpleReportDto reviewReportToSimpleReportDto(ReviewReport review);
+//    @Mapping(target = "userIdx", source = "user.userIdx")
+//    SimpleReportDto reviewReportToSimpleReportDto(ReviewReport review);
 
 }

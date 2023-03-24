@@ -1,8 +1,8 @@
 package com.project.mainproject.review.service;
 
 import com.project.mainproject.exception.BusinessLogicException;
+import com.project.mainproject.review.dto.ReviewIdxDto;
 import com.project.mainproject.review.entity.Review;
-import com.project.mainproject.review.entity.ReviewImage;
 import com.project.mainproject.review.repository.ReviewRepository;
 import com.project.mainproject.utils.FileUploader;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static com.project.mainproject.review.enums.ReportStatus.REJECTED;
+import static com.project.mainproject.review.enums.ReportStatus.SUCCESS;
+import static com.project.mainproject.review.enums.ReviewStatus.DELETED;
 import static com.project.mainproject.review.enums.ReviewStatus.POSTED;
 import static com.project.mainproject.review.exception.ReviewExceptionCode.REVIEW_NOT_EXIST;
 
@@ -47,17 +50,34 @@ public class ReviewService {
         return updatedReview;
     }
 
-    @Transactional
-    public Review updateReview(Review review, MultipartFile image) {
-        Review updatedReview = reviewRepository.save(review);
-        updateReviewImage(image, updatedReview);
-
-        return updatedReview;
-    }
+//    리뷰 수정 기존 로직
+//    @Transactional
+//    public Review updateReview(Review review, MultipartFile image) {
+//        Review updatedReview = reviewRepository.save(review);
+//        updateReviewImage(image, updatedReview);
+//
+//        return updatedReview;
+//    }
+//
+//    private void updateReviewImage(MultipartFile image, Review review) {
+//        deleteExistReviewImages(review);
+//        String uploadImagePath = "";
+//        if (image != null) {
+//            uploadImagePath = uploadImage(image);
+//        }
+//        review.updateReviewImage(uploadImagePath);
+//    }
+//
+//    private void deleteExistReviewImages(Review review) {
+//        List<String> existImages = new ArrayList<>();
+//        for (ReviewImage existReviewImage : review.getReviewImages()){
+//            existImages.add(existReviewImage.getImagePath());
+//        }
+//        if (existImages.size() != 0) FileUploader.deleteImages(existImages);
+//    }
 
     @Transactional
     public void deleteReview(Long storeIdx, Long reviewIdx) {
-        // TODO: 작성자 검증 시점?
         Review review = findVerifiedReview(storeIdx, reviewIdx);
         reviewRepository.delete(review);
     }
@@ -77,25 +97,8 @@ public class ReviewService {
         review.addReviewImage(uploadImagePath);
     }
 
-    private void updateReviewImage(MultipartFile image, Review review) {
-        deleteExistReviewImages(review);
-        String uploadImagePath = "";
-        if (image != null) {
-            uploadImagePath = uploadImage(image);
-        }
-        review.updateReviewImage(uploadImagePath);
-    }
-
     private String uploadImage(MultipartFile image) {
         return FileUploader.saveImage(image);
-    }
-
-    private void deleteExistReviewImages(Review review) {
-        List<String> existImages = new ArrayList<>();
-        for (ReviewImage existReviewImage : review.getReviewImages()){
-            existImages.add(existReviewImage.getImagePath());
-        }
-        if (existImages.size() != 0) FileUploader.deleteImages(existImages);
     }
 
     public List<Review> getUserReviews(Long userIdx) {
@@ -104,9 +107,47 @@ public class ReviewService {
                 userIdx, POSTED);
     }
 
+    /*
+        신고 리뷰(신고 한 개 이상) 조회
+        - POSTED, BLINDED 리뷰 모두 포함
+    */
     public Page<Review> getReportedReviews(Pageable pageable) {
-        int reportCnt = 3;
-        return reviewRepository.findByReportCntGreaterThan(reportCnt, pageable);
+        int reportCnt = 0;
+        return reviewRepository.findByReviewStatusNotAndReportCntGreaterThan(DELETED, reportCnt, pageable);
+    }
+
+    /*
+        신고 리뷰(신고 한 개 이상) 삭제
+        1. 신고 내역의 상태 -> SUCCESS
+        2. 리뷰 상태 -> DELETED
+    */
+    @Transactional
+    public void deleteReportedReviews(ReviewIdxDto deleteReviewIdxs) {
+        List<Long> idxs =
+                deleteReviewIdxs.getReviews().stream().map(el -> el.getReviewIdx()).collect(Collectors.toList());
+        List<Review> reviews = reviewRepository.findAllById(idxs);
+        if (reviews.size() != deleteReviewIdxs.getReviews().size())
+            throw new BusinessLogicException(REVIEW_NOT_EXIST);
+
+        reviews.stream().forEach(review -> review.changeReportStatus(SUCCESS));
+        reviews.stream().forEach(review -> review.setReviewStatus(DELETED));
+    }
+
+    /*
+        신고 누적 리뷰(블라인드) 복원
+        1. 신고 내역의 상태 -> REJECTED
+        2. 리뷰 상태 -> POSTED
+     */
+    @Transactional
+    public void recoverReportedReviews(ReviewIdxDto recoverReviewIdxs) {
+        List<Long> idxs =
+                recoverReviewIdxs.getReviews().stream().map(el -> el.getReviewIdx()).collect(Collectors.toList());
+        List<Review> reviews = reviewRepository.findAllByIdAndReviewStatus(idxs, POSTED); // TODO: BLINDED로 바꾸기
+        if (reviews.size() != recoverReviewIdxs.getReviews().size())
+            throw new BusinessLogicException(REVIEW_NOT_EXIST);
+
+        reviews.stream().forEach(review -> review.changeReportStatus(REJECTED));
+        reviews.stream().forEach(review -> review.setReviewStatus(POSTED));
     }
 
 }

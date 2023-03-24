@@ -2,13 +2,12 @@ package com.project.mainproject.review.controller;
 
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
-import com.project.mainproject.dummy.CommonStub;
 import com.project.mainproject.review.dto.ListGetStoreReviewDto;
 import com.project.mainproject.review.dto.ListReportedReviewDto;
+import com.project.mainproject.review.dto.ReviewIdxDto;
 import com.project.mainproject.review.entity.Review;
 import com.project.mainproject.review.mapper.ReviewMapper;
 import com.project.mainproject.review.service.ReviewService;
-import com.project.mainproject.user.dto.BannedReviewsDto;
 import com.project.mainproject.utils.ResponseBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -42,18 +41,19 @@ public class AdminReviewController {
         return ResponseEntity.ok().body(response);
     }
 
-    @DeleteMapping("/banned")
-    public ResponseEntity deleteReviews(@RequestBody BannedReviewsDto bannedReviewsDto) {
-        //TODO
+    @DeleteMapping("/reports")
+    public ResponseEntity deleteReviews(@RequestBody ReviewIdxDto deleteReviewsDto) {
+        reviewService.deleteReportedReviews(deleteReviewsDto);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping("/banned")
-    public ResponseEntity restoreReviews(@RequestBody BannedReviewsDto bannedReviewsDto) {
-        //TODO
+    @PostMapping("/reports")
+    public ResponseEntity restoreReviews(@RequestBody ReviewIdxDto recoverReviewsDto) {
+        reviewService.recoverReportedReviews(recoverReviewsDto);
 
-        SingleResponseDto tmpResponse = CommonStub.getSingleResponseStub();
-        return ResponseEntity.status(HttpStatus.OK).body(tmpResponse);
+        SingleResponseDto repsonse = responseBuilder.buildSingleCreatedResponse(null);
+
+        return ResponseEntity.status(HttpStatus.OK).body(repsonse);
     }
 }

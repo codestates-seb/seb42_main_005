@@ -1,5 +1,6 @@
 package com.project.mainproject.review.service;
 
+import com.project.mainproject.review.entity.Review;
 import com.project.mainproject.review.entity.ReviewReport;
 import com.project.mainproject.review.repository.ReviewReportRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,8 @@ public class ReviewReportService {
     private final ReviewReportRepository reportRepository;
 
     @Transactional
-    public ReviewReport createReport(Long storeIdx, ReviewReport reviewReport) {
-        // User 검증
-        reviewService.verifyReview(storeIdx, reviewReport.getReview().getReviewIdx());
-        return reportRepository.save(reviewReport);
+    public void createReport(Long storeIdx, ReviewReport reviewReport) {
+        Review review = reviewService.findVerifiedReview(storeIdx, reviewReport.getReview().getReviewIdx());
+        review.addReport(reviewReport);
     }
 }

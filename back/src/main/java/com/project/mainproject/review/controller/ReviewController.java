@@ -118,20 +118,17 @@ public class ReviewController {
      *  리뷰 신고
      * */
     @PostMapping("/store/{storeIdx}/review/{reviewIdx}/report")
-    public ResponseEntity<SingleResponseDto<SimpleReportDto>> reportReview(
+    public ResponseEntity<SingleResponseDto> reportReview(
             @PathVariable Long storeIdx,
             @PathVariable Long reviewIdx,
             @RequestBody PostReviewReportDto postReportDto
     ) {
-        // TODO: content 넣어주는지 확인
         postReportDto.setReviewIdx(reviewIdx);
         ReviewReport reviewReport = reportMapper.postReportDtoToReviewReport(postReportDto);
-        ReviewReport createdReport = reportService.createReport(storeIdx, reviewReport);
+        reportService.createReport(storeIdx, reviewReport);
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review/" + reviewIdx);
-        SimpleReportDto responseData = reportMapper.reviewReportToSimpleReportDto(createdReport);
-        SingleResponseDto<SimpleReportDto> response =
-                responseBuilder.buildSingleCreatedResponse(responseData);
+        SingleResponseDto response = responseBuilder.buildSingleOkResponse(null);
 
         return ResponseEntity.ok().header("Location", location.toString()).body(response);
     }
