@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import PharmRank from "../Ul/PharmRank";
 import PharmDetail from "../Modal/PharmDetail";
-import { API_PharmItem } from "../../Api/APIs"; // PharmDetail.json
+import { API_PharmItem } from "../../Api/APIs";
+import { API_PharmDetail } from "../../Api/APIs";
+import { useAppSelector } from "../../Redux/hooks";
+import { useNavigate } from "react-router-dom";
+import { getLocalStorage } from "../../Api/localStorage";
 
-//TODO 실제 url 일때
 interface Props {
   Pharm: any;
   storeIdx: number;
@@ -13,21 +16,55 @@ interface Props {
 
 export default function PharmItem({ Pharm, storeIdx }: Props) {
   const [isModalUp, setIsModalUp] = useState(false);
-  const [pharmDetail, setPharmDetail] = useState();
+  const [pharmDetail, setPharmDetail] = useState({});
+  const [reviewList, setReviewList] = useState([]);
   const [like, setLike] = useState(false);
 
-  //! GET : 약국상세정보
-  useEffect(() => {
-    const getPharmDetail = async () => {
-      try {
-        const response = await axios.get(`${API_PharmItem.REAL_API}/${storeIdx}`);
-        setPharmDetail(response.data.response);
-      } catch (error) {
-        console.log(error);
-      }
+  //! GET : 약국상세정보 + 리뷰리스트
+  const onModalUp = () => {
+    const pharmDetailsAndreviewList = async () => {
+      await axios
+        .get(`${API_PharmItem.REAL_API}/${storeIdx}`)
+        .then((response) => {
+          setPharmDetail(response.data.response);
+          axios
+            .get(`${API_PharmDetail.REAL_API}/${storeIdx}/review`)
+            .then((response) => {
+              setReviewList(response.data.response.storeReviews);
+            })
+            .catch((err) => console.log("리뷰받아오던 중" + err));
+        })
+        .catch((err) => console.log("약국상세받아오던 중" + err));
     };
-    getPharmDetail();
-  }, []);
+    pharmDetailsAndreviewList();
+    setIsModalUp(true);
+  };
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
+  //! POST : 찜하기/찜취소
+  const likeThisPharmacy = async () => {
+    try {
+      await axios({
+        url: `${API_PharmItem.REAL_API}/${storeIdx}/pick?userIdx=${user.userIdx}`, //! 리덕스 툴킷에서 유저인덱스 받아와야 함
+        method: "post",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    setLike(!like);
+  };
+
+  const nagigate = useNavigate();
+  const leadToLogin = () => {
+    nagigate("/login");
+  };
+
+  const onClick = () => {
+    const accessToken = getLocalStorage("access_token");
+    accessToken ? likeThisPharmacy() : leadToLogin();
+  };
 
   return (
     <PharmCard>
@@ -36,23 +73,34 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
           setIsModalUp={setIsModalUp}
           like={like}
           setLike={setLike}
-          Pharm={pharmDetail}
+          Pharm={Pharm}
           storeIdx={Pharm.storeIdx}
+          pharmDetail={pharmDetail}
+          reviewList={reviewList}
+          setReviewList={setReviewList}
         />
       ) : null}
       <InfoImgContainer>
-        {Pharm.image ? (
-          <PharmImg src={Pharm.image as string} onClick={() => setIsModalUp(true)} />
-        ) : (
-          <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." onClick={() => setIsModalUp(true)} />
-        )}
-        <LikeButton onClick={() => setLike(!like)}>
-          {like ? (
-            <img src="./Images/Heart.png" alt="좋아요가 선택된 상태의 꽉 찬 하트모양입니다." />
+        <>
+          {Pharm.image ? (
+            <PharmImg src={Pharm.image as string} onClick={() => onModalUp()} />
           ) : (
-            <img src="./Images/UnHeart.png" alt="좋아요 하기 전의 빈 하트모양입니다." />
+            <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." onClick={() => onModalUp()} />
           )}
-        </LikeButton>
+        </>
+        <>
+          {/* <LikeButton onClick={() => likeThisPharmacy()}> */}
+          <LikeButton onClick={onClick}>
+            {/* like 의 상태가 아니라 약국 정보에 내가 이 약국을 찜했는지 여부의 boolean 으로 바꿔야 함 */}
+            {like ? (
+              <img src="./Images/Heart.png" alt="좋아요가 선택된 상태의 꽉 찬 하트모양입니다." />
+            ) : (
+              <img src="./Images/UnHeart.png" alt="좋아요 하기 전의 빈 하트모양입니다." />
+            )}
+          </LikeButton>
+        </>
+
+        {/* 리덕스 툴킷에 유저인덱스가 없으면, -> 로그인 전*/}
       </InfoImgContainer>
       <PharmTitleBox>
         <PharmName onClick={() => setIsModalUp(true)}>{Pharm && Pharm.name}</PharmName>
@@ -105,7 +153,11 @@ const PharmTitleBox = styled.header`
 `;
 const PharmName = styled.h1`
   cursor: pointer;
-  font-size: 1.56rem;
+  width: 170px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 1.4rem;
   font-weight: bold;
 `;
 const PharmImg = styled.img`

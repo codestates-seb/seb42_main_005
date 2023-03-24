@@ -27,7 +27,7 @@ public class JwtHelper {
 
 
     public String getEmailFromJwtToken(String token) {
-        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(environment.getProperty("token.secret")));
+        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(environment.getProperty("jwt.key.secret")));
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -37,7 +37,7 @@ public class JwtHelper {
     }
 
     public boolean validateJwtToken(String authToken) {
-        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(environment.getProperty("token.secret")));
+        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(environment.getProperty("jwt.key.secret")));
 
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken);

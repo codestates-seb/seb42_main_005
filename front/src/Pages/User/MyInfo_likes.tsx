@@ -39,6 +39,7 @@ export default function MyInfoLikes() {
         <Rest>
           {likedPharmacies.map((likedPharmacy: any) => (
             <LikedPharmacyUnit
+              key={likedPharmacy.storeIdx}
               likedPharmacy={likedPharmacy}
               likedPharmacies={likedPharmacies}
               setLikedPharmacies={setLikedPharmacies}

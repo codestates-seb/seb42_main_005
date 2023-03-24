@@ -1,6 +1,6 @@
 package com.project.mainproject.user.dummy;
 
-import com.project.mainproject.review.dto.GetReviewDto;
+import com.project.mainproject.review.dto.ListGetUserReviewDto.GetUserReviewDto;
 import com.project.mainproject.store.dto.GetPickedStoreDto;
 import com.project.mainproject.user.dto.UserFindPasswordDto;
 import com.project.mainproject.user.dto.UserInfoDto;
@@ -56,7 +56,7 @@ public class UserStub {
         );
         stubRequestBody.put(
                 "patchUser",
-                new UserPatchDto("장호동", "서울특별시 강남구 삼성동", "abc123!")
+                new UserPatchDto("장호동", "서울특별시 강남구 삼성동", "abc123!", "sdgs")
         );
         stubRequestBody.put(
                 "findPassword",
@@ -78,15 +78,15 @@ public class UserStub {
         return stores;
     }
 
-    public static List<GetReviewDto> getReviews() {
-        List<GetReviewDto> reviews = new ArrayList<>();
+    public static List<GetUserReviewDto> getReviews() {
+        List<GetUserReviewDto> reviews = new ArrayList<>();
         for (int i = 1; i <= 5; i++) {
-            GetReviewDto review = GetReviewDto.builder()
+            GetUserReviewDto review = GetUserReviewDto.builder()
                     .reviewIdx((long) i + 1)
-                    .storeIdx((long) i)
                     .storeName(i + "번가 약국")
                     .content(i + "점 드립니다")
                     .rating(i)
+                    .modifiedAt(LocalDateTime.now())
                     .build();
             reviews.add(review);
         }

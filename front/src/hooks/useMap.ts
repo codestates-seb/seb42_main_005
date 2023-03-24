@@ -2,17 +2,19 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import useGeolocation from "./useGeolocation";
 import "./PharmacyOverlay.css";
-// import { API_PharmLists } from "../Api/APIs";
 
 const { kakao } = window;
 
-export function useMap() {
+interface Props {
+  totalPharmList: any;
+  setTotalPharmList: any;
+}
+
+export function useMap(totalPharmList: any, setTotalPharmList: any) {
   const location: any = useGeolocation();
   const [_map, setMap]: any = useState();
-  const [pharmacies, setPharmacies] = useState([]);
   const [mapCenter, setMapCenter] = useState({ latitude: 0, longitude: 0 });
-  const API_URL = "https://apis.data.go.kr/B552657";
-  // const API_URL = API_PharmLists.REAL_API;
+
 
   useEffect(() => {
     if (typeof location != "string" && kakao) {
@@ -49,45 +51,27 @@ export function useMap() {
       map.setMaxLevel(10);
       setMap(map);
 
-      axios
-        .get(`${API_URL}/ErmctInsttInfoInqireService/getParmacyFullDown`, {
-          params: {
-            ServiceKey: "LYki5UdYrhpVu5YPHg03MBzs3WoCetCv02paAeoaDrc01C9rKu5sVO02/i6dlkmA1+8rxI1HdSK/b8b5cgcTmQ==", // 배포 때 .env파일로
-            ServiceType: "json",
-            numOfRows: 1000,
-          },
-        })
-        .then((response) => {
-          try {
-            const responseData = response.data.response || {};
-            const body = responseData.body || {};
-            const items = body.items || {};
-            const pharmacies = items.item || [];
+      console.log(totalPharmList)
 
-            setPharmacies(pharmacies);
-          } catch (error) {
-            console.error("문제 발생!", error);
-          }
-        });
     }
   }, [location, kakao]);
 
-  useEffect(() => {
-    if (_map) {
-      kakao.maps.event.addListener(_map, "idle", () => {
-        const center = _map.getCenter();
-        setMapCenter({ latitude: center.getLat(), longitude: center.getLng() });
-        setMap(_map);
-      });
-    }
-  }, [_map]);
+  // useEffect(() => {
+  //   if (_map) {
+  //     kakao.maps.event.addListener(_map, "idle", () => {
+  //       const center = _map.getCenter();
+  //       setMapCenter({ latitude: center.getLat(), longitude: center.getLng() });
+  //       setMap(_map);
+  //     });
+  //   }
+  // }, [_map]);
 
   useEffect(() => {
     if (_map) {
       const bounds = _map.getBounds();
       const ne = bounds.getNorthEast();
       const sw = bounds.getSouthWest();
-      const filteredPharmacies = pharmacies.filter((pharmacy: any) => {
+      const filteredPharmacies = totalPharmList.filter((pharmacy: any) => {
         const lat = Number(pharmacy.wgs84Lat);
         const lng = Number(pharmacy.wgs84Lon);
         return lat > sw.getLat() && lat < ne.getLat() && lng > sw.getLng() && lng < ne.getLng();
@@ -159,7 +143,7 @@ export function useMap() {
       clusterer.setMap(_map);
       kakao.maps.event.addListener(_map, "idle", function () {
         clusterer.clear();
-        markers.forEach((marker) => marker.setMap(null));
+        markers.forEach((marker: { setMap: (arg0: null) => any }) => marker.setMap(null));
       });
     }
   }, [location, _map, mapCenter]);

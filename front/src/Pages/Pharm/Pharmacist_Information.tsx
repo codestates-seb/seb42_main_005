@@ -4,8 +4,12 @@ import axios from "axios";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { API_MyInfoInformation } from "../../Api/APIs";
 
-export default function PharmacistInformation() {
-  const [myInfo, setMyInfo] = useState({
+interface Props {
+  scriptUrl?: string;
+}
+
+export default function PharmacistInformation({ scriptUrl }: Props) {
+  const [myInfo, setMyInfo]: any = useState({
     createdAt: "",
     name: "",
     email: "",

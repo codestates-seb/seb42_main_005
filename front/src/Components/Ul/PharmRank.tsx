@@ -5,14 +5,14 @@ import { BsStarFill } from "react-icons/bs";
 interface Props {
   rating: number;
   likes: number;
-  reviewCount: number
+  reviewCount: number;
 }
 export default function PharmRank({ rating, likes, reviewCount }: Props) {
   return (
     <Container>
       <div>{rating ? <BsStarFill className="select_star" /> : <BsStar className="unSelect_star" />}</div>
       <Star>
-        {rating}
+        {rating ? rating.toFixed(1) : rating}
         <span className="rest">/5</span>
       </Star>
       <Selected>찜콩 {likes}</Selected>
@@ -44,10 +44,10 @@ const Container = styled.div`
 `;
 
 const Star = styled.span`
-  margin-right: 1.2rem;
+  margin-right: 0.9rem;
   margin-left: 0.2rem;
   padding-bottom: 2px;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: bold;
   color: var(--black-700);
   .rest {
@@ -58,8 +58,10 @@ const Star = styled.span`
 `;
 
 const Selected = styled.span`
+  font-size: 0.9rem;
   color: var(--black-400);
 `;
 const TotalReview = styled.span`
+  font-size: 0.9rem;
   color: var(--black-400);
 `;

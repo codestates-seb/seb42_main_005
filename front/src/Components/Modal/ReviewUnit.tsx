@@ -8,6 +8,7 @@ import Button from "../Ul/Button";
 import { API_ReviewUnit } from "../../Api/APIs"; // Review.json
 import { BsFillStarFill } from "react-icons/bs";
 import { HiXMark } from "react-icons/hi2";
+import { useAppSelector } from "../../Redux/hooks";
 
 interface Props {
   review: any;
@@ -22,37 +23,33 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
   const [isOnEdit, setIsOnEdit] = useState(false);
   const [reviewContent, setReviewContent] = useState(review.content);
   const [commentContent, setCommentContent] = useState("");
-
   const handleReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReviewContent(e.target.value);
   };
   const handleComment = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCommentContent(e.target.value);
   };
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
 
   //! PATCH : 리뷰수정
   const editReview = (e: any) => {
-    e.preventDefault();
-    if (e.key === "Enter") {
-      const formData = new FormData(e.target.value);
-      const reviewtextarea = formData.get("reviewtextarea");
-
-      //* dummy url 일때
-      // const ReviewData = {
-      //   ...review,
-      //   content:reviewContent,
-      // };
-      //TODO url 받았을때
-
+    if (e.key === " " && e.getModifierState("Shift") === false) {
+      e.stopPropagation();
+    } else if (e.key === " " && e.target.value.slice(-1) === " ") {
+      e.stopPropagation();
+    } else if (e.key === "Enter") {
       const data: any = {
-        userIdx: 1,
-        content: reviewtextarea,
+        //! userIdx 는 리덕스 툴킷에서 가져올거고 일단은 임의로
+        userIdx: user.userIdx,
+        content: reviewContent,
         rating: review.rating,
       };
       const submitReview = async () => {
         try {
           await axios({
-            url: `${API_ReviewUnit.REAL_API}/${storeIdx}/review/${reviewIdx}`,
+            url: `${API_ReviewUnit.PATCH_REAL_API}/${storeIdx}/review/${reviewIdx}`,
             method: "patch",
             data,
           }).then(() => setIsOnEdit(false));
@@ -60,38 +57,93 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
           console.log(error);
         }
       };
+      const editedReview = {
+        ...review,
+        content: reviewContent,
+      };
+      setReviewList([...reviewList].map((rev) => (rev.reviewIdx === reviewIdx ? editedReview : rev)));
       submitReview();
     }
   };
+
   // ! DELETE : 리뷰삭제
   const deleteReview = async () => {
+    try {
+      await axios({
+        url: `${API_ReviewUnit.DELETE_REAL_API}/${storeIdx}/review/${reviewIdx}`,
+        method: "delete",
+      });
+    } catch (error) {
+      console.log(error);
+    }
     setReviewList([...reviewList].filter((review: any) => review.reviewIdx !== reviewIdx));
-    await axios.delete(`${API_ReviewUnit.REAL_API}/${storeIdx}/review/${reviewIdx}`);
+  };
+
+  //! POST : 리뷰신고
+  const reportReview = async () => {
+    try {
+      await axios({
+        url: `${API_ReviewUnit.POST_REAL_API}/${storeIdx}/review/${reviewIdx}/report`,
+        method: "post",
+        data: {
+          userIdx: 1, //? 리덕스 툴킷에서 가져오고 지금은 임의로 1
+          content: reviewContent,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const newComment = {
-    //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
+    storeIdx,
     userIdx: 1,
     content: commentContent,
   };
 
   //! POST : 리뷰의 댓글작성
-  const submitCommentKeyPress = async (e: any) => {
-    try {
-      //* dummy url 일때 -> Review.json
-      // await axios({
-      //   url: "http://localhost:3010/response",
-      //   method: "post",
-      //   data: newComment,
-      // });
-      //TODO url 받았을때 -> /api/store/{storeIdx}/review/{reviewIdx}
-      await axios({
-        url: `${API_ReviewUnit.REAL_API}/${storeIdx}/review/${reviewIdx}`,
-        method: "post",
-        data: newComment,
-      });
-    } catch (error) {
-      console.log(error);
+  const submitCommentKeyPress = (e: any) => {
+    if (e.key === " " && e.getModifierState("Shift") === false) {
+      e.stopPropagation();
+    } else if (e.key === " " && e.target.value.slice(-1) === " ") {
+      e.stopPropagation();
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const reply = async () => {
+        try {
+          await axios({
+            url: `${API_ReviewUnit.POST_COMMENT_REAL_API}/review/${reviewIdx}/reply`,
+            method: "post",
+            data: newComment,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      const show = {
+        //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
+        storeIdx,
+        userIdx: 1,
+        content: commentContent,
+        userName: "내가 씀",
+        createdAt: new Date().toLocaleDateString(),
+      };
+      setCommentContent("");
+      setIsCommentFormShown(false);
+      setReviewList(
+        [...reviewList].map(
+          (
+            rev, //? username 임의로 작성해둠, 나중에 리덕스 툴킷에서 가져오기
+          ) =>
+            rev.reviewIdx === reviewIdx
+              ? {
+                  ...rev,
+                  replies: [show, ...rev.replies],
+                }
+              : rev,
+        ),
+      );
+      reply();
     }
   };
 
@@ -101,7 +153,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
         <Upper>
           <UserInfo>
             <UserIcon src={review.userImage} alt="일반계정 사용자의 이미지 입니다." />
-            <UserName>{review.name}</UserName>
+            <UserName>{review.userName}</UserName>
             <Created>{new Date(review.createdAt).toLocaleDateString()}</Created>
             <StarContainer>
               {new Array(review.rating).fill("").map((_, i) => (
@@ -117,7 +169,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
             {/* 약사계정이면 && 해당 약국의 storIdx 와 리덕스 툴킷의 내 storeIdx 가 같을 때 => 댓글 + 신고 버튼이 보임 */}
             <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsCommentFormShown(true)} />
             {/* 로그인 상태여야 함 */}
-            <Button color="l_black" size="sm" text="신 고" />
+            <Button color="l_black" size="sm" text="신 고" onClick={() => reportReview()} />
           </ButtonContainer>
         </Upper>
         <Lower>
@@ -142,15 +194,6 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
           <ReviewImg src={review.reviewImage} />
         </Lower>
       </section>
-      {review.reply?.map((reply: any) => (
-        <ReviewOfReview
-          key={reply.replyIdx}
-          reply={reply}
-          reviewIdx={review.reviewIdx}
-          userIdx={1}
-          replyIdx={reply.reply}
-        />
-      ))}
       {isCommentFormShown ? (
         <WriteCommentForm>
           <Instruction>
@@ -169,6 +212,17 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
           />
         </WriteCommentForm>
       ) : null}
+      {review.replies?.map((reply: any) => (
+        <ReviewOfReview
+          key={reply.replyIdx}
+          reviewIdx={reviewIdx}
+          reply={reply}
+          review={review}
+          storeIdx={storeIdx}
+          reviewList={reviewList}
+          setReviewList={setReviewList}
+        />
+      ))}
     </ReviewUnitContainer>
   );
 }
@@ -235,6 +289,7 @@ const ReviewImg = styled.img`
   height: 80px;
   width: 100px;
   border-radius: 5px;
+  border: 1px solid var(--black-100);
 `;
 const Upper = styled.section`
   display: flex;

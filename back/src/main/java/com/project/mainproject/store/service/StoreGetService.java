@@ -45,11 +45,17 @@ public class StoreGetService {
     }
 
     /*
-    * 거리기준으로 필터링 할 때 출력되는 데이터
+    * 거리기준 랭킹기준 찜 기준
     * */
     public SingleResponseDto getStoreListDto(GetStoreListRequestDto request) {
         Boolean isHoliday = getIsHoliday();
-        List<DBStoreListDto> findStores = storeQueryRepository.getStoreList(request.getLat(), request.getLng(), request.getDistance(), request.getSortCondition(),request.getFilterCondition(),isHoliday);
+        double maxLat = Math.max(request.getSwLat(), request.getNeLat());
+        double minLat = Math.min(request.getSwLat(), request.getNeLat());
+        double maxLng = Math.max(request.getSwLng(), request.getNeLng());
+        double minLng = Math.min(request.getSwLng(), request.getNeLng());
+
+        List<DBStoreListDto> findStores = storeQueryRepository.getStoreList(maxLat,minLat,maxLng,minLng, request.getLat(), request.getLng(),request.getSortCondition(),request.getFilterCondition(),isHoliday);
+
 
         return SingleResponseDto
                 .<List<DBStoreListDto>>builder()

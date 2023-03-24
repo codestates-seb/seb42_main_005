@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import AdminTabs from "./AdminTabs";
-import Report from "./Report";
 import Button from "../../Components/Ul/Button";
 import CheckBox from "../../Components/Ul/CheckBox";
 import { API_Reports } from "../../Api/APIs";
@@ -10,15 +9,14 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Reports() {
   const [reports, setReports] = useState([]);
-  const [checkedList, setCheckedList]: any = useState([]);
+  const [checkedList, setCheckedList] = useState<Array<any>>([]);
 
-  //! GET : 신고리뷰관리 리스트 불러오기
+  //! GET : 신고리뷰 리스트 불러오기
   useEffect(() => {
     const getReports = async () => {
       try {
-        //TODO /api/admin/reports
         const response = await axios.get(API_Reports.GET_REAL_API);
-        setReports(response.data.storeReview);
+        setReports(response.data.response.reportedReviews);
       } catch (error) {
         console.log(error);
       }
@@ -26,15 +24,26 @@ export default function Reports() {
     getReports();
   }, []);
 
+  //* 체크된 항목을 하나씩 담아주는 부분
+  const onCheckedItem = useCallback(
+    (checked: boolean, id: string) => {
+      if (checked) {
+        setCheckedList((prev) => [...prev, { reviewIdx: id }]);
+      } else if (!checked) {
+        setCheckedList(checkedList.filter((check) => check.reviewIdx !== id));
+      }
+    },
+    [checkedList],
+  );
+
   //! DELETE : 신고누적리뷰 삭제
   const deleteReview = async () => {
     try {
-      //TODO /api/admin/access/success
       await axios({
         url: API_Reports.DELETE_REAL_API,
         method: "delete",
-        data: setCheckedList,
-      });
+        data: { reviews: checkedList },
+      }).then(() => location.reload());
     } catch (error) {
       console.log(error);
     }
@@ -43,27 +52,17 @@ export default function Reports() {
   //! POST : 신고누적리뷰 복구
   const restoreReview = async () => {
     try {
-      //TODO /api/admin/access/failure
       await axios({
         url: API_Reports.POST_REAL_API,
         method: "post",
-        data: setCheckedList,
+        data: { reviews: checkedList },
+      }).then(() => {
+        location.reload();
       });
     } catch (error) {
       console.log(error);
     }
   };
-
-  const onCheckedItem = useCallback(
-    (checked: boolean, item: string) => {
-      if (checked) {
-        setCheckedList([...checkedList, item]);
-      } else if (!checked) {
-        setCheckedList(checkedList.filter((el: any) => el !== item));
-      }
-    },
-    [checkedList]
-  );
 
   return (
     <WholePage>
@@ -80,7 +79,7 @@ export default function Reports() {
           <Table>
             <Label>
               <Values className="checkBox">
-                <CheckBox onChange={(e: any) => onCheckedItem(e.target.checked, e.target.id)}/>
+                <CheckBox onChange={(e: any) => onCheckedItem(e.target.checked, e.target.id)} />
               </Values>
               <Values className="content">내용</Values>
               <Values className="email">email</Values>
@@ -92,9 +91,15 @@ export default function Reports() {
                 {reports.map((report: any, i: number) => (
                   <Content key={i}>
                     <Values className="checkBox">
-                      <CheckBox id={report.reportIdx} onChange={(e: any) => onCheckedItem(e.target.checked, e.target.id)} />
+                      <CheckBox
+                        id={report.reviewIdx}
+                        onChange={(e: any) => onCheckedItem(e.target.checked, e.target.id)}
+                      />
                     </Values>
-                    <Report key={i} report={report} />
+                    <Values className="content">{report.content}</Values>
+                    <Values className="email">{report.email}</Values>
+                    <Values className="writtenAt">{new Date(report.createdAt).toLocaleDateString()}</Values>
+                    <Values className="reports">{report.reportCnt}</Values>
                   </Content>
                 ))}
               </BelowLable>

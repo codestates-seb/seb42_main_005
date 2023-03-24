@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface User {
-  address?: string;
-  name?: string;
+  address?: string | null;
+  name?: string | null;
   storeIdx?: number | null;
   userIdx?: number | null;
-  userRole?: string;
+  userRole?: string | null;
 }
 
 const initialState: User = {
@@ -23,7 +23,11 @@ export const userSlice = createSlice({
     getUserInfo: (state: any, action: PayloadAction<User>) => {
       state.response = action.payload;
     },
+
+    DeleteUserInfo: (state: any) => {
+      state.response = null;
+    },
   },
 });
-export const { getUserInfo } = userSlice.actions;
+export const { getUserInfo, DeleteUserInfo } = userSlice.actions;
 export default userSlice.reducer;

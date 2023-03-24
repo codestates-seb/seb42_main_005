@@ -6,6 +6,8 @@ import { API_SignOut } from "../Api/APIs";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { removeLocalStorage } from "../Api/localStorage";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../Redux/hooks";
+import { DeleteUserInfo } from "../Redux/slice/userSlice";
 
 export default function SignOut() {
   const [isChecked, setIsChecked] = useState(false);
@@ -15,16 +17,19 @@ export default function SignOut() {
   //* 토큰 지우고 디스패치 날리기
 
   const navigate = useNavigate();
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
 
+  const dispatch = useAppDispatch();
   const signOut = () => {
     if (!isChecked) {
       return setErrMsg(true);
     }
-
     const signOutDelete = async () => {
+      dispatch(DeleteUserInfo());
       await axios
-        //디스패치로 유저인덱스랑, 스토어 인덱스 지우기
-        .delete(`${API_SignOut.REAL_API}/${1}`)
+        .delete(`${API_SignOut.REAL_API}/${user.userIdx}`)
         .then(() => {
           removeLocalStorage("access_token");
           removeLocalStorage("refresh_token");

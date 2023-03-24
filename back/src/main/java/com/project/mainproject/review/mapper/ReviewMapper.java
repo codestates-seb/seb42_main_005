@@ -1,6 +1,12 @@
 package com.project.mainproject.review.mapper;
 
-import com.project.mainproject.review.dto.*;
+import com.project.mainproject.review.dto.ListGetStoreReviewDto.ReplyDto;
+import com.project.mainproject.review.dto.ListGetStoreReviewDto.StoreReviewDto;
+import com.project.mainproject.review.dto.ListGetUserReviewDto.GetUserReviewDto;
+import com.project.mainproject.review.dto.ListReportedReviewDto.ReportedReviewDto;
+import com.project.mainproject.review.dto.PostCreateReviewDto;
+import com.project.mainproject.review.dto.PostUpdateReviewDto;
+import com.project.mainproject.review.dto.SimpleReviewDto;
 import com.project.mainproject.review.entity.Review;
 import com.project.mainproject.review.entity.ReviewReply;
 import org.mapstruct.Mapper;
@@ -9,8 +15,6 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
-
-import static com.project.mainproject.review.dto.StoreReviewPageDto.ReplyDto;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ReviewMapper {
@@ -24,7 +28,7 @@ public interface ReviewMapper {
     @Mapping(target = "storeIdx", source = "store.storeIdx")
     SimpleReviewDto reviewToSimpleReviewDto(Review review);
 
-    List<StoreReviewPageDto> reviewsToReviewsDto(List<Review> reviews);
+    List<StoreReviewDto> reviewsToReviewsDto(List<Review> reviews);
 
     @Mapping(target = "reviewImage", expression = "java(review.getReviewImages().size() == 0 " +
                                                         "? null " +
@@ -33,16 +37,20 @@ public interface ReviewMapper {
     @Mapping(target = "userIdx", source = "user.userIdx")
     @Mapping(target = "userName", source = "user.name")
     @Mapping(target = "profileImage", source = "user.imagePath")
-    StoreReviewPageDto reviewToReviewDto(Review review);
+    StoreReviewDto reviewToReviewDto(Review review);
 
     @Mapping(target = "userIdx", source = "user.userIdx")
     @Mapping(target = "userName", source = "user.name")
     @Mapping(target = "profileImage", source = "user.imagePath")
     ReplyDto replyToReplyDto(ReviewReply reply);
 
-    List<GetReviewDto> reviewsToUserReviewsDto(List<Review> reviews);
+    List<GetUserReviewDto> reviewsToUserReviewsDto(List<Review> reviews);
 
-    @Mapping(target = "storeIdx", source = "store.storeIdx")
     @Mapping(target = "storeName", source = "store.name")
-    GetReviewDto reviewToGetReviewDto(Review reviews);
+    GetUserReviewDto reviewToGetReviewDto(Review reviews);
+
+    List<ReportedReviewDto> reviewsToReportedReviewsDto(List<Review> reviews);
+
+    @Mapping(target = "email", source = "user.email")
+    ReportedReviewDto reviewToReportedReviewDto(Review reviews);
 }

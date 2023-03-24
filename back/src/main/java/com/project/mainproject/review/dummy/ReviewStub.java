@@ -1,7 +1,7 @@
 package com.project.mainproject.review.dummy;
 
-import com.project.mainproject.review.dto.GetReportedReviewDto;
-import com.project.mainproject.review.dto.StoreReviewPageDto;
+import com.project.mainproject.review.dto.ListGetReportedReviewDto.GetReportedReviewDto;
+import com.project.mainproject.review.dto.ListGetStoreReviewDto.StoreReviewDto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,8 +23,8 @@ public class ReviewStub {
         return result;
     }
 
-    public static StoreReviewPageDto storeReviewDetailDto() {
-        return StoreReviewPageDto.builder()
+    public static StoreReviewDto storeReviewDetailDto() {
+        return StoreReviewDto.builder()
                 .reviewIdx(1L)
                 .rating(4)
                 .reviewImage("사진 파일이 들어갈 위치입니다.")
@@ -34,10 +34,10 @@ public class ReviewStub {
                 .build();
     }
 
-    public static List<StoreReviewPageDto> getStoreReviewPageListStub() {
-        List<StoreReviewPageDto> result = new ArrayList<>();
+    public static List<StoreReviewDto> getStoreReviewPageListStub() {
+        List<StoreReviewDto> result = new ArrayList<>();
         for (Long i = 1L; i < 20; i++) {
-            StoreReviewPageDto build = StoreReviewPageDto.builder()
+            StoreReviewDto build = StoreReviewDto.builder()
                     .reviewIdx(i)
                     .rating(4)
                     .reviewImage("사진 파일이 들어갈 위치입니다.")

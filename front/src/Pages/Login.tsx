@@ -7,7 +7,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { validators } from "../Components/SignUpForm/Validation";
 import ErrorAlert from "../Components/SignUpForm/ErrorAlert";
 import axios from "axios";
-
 import { API_UserLogIn } from "../Api/APIs";
 import { setLocalStorage } from "../Api/localStorage";
 import { useAppDispatch, useAppSelector } from "../Redux/hooks";
@@ -84,9 +83,6 @@ export default function Login() {
           let accessToken = res.headers.authorization;
           let refreshToken = res.headers.refresh;
 
-          console.log("access 토큰 :", accessToken);
-          console.log("refresh 토큰 :", refreshToken);
-
           setLocalStorage("access_token", accessToken);
           setLocalStorage("refresh_token", refreshToken);
 
@@ -106,6 +102,10 @@ export default function Login() {
     };
     postLogin();
   };
+  // const user = useAppSelector((state: any) => {
+  //   return state.userInfo.response;
+  // });
+  // console.log(user);
 
   //! POST : 로그인 - Auth
   const postAuthSignUp = async () => {

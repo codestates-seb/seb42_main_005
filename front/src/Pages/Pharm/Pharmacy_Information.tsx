@@ -13,6 +13,7 @@ export default function PharmacyInformation() {
   const [pharmDetail, setPharmDetail]: any = useState();
   const [isModalUp, setIsModalUp] = useState(false);
   const [like, setLike] = useState(false);
+  const [reviewList, setReviewList] = useState([]);
   const [isDropDownDown, setIsDropDownDown] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const [imgFile, setImgFlie]: any = useState(null);

@@ -15,23 +15,28 @@ interface Props {
 export default function LikedPharmacyUnit({ likedPharmacy, likedPharmacies, setLikedPharmacies }: Props) {
   const [pharmDetail, setPharmDetail] = useState();
   const [isModalUp, setIsModalUp] = useState(false);
+  const [reviewList, setReviewList] = useState([]);
   const [like, setLike] = useState(false);
 
-  //! GET : 약국상세정보
-  useEffect(() => {
-    const getPharmDetail = async () => {
-      try {
-        //* dummy data 일때 -> Pharm.json
-        // const response = await axios.get(API_LikedPharmacyUnit.GET_DUMMY_API_);
-        //TODO 실제 url 일때 -> /api/store/{storeIdx}
-        const response = await axios.get(`${API_LikedPharmacyUnit.GET_REAL_API}/store${likedPharmacy.storeIdx}`);
-        setPharmDetail(response.data);
-      } catch (error) {
-        console.log(error);
-      }
+  //! GET : 약국상세정보 + 리뷰리스트
+  const onModalUp = () => {
+    const pharmDetailsAndreviewList = async () => {
+      await axios
+        .get(`${API_LikedPharmacyUnit.GET_REAL_API}/${likedPharmacy.storeIdx}`)
+        .then((response) => {
+          setPharmDetail(response.data.response);
+          axios
+            .get(`${API_LikedPharmacyUnit.GET_REAL_API}/${likedPharmacy.storeIdx}/review`)
+            .then((response) => {
+              setReviewList(response.data.response.storeReviews);
+            })
+            .catch((err) => console.log("리뷰받아오던 중" + err));
+        })
+        .catch((err) => console.log("약국상세받아오던 중" + err));
     };
-    getPharmDetail();
-  }, []);
+    pharmDetailsAndreviewList();
+    setIsModalUp(true);
+  };
 
   //! POST : 찜취소
   const unLikePharmacy = async (storeIdx: number) => {
@@ -53,11 +58,13 @@ export default function LikedPharmacyUnit({ likedPharmacy, likedPharmacies, setL
           like={like}
           setLike={setLike}
           storeIdx={likedPharmacy.storeIdx}
-          Pharm={pharmDetail}
+          pharmDetail={pharmDetail}
+          reviewList={reviewList}
+          setReviewList={setReviewList}
         />
       ) : null}
       <Text className="single icon">
-        <IoIosArrowDropright onClick={() => setIsModalUp(true)} aria-hidden="true" />
+        <IoIosArrowDropright onClick={() => onModalUp()} aria-hidden="true" />
       </Text>
       <Text className="pharm">{likedPharmacy.name}</Text>
       <Text className="address">{likedPharmacy.address}</Text>
