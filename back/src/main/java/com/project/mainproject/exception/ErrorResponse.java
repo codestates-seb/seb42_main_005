@@ -1,6 +1,5 @@
 package com.project.mainproject.exception;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -88,7 +87,7 @@ public class ErrorResponse {
             return constraintViolations.stream()
                     .map(constraintViolation -> new ConstraintViolationError(
                             constraintViolation.getPropertyPath().toString(),
-                            constraintViolation.getInvalidValue().toString(),
+                            constraintViolation.getInvalidValue().toString().startsWith("{bcrypt}")? "********" : constraintViolation.getInvalidValue().toString(),
                             constraintViolation.getMessage()
                     )).collect(Collectors.toList());
         }

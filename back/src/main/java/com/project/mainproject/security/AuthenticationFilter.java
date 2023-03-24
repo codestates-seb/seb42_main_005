@@ -34,6 +34,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         this.jwtHelper = jwtHelper;
         this.userRepository = userRepository;
     }
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
@@ -54,7 +55,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        String username = ((org.springframework.security.core.userdetails.User)authResult.getPrincipal()).getUsername();
+        String username = ((org.springframework.security.core.userdetails.User) authResult.getPrincipal()).getUsername();
         String accessToken = jwtHelper.createAccessToken(username);
         String refreshToken = jwtHelper.createRefreshToken(username);
 
@@ -67,57 +68,19 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String name = successUser.getName();
 
         UserLoginInfoResponse userLoginInfoResponse;
-        if(userType.equals("약국회원")) {
+        if (userType.equals("약국회원")) {
             Pharmacy findPharmacy = (Pharmacy) successUser;
             Long storeIdx = findPharmacy.getStore().getStoreIdx();
             userLoginInfoResponse = new UserLoginInfoResponse(userIdx, name, userType, storeIdx, address);
-        }
-        else {
+        } else {
             userLoginInfoResponse = new UserLoginInfoResponse(userIdx, name, userType, address);
         }
-
-        log.info("address {}", address);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.getWriter().write(new ObjectMapper().writeValueAsString(userLoginInfoResponse));
-        response.setHeader("Authorization", "Bearer "+ accessToken);
+        response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
     }
-
-//    public static String[] setGeoPoint(String address) {
-//        String apikey = "FAEDA98E-BB2E-309E-9BE1-53CDB7E7CF6F";
-//        String searchType = "parcel";
-//        String searchAddr = "삼평동 624";
-//        String epsg = "epsg:4326";
-//
-//        StringBuilder sb = new StringBuilder("https://api.vworld.kr/req/address");
-//        sb.append("?service=address");
-//        sb.append("&request=getCoord");
-//        sb.append("&format=json");
-//        sb.append("&crs=" + epsg);
-//        sb.append("&key=" + apikey);
-//        sb.append("&type=" + searchType);
-//        sb.append("&address=" + URLEncoder.encode(address, StandardCharsets.UTF_8));
-//
-//        try{
-//            URL url = new URL(sb.toString());
-//            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8));
-//
-//            JsonParser parser = new JsonParser();
-//            JsonObject obj = (JsonObject) parser.parse(reader);
-//            JsonObject responseObj = (JsonObject) obj.get("response");
-//            JsonObject resultObj = (JsonObject) responseObj.get("result");
-//            JsonObject jsPoint = (JsonObject) resultObj.get("point");
-//
-//            String[] location = new String[2];
-//            location[0] = jsPoint.get("x").toString();
-//            location[1] = jsPoint.get("y").toString();
-//            return location;
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 }
