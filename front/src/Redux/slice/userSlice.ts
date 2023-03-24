@@ -1,49 +1,29 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface User {
-  user?: any;
-  userIdx?: number | undefined;
-  storeIdx?: number | undefined;
-  userType?: string;
-  isLogin?: boolean;
+  address?: string;
+  name?: string;
+  storeIdx?: number | null;
+  userIdx?: number | null;
+  userRole?: string;
 }
-//백엔드한테 어떻게 던져주는지 알아보고 수정
+
 const initialState: User = {
-  user: {},
-  userIdx: undefined,
-  storeIdx: undefined,
-  userType: "",
-  isLogin: false,
+  address: "",
+  name: "",
+  storeIdx: null,
+  userIdx: null,
+  userRole: "",
 };
 
 export const userSlice = createSlice({
   name: "userInfo",
   initialState,
   reducers: {
-    //로그인 됐을때, type
-    getUserType(state, action: PayloadAction<User>) {
-      state.userType = action.payload.userType;
-      state.isLogin = true;
-    },
-    //로그인 됐을때, idx
-    getUserIdx(state, action: PayloadAction<User>) {
-      state.userIdx = action.payload.userIdx;
-      state.storeIdx = action.payload.storeIdx;
-      state.isLogin = true;
-    },
-    //로그인 됐을때 유저인포
-    loginUser(state, action: PayloadAction<User>) {
-      state.isLogin = true;
-      state.user = action.payload;
-    },
-    //로그아웃
-    logOut(state) {
-      state.isLogin = false;
-      state.userIdx = undefined;
-      state.user = {};
+    getUserInfo: (state: any, action: PayloadAction<User>) => {
+      state.response = action.payload;
     },
   },
 });
-
-export const { getUserType, getUserIdx, loginUser, logOut } = userSlice.actions;
+export const { getUserInfo } = userSlice.actions;
 export default userSlice.reducer;

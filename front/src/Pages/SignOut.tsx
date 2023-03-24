@@ -4,8 +4,6 @@ import styled from "styled-components";
 import Button from "../Components/Ul/Button";
 import { API_SignOut } from "../Api/APIs";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
-import { useAppSelector } from "../Redux/hooks";
-import { useDispatch } from "react-redux";
 import { removeLocalStorage } from "../Api/localStorage";
 import { useNavigate } from "react-router-dom";
 
@@ -25,11 +23,11 @@ export default function SignOut() {
 
     const signOutDelete = async () => {
       await axios
+        //디스패치로 유저인덱스랑, 스토어 인덱스 지우기
         .delete(`${API_SignOut.REAL_API}/${1}`)
         .then(() => {
           removeLocalStorage("access_token");
           removeLocalStorage("refresh_token");
-          //디스패치로 유저인덱스랑, 스토어 인덱스 지우기
         })
         .catch((err) => {
           console.log(err);

@@ -131,10 +131,8 @@ export default function PharmSignForms() {
     formDataForsubmit.append("pharmacistCertificate", pharmImg);
     formDataForsubmit.append("userSignUpDto", new Blob([JSON.stringify(data)], { type: "application/json" }));
 
-    //! POST : 약사회원 회원가입 - JWT
     const postSignUp = async () => {
       try {
-        //TODO api/users/store
         await axios({
           url: API_PharmSignUpForms.REAL_API,
           method: "post",

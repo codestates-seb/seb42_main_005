@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import styled from "styled-components";
 import { zIndex_MyPage } from "../../Util/z-index";
 import { HiXMark } from "react-icons/hi2";
@@ -9,12 +9,14 @@ interface Props {
 }
 
 export default function DropDown({ setIsDropDownDown, workingHours }: Props) {
+  console.log(workingHours);
+
   return (
     <DropDownContainer onClick={(event) => event.stopPropagation()}>
       <CloseBtnContainer>
         <HiXMark id="close" onClick={() => setIsDropDownDown(false)} aria-hidden="true" />
       </CloseBtnContainer>
-            <Unit>
+      <Unit>
         <Key>월요일</Key>
         {workingHours.monday ? (
           <Value>{`${workingHours.monday.startTime.slice(0, -3)} - ${workingHours.monday.endTime.slice(0, -3)}`}</Value>
@@ -25,7 +27,10 @@ export default function DropDown({ setIsDropDownDown, workingHours }: Props) {
       <Unit>
         <Key>화요일</Key>
         {workingHours.tuesday ? (
-          <Value>{`${workingHours.tuesday.startTime.slice(0, -3)} - ${workingHours.tuesday.endTime.slice(0, -3)}`}</Value>
+          <Value>{`${workingHours.tuesday.startTime.slice(0, -3)} - ${workingHours.tuesday.endTime.slice(
+            0,
+            -3,
+          )}`}</Value>
         ) : (
           <Value>휴무</Value>
         )}
@@ -33,7 +38,10 @@ export default function DropDown({ setIsDropDownDown, workingHours }: Props) {
       <Unit>
         <Key>수요일</Key>
         {workingHours.wednesday ? (
-          <Value>{`${workingHours.wednesday.startTime.slice(0, -3)} - ${workingHours.wednesday.endTime.slice(0, -3)}`}</Value>
+          <Value>{`${workingHours.wednesday.startTime.slice(0, -3)} - ${workingHours.wednesday.endTime.slice(
+            0,
+            -3,
+          )}`}</Value>
         ) : (
           <Value>휴무</Value>
         )}
@@ -41,7 +49,10 @@ export default function DropDown({ setIsDropDownDown, workingHours }: Props) {
       <Unit>
         <Key>목요일</Key>
         {workingHours.thursday ? (
-          <Value>{`${workingHours.thursday.startTime.slice(0, -3)} - ${workingHours.thursday.endTime.slice(0, -3)}`}</Value>
+          <Value>{`${workingHours.thursday.startTime.slice(0, -3)} - ${workingHours.thursday.endTime.slice(
+            0,
+            -3,
+          )}`}</Value>
         ) : (
           <Value>휴무</Value>
         )}
@@ -57,7 +68,10 @@ export default function DropDown({ setIsDropDownDown, workingHours }: Props) {
       <Unit>
         <Key>토요일</Key>
         {workingHours.saturday ? (
-          <Value>{`${workingHours.saturday.startTime.slice(0, -3)} - ${workingHours.saturday.endTime.slice(0, -3)}`}</Value>
+          <Value>{`${workingHours.saturday.startTime.slice(0, -3)} - ${workingHours.saturday.endTime.slice(
+            0,
+            -3,
+          )}`}</Value>
         ) : (
           <Value>휴무</Value>
         )}
@@ -73,7 +87,10 @@ export default function DropDown({ setIsDropDownDown, workingHours }: Props) {
       <Unit>
         <Key>공휴일</Key>
         {workingHours.holiday ? (
-          <Value>{`${workingHours.holiday.startTime.slice(0, -3)} - ${workingHours.holiday.endTime.slice(0, -3)}`}</Value>
+          <Value>{`${workingHours.holiday.startTime.slice(0, -3)} - ${workingHours.holiday.endTime.slice(
+            0,
+            -3,
+          )}`}</Value>
         ) : (
           <Value>휴무</Value>
         )}
@@ -90,14 +107,14 @@ const DropDownContainer = styled.section`
   align-items: center;
   top: 24px;
   gap: 4px;
-  height: 200px;
+  height: 240px;
   width: 170px;
   background: white;
   box-shadow: var(--bs-lg);
   border-radius: 3px;
   z-index: ${zIndex_MyPage.DropDown};
   @media (max-width: 768px) {
-    left: -25px
+    left: -25px;
   }
 `;
 const Unit = styled.article`

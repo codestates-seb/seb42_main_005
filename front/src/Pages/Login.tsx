@@ -7,8 +7,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { validators } from "../Components/SignUpForm/Validation";
 import ErrorAlert from "../Components/SignUpForm/ErrorAlert";
 import axios from "axios";
+
 import { API_UserLogIn } from "../Api/APIs";
 import { setLocalStorage } from "../Api/localStorage";
+import { useAppDispatch, useAppSelector } from "../Redux/hooks";
+import { getUserInfo } from "../Redux/slice/userSlice";
 
 export default function Login() {
   const [loginForm, setLoginForms] = useState({
@@ -58,7 +61,7 @@ export default function Login() {
       [name]: errors,
     });
   };
-
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
@@ -72,37 +75,29 @@ export default function Login() {
     if (error.email === true || error.password === true) {
       return alert("항목을 다시 확인해주세요");
     }
+
     // { withCredentials: true }
-    //! POST : 로그인 - JWT
     const postLogin = async () => {
       await axios
         .post(API_UserLogIn.REAL_API, { email: email, password: password })
         .then((res) => {
-          //! accessToken어떤 키로 주는지 보고, 잘들어오는지 확인하기
-          // let accessToken = res.headers.Authorization;
-          // let refreshToken = res.headers.Refresh;
-
           let accessToken = res.headers.authorization;
           let refreshToken = res.headers.refresh;
 
-          // console.log("access 토큰 :", accessToken);
-          // console.log("refresh 토큰 :", refreshToken);
+          console.log("access 토큰 :", accessToken);
+          console.log("refresh 토큰 :", refreshToken);
 
-          //localStorage에 토큰 넣음
           setLocalStorage("access_token", accessToken);
           setLocalStorage("refresh_token", refreshToken);
 
-          // API 요청마다 헤더에 access토큰 담아서 요청보냄
           axios.defaults.headers.common["Authorization"] = `${accessToken}`;
-          //dispatch써야해=> userIdx, userType, storeIdx
-          // console.log(res.data);
+
+          dispatch(getUserInfo(res.data));
         })
         .then(() => {
-          //!로그인 성공하면 이거 주석 풀어!
           // navigate("/");
         })
         .catch((err) => {
-          //! 상태코드 물어봐서 고치기
           if (err.response.status === 401) {
             alert("ID 또는 비밀번호가 일치하지 않습니다.");
           }

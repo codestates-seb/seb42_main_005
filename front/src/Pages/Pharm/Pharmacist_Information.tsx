@@ -4,12 +4,8 @@ import axios from "axios";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { API_MyInfoInformation } from "../../Api/APIs";
 
-interface Props {
-  scriptUrl?: string;
-}
-
-export default function PharmacistInformation({ scriptUrl }: Props) {
-  const [myInfo, setMyInfo]: any = useState({
+export default function PharmacistInformation() {
+  const [myInfo, setMyInfo] = useState({
     createdAt: "",
     name: "",
     email: "",
@@ -22,7 +18,6 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
   useEffect(() => {
     const getReviews = async () => {
       try {
-        //TODO 실제 url 일때 -> /api/users/{userIdx}
         //? userIdx 는 리덕스 툴킷에서 -> 2
         const response = await axios.get(`${API_MyInfoInformation.REAL_API}/${2}`);
         setMyInfo(response.data.response);
@@ -36,6 +31,7 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const onUpload = (e: any) => {
     const file = e.target.files[0];
+    setImgFlie(file);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     return new Promise<void>((resolve) => {
@@ -52,15 +48,13 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
     formDataImgsubmit.append("image", imgFile);
 
     // TODO : 리덕스 툴킷에서 userIdx가져와 [JSON.stringify(userIdx)] 수정 => 아래주석 코드 지우면 안돼!
-    //   formDataForsubmit.append("userIdx", new Blob([JSON.stringify(userIdx)], { type: "application/json" }));
+    //   formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(userIdx)], { type: "application/json" }));
     //
 
     const submitNewImg: any = async () => {
       try {
-        //? 수정 /api/users/{userIdx}=>리덕스에서 userIdx꺼내
         await axios({
-          //TODO : {userIdx}/image 수정
-          url: `${API_MyInfoInformation.REAL_API}/${2}/image`,
+          url: `${API_MyInfoInformation.REAL_API}/image`,
           method: "patch",
           data: formDataImgsubmit,
         });

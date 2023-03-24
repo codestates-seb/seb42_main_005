@@ -89,10 +89,11 @@ export const API_MyInfoLikes = {
   DUMMY_API: "http://localhost:3050/response",
   REAL_API: `${API}/users`,
 };
+
 // 일반계정 마이페이지 (LikedPharmacyUnit) //! 내가 찜한 약국 리스트들 중 한줄
 export const API_LikedPharmacyUnit = {
   GET_DUMMY_API: "http://localhost:3060/response",
-  GET_REAL_API: `${API}/store`,
+  GET_REAL_API: `${API}/store/user`,
   DELETE_DUMMY_API_: "http://localhost:3060/response",
   DELETE_REAL_API: `${API}/store`,
 };

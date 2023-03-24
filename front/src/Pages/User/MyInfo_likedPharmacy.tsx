@@ -8,9 +8,11 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface Props {
   likedPharmacy: any;
+  likedPharmacies: any;
+  setLikedPharmacies: any;
 }
 
-export default function LikedPharmacyUnit({ likedPharmacy }: Props) {
+export default function LikedPharmacyUnit({ likedPharmacy, likedPharmacies, setLikedPharmacies }: Props) {
   const [pharmDetail, setPharmDetail] = useState();
   const [isModalUp, setIsModalUp] = useState(false);
   const [like, setLike] = useState(false);
@@ -32,13 +34,17 @@ export default function LikedPharmacyUnit({ likedPharmacy }: Props) {
   }, []);
 
   //! POST : 찜취소
-  const unLikePharmacy = (storeIdx: number) => {
-    //* dummy data 일때
-    // axios.delete(API_LikedPharmacyUnit.DELETE_DUMMY_API);
-    //TODO 실제 url 일때 -> /api/store/{storeIdx}/pick
-    axios.delete(`${API_LikedPharmacyUnit.DELETE_REAL_API}/${likedPharmacy.storeIdx}/pick`);
+  const unLikePharmacy = async (storeIdx: number) => {
+    try {
+      await axios({
+        url: `${API_LikedPharmacyUnit.GET_REAL_API}/${storeIdx}/pick?userIdx=${1}`, //? 리덕스 툴킷에서 유저인덱스 받아와야 함
+        method: "post",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    setLikedPharmacies([...likedPharmacies].filter((pharm) => pharm.storeIdx !== likedPharmacy.storeIdx));
   };
-
   return (
     <TableBody key={likedPharmacy.storeIdx}>
       {isModalUp ? (

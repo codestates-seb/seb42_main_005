@@ -3,9 +3,9 @@ import styled from "styled-components";
 
 interface CheckProps {
   name?: string;
-  value?: any;
+  value?: string;
   id?: string;
-  checked?: any;
+  checked?: boolean;
   onChange?: any;
 }
 

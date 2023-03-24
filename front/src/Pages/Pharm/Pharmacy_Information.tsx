@@ -7,7 +7,7 @@ import DropDown from "./DropDown";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { IoIosArrowDropright } from "react-icons/io";
 import { IoIosArrowDropdown } from "react-icons/io";
-import { API_PharmacyInformation } from "../../Api/APIs";
+import { API_MyInfoInformation, API_PharmacyInformation } from "../../Api/APIs";
 
 export default function PharmacyInformation() {
   const [pharmDetail, setPharmDetail]: any = useState();
@@ -15,8 +15,11 @@ export default function PharmacyInformation() {
   const [like, setLike] = useState(false);
   const [isDropDownDown, setIsDropDownDown] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
+  const [imgFile, setImgFlie]: any = useState(null);
+
   const onUpload = (e: any) => {
     const file = e.target.files[0];
+    setImgFlie(file);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     return new Promise<void>((resolve) => {
@@ -42,6 +45,28 @@ export default function PharmacyInformation() {
     getPharmDetail();
   }, []);
 
+  const submitPharmImg = (e: any) => {
+    e.preventDefault();
+    const formDataImgsubmit = new FormData();
+    formDataImgsubmit.append("image", imgFile);
+
+    // TODO : 리덕스 툴킷에서 userIdx가져와 [JSON.stringify(userIdx)] 수정 => 아래주석 코드 지우면 안돼!
+    // formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(userIdx)], { type: "application/json" }));
+
+    const submitNewImg: any = async () => {
+      try {
+        await axios({
+          url: `${API_MyInfoInformation.REAL_API}/image`,
+          method: "patch",
+          data: formDataImgsubmit,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    submitNewImg();
+  };
+
   return (
     <Content>
       {isModalUp ? (
@@ -60,10 +85,17 @@ export default function PharmacyInformation() {
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="image preparing" />
         )}
-        <Label htmlFor="pharmImg">
-          <MdOutlineAddAPhoto aria-hidden="true" />
-          우리 약국 사진추가하기
-        </Label>
+        {imageSrc ? (
+          <Label htmlFor="pharmImg">
+            <MdOutlineAddAPhoto aria-hidden="true" />
+            우리약국 사진 수정완료
+          </Label>
+        ) : (
+          <Label onClick={submitPharmImg}>
+            <MdOutlineAddAPhoto aria-hidden="true" />
+            우리약국 사진 수정하기
+          </Label>
+        )}
       </ImgContainer>
       <InfomationContainer>
         <Header>
