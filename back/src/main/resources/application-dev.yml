@@ -27,7 +27,7 @@ logging:
 
 jwt:
   key:
-    secret: 12wwdf23rtadf1232412wwdf23rtadf1232412wwdf23rtadf1232412wwdf23rtadf1232412wwdf23rtadf1232412wwdf23rtadf1232412wwdf23rtadf12324
+    secret: ${JWT_KEY}
   access-token-expiration-minutes: 300000
   refresh-token-expiration-minutes: 420
 
