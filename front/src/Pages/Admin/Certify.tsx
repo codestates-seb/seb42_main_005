@@ -163,9 +163,6 @@ const Table = styled.figure`
   flex-direction: column;
   height: 450px;
   overflow-x: scroll;
-  ::-webkit-scrollbar {
-    display: none;
-  }
   @media (max-width: 768px) {
     overflow-x: scroll;
     ::-webkit-scrollbar {

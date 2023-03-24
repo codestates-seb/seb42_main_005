@@ -36,6 +36,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
     } else if (e.key === " " && e.target.value.slice(-1) === " ") {
       e.stopPropagation();
     } else if (e.key === "Enter") {
+      e.preventDefault();
       const data: any = {
         //? userIdx 는 리덕스 툴킷에서 가져올거고 일단은 임의로 1
         userIdx: 1,
@@ -91,12 +92,6 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
     }
   };
 
-  const newComment = {
-    storeIdx,
-    userIdx: 1,
-    content: commentContent,
-  };
-
   //! POST : 리뷰의 댓글작성
   const submitCommentKeyPress = (e: any) => {
     if (e.key === " " && e.getModifierState("Shift") === false) {
@@ -105,6 +100,11 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
       e.stopPropagation();
     } else if (e.key === "Enter") {
       e.preventDefault();
+      const newComment = {
+        storeIdx,
+        userIdx: 1,
+        content: commentContent,
+      };
       const reply = async () => {
         try {
           await axios({
@@ -230,7 +230,7 @@ const ReviewUnitContainer = styled.article`
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 15px 10px 10px 10px;
+  padding: 15px 10px 0px 10px;
   margin-bottom: 20px;
   border: 1px solid var(--black-100);
   border-radius: 5px;
@@ -241,7 +241,6 @@ const ReviewUnitContainer = styled.article`
     width: 420px;
   }
 `;
-
 const StarContainer = styled.span`
   color: var(--l_button-mint);
   font-size: 12px;
@@ -258,6 +257,8 @@ const Rest = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin-bottom: 0.6rem;
+  height: 80px;
   width: 280px;
   white-space: normal;
   word-break: break-all;
@@ -273,7 +274,6 @@ const EditRest = styled.section`
   flex-direction: column;
   justify-content: flex-end;
   width: 280px;
-  padding-top: 10px;
   p {
     position: absolute;
     top: 5px;
@@ -283,8 +283,9 @@ const EditRest = styled.section`
     color: var(--blue-300);
   }
 `;
-const ReviewImg = styled.img`
+const ReviewImg = styled.img`//?
   object-fit: cover;
+  margin-bottom: 0.6rem;
   height: 80px;
   width: 100px;
   border-radius: 5px;
@@ -295,7 +296,7 @@ const Upper = styled.section`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 5px;
+  margin-bottom: 10px;
 `;
 const UserInfo = styled.header`
   display: flex;
@@ -328,10 +329,10 @@ const ButtonContainer = styled.span`
 const WriteCommentForm = styled.form`
   display: flex;
   flex-direction: column;
-  margin: 10px 2px 0px 6px;
+  margin-bottom: 10px;
   padding: 10px;
   gap: 5px;
-  height: 80px;
+  height: 85px;
   border-radius: 10px;
   background-color: var(--white);
   border: 0.5px solid var(--blue-300);

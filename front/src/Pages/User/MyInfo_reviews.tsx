@@ -50,8 +50,8 @@ export default function MyInfoReviews() {
             <IoMdAddCircleOutline id="icon" aria-hidden="true" />
           </Add>
           <span>
-            <p>현재 찜한 약국이 없습니다.</p>
-            <p>마음에 드는 약국을 찜해보세요!</p>
+            <p>현재 내가 남긴 리뷰가 없습니다.</p>
+            <p>마음에 드는 약국에 리뷰를 남겨보세요!</p>
           </span>
         </WhenEmpty>
       )}

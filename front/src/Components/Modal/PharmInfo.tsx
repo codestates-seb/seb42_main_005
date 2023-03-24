@@ -151,25 +151,27 @@ const InfoUnit = styled.article`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   gap: 20px;
 `;
 const InfoInfoTitle = styled.h2`
+  display: flex;
+  align-items: flex-start;
   width: 70px;
   color: var(--black-350);
-  font-size: 16px;
+  font-size: 17px;
   font-weight: bold;
 `;
 const InfoInfoContent = styled.span`
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   height: 25px;
   width: 350px;
   gap: 3px;
   font-size: 17px;
   &.address {
-    padding: 30px 0;
+    height: 60px;
     white-space: normal;
     word-break: normal;
   }

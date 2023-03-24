@@ -96,7 +96,6 @@ const Instead = styled.div`
   font-weight: 700;
   color: var(--black-300);
   border-radius: 5px;
-  background-color: var(--black-050);
   .bigger {
     font-size: 40px;
     margin-bottom: 10px;

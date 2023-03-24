@@ -54,6 +54,7 @@ export default function PharmDetail({
         </Constant>
         {isReviewFormShown ? (
           <WriteReviewForm
+          Pharm={Pharm}
             setIsReviewFormShown={setIsReviewFormShown}
             storeIdx={Pharm.storeIdx}
             reviewList={reviewList}
