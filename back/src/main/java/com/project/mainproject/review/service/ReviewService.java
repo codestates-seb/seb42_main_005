@@ -80,7 +80,11 @@ public class ReviewService {
     @Transactional
     public void deleteReview(Long storeIdx, Long reviewIdx) {
         Review review = findVerifiedReview(storeIdx, reviewIdx);
-        reviewRepository.delete(review);
+        review.setReviewStatus(DELETED);
+
+        if (review.getReviewImages().size() != 0)
+            fileUploader.deleteS3Image(review.getReviewImages().get(0).getImagePath());
+        review.deleteReviewImage();
     }
 
     public Review findVerifiedReview(Long storeIdx, Long reviewIdx) {
