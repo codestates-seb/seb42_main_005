@@ -10,10 +10,12 @@ public class UserLoginInfoResponse {
     private String name;
     private String userRole;
     private Long StoreIdx;
+    private String address;
 
-    public UserLoginInfoResponse(Long userIdx, String name, String userRole) {
+    public UserLoginInfoResponse(Long userIdx, String name, String userRole, String address) {
         this.userIdx = userIdx;
         this.name = name;
         this.userRole = userRole;
+        this.address = address;
     }
 }
