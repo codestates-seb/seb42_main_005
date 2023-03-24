@@ -2,6 +2,7 @@ package com.project.mainproject.user.service;
 
 import com.project.mainproject.exception.BusinessLogicException;
 import com.project.mainproject.security.CustomAuthorityUtils;
+import com.project.mainproject.security.UserContext;
 import com.project.mainproject.store.entity.Store;
 import com.project.mainproject.store.repository.StoreRepository;
 import com.project.mainproject.user.dto.UserInfoDto;
@@ -57,9 +58,10 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByEmail(username).get();
         List<GrantedAuthority> authority = new ArrayList<>();
         authority.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(), user.getPassword(), authority);
+        String userId = user.getUserIdx().toString();
+//        return new org.springframework.security.core.userdetails.User(
+//                user.getEmail(), user.getPassword(), authority);
+        return new UserContext(userId, user.getEmail(), user.getPassword(), authority);
     }
 
     public void saveNormal(Normal normal) {
@@ -217,5 +219,17 @@ public class UserService implements UserDetailsService {
         if (!(user instanceof Pharmacy)) {
             throw new BusinessLogicException(UserExceptionCode.USER_NOT_PHARMACY);
         }
+    }
+
+    /*
+     * normal User인지 확인하는 로직
+     * */
+    public Normal checkIsNormal(Long userIdx) {
+        User findUser = validUser(userIdx);
+
+        if (!(findUser instanceof Normal)) {
+            throw new BusinessLogicException(UserExceptionCode.USER_NOT_NORMAL);
+        }
+        return (Normal) findUser;
     }
 }

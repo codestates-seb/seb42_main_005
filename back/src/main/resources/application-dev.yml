@@ -22,6 +22,7 @@ spring:
 logging:
   level:
     org.hibernate.sql: info
+    org.hibernate.type.descriptor.sql: trace
   #    org.hibernate.type: trace
 
 jwt:

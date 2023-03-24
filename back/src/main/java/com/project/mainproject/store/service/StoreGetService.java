@@ -10,12 +10,13 @@ import com.project.mainproject.store.dto.DBdto.DBStoreListDto;
 import com.project.mainproject.store.dto.DBdto.DBStoreSearchDto;
 import com.project.mainproject.store.dto.GetStoreDetailDto;
 import com.project.mainproject.store.dto.GetStoreListRequestDto;
-import com.project.mainproject.store.dto.StoreSearchStoreDto;
 import com.project.mainproject.store.mapper.StoreMapper;
 import com.project.mainproject.store.repository.StoreQueryRepository;
 import com.project.mainproject.store.repository.StoreRepository;
+import com.project.mainproject.utils.CheckLoginUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,9 +36,8 @@ public class StoreGetService {
     private final StoreMapper storeMapper;
     private final RedisRepository redisRepository;
 
-    public SingleResponseDto getStoreDetailDto(Long storeIdx) {
-//        DBStoreDetailDto findDetailDto = storeQueryRepository.findData(storeIdx);
-        DBStoreDetailDto findDetailDto = storeQueryRepository.findData(storeIdx);
+    public SingleResponseDto getStoreDetailDto(Long storeIdx,Long userIdx) {
+        DBStoreDetailDto findDetailDto = storeQueryRepository.findData(storeIdx,userIdx);
         log.info("### findDetailDto = {}", findDetailDto);
         GetStoreDetailDto responseDto = storeMapper.getStoreDetailDto(findDetailDto);
 
@@ -47,14 +47,14 @@ public class StoreGetService {
     /*
     * 거리기준 랭킹기준 찜 기준
     * */
-    public SingleResponseDto getStoreListDto(GetStoreListRequestDto request) {
+    public SingleResponseDto getStoreListDto(GetStoreListRequestDto request, Long userIdx) {
         Boolean isHoliday = getIsHoliday();
         double maxLat = Math.max(request.getSwLat(), request.getNeLat());
         double minLat = Math.min(request.getSwLat(), request.getNeLat());
         double maxLng = Math.max(request.getSwLng(), request.getNeLng());
         double minLng = Math.min(request.getSwLng(), request.getNeLng());
 
-        List<DBStoreListDto> findStores = storeQueryRepository.getStoreList(maxLat,minLat,maxLng,minLng, request.getLat(), request.getLng(),request.getSortCondition(),request.getFilterCondition(),isHoliday);
+        List<DBStoreListDto> findStores = storeQueryRepository.getStoreList(maxLat,minLat,maxLng,minLng, request.getLat(), request.getLng(),request.getSortCondition(),request.getFilterCondition(),isHoliday,userIdx);
 
 
         return SingleResponseDto
@@ -80,8 +80,8 @@ public class StoreGetService {
     /*
      * 검색한 약국 리스트 보내주는 메서드
      * */
-    public SingleResponseDto getSearchStoreList(StoreSearchStoreDto requestDto) {
-        List<DBStoreSearchDto> responseDto = storeQueryRepository.searchStoreByNameOrAddress(requestDto.getName(), requestDto.getAddress());
+    public SingleResponseDto getSearchStoreList(String keyword) {
+        List<DBStoreSearchDto> responseDto = storeQueryRepository.searchStoreByNameOrAddress(keyword);
 
         return SingleResponseDto.<List<DBStoreSearchDto>>builder()
                 .response(responseDto)
