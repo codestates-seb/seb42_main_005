@@ -68,12 +68,12 @@ public class StoreService {
     public SingleResponseDto updateImage(Long userIdx, MultipartFile multipartFile) {
         Pharmacy pharmacy = userService.checkIsPharmacy(userIdx);
         StoreImage storeImages = pharmacy.getStore().getStoreImages();
-        String uploadImagePath = null;
+        String uploadImagePath = "";
         if (storeImages == null) {
-            uploadImagePath = fileUploader.saveImage(multipartFile);
+            uploadImagePath = fileUploader.saveImage(multipartFile,"storeImage");
         } else {
             String deleteImagePath = storeImages.getImagePath();
-            uploadImagePath = fileUploader.deleteAndSaveImage(multipartFile, deleteImagePath);
+            uploadImagePath = fileUploader.patchImage(multipartFile, deleteImagePath,"storeImage");
         }
 
         StoreImage storeImage = StoreImage.builder().imagePath(uploadImagePath).store(pharmacy.getStore()).build();
