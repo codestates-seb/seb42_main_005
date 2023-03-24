@@ -28,6 +28,7 @@ import static com.project.mainproject.review.exception.ReviewExceptionCode.REVIE
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final FileUploader fileUploader;
 
     public Page<Review> getReviews(Long storeIdx, Pageable pageable) {
         // TODO: 존재하는 약국 검증 추가 (StoreService)
@@ -79,7 +80,11 @@ public class ReviewService {
     @Transactional
     public void deleteReview(Long storeIdx, Long reviewIdx) {
         Review review = findVerifiedReview(storeIdx, reviewIdx);
-        reviewRepository.delete(review);
+        review.setReviewStatus(DELETED);
+
+        if (review.getReviewImages().size() != 0)
+            fileUploader.deleteS3Image(review.getReviewImages().get(0).getImagePath());
+        review.deleteReviewImage();
     }
 
     public Review findVerifiedReview(Long storeIdx, Long reviewIdx) {
@@ -98,7 +103,7 @@ public class ReviewService {
     }
 
     private String uploadImage(MultipartFile image) {
-        return FileUploader.saveImage(image);
+        return fileUploader.saveImage(image, "review");
     }
 
     public List<Review> getUserReviews(Long userIdx) {

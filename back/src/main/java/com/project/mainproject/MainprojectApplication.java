@@ -11,6 +11,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 import java.util.UUID;
 
+//@SpringBootApplication(
+//		exclude = {
+//				org.springframework.cloud.aws.autoconfigure.context.ContextInstanceDataAutoConfiguration.class,
+//				org.springframework.cloud.aws.autoconfigure.context.ContextStackAutoConfiguration.class,
+//				org.springframework.cloud.aws.autoconfigure.context.ContextRegionProviderAutoConfiguration.class
+//		}
+//)
 @SpringBootApplication
 @EnableJpaAuditing
 public class MainprojectApplication {

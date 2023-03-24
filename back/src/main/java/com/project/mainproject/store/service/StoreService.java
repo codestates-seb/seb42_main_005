@@ -25,6 +25,7 @@ public class StoreService {
     private final StoreQueryRepository storeQueryRepository;
     private final PickedStoreRepository pickedStoreRepository;
     private final UserService userService;
+    private final FileUploader fileUploader;
 
     public SingleResponseDto pickStore(Long userIdx, Long storeIdx) {
         Normal findUser = (Normal) userService.validUser(userIdx);    //user 가 존재하는지 먼저 검증 시큐리티 적용 후 필요 없음
@@ -69,10 +70,10 @@ public class StoreService {
         StoreImage storeImages = pharmacy.getStore().getStoreImages();
         String uploadImagePath = null;
         if (storeImages == null) {
-            uploadImagePath = FileUploader.saveImage(multipartFile);
+            uploadImagePath = fileUploader.saveImage(multipartFile);
         } else {
             String deleteImagePath = storeImages.getImagePath();
-            uploadImagePath = FileUploader.deleteAndSaveImage(multipartFile, deleteImagePath);
+            uploadImagePath = fileUploader.deleteAndSaveImage(multipartFile, deleteImagePath);
         }
 
         StoreImage storeImage = StoreImage.builder().imagePath(uploadImagePath).store(pharmacy.getStore()).build();
