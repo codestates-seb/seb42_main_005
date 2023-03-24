@@ -12,12 +12,12 @@ export default function Users() {
   const [time, setTime] = useState(0);
   const [checkedList, setCheckedList] = useState<Array<any>>([]);
 
+  //! GET : 전체 회원 리스트 불러오기
   useEffect(() => {
     const getUsers = async () => {
       try {
         const response = await axios.get(API_Users.GET_REAL_API);
         setUsers(response.data.response.content);
-        console.log(users)
       } catch (error) {
         console.log(error);
       }
@@ -36,22 +36,17 @@ export default function Users() {
     },
     [checkedList],
   );
+  console.log(users);
 
   //! POST : 계정 정지
   const blockUsers = async () => {
     try {
-      //TODO /api/admin/block?period=XX
-      // console.log("time");
-      // console.log(time);
-      // console.log("");
-      // console.log("checkedList");
-      // console.log(checkedList);
-      // console.log("");
-      await axios({
+      const response = await axios({
         url: `${API_Users.POST_REAL_API}/block?period=${time}`,
         method: "post",
-        data: checkedList,
+        data: { userIdxs: checkedList },
       });
+      console.log(response)
     } catch (error) {
       console.log(error);
     }
@@ -60,23 +55,21 @@ export default function Users() {
   //! POST : 계정 강퇴
   const fireUsers = async () => {
     try {
-      //TODO /api/admin/fired
       await axios({
         url: `${API_Users.POST_REAL_API}/fired`,
         method: "post",
-        data: checkedList,
+        data: { userIdxs: checkedList },
       });
     } catch (error) {
       console.log(error);
     }
   };
-  
+
   //! ???? : 계정 복구
   const restoreUsers = async () => {
     try {
       //TODO --------------
-      await axios({
-      });
+      await axios({});
     } catch (error) {
       console.log(error);
     }
@@ -118,7 +111,7 @@ export default function Users() {
             {users.length ? (
               <BelowLable>
                 {users.map((user: any, i) => (
-                  <Content key={i} className={user.accountStatus === "suspended" ? "suspended" : ""}>
+                  <Content key={i} className={user.userStatus === "ACTIVE" ? "" : "suspended"}>
                     <Values className="checkBox">
                       <CheckBox
                         id={user.userIdx}
@@ -127,8 +120,8 @@ export default function Users() {
                         }}
                       />
                     </Values>
-                    <Values className="classification">{user.classification}</Values>
-                    <Values className="accountStatus">{user.accountStatus}</Values>
+                    <Values className="classification">{user.userType}</Values>
+                    <Values className="accountStatus">{user.userStatus}</Values>
                     <Values className="nickname">{user.name}</Values>
                     <Values className="email">{user.email}</Values>
                     <Values className="returnAt">{user.returnAt}</Values>

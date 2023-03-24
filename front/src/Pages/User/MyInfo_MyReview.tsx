@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import PharmDetail from "../../Components/Modal/PharmDetail";
 import { API_MyInfoReviews } from "../../Api/APIs";
 import { API_MyReview } from "../../Api/APIs";
 import { RiDeleteBin6Line } from "react-icons/ri";
-
-const API_URL = "http://localhost:3005/response";
 
 interface Props {
   review: any;
@@ -16,52 +14,67 @@ interface Props {
 }
 
 export default function MyReview({ review, storeIdx, reviewIdx, idx }: Props) {
-  const [pharmDetail, setPharmDetail] = useState();
   const [isModalUp, setIsModalUp] = useState(false);
+  const [pharmDetail, setPharmDetail] = useState();
+  const [reviewList, setReviewList] = useState([]);
   const [like, setLike] = useState(false);
 
-    //! GET : 약국상세정보
-    useEffect(() => {
-      const getPharmDetail = async () => {
-        try {
-          //* dummy data 일때 -> Pharm.json
-          // const response = await axios.get(API_MyReview.DUMMY_API);
-          //TODO 실제 url 일때 -> /api/store/{storeIdx}
-          const response = await axios.get(`${API_MyReview.REAL_API}/${storeIdx}`);
-          setPharmDetail(response.data);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      getPharmDetail();
-    }, []);
+  //! GET : 약국상세정보 + 리뷰리스트
+  const onModalUp = () => {
+    const pharmDetailsAndreviewList = async () => {
+      await axios
+        .get(`${API_MyReview.REAL_API}/${storeIdx}`)
+        .then((response) => {
+          setPharmDetail(response.data.response);
+          axios
+            .get(`${API_MyReview.REAL_API}/${storeIdx}/review`)
+            .then((response) => {
+              setReviewList(response.data.response.storeReviews);
+            })
+            .catch((err) => console.log("리뷰받아오던 중" + err));
+        })
+        .catch((err) => console.log("약국상세받아오던 중" + err));
+    };
+    pharmDetailsAndreviewList();
+    setIsModalUp(true);
+  };
 
   //! DELETE : 리뷰삭제
   const deleteReview = async () => {
-    //* dummy data 일때 -> Review.json
-    // await axios.delete(`${API_MyInfoReviews.DUMMY_API}`);
-    //TODO url 받았을때 -> /api/store/{storeIdx}/review/{reviewIdx}
-    await axios.delete(`${API_MyInfoReviews.REAL_API}/${storeIdx}/review/${reviewIdx}`)
+    try {
+      await axios({
+        url: `${API_MyInfoReviews.REAL_API}/${storeIdx}/review/${reviewIdx}`,
+        method: "delete",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    setReviewList([...reviewList].filter((review: any) => review.reviewIdx !== reviewIdx));
   };
 
   return (
     <TableBody>
-      //* dummy data 일때
       {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} storeIdx={storeIdx} Pharm={pharmDetail} />
+        <>
+          <PharmDetail
+            setIsModalUp={setIsModalUp}
+            like={like}
+            setLike={setLike}
+            storeIdx={storeIdx}
+            pharmDetail={pharmDetail}
+            reviewList={reviewList}
+            setReviewList={setReviewList}
+          />
+        </>
       ) : null}
-      //TODO 실제 url 일때
-      {/* {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} storeIdx={storeIdx} />
-      ) : null} */}
       <Text className="single">{idx + 1}</Text>
-      <Text className="pharm" onClick={() => setIsModalUp(true)}>
+      <Text className="pharm" onClick={() => onModalUp()}>
         {review.storeName}
       </Text>
       <Text className="review">{review.content}</Text>
       <Text className="number">{review.createdAt}</Text>
       <Text className="single icon">
-        <RiDeleteBin6Line aria-hidden="true" onClick={() => deleteReview} />
+        <RiDeleteBin6Line aria-hidden="true" onClick={() => deleteReview()} />
       </Text>
     </TableBody>
   );

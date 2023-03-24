@@ -3,28 +3,29 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import LikedPharmacyUnit from "../User/MyInfo_likedPharmacy";
-import { API_MyInfoLikes } from "../../Api/APIs";
+import { API_LikedPharmacyUnit } from "../../Api/APIs";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
 export default function MyInfoLikes() {
   const [likedPharmacies, setLikedPharmacies] = useState([]);
 
-  //! GET : 내가 찜한 약국 리스트
-  useEffect(() => {
-    const getLikedPharmList = async () => {
-      try {
-        //* dummy url 일때
-        const response = await axios.get(API_MyInfoLikes.DUMMY_API);
-        //TODO url 받았을때 -> /api/users/{userIdx}/store
-        //? userIdx 는 리덕스 툴킷에서
-        // const response = await axios.get(`${API_MyInfoLikes.REAL_API}/${userIdx}/store`);
-        setLikedPharmacies(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getLikedPharmList();
-  }, []);
+//! GET : 내가 찜한 약국 리스트
+useEffect(() => {
+  const getLikedPharmList = async () => {
+    try {
+      //TODO url 받았을때 -> /api/store/user/{userIdx}/pick
+      //! 이거 안돼 => 찜하기 데이터가 없어서 안뜸?
+      //? userIdx 는 리덕스 툴킷에서
+      const response = await axios.get(`${API_LikedPharmacyUnit.GET_REAL_API}/${1}/pick`);
+
+      setLikedPharmacies(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  getLikedPharmList();
+}, []);
+
 
   return (
     <Content>
@@ -38,7 +39,12 @@ export default function MyInfoLikes() {
       {likedPharmacies.length ? (
         <Rest>
           {likedPharmacies.map((likedPharmacy: any) => (
-            <LikedPharmacyUnit likedPharmacy={likedPharmacy} />
+            <LikedPharmacyUnit
+              key={likedPharmacy.storeIdx}
+              likedPharmacy={likedPharmacy}
+              likedPharmacies={likedPharmacies}
+              setLikedPharmacies={setLikedPharmacies}
+            />
           ))}
         </Rest>
       ) : (

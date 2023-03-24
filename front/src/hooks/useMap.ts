@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import useGeolocation from "./useGeolocation";
 import "./PharmacyOverlay.css";
-// import { API_PharmLists } from "../Api/APIs";
 
 const { kakao } = window;
 
@@ -14,10 +13,8 @@ interface Props {
 export function useMap(totalPharmList: any, setTotalPharmList: any) {
   const location: any = useGeolocation();
   const [_map, setMap]: any = useState();
-  // const [pharmacies, setPharmacies] = useState([]);
   const [mapCenter, setMapCenter] = useState({ latitude: 0, longitude: 0 });
-  const API_URL = "https://apis.data.go.kr/B552657";
-  // const API_URL = API_PharmLists.REAL_API;
+
 
   useEffect(() => {
     if (typeof location != "string" && kakao) {

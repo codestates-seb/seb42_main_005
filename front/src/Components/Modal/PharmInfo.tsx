@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import PharmRank from "../Ul/PharmRank";
@@ -14,10 +14,17 @@ interface Props {
 export default function PharmInfo({ like, setLike, Pharm }: Props) {
   const [isDropDownDown, setIsDropDownDown] = useState(false);
 
-  //! POST : 찜하기, 찜취소
-  const LikePharmacy = (storeIdx: number) => {
-    //TODO 실제 url 일때 -> /api/store/{storeIdx}/pick
-    axios.delete(`${API_PharmInfo.REAL_API}/${storeIdx}/pick`);
+  //! POST : 찜하기/찜취소
+  const likeThisPharmacy = async () => {
+    try {
+      await axios({
+        url: `${API_PharmInfo.REAL_API}/${Pharm.storeIdx}/pick?userIdx=${1}`, //? 리덕스 툴킷에서 유저인덱스 받아와야 함
+        method: "post",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    setLike(!like);
   };
 
   return (
@@ -32,12 +39,13 @@ export default function PharmInfo({ like, setLike, Pharm }: Props) {
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." />
         )}
+        {/* like 의 상태가 아니라 약국 정보에 내가 이 약국을 찜했는지 여부의 boolean 으로 바꿔야 함 */}
         {like ? (
-          <LikeButton onClick={() => LikePharmacy(Pharm.storeIdx)}>
+          <LikeButton onClick={() => likeThisPharmacy()}>
             <img src="./Images/Heart.png" alt="좋아요 상태의 꽉찬 하트입니다." />
           </LikeButton>
         ) : (
-          <LikeButton onClick={() => LikePharmacy(Pharm.storeIdx)}>
+          <LikeButton onClick={() => likeThisPharmacy()}>
             <img src="./Images/UnHeart.png" alt="좋아요 전 상태의 빈 하트입니다." />
           </LikeButton>
         )}
