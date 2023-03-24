@@ -78,17 +78,10 @@ export default function Login() {
       await axios
         .post(API_UserLogIn.REAL_API, { email: email, password: password })
         .then((res) => {
-          //! accessToken어떤 키로 주는지 보고, 잘들어오는지 확인하기
-          // let accessToken = res.headers.Authorization;
-          // let refreshToken = res.headers.Refresh;
-
+         
           let accessToken = res.headers.authorization;
           let refreshToken = res.headers.refresh;
-
-          console.log("response", res);
-          console.log("access 토큰 :", accessToken);
-          console.log("refresh 토큰 :", refreshToken);
-
+          
           //localStorage에 토큰 넣음
           setLocalStorage("access_token", accessToken);
           setLocalStorage("refresh_token", refreshToken);
