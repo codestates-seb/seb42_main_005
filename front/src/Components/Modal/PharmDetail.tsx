@@ -31,46 +31,6 @@ export default function PharmDetail({
 }: Props) {
 
   const [isReviewFormShown, setIsReviewFormShown] = useState(false);
-  // const [pharmDetail, setPharmDetail] = useState({});
-  // const [reviewList, setReviewList] = useState([]);
-
-  //! GET : 약국상세정보 + 리뷰리스트
-  // useEffect(() => {
-  //   const pharmDetailsAndreviewList = async () => {
-  //     await axios
-  //       .get(`${API_PharmItem.REAL_API}/${storeIdx}`)
-  //       .then((response) => {
-  //         setPharmDetail(response.data.response);
-  //         axios
-  //           .get(`${API_PharmDetail.REAL_API}/${storeIdx}/review`)
-  //           .then((response) => {
-  //             setReviewList(response.data.response.storeReviews);
-  //           })
-  //           .catch((err) => console.log("리뷰받아오던 중" + err));
-  //       })
-  //       .catch((err) => console.log("약국상세받아오던 중" + err));
-  //   };
-  //   pharmDetailsAndreviewList();
-  // }, []);
-
-  // const onModalUp = () => {
-  //   const pharmDetailsAndreviewList = async () => {
-  //     await axios
-  //       .get(`${API_PharmItem.REAL_API}/${storeIdx}`)
-  //       .then((response) => {
-  //         setPharmDetail(response.data.response);
-  //         axios
-  //           .get(`${API_PharmDetail.REAL_API}/${storeIdx}/review`)
-  //           .then((response) => {
-  //             setReviewList(response.data.response.storeReviews);
-  //           })
-  //           .catch((err) => console.log("리뷰받아오던 중" + err));
-  //       })
-  //       .catch((err) => console.log("약국상세받아오던 중" + err));
-  //   };
-  //   pharmDetailsAndreviewList();
-  //   setIsModalUp(false);
-  // };
 
   return (
     <ModalBackDrop onClick={() => setIsModalUp(false)}>
