@@ -161,7 +161,7 @@ public class StoreQueryRepository {
                 .fetchOne();
     }
 
-    public List<DBStoreSearchDto> searchStoreByNameOrAddress(String name, String address) {
+    public List<DBStoreSearchDto> searchStoreByNameOrAddress(String keyword) {
         return queryFactory
                 .select(new QDBStoreSearchDto(
                         store.storeIdx, store.name, store.address, store.latitude, store.longitude,
@@ -175,7 +175,8 @@ public class StoreQueryRepository {
                 .leftJoin(store.reviews, review)
                 .leftJoin(store.pickedStores, pickedStore)
                 .leftJoin(store.storeImages, storeImage)
-                .where(searchCondition(name, address))
+                .where(store.address.contains(keyword).or(store.name.contains(keyword)))
+                .groupBy(store.storeIdx,storeImage.imagePath)
                 .fetch();
     }
 
@@ -245,12 +246,6 @@ public class StoreQueryRepository {
         return store.holidayOperating.endTime.after(LocalTime.of(22,0,0));
     }
 
-    private BooleanExpression searchCondition(String name, String address) {
-        if (name == null) {
-            return searchWithAddress(address);
-        }
-        return searchWithName(name);
-    }
 
     private BooleanExpression getNormalOperatingCondition() {
         DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();

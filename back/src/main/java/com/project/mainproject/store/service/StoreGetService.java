@@ -10,7 +10,6 @@ import com.project.mainproject.store.dto.DBdto.DBStoreListDto;
 import com.project.mainproject.store.dto.DBdto.DBStoreSearchDto;
 import com.project.mainproject.store.dto.GetStoreDetailDto;
 import com.project.mainproject.store.dto.GetStoreListRequestDto;
-import com.project.mainproject.store.dto.StoreSearchStoreDto;
 import com.project.mainproject.store.mapper.StoreMapper;
 import com.project.mainproject.store.repository.StoreQueryRepository;
 import com.project.mainproject.store.repository.StoreRepository;
@@ -80,8 +79,8 @@ public class StoreGetService {
     /*
      * 검색한 약국 리스트 보내주는 메서드
      * */
-    public SingleResponseDto getSearchStoreList(StoreSearchStoreDto requestDto) {
-        List<DBStoreSearchDto> responseDto = storeQueryRepository.searchStoreByNameOrAddress(requestDto.getName(), requestDto.getAddress());
+    public SingleResponseDto getSearchStoreList(String keyword) {
+        List<DBStoreSearchDto> responseDto = storeQueryRepository.searchStoreByNameOrAddress(keyword);
 
         return SingleResponseDto.<List<DBStoreSearchDto>>builder()
                 .response(responseDto)

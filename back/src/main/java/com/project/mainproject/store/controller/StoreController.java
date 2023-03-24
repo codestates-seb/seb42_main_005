@@ -2,7 +2,6 @@ package com.project.mainproject.store.controller;
 
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.store.dto.GetStoreListRequestDto;
-import com.project.mainproject.store.dto.StoreSearchStoreDto;
 import com.project.mainproject.store.service.StoreGetService;
 import com.project.mainproject.store.service.StoreService;
 import com.project.mainproject.utils.UriCreator;
@@ -26,7 +25,7 @@ public class StoreController {
      *  약국 목록_페이지 리스트
      * */
     @GetMapping
-    public ResponseEntity getStoreList(@RequestBody GetStoreListRequestDto requestDto) {
+    public ResponseEntity getStoreList(@ModelAttribute GetStoreListRequestDto requestDto) {
         SingleResponseDto response = storeGetService.getStoreListDto(requestDto);
 
         return ResponseEntity.ok().body(response);
@@ -69,8 +68,8 @@ public class StoreController {
      * 약국 이름으로 검색하기
      * */
     @GetMapping("/search")
-    public ResponseEntity searchStore(@RequestBody StoreSearchStoreDto storeSearchStoreDto) {
-        SingleResponseDto searchResult = storeGetService.getSearchStoreList(storeSearchStoreDto);
+    public ResponseEntity searchStore(@RequestParam String keyword) {
+        SingleResponseDto searchResult = storeGetService.getSearchStoreList(keyword);
 
         return ResponseEntity.ok(searchResult);
     }
