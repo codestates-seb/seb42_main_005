@@ -28,6 +28,7 @@ import static com.project.mainproject.review.exception.ReviewExceptionCode.REVIE
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final FileUploader fileUploader;
 
     public Page<Review> getReviews(Long storeIdx, Pageable pageable) {
         // TODO: 존재하는 약국 검증 추가 (StoreService)
@@ -98,7 +99,7 @@ public class ReviewService {
     }
 
     private String uploadImage(MultipartFile image) {
-        return FileUploader.saveImage(image);
+        return fileUploader.saveImage(image, "review");
     }
 
     public List<Review> getUserReviews(Long userIdx) {

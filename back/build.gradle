@@ -59,8 +59,11 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 
 	implementation group: 'com.google.code.geocoder-java', name: 'geocoder-java', version: '0.16'//위치정보
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' // S3 이미지 업로드
+
+	// S3 이미지 업로드
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
+
 
 tasks.named('test') {
 	outputs.dir snippetsDir
