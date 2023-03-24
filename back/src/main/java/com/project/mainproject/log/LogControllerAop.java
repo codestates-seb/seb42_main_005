@@ -13,8 +13,8 @@ import java.lang.reflect.Method;
 
 
 @Slf4j
-//@Aspect
-//@Component
+@Aspect
+@Component
 public class LogControllerAop {
     @Pointcut("execution(* com.project.mainproject.store.controller..*.*(..))")
     private void cut(){}
