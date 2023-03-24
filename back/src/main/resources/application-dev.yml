@@ -27,8 +27,8 @@ logging:
 
 jwt:
   key:
-    secret: ${JWT_KEY}
-  access-token-expiration-minutes: 30
+    secret: 12wwdf23rtadf1232412wwdf23rtadf1232412wwdf23rtadf1232412wwdf23rtadf1232412wwdf23rtadf1232412wwdf23rtadf1232412wwdf23rtadf12324
+  access-token-expiration-minutes: 300000
   refresh-token-expiration-minutes: 420
 
 mail:

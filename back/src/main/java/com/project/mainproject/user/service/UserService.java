@@ -120,14 +120,14 @@ public class UserService implements UserDetailsService {
     }
 
     public void patchUserProfile(Long userIdx, MultipartFile uploadFile) {
-        Optional<User> findUser = userRepository.findById(userIdx);
-        if (findUser.isPresent()) {
-            String deletePath = findUser.get().getImagePath();
-            fileUploader.deleteAndSaveImage(uploadFile, deletePath);
+        User findUser = validUser(userIdx);
+        String userProfile = "";
+        if (findUser.getImagePath() == null) {
+            userProfile = fileUploader.saveImage(uploadFile, "userProfile");
+        } else {
+            userProfile = fileUploader.patchImage(uploadFile, findUser.getImagePath(), "userProfile");
         }
-        else {
-            fileUploader.saveImage(uploadFile, "userProfile");
-        }
+        findUser.setImagePath(userProfile);
     }
 
     public void deleteUser(Long userIdx) {
