@@ -3,8 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import PharmRank from "../Ul/PharmRank";
 import PharmDetail from "../Modal/PharmDetail";
-import { API_PharmItem } from "../../Api/APIs";
-import { API_PharmDetail } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 
 interface Props {
   Pharm: any;
@@ -19,21 +18,19 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
 
   //! GET : 약국상세정보 + 리뷰리스트
   const onModalUp = () => {
-    const pharmDetailsAndreviewList = async () => {
+    const getPharmDetail = async () => {
       await axios
-        .get(`${API_PharmItem.REAL_API}/${storeIdx}`)
-        .then((response) => {
-          setPharmDetail(response.data.response);
-          axios
-            .get(`${API_PharmDetail.REAL_API}/${storeIdx}/review`)
-            .then((response) => {
-              setReviewList(response.data.response.storeReviews);
-            })
-            .catch((err) => console.log("리뷰받아오던 중" + err));
-        })
+        .get(`${APIS.GET_PHARMLIST}/${storeIdx}`)
+        .then((response) => setPharmDetail(response.data.response))
         .catch((err) => console.log("약국상세받아오던 중" + err));
     };
-    pharmDetailsAndreviewList();
+    const getReviewList = async () => {
+      await axios
+        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+        .then((response) => setReviewList(response.data.response.storeReviews))
+        .catch((err) => console.log("리뷰받아오던 중" + err));
+    };
+    axios.all([getPharmDetail(), getReviewList()]);
     setIsModalUp(true);
   };
 
@@ -41,7 +38,7 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
   const likeThisPharmacy = async () => {
     try {
       await axios({
-        url: `${API_PharmItem.REAL_API}/${storeIdx}/pick?userIdx=${1}`, //? 리덕스 툴킷에서 유저인덱스 받아와야 함
+        url: `${APIS.POST_LIKE}/${storeIdx}/pick?userIdx=${1}`, //? 리덕스 툴킷에서 유저인덱스 받아와야 함
         method: "post",
       });
     } catch (error) {

@@ -7,7 +7,7 @@ import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BiPhotoAlbum } from "react-icons/bi";
 import { HiXMark } from "react-icons/hi2";
 import { zIndex_Modal } from "../../Util/z-index";
-import { API_WriteReviewForm } from "../../Api/APIs"; // Review.json
+import { APIS } from "../../Api/APIs"; // Review.json
 
 interface Props {
   Pharm: any;
@@ -54,60 +54,50 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
       [name]: value,
     });
   };
-  const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
+
+  //! POST : 리뷰작성
+  const onSubmit: any = async (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const reviewContent = formData.get("content");
-    const star = formData.get("rating");
-
     let data: any = {
-      userIdx: 3,
+      userIdx: 4,
       content: review.content,
       rating: review.rating,
     };
-
-    const formDataForsubmit = new FormData();
-    formDataForsubmit.append("postDto", new Blob([JSON.stringify(data)], { type: "application/json" }));
-    formDataForsubmit.append("image", imgFile);
-
-    //! POST : 리뷰작성
-    const postReview = async () => {
-      try {
-        await axios({
-          url: `${API_WriteReviewForm.POST_REAL_API}/${storeIdx}/review`,
-          method: "post",
-          data: formDataForsubmit,
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    //* 새로고침 안되고 보여주는 로직
-    let show: any = {
-      userIdx: 1, //? 리덕스 툴킷에서 userIdx 가져오기
-      userImage: review.userImage,
-      userName: "나 회원 아니거든?", //? 리덕스 툴킷에서 name 가져오기
-      content: review.content,
-      rating: review.rating,
-      reviewImage: imageSrc,
-      createdAt: new Date().toLocaleDateString(),
-    };
-    setReviewList([show, ...reviewList]);
-    setReview({
-      reviewIdx: 0,
-      content: "",
-      rating: 0,
-      createdAt: "",
-    });
-    setImageSrc("");
-    postReview();
+    const formData = new FormData();
+    formData.append("postDto", new Blob([JSON.stringify(data)], { type: "application/json" }));
+    formData.append("image", imgFile);
+    try {
+      await axios({
+        url: `${APIS.POST_REVIEWS}/${storeIdx}/review`,
+        method: "post",
+        data: formData,
+      })
+        .then(() =>
+          setReview({
+            reviewIdx: 0,
+            content: "",
+            rating: 0,
+            createdAt: "",
+          }),
+        )
+        .then(() => setImageSrc(""))
+        .then(() => setIsReviewFormShown(false))
+        .then(() =>
+          axios.get(`${APIS.GET_REVIEWS}/${storeIdx}/review`).then((response) => {
+            setReviewList(response.data.response.storeReviews);
+          }),
+        );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <WriteReviewContainer onSubmit={onSubmit}>
       <InputTop>
-        <span id="instruction"><span id="name">{Pharm.name}</span>에 리뷰를 남겨보세요!</span>
+        <span id="instruction">
+          <span id="name">{Pharm.name}</span>에 리뷰를 남겨보세요!
+        </span>
         <HiXMark id="close" aria-hidden="true" className="except" onClick={() => setIsReviewFormShown(false)} />
       </InputTop>
       <InputTop>
@@ -231,7 +221,7 @@ const InputTop = styled.section`
       color: var(--black-400);
       font-weight: 400;
     }
-    &#name{
+    &#name {
       margin-right: 5px;
       font-size: 17px;
       font-weight: 600;

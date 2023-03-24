@@ -7,7 +7,7 @@ import DropDown from "./DropDown";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { IoIosArrowDropright } from "react-icons/io";
 import { IoIosArrowDropdown } from "react-icons/io";
-import { API_PharmacyInformation } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 
 export default function PharmacyInformation() {
   const [pharmDetail, setPharmDetail]: any = useState();
@@ -28,37 +28,21 @@ export default function PharmacyInformation() {
     });
   };
 
-  //! GET : 약국상세정보
-  useEffect(() => {
-    const getPharmDetail = async () => {
-      try {
-        //? storeIdx 는 약사 계정으로 로그인 시 리덕스 툴킷에서 받아올 수 있음 일단 임의로 2
-        const response = await axios.get(`${API_PharmacyInformation.REAL_API}/store/${2}`);
-        setPharmDetail(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getPharmDetail();
-  }, []);
   //! GET : 약국상세정보 + 리뷰리스트
   const onModalUp = () => {
-    const pharmDetailsAndreviewList = async () => {
+    const getPharmDetail = async () => {
       await axios
-        //? storeIdx 는 약사 계정으로 로그인 시 리덕스 툴킷에서 받아올 수 있음 일단 임의로 2
-        .get(`${API_PharmacyInformation.REAL_API}/${2}`)
-        .then((response) => {
-          setPharmDetail(response.data.response);
-          axios
-            .get(`${API_PharmacyInformation.REAL_API}/${2}/review`)
-            .then((response) => {
-              setReviewList(response.data.response.storeReviews);
-            })
-            .catch((err) => console.log("리뷰받아오던 중" + err));
-        })
+        .get(`${APIS.GET_PHARMLIST}/${2}`)
+        .then((response) => setPharmDetail(response.data.response))
         .catch((err) => console.log("약국상세받아오던 중" + err));
     };
-    pharmDetailsAndreviewList();
+    const getReviewList = async () => {
+      await axios
+        .get(`${APIS.GET_REVIEWS}/${2}/review`)
+        .then((response) => setReviewList(response.data.response.storeReviews))
+        .catch((err) => console.log("리뷰받아오던 중" + err));
+    };
+    axios.all([getPharmDetail(), getReviewList()]);
     setIsModalUp(true);
   };
 

@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import Button from "../Components/Ul/Button";
-import { API_SignOut } from "../Api/APIs";
+import { APIS } from "../Api/APIs";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function SignOut() {
   const [isChecked, setIsChecked] = useState(false);
   const [errMsg, setErrMsg] = useState(false);
 
-  //! DELETE : 일반회원 회원가입 - JWT
+  //! DELETE : 탈퇴
   //* 토큰 지우고 디스패치 날리기
   const signOut = async () => {
     isChecked ? setErrMsg(false) : setErrMsg(true);
@@ -17,7 +17,7 @@ export default function SignOut() {
       //TODO /api/users/{userIdx}
       //? userIdx 는 리덕스 툴킷에서 가져오기 지금은 임의로 1
       await axios({
-        url: `${API_SignOut.REAL_API}/${1}`,
+        url: `${APIS.DELETE_SIGNOUT}/${1}`,
         method: "delete",
       });
     } catch (error) {

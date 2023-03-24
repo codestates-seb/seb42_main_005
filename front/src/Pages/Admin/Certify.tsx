@@ -5,7 +5,7 @@ import AdminTabs from "./AdminTabs";
 import Cert from "./Cert";
 import Button from "../../Components/Ul/Button";
 import CheckBox from "../../Components/Ul/CheckBox";
-import { API_Certify } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Certify() {
@@ -16,7 +16,7 @@ export default function Certify() {
   useEffect(() => {
     const getCertificates = async () => {
       try {
-        const response = await axios.get(`${API_Certify.GET_REAL_API}/access/requests`);
+        const response = await axios.get(`${APIS.GET_ADMIN_CERTS}/access/requests`);
         console.log(response);
         setCertificates(response.data);
       } catch (error) {
@@ -42,7 +42,7 @@ export default function Certify() {
   const successCertify = async () => {
     try {
       await axios({
-        url: API_Certify.POST_SUCCESS_REAL_API,
+        url: APIS.POST_ADMIN_CERTIFY,
         method: "post",
         data: { userIdxs: checkedList },
       });
@@ -55,7 +55,7 @@ export default function Certify() {
   const deniedCertify = async () => {
     try {
       await axios({
-        url: API_Certify.POST_DENIED_REAL_API,
+        url: APIS.POST_ADMIN_DENY,
         method: "post",
         data: { userIdxs: checkedList },
       });

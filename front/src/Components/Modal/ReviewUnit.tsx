@@ -5,7 +5,7 @@ import ReviewOfReview from "./ReviewOfReview";
 import Textarea from "../Ul/Textarea";
 import Input from "../Ul/Input";
 import Button from "../Ul/Button";
-import { API_ReviewUnit } from "../../Api/APIs"; // Review.json
+import { APIS } from "../../Api/APIs"; // Review.json
 import { BsFillStarFill } from "react-icons/bs";
 import { HiXMark } from "react-icons/hi2";
 
@@ -30,7 +30,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
   };
 
   //! PATCH : 리뷰수정
-  const editReview = (e: any) => {
+  const editReview = async (e: any) => {
     if (e.key === " " && e.getModifierState("Shift") === false) {
       e.stopPropagation();
     } else if (e.key === " " && e.target.value.slice(-1) === " ") {
@@ -43,23 +43,21 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
         content: reviewContent,
         rating: review.rating,
       };
-      const submitReview = async () => {
-        try {
-          await axios({
-            url: `${API_ReviewUnit.PATCH_REAL_API}/${storeIdx}/review/${reviewIdx}`,
-            method: "patch",
-            data,
-          }).then(() => setIsOnEdit(false));
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      const editedReview = {
-        ...review,
-        content: reviewContent,
-      };
-      setReviewList([...reviewList].map((rev) => (rev.reviewIdx === reviewIdx ? editedReview : rev)));
-      submitReview();
+      try {
+        await axios({
+          url: `${APIS.PATCH_REVIEWS}/${storeIdx}/review/${reviewIdx}`,
+          method: "patch",
+          data,
+        })
+          .then((res) =>
+            axios.get(`${APIS.GET_REVIEWS}/${storeIdx}/review`).then((response) => {
+              setReviewList(response.data.response.storeReviews);
+            }),
+          )
+          .then(() => setIsOnEdit(false));
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -67,20 +65,25 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
   const deleteReview = async () => {
     try {
       await axios({
-        url: `${API_ReviewUnit.DELETE_REAL_API}/${storeIdx}/review/${reviewIdx}`,
+        url: `${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`,
         method: "delete",
-      });
+      }).then(() =>
+        axios
+          .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+          .then((response) => {
+            setReviewList(response.data.response.storeReviews);
+          }),
+      );
     } catch (error) {
       console.log(error);
     }
-    setReviewList([...reviewList].filter((review: any) => review.reviewIdx !== reviewIdx));
   };
 
   //! POST : 리뷰신고
   const reportReview = async () => {
     try {
       await axios({
-        url: `${API_ReviewUnit.POST_REAL_API}/${storeIdx}/review/${reviewIdx}/report`,
+        url: `${APIS.POST_REPORT_REVIEW}/${storeIdx}/review/${reviewIdx}/report`,
         method: "post",
         data: {
           userIdx: 1, //? 리덕스 툴킷에서 가져오고 지금은 임의로 1
@@ -93,7 +96,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
   };
 
   //! POST : 리뷰의 댓글작성
-  const submitCommentKeyPress = (e: any) => {
+  const postReply = async (e: any) => {
     if (e.key === " " && e.getModifierState("Shift") === false) {
       e.stopPropagation();
     } else if (e.key === " " && e.target.value.slice(-1) === " ") {
@@ -101,49 +104,29 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
     } else if (e.key === "Enter") {
       e.preventDefault();
       const newComment = {
-        storeIdx,
-        userIdx: 1,
-        content: commentContent,
-      };
-      const reply = async () => {
-        try {
-          await axios({
-            url: `${API_ReviewUnit.POST_COMMENT_REAL_API}/review/${reviewIdx}/reply`,
-            method: "post",
-            data: newComment,
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      const show = {
         //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
         storeIdx,
         userIdx: 1,
         content: commentContent,
-        userName: "내가 씀",
-        createdAt: new Date().toLocaleDateString(),
       };
-      setCommentContent("");
-      setIsCommentFormShown(false);
-      setReviewList(
-        [...reviewList].map(
-          (
-            rev, 
-          ) =>
-            {
-              const needToRefresh = rev.reviewIdx === reviewIdx;
-              if (!needToRefresh) return rev
-              
-              return rev.reviewIdx === reviewIdx
-              ? {
-                  ...rev,
-                  replies: [show, ...rev.replies],
-                }
-              : rev}
-        ),
-      );
-      reply();
+      try {
+        await axios({
+          url: `${APIS.POST_COMMENT}/review/${reviewIdx}/reply`,
+          method: "post",
+          data: newComment,
+        })
+          .then(() => setCommentContent(""))
+          .then(() => setIsCommentFormShown(false))
+          .then(() =>
+            axios
+              .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+              .then((response) => {
+                setReviewList(response.data.response.storeReviews);
+              }),
+          );
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -207,7 +190,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
             icon={true}
             value={commentContent}
             onChange={handleComment}
-            onKeyPress={submitCommentKeyPress}
+            onKeyPress={postReply}
           />
         </WriteCommentForm>
       ) : null}
@@ -230,7 +213,7 @@ const ReviewUnitContainer = styled.article`
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 15px 10px 0px 10px;
+  padding: 15px 10px;
   margin-bottom: 20px;
   border: 1px solid var(--black-100);
   border-radius: 5px;
@@ -283,7 +266,7 @@ const EditRest = styled.section`
     color: var(--blue-300);
   }
 `;
-const ReviewImg = styled.img`//?
+const ReviewImg = styled.img`
   object-fit: cover;
   margin-bottom: 0.6rem;
   height: 80px;
@@ -329,7 +312,6 @@ const ButtonContainer = styled.span`
 const WriteCommentForm = styled.form`
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
   padding: 10px;
   gap: 5px;
   height: 85px;

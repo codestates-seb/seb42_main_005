@@ -5,7 +5,7 @@ import Button from "../Components/Ul/Button";
 import SignUpInput from "../Components/SignUpForm/SignUpInput";
 import ErrorAlert from "../Components/SignUpForm/ErrorAlert";
 import { BsPersonCircle } from "react-icons/bs";
-import { API_FindPW } from "../Api/APIs";
+import { APIS } from "../Api/APIs";
 import { validators } from "../Components/SignUpForm/Validation";
 
 export default function FindPW() {
@@ -35,7 +35,7 @@ export default function FindPW() {
     } else
       await axios({
         //? userIdx 가 없는데 어떻게 보내지? 지금은 일단 임의로 1
-        url: `${API_FindPW.REAL_API}/${1}`,
+        url: APIS.PATCH_FINDPW,
         method: "patch",
         data: {
           email,

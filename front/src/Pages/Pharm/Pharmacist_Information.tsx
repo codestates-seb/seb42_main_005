@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { MdOutlineAddAPhoto } from "react-icons/md";
-import { API_MyInfoInformation } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 
 interface Props {
   scriptUrl?: string;
@@ -23,7 +23,7 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
     const getReviews = async () => {
       try {
         //? userIdx 는 리덕스 툴킷에서 -> 2
-        const response = await axios.get(`${API_MyInfoInformation.REAL_API}/${2}`);
+        const response = await axios.get(`${APIS.GET_USER_INFO}/${2}`);
         setMyInfo(response.data.response);
       } catch (error) {
         console.log(error);
@@ -46,6 +46,7 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
     });
   };
 
+  //! PATCH : 유저 이미지 업로드
   const submitUserImg = (e: any) => {
     e.preventDefault();
     const formDataImgsubmit = new FormData();
@@ -58,7 +59,7 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
     const submitNewImg: any = async () => {
       try {
         await axios({
-          url: `${API_MyInfoInformation.REAL_API}/image`,
+          url: `${APIS.PATCH_USER_IMG}/image`,
           method: "patch",
           data: formDataImgsubmit,
         });

@@ -7,7 +7,7 @@ import InputAlert from "./InputAlert";
 import Button from "../../Components/Ul/Button";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { MdOutlineAddAPhoto } from "react-icons/md";
-import { API_MyInfoInformation } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 import { validators } from "../../Components/SignUpForm/Validation";
 
 interface Props {
@@ -28,9 +28,8 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
   useEffect(() => {
     const getReviews = async () => {
       try {
-        //TODO 실제 url 일때 -> /api/users/{userIdx}
         //? userIdx 는 리덕스 툴킷에서 -> 1
-        const response = await axios.get(`${API_MyInfoInformation.REAL_API}/${1}`);
+        const response = await axios.get(`${APIS.GET_USER_INFO}/${1}`);
         setMyInfo(response.data.response);
         setMyName(response.data.response.name);
         setMyAddress(response.data.response.address);
@@ -177,6 +176,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     e.preventDefault();
   };
 
+  //! PATCH : 회원정보 수정
   const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -212,7 +212,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
       try {
         //? 수정 /api/users/{userIdx}=>리덕스에서 userIdx꺼내
         await axios({
-          url: `${API_MyInfoInformation.REAL_API}/${1}`,
+          url: `${APIS.PATCH_USER_INFO}/${1}`,
           method: "patch",
           data: newUserData,
         }).then(() => setIsEditing(false));
@@ -240,7 +240,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
         //? 수정 /api/users/{userIdx}=>리덕스에서 userIdx꺼내
         await axios({
           //TODO : {userIdx}/image 수정
-          url: `${API_MyInfoInformation.REAL_API}/${1}/image`,
+          url: `${APIS.PATCH_USER_IMG}/${1}/image`,
           method: "patch",
           data: formDataImgsubmit,
         });

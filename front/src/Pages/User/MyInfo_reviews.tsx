@@ -4,7 +4,7 @@ import styled from "styled-components";
 import MyReview from "../User/MyInfo_MyReview";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import axios from "axios";
-import { API_MyPharmacy } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 
 export default function MyInfoReviews() {
   const [reviews, setReviews] = useState([]);
@@ -14,7 +14,7 @@ export default function MyInfoReviews() {
     const getMyReviews = async () => {
       try {
         //? userIdx 는 리덕스 툴킷에서 가져오고 일단은 임의로 1
-        const response = await axios.get(`${API_MyPharmacy.REAL_API}/${1}/review`);
+        const response = await axios.get(`${APIS.GET_MYREVIEWS}/${1}/review`);
         setReviews(response.data);
       } catch (error) {
         console.log(error);

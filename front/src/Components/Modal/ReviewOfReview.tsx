@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import Input from "../Ul/Input";
 import Button from "../Ul/Button";
-import { API_ReviewOfReview } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 import { BsArrowReturnRight } from "react-icons/bs";
 import { HiXMark } from "react-icons/hi2";
 
@@ -23,47 +23,37 @@ export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, rev
     setContent(e.target.value);
   };
 
-  const data = {
-    //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
-    storeIdx,
-    userIdx: 1,
-    content,
-  };
   //! PATCH : 리뷰의 댓글수정
-  const editCommentKeyPress = (e: any) => {
+  const editCommentKeyPress = async (e: any) => {
     if (e.key === " " && e.getModifierState("Shift") === false) {
       e.stopPropagation();
     } else if (e.key === " " && e.target.value.slice(-1) === " ") {
       e.stopPropagation();
     } else if (e.key === "Enter") {
       e.preventDefault();
-      const submitReviewOfReview = async () => {
-        try {
-          await axios({
-            url: `${API_ReviewOfReview.REAL_API}/${reviewIdx}/reply/${reply.replyIdx}`,
-            method: "patch",
-            data,
-          }).then(() => setIsPatchFormShown(false));
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      const show = {
-        ...reply,
+      const data = {
+        //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
+        storeIdx,
+        userIdx: 1,
         content,
-        createdAt: new Date().toLocaleDateString(),
       };
-      setReviewList(
-        [...reviewList].map((rev) =>
-          rev.reviewIdx === reviewIdx
-            ? {
-                ...rev,
-                replies: [...review.replies].map((rep) => (rep.replyIdx === reply.replyIdx ? show : rep)),
-              }
-            : rev,
-        ),
-      );
-      submitReviewOfReview();
+      try {
+        await axios({
+          url: `${APIS.PATCH_COMMENT}/${reviewIdx}/reply/${reply.replyIdx}`,
+          method: "patch",
+          data,
+        })
+          .then(() => setIsPatchFormShown(false))
+          .then(() =>
+            axios
+              .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+              .then((response) => {
+                setReviewList(response.data.response.storeReviews);
+              }),
+          );
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -71,22 +61,18 @@ export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, rev
   const deleteComment = async () => {
     try {
       await axios({
-        url: `${API_ReviewOfReview.REAL_API}/${reviewIdx}/reply/${reply.replyIdx}`,
+        url: `${APIS.DELETE_COMMENT}/${reviewIdx}/reply/${reply.replyIdx}`,
         method: "delete",
-      });
+      }).then(() =>
+      axios
+        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+        .then((response) => {
+          setReviewList(response.data.response.storeReviews);
+        }),
+    );
     } catch (error) {
       console.log(error);
     }
-    setReviewList(
-      [...reviewList].map((rev) =>
-        rev.reviewIdx === reviewIdx
-          ? {
-              ...rev,
-              replies: [...review.replies].filter((rep) => rep.replyIdx !== reply.replyIdx),
-            }
-          : rev,
-      ),
-    );
   };
 
   return (
@@ -132,7 +118,6 @@ export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, rev
 const CommentContainer = styled.section`
   display: flex;
   flex-direction: column;
-  margin-top: 10px;
   padding: 10px 0px 0px 6px;
   gap: 3px;
   border-top: 1px solid var(--black-075);

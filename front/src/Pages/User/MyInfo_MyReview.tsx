@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import PharmDetail from "../../Components/Modal/PharmDetail";
-import { API_MyInfoReviews } from "../../Api/APIs";
-import { API_MyReview } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface Props {
@@ -21,21 +20,19 @@ export default function MyReview({ review, storeIdx, reviewIdx, idx }: Props) {
 
   //! GET : 약국상세정보 + 리뷰리스트
   const onModalUp = () => {
-    const pharmDetailsAndreviewList = async () => {
+    const getPharmDetail = async () => {
       await axios
-        .get(`${API_MyReview.REAL_API}/${storeIdx}`)
-        .then((response) => {
-          setPharmDetail(response.data.response);
-          axios
-            .get(`${API_MyReview.REAL_API}/${storeIdx}/review`)
-            .then((response) => {
-              setReviewList(response.data.response.storeReviews);
-            })
-            .catch((err) => console.log("리뷰받아오던 중" + err));
-        })
+        .get(`${APIS.GET_PHARMDETAILS}/${storeIdx}`)
+        .then((response) => setPharmDetail(response.data.response))
         .catch((err) => console.log("약국상세받아오던 중" + err));
     };
-    pharmDetailsAndreviewList();
+    const getReviewList = async () => {
+      await axios
+        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+        .then((response) => setReviewList(response.data.response.storeReviews))
+        .catch((err) => console.log("리뷰받아오던 중" + err));
+    };
+    axios.all([getPharmDetail(), getReviewList()]);
     setIsModalUp(true);
   };
 
@@ -43,7 +40,7 @@ export default function MyReview({ review, storeIdx, reviewIdx, idx }: Props) {
   const deleteReview = async () => {
     try {
       await axios({
-        url: `${API_MyInfoReviews.REAL_API}/${storeIdx}/review/${reviewIdx}`,
+        url: `${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`,
         method: "delete",
       });
     } catch (error) {

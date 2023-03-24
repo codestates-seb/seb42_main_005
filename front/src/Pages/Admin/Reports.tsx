@@ -4,7 +4,7 @@ import styled from "styled-components";
 import AdminTabs from "./AdminTabs";
 import Button from "../../Components/Ul/Button";
 import CheckBox from "../../Components/Ul/CheckBox";
-import { API_Reports } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Reports() {
@@ -15,7 +15,7 @@ export default function Reports() {
   useEffect(() => {
     const getReports = async () => {
       try {
-        const response = await axios.get(API_Reports.GET_REAL_API);
+        const response = await axios.get(APIS.GET_ADMIN_REPORTED);
         setReports(response.data.response.reportedReviews);
       } catch (error) {
         console.log(error);
@@ -40,7 +40,7 @@ export default function Reports() {
   const deleteReview = async () => {
     try {
       await axios({
-        url: API_Reports.DELETE_REAL_API,
+        url: APIS.DELETE_ADMIN_REVIEW_DELETE,
         method: "delete",
         data: { reviews: checkedList },
       }).then(() => location.reload());
@@ -53,7 +53,7 @@ export default function Reports() {
   const restoreReview = async () => {
     try {
       await axios({
-        url: API_Reports.POST_REAL_API,
+        url: APIS.POST_ADMIN_REVIEW_RESTORE,
         method: "post",
         data: { reviews: checkedList },
       }).then(() => {

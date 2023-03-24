@@ -4,7 +4,7 @@ import styled from "styled-components";
 import AdminTabs from "./AdminTabs";
 import Button from "../../Components/Ul/Button";
 import CheckBox from "../../Components/Ul/CheckBox";
-import { API_Users } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Users() {
@@ -16,7 +16,7 @@ export default function Users() {
   useEffect(() => {
     const getUsers = async () => {
       try {
-        const response = await axios.get(API_Users.GET_REAL_API);
+        const response = await axios.get(APIS.GET_ADMIN_USERS);
         setUsers(response.data.response.content);
       } catch (error) {
         console.log(error);
@@ -36,13 +36,12 @@ export default function Users() {
     },
     [checkedList],
   );
-  console.log(users);
 
   //! POST : 계정 정지
   const blockUsers = async () => {
     try {
       const response = await axios({
-        url: `${API_Users.POST_REAL_API}/block?period=${time}`,
+        url: `${APIS.POST_ADMIN_BLOCK}?period=${time}`,
         method: "post",
         data: { userIdxs: checkedList },
       });
@@ -56,7 +55,7 @@ export default function Users() {
   const fireUsers = async () => {
     try {
       await axios({
-        url: `${API_Users.POST_REAL_API}/fired`,
+        url: APIS.POST_ADMIN_FIRE,
         method: "post",
         data: { userIdxs: checkedList },
       });

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import LikedPharmacyUnit from "../User/MyInfo_likedPharmacy";
-import { API_LikedPharmacyUnit } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
 export default function MyInfoLikes() {
@@ -14,10 +14,8 @@ useEffect(() => {
   const getLikedPharmList = async () => {
     try {
       //TODO url 받았을때 -> /api/store/user/{userIdx}/pick
-      //! 이거 안돼 => 찜하기 데이터가 없어서 안뜸?
       //? userIdx 는 리덕스 툴킷에서
-      const response = await axios.get(`${API_LikedPharmacyUnit.GET_REAL_API}/${1}/pick`);
-
+      const response = await axios.get(`${APIS.GET_MYREVIEWS}/${1}`);
       setLikedPharmacies(response.data);
     } catch (error) {
       console.log(error);

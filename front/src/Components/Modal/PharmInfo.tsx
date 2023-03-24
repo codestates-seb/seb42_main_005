@@ -3,7 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import PharmRank from "../Ul/PharmRank";
 import AnyDropDown from "./AnyDropDown";
-import { API_PharmInfo } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 
 interface Props {
   like: any;
@@ -18,7 +18,7 @@ export default function PharmInfo({ like, setLike, Pharm }: Props) {
   const likeThisPharmacy = async () => {
     try {
       await axios({
-        url: `${API_PharmInfo.REAL_API}/${Pharm.storeIdx}/pick?userIdx=${1}`, //? 리덕스 툴킷에서 유저인덱스 받아와야 함
+        url: `${APIS.POST_LIKE}/${Pharm.storeIdx}/pick?userIdx=${1}`, //? 리덕스 툴킷에서 유저인덱스 받아와야 함
         method: "post",
       });
     } catch (error) {
