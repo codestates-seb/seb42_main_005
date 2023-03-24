@@ -1,5 +1,6 @@
 package com.project.mainproject.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,8 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/token")
+@RequiredArgsConstructor
 public class SecurityController {
-    private JwtHelper jwtHelper;
+    private final JwtHelper jwtHelper;
 
     @PostMapping
     public ResponseEntity reaccess(HttpServletRequest request) {
