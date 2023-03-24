@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdminController {
     private final AdminService adminService;
+
     @PostMapping("/access/success")
     public ResponseEntity approvalPharmacy(@RequestBody AdminUsersDto adminUsersDto) {
         List<Long> userIdxs = adminUsersDto.getUserIdxs().stream().map(user -> user.getUserIdx()).collect(Collectors.toList());
@@ -46,7 +47,13 @@ public class AdminController {
     @PostMapping("/fired")
     public void banishUsers(@RequestBody AdminUsersDto adminUsersDto) {
         List<Long> userIdx = adminUsersDto.getUserIdxs().stream().map(user -> user.getUserIdx()).collect(Collectors.toList());
-
         adminService.banishUsers(userIdx);
+    }
+
+    @PostMapping("/restore")
+    public ResponseEntity restoreUser(@RequestBody AdminUsersDto adminUsersDto) {
+        List<Long> userIdx = adminUsersDto.getUserIdxs().stream().map(user -> user.getUserIdx()).collect(Collectors.toList());
+        SingleResponseDto responseDto = adminService.restoreUsers(userIdx);
+        return ResponseEntity.ok(responseDto);
     }
 }
