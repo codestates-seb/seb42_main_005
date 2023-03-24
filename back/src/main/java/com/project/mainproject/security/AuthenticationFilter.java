@@ -70,10 +70,10 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         if(userType.equals("약국회원")) {
             Pharmacy findPharmacy = (Pharmacy) successUser;
             Long storeIdx = findPharmacy.getStore().getStoreIdx();
-            userLoginInfoResponse = new UserLoginInfoResponse(userIdx, name, userType, storeIdx);
+            userLoginInfoResponse = new UserLoginInfoResponse(userIdx, name, userType, storeIdx, address);
         }
         else {
-            userLoginInfoResponse = new UserLoginInfoResponse(userIdx, name, userType);
+            userLoginInfoResponse = new UserLoginInfoResponse(userIdx, name, userType, address);
         }
 
         log.info("address {}", address);
