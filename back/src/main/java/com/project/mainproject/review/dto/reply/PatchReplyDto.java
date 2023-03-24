@@ -2,9 +2,11 @@ package com.project.mainproject.review.dto.reply;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.util.Assert;
 
 @Getter
+@ToString
 @AllArgsConstructor
 public class PatchReplyDto {
     private Long storeIdx;
