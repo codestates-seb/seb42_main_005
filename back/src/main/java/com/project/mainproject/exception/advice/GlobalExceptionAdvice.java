@@ -67,6 +67,7 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleException(MethodArgumentTypeMismatchException e) {
+        log.error("MethodArgumentTypeMismatchException : ", e);
         log.error("MethodArgumentTypeMismatchException : {}", e.getMessage());
         final ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
         return errorResponse;

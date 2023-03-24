@@ -4,14 +4,19 @@ import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.store.dto.GetStoreListRequestDto;
 import com.project.mainproject.store.service.StoreGetService;
 import com.project.mainproject.store.service.StoreService;
+import com.project.mainproject.utils.CheckLoginUser;
 import com.project.mainproject.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
+import java.security.Principal;
 
 @Slf4j
 @RestController
@@ -25,8 +30,11 @@ public class StoreController {
      *  약국 목록_페이지 리스트
      * */
     @GetMapping
-    public ResponseEntity getStoreList(@ModelAttribute GetStoreListRequestDto requestDto) {
-        SingleResponseDto response = storeGetService.getStoreListDto(requestDto);
+    public ResponseEntity getStoreList(@ModelAttribute GetStoreListRequestDto requestDto, @AuthenticationPrincipal Object principal) {
+        Long userIdx = CheckLoginUser.getContextIdx(principal);
+
+
+        SingleResponseDto response = storeGetService.getStoreListDto(requestDto,userIdx);
 
         return ResponseEntity.ok().body(response);
     }

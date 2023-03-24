@@ -46,14 +46,14 @@ public class StoreGetService {
     /*
     * 거리기준 랭킹기준 찜 기준
     * */
-    public SingleResponseDto getStoreListDto(GetStoreListRequestDto request) {
+    public SingleResponseDto getStoreListDto(GetStoreListRequestDto request, Long userIdx) {
         Boolean isHoliday = getIsHoliday();
         double maxLat = Math.max(request.getSwLat(), request.getNeLat());
         double minLat = Math.min(request.getSwLat(), request.getNeLat());
         double maxLng = Math.max(request.getSwLng(), request.getNeLng());
         double minLng = Math.min(request.getSwLng(), request.getNeLng());
 
-        List<DBStoreListDto> findStores = storeQueryRepository.getStoreList(maxLat,minLat,maxLng,minLng, request.getLat(), request.getLng(),request.getSortCondition(),request.getFilterCondition(),isHoliday);
+        List<DBStoreListDto> findStores = storeQueryRepository.getStoreList(maxLat,minLat,maxLng,minLng, request.getLat(), request.getLng(),request.getSortCondition(),request.getFilterCondition(),isHoliday,userIdx);
 
 
         return SingleResponseDto
