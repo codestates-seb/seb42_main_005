@@ -12,7 +12,7 @@ export default function Users() {
   const [time, setTime] = useState(0);
   const [checkedList, setCheckedList] = useState<Array<any>>([]);
 
-  //! GET : 신고리뷰 리스트 불러오기
+  //! GET : 전체 회원 리스트 불러오기
   useEffect(() => {
     const getUsers = async () => {
       try {
