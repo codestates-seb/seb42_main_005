@@ -13,9 +13,6 @@ export default function MyInfoReviews() {
   useEffect(() => {
     const getMyReviews = async () => {
       try {
-        //* dummy data 일때 -> Review.json
-        // const response = await axios.get(API_MyPharmacy.DUMMY_API);
-        //TODO 실제 url 일때 -> /api/users/{userIdx}/review
         //? userIdx 는 리덕스 툴킷에서 가져오고 일단은 임의로 1
         const response = await axios.get(`${API_MyPharmacy.REAL_API}/${1}/review`);
         setReviews(response.data);

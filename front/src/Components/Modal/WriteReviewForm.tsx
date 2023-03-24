@@ -8,7 +8,6 @@ import { BiPhotoAlbum } from "react-icons/bi";
 import { HiXMark } from "react-icons/hi2";
 import { zIndex_Modal } from "../../Util/z-index";
 import { API_WriteReviewForm } from "../../Api/APIs"; // Review.json
-import { useAppSelector, useAppDispatch } from "../../Redux/hooks";
 
 interface Props {
   setIsReviewFormShown: React.Dispatch<React.SetStateAction<boolean>>;
@@ -71,7 +70,6 @@ export default function WriteReviewForm({ setIsReviewFormShown, storeIdx, review
     formDataForsubmit.append("image", imgFile);
 
     //! POST : 리뷰작성
-    //TODO /api/store/{storeIdx}/review
     const postReview = async () => {
       try {
         await axios({

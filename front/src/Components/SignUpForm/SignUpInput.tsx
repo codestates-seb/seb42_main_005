@@ -10,7 +10,6 @@ interface Props {
   readOnly?: boolean;
   className?: string;
 }
-//? signUpInput으로 하면 에러남=> TS는 가장 처음 레터를 대문자로 해야?
 
 export default function SignUpInput({ type, name, placeholder, value, onChange, readOnly, className }: Props) {
   return (

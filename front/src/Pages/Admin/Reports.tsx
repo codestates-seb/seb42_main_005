@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import AdminTabs from "./AdminTabs";
@@ -15,7 +15,6 @@ export default function Reports() {
   useEffect(() => {
     const getReports = async () => {
       try {
-        //TODO /api/admin/reports
         const response = await axios.get(API_Reports.GET_REAL_API);
         setReports(response.data.response.reportedReviews);
       } catch (error) {
@@ -40,7 +39,6 @@ export default function Reports() {
   //! DELETE : 신고누적리뷰 삭제
   const deleteReview = async () => {
     try {
-      //TODO /api/admin/reports
       await axios({
         url: API_Reports.DELETE_REAL_API,
         method: "delete",
@@ -54,7 +52,6 @@ export default function Reports() {
   //! POST : 신고누적리뷰 복구
   const restoreReview = async () => {
     try {
-      //TODO /api/admin/access/failure
       await axios({
         url: API_Reports.POST_REAL_API,
         method: "post",

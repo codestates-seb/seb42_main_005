@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import styled from "styled-components";
 import WriteReviewForm from "./WriteReviewForm";
 import PharmInfo from "./PharmInfo";
 import PharmRank from "../Ul/PharmRank";
 import Button from "../Ul/Button";
 import ReviewList from "./Reviews";
-import { API_PharmItem } from "../../Api/APIs"; // PharmDetail.json
-import { API_PharmDetail } from "../../Api/APIs";
 import { zIndex_Modal } from "../../Util/z-index";
 import { HiXMark } from "react-icons/hi2";
 
@@ -16,32 +13,64 @@ interface Props {
   like?: boolean;
   setLike?: React.Dispatch<React.SetStateAction<boolean>>;
   storeIdx: number;
-  Pharm: any;
+  Pharm?: any;
+  pharmDetail: any;
+  reviewList: any;
+  setReviewList: any;
 }
 
-export default function PharmDetail({ setIsModalUp, like, setLike, storeIdx, Pharm }: Props) {
+export default function PharmDetail({
+  setIsModalUp,
+  like,
+  setLike,
+  storeIdx,
+  Pharm,
+  pharmDetail,
+  reviewList,
+  setReviewList,
+}: Props) {
+
   const [isReviewFormShown, setIsReviewFormShown] = useState(false);
-  const [pharmDetail, setPharmDetail] = useState({});
-  const [reviewList, setReviewList] = useState([]);
+  // const [pharmDetail, setPharmDetail] = useState({});
+  // const [reviewList, setReviewList] = useState([]);
 
   //! GET : 약국상세정보 + 리뷰리스트
-  useEffect(() => {
-    const pharmDetailsAndreviewList = async () => {
-      await axios
-        .get(`${API_PharmItem.REAL_API}/${storeIdx}`)
-        .then((response) => {
-          setPharmDetail(response.data.response);
-          axios
-            .get(`${API_PharmDetail.REAL_API}/${storeIdx}/review`)
-            .then((response) => {
-              setReviewList(response.data.response.storeReviews);
-            })
-            .catch((err) => console.log("리뷰받아오던 중" + err));
-        })
-        .catch((err) => console.log("약국상세받아오던 중" + err));
-    };
-    pharmDetailsAndreviewList();
-  }, []);
+  // useEffect(() => {
+  //   const pharmDetailsAndreviewList = async () => {
+  //     await axios
+  //       .get(`${API_PharmItem.REAL_API}/${storeIdx}`)
+  //       .then((response) => {
+  //         setPharmDetail(response.data.response);
+  //         axios
+  //           .get(`${API_PharmDetail.REAL_API}/${storeIdx}/review`)
+  //           .then((response) => {
+  //             setReviewList(response.data.response.storeReviews);
+  //           })
+  //           .catch((err) => console.log("리뷰받아오던 중" + err));
+  //       })
+  //       .catch((err) => console.log("약국상세받아오던 중" + err));
+  //   };
+  //   pharmDetailsAndreviewList();
+  // }, []);
+
+  // const onModalUp = () => {
+  //   const pharmDetailsAndreviewList = async () => {
+  //     await axios
+  //       .get(`${API_PharmItem.REAL_API}/${storeIdx}`)
+  //       .then((response) => {
+  //         setPharmDetail(response.data.response);
+  //         axios
+  //           .get(`${API_PharmDetail.REAL_API}/${storeIdx}/review`)
+  //           .then((response) => {
+  //             setReviewList(response.data.response.storeReviews);
+  //           })
+  //           .catch((err) => console.log("리뷰받아오던 중" + err));
+  //       })
+  //       .catch((err) => console.log("약국상세받아오던 중" + err));
+  //   };
+  //   pharmDetailsAndreviewList();
+  //   setIsModalUp(false);
+  // };
 
   return (
     <ModalBackDrop onClick={() => setIsModalUp(false)}>

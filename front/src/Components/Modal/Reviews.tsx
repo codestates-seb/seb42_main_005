@@ -1,9 +1,5 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
 import styled from "styled-components";
 import ReviewUnit from "./ReviewUnit";
-import { API_PharmDetail } from "../../Api/APIs";
-import { zIndex_Modal } from "../../Util/z-index";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 interface Props {
@@ -15,8 +11,6 @@ interface Props {
 }
 
 export default function ReviewList({ reviewList, setReviewList, setIsReviewFormShown, storeIdx, Pharm }: Props) {
-
-  console.log(reviewList)
   return (
     <ReviewContainer>
       <ReviewTitle>리뷰</ReviewTitle>
@@ -24,8 +18,8 @@ export default function ReviewList({ reviewList, setReviewList, setIsReviewFormS
         <Reviews>
           {reviewList.map((review: any) => (
             <ReviewUnit
-              review={review}
               key={review.reviewIdx}
+              review={review}
               reviewIdx={review.reviewIdx}
               storeIdx={Pharm.storeIdx}
               setReviewList={setReviewList}

@@ -1,5 +1,5 @@
 //홈화면 옆에 약국 리스트
-import React, { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import PharmItem from "./PharmItem";
 import SearchBar from "./SearchBar";
@@ -53,7 +53,7 @@ export default function PharmLists({ hidden, setHidden, totalPharmList }: Props)
           </ListHead>
           <ListBody>
             {totalPharmList?.map((pharm: any) => (
-              <PharmItem Pharm={pharm} key={pharm.storeIdx} storeIdx={pharm.storeIdx} />
+              <PharmItem key={pharm.storeIdx} Pharm={pharm} storeIdx={pharm.storeIdx} />
             ))}
           </ListBody>
         </PharmList>

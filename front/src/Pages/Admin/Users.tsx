@@ -36,12 +36,11 @@ export default function Users() {
     },
     [checkedList],
   );
-  // console.log(users);
+  console.log(users);
 
   //! POST : 계정 정지
   const blockUsers = async () => {
     try {
-      //TODO /api/admin/block?period=XX
       const response = await axios({
         url: `${API_Users.POST_REAL_API}/block?period=${time}`,
         method: "post",
@@ -56,7 +55,6 @@ export default function Users() {
   //! POST : 계정 강퇴
   const fireUsers = async () => {
     try {
-      //TODO /api/admin/fired
       await axios({
         url: `${API_Users.POST_REAL_API}/fired`,
         method: "post",

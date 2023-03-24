@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import AdminTabs from "./AdminTabs";
@@ -16,7 +16,6 @@ export default function Certify() {
   useEffect(() => {
     const getCertificates = async () => {
       try {
-        //TODO 실제 url 일때 -> /api/admin/access/requests
         const response = await axios.get(`${API_Certify.GET_REAL_API}/access/requests`);
         console.log(response);
         setCertificates(response.data);
@@ -42,7 +41,6 @@ export default function Certify() {
   //! POST : 약사인증신청 승인
   const successCertify = async () => {
     try {
-      //TODO /api/admin/access/success
       await axios({
         url: API_Certify.POST_SUCCESS_REAL_API,
         method: "post",
@@ -56,7 +54,6 @@ export default function Certify() {
   //! POST : 약사인증신청 반려
   const deniedCertify = async () => {
     try {
-      //TODO /api/admin/access/failure
       await axios({
         url: API_Certify.POST_DENIED_REAL_API,
         method: "post",

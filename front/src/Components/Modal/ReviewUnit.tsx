@@ -61,10 +61,10 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
       submitReview();
     }
   };
+
   // ! DELETE : 리뷰삭제
   const deleteReview = async () => {
     try {
-      //TODO url 받았을때 -> //TODO /api/store/{storeIdx}/review/{reviewIdx}
       await axios({
         url: `${API_ReviewUnit.DELETE_REAL_API}/${storeIdx}/review/${reviewIdx}`,
         method: "delete",
@@ -78,7 +78,6 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
   //! POST : 리뷰신고
   const reportReview = async () => {
     try {
-      //TODO url 받았을때 -> /api/store/{storeIdx}/review/{reviewIdx}/report
       await axios({
         url: `${API_ReviewUnit.POST_REAL_API}/${storeIdx}/review/${reviewIdx}/report`,
         method: "post",
@@ -93,23 +92,21 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
   };
 
   const newComment = {
-    //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
     storeIdx,
     userIdx: 1,
     content: commentContent,
   };
+
   //! POST : 리뷰의 댓글작성
   const submitCommentKeyPress = (e: any) => {
     if (e.key === " " && e.getModifierState("Shift") === false) {
       e.stopPropagation();
     } else if (e.key === " " && e.target.value.slice(-1) === " ") {
       e.stopPropagation();
-    }
-    else if (e.key === "Enter") {
+    } else if (e.key === "Enter") {
       e.preventDefault();
       const reply = async () => {
         try {
-          //TODO url 받았을때 -> /api/review/{reviewIdx}/reply
           await axios({
             url: `${API_ReviewUnit.POST_COMMENT_REAL_API}/review/${reviewIdx}/reply`,
             method: "post",
@@ -132,14 +129,14 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
       setReviewList(
         [...reviewList].map(
           (
-            review, // username 임의로 작성해둠, 나중에 리덕스 툴킷에서 가져오기
+            rev, //? username 임의로 작성해둠, 나중에 리덕스 툴킷에서 가져오기
           ) =>
-            review.reviewIdx === reviewIdx
+            rev.reviewIdx === reviewIdx
               ? {
-                  ...review,
-                  replies: [show, ...review.replies],
+                  ...rev,
+                  replies: [show, ...rev.replies],
                 }
-              : review,
+              : rev,
         ),
       );
       reply();
@@ -211,7 +208,15 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
         </WriteCommentForm>
       ) : null}
       {review.replies?.map((reply: any) => (
-        <ReviewOfReview key={reply.replyIdx} reviewIdx={reviewIdx} reply={reply} review={review} storeIdx={storeIdx}/>
+        <ReviewOfReview
+          key={reply.replyIdx}
+          reviewIdx={reviewIdx}
+          reply={reply}
+          review={review}
+          storeIdx={storeIdx}
+          reviewList={reviewList}
+          setReviewList={setReviewList}
+        />
       ))}
     </ReviewUnitContainer>
   );
