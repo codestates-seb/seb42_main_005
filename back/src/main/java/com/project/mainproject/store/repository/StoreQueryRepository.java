@@ -34,7 +34,7 @@ public class StoreQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public DBStoreDetailDto findData(Long storeIdx) {
+    public DBStoreDetailDto findData(Long storeIdx,Long userIdx) {
         DBStoreDetailDto dbStoreDetailDto = queryFactory
                 .select(new QDBStoreDetailDto(
                         store.storeIdx, store.name, store.address, store.longitude, store.latitude, store.tel, store.etc,
@@ -51,14 +51,18 @@ public class StoreQueryRepository {
                         store.sundayOperating,
                         store.holidayOperating,
                         store._super.createdAt,
-                        store._super.modifiedAt
+                        store._super.modifiedAt,
+                        new CaseBuilder()
+                                .when(normal.userIdx.eq(userIdx)).then(true)
+                                .otherwise(false)
                 ))
                 .from(store)
                 .leftJoin(store.reviews, review)
                 .leftJoin(store.pickedStores, pickedStore)
                 .leftJoin(store.storeImages, storeImage)
+                .leftJoin(pickedStore.normal,normal)
                 .where(store.storeIdx.eq(storeIdx))
-                .groupBy(store.storeIdx, storeImage.imagePath)
+                .groupBy(store.storeIdx, storeImage.imagePath,normal.userIdx)
                 .fetchOne();
         return dbStoreDetailDto;
     }
@@ -69,7 +73,7 @@ public class StoreQueryRepository {
      * neLat : 3시
      * neLng : 12시
      * */
-    public List<DBStoreListDto> getStoreList(double maxLat, double minLat, double maxLng, double minLng, double lat, double lng, String sortCondition, String operatingFilterCond, boolean isHoliday,Long userIdx) {
+    public List<DBStoreListDto> getStoreList(double maxLat, double minLat, double maxLng, double minLng, double lat, double lng, String sortCondition, String operatingFilterCond, boolean isHoliday,long userIdx) {
         Expression<Double> maxLatitude = Expressions.constant(maxLat);   //9
         Expression<Double> maxLongitude = Expressions.constant(maxLng);   //6
         Expression<Double> minLatitude = Expressions.constant(minLat);    //3

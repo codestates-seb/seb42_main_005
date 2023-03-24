@@ -43,8 +43,9 @@ public class StoreController {
      * 약국 상세 조회 - 완성
      * */
     @GetMapping("/{storeIdx}")
-    public ResponseEntity getStoreDetail(@PathVariable Long storeIdx) {
-        SingleResponseDto storeDetailDto = storeGetService.getStoreDetailDto(storeIdx);
+    public ResponseEntity getStoreDetail(@PathVariable Long storeIdx,@AuthenticationPrincipal Object principal) {
+        Long userIdx = CheckLoginUser.getContextIdx(principal);
+        SingleResponseDto storeDetailDto = storeGetService.getStoreDetailDto(storeIdx,userIdx);
 
         return ResponseEntity.ok(storeDetailDto);
     }

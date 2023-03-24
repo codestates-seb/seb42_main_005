@@ -13,8 +13,10 @@ import com.project.mainproject.store.dto.GetStoreListRequestDto;
 import com.project.mainproject.store.mapper.StoreMapper;
 import com.project.mainproject.store.repository.StoreQueryRepository;
 import com.project.mainproject.store.repository.StoreRepository;
+import com.project.mainproject.utils.CheckLoginUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,9 +36,8 @@ public class StoreGetService {
     private final StoreMapper storeMapper;
     private final RedisRepository redisRepository;
 
-    public SingleResponseDto getStoreDetailDto(Long storeIdx) {
-//        DBStoreDetailDto findDetailDto = storeQueryRepository.findData(storeIdx);
-        DBStoreDetailDto findDetailDto = storeQueryRepository.findData(storeIdx);
+    public SingleResponseDto getStoreDetailDto(Long storeIdx,Long userIdx) {
+        DBStoreDetailDto findDetailDto = storeQueryRepository.findData(storeIdx,userIdx);
         log.info("### findDetailDto = {}", findDetailDto);
         GetStoreDetailDto responseDto = storeMapper.getStoreDetailDto(findDetailDto);
 
