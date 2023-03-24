@@ -218,7 +218,7 @@ public class StoreQueryRepository {
 
     private BooleanExpression getOperatingCondition(boolean isHoliday, String filterCond) {     //operating
         //holliday인가 ? null ->  정렬하지 않는다.
-        if (filterCond == null ) {
+        if (filterCond.equals("not") ) {
             return null;
         }
 
