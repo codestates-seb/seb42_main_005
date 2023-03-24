@@ -16,9 +16,9 @@ export default function ReviewList({ reviewList, setReviewList, setIsReviewFormS
       <ReviewTitle>리뷰</ReviewTitle>
       {reviewList.length ? (
         <Reviews>
-          {reviewList.map((review: any) => (
+          {reviewList.map((review: any, i:number) => (
             <ReviewUnit
-              key={review.reviewIdx}
+              key={i}
               review={review}
               reviewIdx={review.reviewIdx}
               storeIdx={Pharm.storeIdx}

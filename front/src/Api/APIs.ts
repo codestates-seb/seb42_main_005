@@ -4,15 +4,15 @@ export const API = "http://ec2-54-180-29-60.ap-northeast-2.compute.amazonaws.com
 // 로그인
 export const API_UserLogIn = {
   REAL_API: `http://ec2-54-180-29-60.ap-northeast-2.compute.amazonaws.com:8080/login`,
-  AUTH_REAL_API: `${API}/auth`,
+  AUTH_REAL_API: `${API}/auth`,//!
 };
 // 약사계정 회원가입 : pharmSignUpForms.tsx
 export const API_PharmSignUpForms = {
-  REAL_API: `${API}/users/store`,
+  REAL_API: `${API}/users/store`,//!
 };
 // 일반계정 회원가입 : userSignUpForms.tsx
 export const API_UserSignUpForms = {
-  REAL_API: `${API}/users/normal`,
+  REAL_API: `${API}/users/normal`,//!
 };
 // 회원탈퇴 : SignOut.tsx
 export const API_SignOut = {

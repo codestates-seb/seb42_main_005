@@ -129,14 +129,18 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
       setReviewList(
         [...reviewList].map(
           (
-            rev, //? username 임의로 작성해둠, 나중에 리덕스 툴킷에서 가져오기
+            rev, 
           ) =>
-            rev.reviewIdx === reviewIdx
+            {
+              const needToRefresh = rev.reviewIdx === reviewIdx;
+              if (!needToRefresh) return rev
+              
+              return rev.reviewIdx === reviewIdx
               ? {
                   ...rev,
                   replies: [show, ...rev.replies],
                 }
-              : rev,
+              : rev}
         ),
       );
       reply();
