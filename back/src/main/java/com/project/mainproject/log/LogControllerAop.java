@@ -10,6 +10,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 
 @Slf4j
@@ -32,8 +33,10 @@ public class LogControllerAop {
         Object[] args = joinPoint.getArgs();
         if (args.length <= 0) log.info("no parameter");
         for (Object arg : args) {
-            log.info("parameter type = {}", arg.getClass().getSimpleName());
-            log.info("parameter value = {}", arg);
+            if(Optional.ofNullable(arg).isPresent()){
+                log.info("parameter type = {}", arg.getClass().getSimpleName());
+                log.info("parameter value = {}", arg);
+            }
         }
 
     }
