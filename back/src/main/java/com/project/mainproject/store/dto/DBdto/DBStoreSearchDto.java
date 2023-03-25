@@ -2,6 +2,7 @@ package com.project.mainproject.store.dto.DBdto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
+import org.mapstruct.Builder;
 
 import java.time.LocalDateTime;
 
