@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { MdOutlineAddAPhoto } from "react-icons/md";
 import { APIS } from "../../Api/APIs";
+import { MdOutlineAddAPhoto } from "react-icons/md";
 
 interface Props {
   scriptUrl?: string;
@@ -21,13 +21,13 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
   //! GET : 유저 정보
   useEffect(() => {
     const getReviews = async () => {
-      try {
-        //? userIdx 는 리덕스 툴킷에서 -> 2
-        const response = await axios.get(`${APIS.GET_USER_INFO}/${2}`);
-        setMyInfo(response.data.response);
-      } catch (error) {
-        console.log(error);
-      }
+      await axios
+        .get(`${APIS.GET_USER_INFO}/${2}`) //TODO - REDUX TOOLKIT
+        .then((response) => setMyInfo(response.data.response))
+        .catch((error) => {
+          console.log("유저정보 받아오던 중 에러 발생");
+          console.log(error);
+        });
     };
     getReviews();
   }, []);
@@ -55,17 +55,12 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
     // TODO : 리덕스 툴킷에서 userIdx가져와 [JSON.stringify(userIdx)] 수정 => 아래주석 코드 지우면 안돼!
     //   formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(userIdx)], { type: "application/json" }));
     //
-
+ //TODO - REDUX TOOLKIT
     const submitNewImg: any = async () => {
-      try {
-        await axios({
-          url: `${APIS.PATCH_USER_IMG}/image`,
-          method: "patch",
-          data: formDataImgsubmit,
-        });
-      } catch (error) {
+      await axios.patch(`${APIS.PATCH_USER_IMG}/image`, formDataImgsubmit).catch((error) => {
+        console.log("이미지 업로드 하던 중 에러 발생");
         console.log(error);
-      }
+      });
     };
     submitNewImg();
   };

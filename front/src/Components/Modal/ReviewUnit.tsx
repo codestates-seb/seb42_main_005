@@ -3,25 +3,26 @@ import styled from "styled-components";
 import axios from "axios";
 import ReviewOfReview from "./ReviewOfReview";
 import Textarea from "../Ul/Textarea";
-import Input from "../Ul/Input";
 import Button from "../Ul/Button";
-import { APIS } from "../../Api/APIs"; // Review.json
-import { BsFillStarFill } from "react-icons/bs";
+import Input from "../Ul/Input";
+import { APIS } from "../../Api/APIs"; 
+import { TYPE_setReviewList, TYPE_reviewList } from "../../Api/TYPES";
 import { HiXMark } from "react-icons/hi2";
+import { BsFillStarFill } from "react-icons/bs";
 
 interface Props {
   review: any;
   reviewIdx: number;
   storeIdx: number;
-  reviewList: any;
-  setReviewList: any;
+  reviewList: TYPE_reviewList;
+  setReviewList: TYPE_setReviewList;
 }
 
 export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, setReviewList }: Props) {
-  const [isCommentFormShown, setIsCommentFormShown] = useState(false);
-  const [isOnEdit, setIsOnEdit] = useState(false);
-  const [reviewContent, setReviewContent] = useState(review.content);
-  const [commentContent, setCommentContent] = useState("");
+  const [isCommentFormShown, setIsCommentFormShown] = useState<React.SetStateAction<boolean>>(false);
+  const [isOnEdit, setIsOnEdit] = useState<React.SetStateAction<boolean>>(false);
+  const [reviewContent, setReviewContent] = useState<React.SetStateAction<any>>(review.content);
+  const [commentContent, setCommentContent] = useState<React.SetStateAction<any>>("");
   const handleReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReviewContent(e.target.value);
   };
@@ -38,61 +39,43 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
     } else if (e.key === "Enter") {
       e.preventDefault();
       const data: any = {
-        //? userIdx 는 리덕스 툴킷에서 가져올거고 일단은 임의로 1
-        userIdx: 1,
+        userIdx: 1, //TODO - REDUX TOOLKIT
         content: reviewContent,
         rating: review.rating,
       };
-      try {
-        await axios({
-          url: `${APIS.PATCH_REVIEWS}/${storeIdx}/review/${reviewIdx}`,
-          method: "patch",
-          data,
+      await axios
+        .patch(`${APIS.PATCH_REVIEWS}/${storeIdx}/review/${reviewIdx}`, data)
+        .catch((error) => {console.log("리뷰를 수정하던 중 에러 발생");console.log(error)});
+      await axios
+        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+        .then((response) => {
+          setReviewList(response.data.response.storeReviews);
         })
-          .then((res) =>
-            axios.get(`${APIS.GET_REVIEWS}/${storeIdx}/review`).then((response) => {
-              setReviewList(response.data.response.storeReviews);
-            }),
-          )
-          .then(() => setIsOnEdit(false));
-      } catch (error) {
-        console.log(error);
-      }
+        .then(() => setIsOnEdit(false))
+        .catch((error) => {console.log("리뷰리스트를 다시 불러오던 중 에러 발생");console.log(error)});
     }
   };
 
   // ! DELETE : 리뷰삭제
   const deleteReview = async () => {
-    try {
-      await axios({
-        url: `${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`,
-        method: "delete",
-      }).then(() =>
-        axios
-          .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
-          .then((response) => {
-            setReviewList(response.data.response.storeReviews);
-          }),
-      );
-    } catch (error) {
-      console.log(error);
-    }
+    await axios.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`).catch((error) => console.log(error));
+    await axios
+      .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+      .then((response) => {
+        setReviewList(response.data.response.storeReviews);
+      })
+      .catch((error) => {console.log("리뷰를 삭제하던 중 에러 발생");console.log(error)});
   };
 
+  const data = {
+    userIdx: 1, //? 리덕스 툴킷에서 가져오고 지금은 임의로 1
+    content: reviewContent,
+  };
   //! POST : 리뷰신고
   const reportReview = async () => {
-    try {
-      await axios({
-        url: `${APIS.POST_REPORT_REVIEW}/${storeIdx}/review/${reviewIdx}/report`,
-        method: "post",
-        data: {
-          userIdx: 1, //? 리덕스 툴킷에서 가져오고 지금은 임의로 1
-          content: reviewContent,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    await axios
+      .post(`${APIS.POST_REPORT_REVIEW}/${storeIdx}/review/${reviewIdx}/report`, data)
+      .catch((error) => {console.log("리뷰를 신고하던 중 에러 발생");console.log(error)});
   };
 
   //! POST : 리뷰의 댓글작성
@@ -104,29 +87,21 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
     } else if (e.key === "Enter") {
       e.preventDefault();
       const newComment = {
-        //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
         storeIdx,
-        userIdx: 1,
+        userIdx: 1,  //TODO - REDUX TOOLKIT
         content: commentContent,
       };
-      try {
-        await axios({
-          url: `${APIS.POST_COMMENT}/review/${reviewIdx}/reply`,
-          method: "post",
-          data: newComment,
+      await axios
+        .post(`${APIS.POST_REPLY}/${reviewIdx}/reply`, newComment)
+        .then(() => setCommentContent(""))
+        .then(() => setIsCommentFormShown(false))
+        .catch((error) => {console.log("리뷰의 댓글을 작성하던 중 에러 발생");console.log(error)});
+      await axios
+        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+        .then((response) => {
+          setReviewList(response.data.response.storeReviews);
         })
-          .then(() => setCommentContent(""))
-          .then(() => setIsCommentFormShown(false))
-          .then(() =>
-            axios
-              .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
-              .then((response) => {
-                setReviewList(response.data.response.storeReviews);
-              }),
-          );
-      } catch (error) {
-        console.log(error);
-      }
+        .catch((error) => {console.log("리뷰리스트를 다시 불러오던 중 에러 발생");console.log(error)});
     }
   };
 

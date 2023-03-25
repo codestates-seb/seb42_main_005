@@ -1,10 +1,11 @@
-import React from "react"
+import React from "react";
 import styled from "styled-components";
+import { TYPE_isImgUp, TYPE_setIsImgUp } from "../../Api/TYPES";
 import { zIndex_AdminPage } from "../../Util/z-index";
 
 interface Props {
-  isImgUp: boolean;
-  setIsImgUp: React.Dispatch<React.SetStateAction<boolean>>;
+  isImgUp: TYPE_isImgUp;
+  setIsImgUp: TYPE_setIsImgUp;
   imgUrl: string;
 }
 
@@ -14,7 +15,10 @@ export default function PharmDetail({ isImgUp, setIsImgUp, imgUrl }: Props) {
       <ModalBackDrop onClick={() => setIsImgUp(!isImgUp)}>
         <Container>
           <span onClick={() => setIsImgUp(!isImgUp)}>닫기</span>
-          <Img src={imgUrl} onClick={(event) => event.stopPropagation()}></Img>
+          <Img
+            src={imgUrl}
+            onClick={(event: React.MouseEvent<HTMLImageElement, MouseEvent>) => event.stopPropagation()}
+          ></Img>
         </Container>
       </ModalBackDrop>
     </>

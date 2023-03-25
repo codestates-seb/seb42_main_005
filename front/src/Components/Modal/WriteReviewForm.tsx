@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import axios from "axios";
 import styled from "styled-components";
+import axios from "axios";
+import { APIS } from "../../Api/APIs";
 import Textarea from "../Ul/Textarea";
 import Button from "../Ul/Button";
+import { TYPE_Pharm, TYPE_setIsReviewFormShown, TYPE_reviewList, TYPE_setReviewList } from "../../Api/TYPES";
+import { zIndex_Modal } from "../../Util/z-index";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BiPhotoAlbum } from "react-icons/bi";
 import { HiXMark } from "react-icons/hi2";
-import { zIndex_Modal } from "../../Util/z-index";
-import { APIS } from "../../Api/APIs"; // Review.json
 
 interface Props {
-  Pharm: any;
-  setIsReviewFormShown: React.Dispatch<React.SetStateAction<boolean>>;
-  storeIdx: number;
-  reviewList: any;
-  setReviewList: any;
+  Pharm: TYPE_Pharm | undefined;
+  setIsReviewFormShown: TYPE_setIsReviewFormShown;
+  storeIdx: number | undefined;
+  reviewList: TYPE_reviewList;
+  setReviewList: TYPE_setReviewList;
 }
 
 export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx, reviewList, setReviewList }: Props) {
@@ -59,44 +60,36 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
   const onSubmit: any = async (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
     let data: any = {
-      userIdx: 4,
+      userIdx: 4, //TODO - REDUX TOOLKIT
       content: review.content,
       rating: review.rating,
     };
     const formData = new FormData();
     formData.append("postDto", new Blob([JSON.stringify(data)], { type: "application/json" }));
     formData.append("image", imgFile);
-    try {
-      await axios({
-        url: `${APIS.POST_REVIEWS}/${storeIdx}/review`,
-        method: "post",
-        data: formData,
+    await axios
+      .post(`${APIS.POST_REVIEWS}/${storeIdx}/review`, formData)
+      .then(() => setIsReviewFormShown(false))
+      .catch((error) => {
+        console.log("리뷰를 작성하던 중 에러 발생");
+        console.log(error);
+      });
+    await axios
+      .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+      .then((response) => {
+        setReviewList(response.data.response.storeReviews);
       })
-        .then(() =>
-          setReview({
-            reviewIdx: 0,
-            content: "",
-            rating: 0,
-            createdAt: "",
-          }),
-        )
-        .then(() => setImageSrc(""))
-        .then(() => setIsReviewFormShown(false))
-        .then(() =>
-          axios.get(`${APIS.GET_REVIEWS}/${storeIdx}/review`).then((response) => {
-            setReviewList(response.data.response.storeReviews);
-          }),
-        );
-    } catch (error) {
-      console.log(error);
-    }
+      .catch((error) => {
+        console.log("리뷰리스트를 다시 불러오던 중 에러 발생");
+        console.log(error);
+      });
   };
 
   return (
     <WriteReviewContainer onSubmit={onSubmit}>
       <InputTop>
         <span id="instruction">
-          <span id="name">{Pharm.name}</span>에 리뷰를 남겨보세요!
+          <span id="name">{Pharm?.name}</span>에 리뷰를 남겨보세요!
         </span>
         <HiXMark id="close" aria-hidden="true" className="except" onClick={() => setIsReviewFormShown(false)} />
       </InputTop>

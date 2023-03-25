@@ -32,47 +32,34 @@ export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, rev
     } else if (e.key === "Enter") {
       e.preventDefault();
       const data = {
-        //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
         storeIdx,
-        userIdx: 1,
+        userIdx: 1,  //TODO - REDUX TOOLKIT
         content,
       };
-      try {
-        await axios({
-          url: `${APIS.PATCH_COMMENT}/${reviewIdx}/reply/${reply.replyIdx}`,
-          method: "patch",
-          data,
+      await axios
+        .patch(`${APIS.PATCH_REPLY}/${reviewIdx}/reply/${reply.replyIdx}`, data)
+        .then(() => setIsPatchFormShown(false))
+        .catch((error) => {console.log("리뷰의 댓글을 수정하던 중 에러 발생");console.log(error)});
+      await axios
+        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+        .then((response) => {
+          setReviewList(response.data.response.storeReviews);
         })
-          .then(() => setIsPatchFormShown(false))
-          .then(() =>
-            axios
-              .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
-              .then((response) => {
-                setReviewList(response.data.response.storeReviews);
-              }),
-          );
-      } catch (error) {
-        console.log(error);
-      }
+        .catch((error) => {console.log("리뷰리스트를 다시 불러오던 중 에러 발생");console.log(error)});
     }
   };
 
   // ! DELETE : 리뷰의 댓글삭제
   const deleteComment = async () => {
-    try {
-      await axios({
-        url: `${APIS.DELETE_COMMENT}/${reviewIdx}/reply/${reply.replyIdx}`,
-        method: "delete",
-      }).then(() =>
-      axios
-        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
-        .then((response) => {
-          setReviewList(response.data.response.storeReviews);
-        }),
-    );
-    } catch (error) {
-      console.log(error);
-    }
+    await axios
+      .delete(`${APIS.DELETE_REPLY}/${reviewIdx}/reply/${reply.replyIdx}`)
+      .catch((error) => {console.log("리뷰의 댓글을 삭제하던 중 에러 발생");console.log(error)});
+    await axios
+      .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+      .then((response) => {
+        setReviewList(response.data.response.storeReviews);
+      })
+      .catch((error) => {console.log("리뷰리스트를 다시 불러오던 중 에러 발생");console.log(error)});
   };
 
   return (

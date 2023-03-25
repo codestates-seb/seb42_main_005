@@ -13,10 +13,10 @@ interface Props {
 }
 
 export default function MyReview({ review, storeIdx, reviewIdx, idx }: Props) {
-  const [isModalUp, setIsModalUp] = useState(false);
-  const [pharmDetail, setPharmDetail] = useState();
-  const [reviewList, setReviewList] = useState([]);
-  const [like, setLike] = useState(false);
+  const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
+  const [pharmDetail, setPharmDetail] = useState<React.SetStateAction<any>>();
+  const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
+  const [like, setLike] = useState<React.SetStateAction<boolean>>(false);
 
   //! GET : 약국상세정보 + 리뷰리스트
   const onModalUp = () => {
@@ -24,13 +24,19 @@ export default function MyReview({ review, storeIdx, reviewIdx, idx }: Props) {
       await axios
         .get(`${APIS.GET_PHARMDETAILS}/${storeIdx}`)
         .then((response) => setPharmDetail(response.data.response))
-        .catch((err) => console.log("약국상세받아오던 중" + err));
+        .catch((error) => {
+          console.log("약국 상세정보 받아오던 중 에러 발생");
+          console.log(error);
+        });
     };
     const getReviewList = async () => {
       await axios
         .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
         .then((response) => setReviewList(response.data.response.storeReviews))
-        .catch((err) => console.log("리뷰받아오던 중" + err));
+        .catch((error) => {
+          console.log("약국 리뷰 받아오던 중 에러 발생");
+          console.log(error);
+        });
     };
     axios.all([getPharmDetail(), getReviewList()]);
     setIsModalUp(true);
@@ -38,15 +44,11 @@ export default function MyReview({ review, storeIdx, reviewIdx, idx }: Props) {
 
   //! DELETE : 리뷰삭제
   const deleteReview = async () => {
-    try {
-      await axios({
-        url: `${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`,
-        method: "delete",
-      });
-    } catch (error) {
-      console.log(error);
-    }
-    setReviewList([...reviewList].filter((review: any) => review.reviewIdx !== reviewIdx));
+    await axios.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`).catch((error) => console.log(error));
+    await axios
+      .get(`${APIS.GET_MYREVIEWS}/${1}`) //TODO - REDUX TOOLKIT
+      .then((response) => setReviewList(response.data))
+      .catch((error) => console.log(error));
   };
 
   return (

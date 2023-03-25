@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import CheckBox from "../../Components/Ul/CheckBox";
+import Button from "../../Components/Ul/Button";
+import { APIS } from "../../Api/APIs";
 import AdminTabs from "./AdminTabs";
 import Cert from "./Cert";
-import Button from "../../Components/Ul/Button";
-import CheckBox from "../../Components/Ul/CheckBox";
-import { APIS } from "../../Api/APIs";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Certify() {
@@ -15,13 +15,10 @@ export default function Certify() {
   //! GET : 약사인증신청 리스트 불러오기
   useEffect(() => {
     const getCertificates = async () => {
-      try {
-        const response = await axios.get(`${APIS.GET_ADMIN_CERTS}/access/requests`);
-        console.log(response);
-        setCertificates(response.data);
-      } catch (error) {
-        console.log(error);
-      }
+      await axios
+        .get(`${APIS.GET_ADMIN_CERTS}`)
+        .then((response) => setCertificates(response.data.response.content))
+        .catch((error) => {console.log("약사인증신청 리스트 불러오던 중 에러 발생");console.log(error)});
     };
     getCertificates();
   }, []);
@@ -38,30 +35,21 @@ export default function Certify() {
     [checkedList],
   );
 
+  const data = { userIdxs: checkedList };
   //! POST : 약사인증신청 승인
   const successCertify = async () => {
-    try {
-      await axios({
-        url: APIS.POST_ADMIN_CERTIFY,
-        method: "post",
-        data: { userIdxs: checkedList },
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    await axios
+      .post(APIS.POST_ADMIN_CERTIFY, data)
+      .catch((error) => {console.log("약사인증 승인하던 중 에러 발생");console.log(error)})
+      .then(() => location.reload())
   };
 
   //! POST : 약사인증신청 반려
   const deniedCertify = async () => {
-    try {
-      await axios({
-        url: APIS.POST_ADMIN_DENY,
-        method: "post",
-        data: { userIdxs: checkedList },
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    await axios
+      .post(APIS.POST_ADMIN_DENY, data)
+      .catch((error) => {console.log("약사인증 반려하던 중 에러 발생");console.log(error)})
+      .then(() => location.reload())
   };
 
   return (
@@ -73,7 +61,7 @@ export default function Certify() {
             <span>약사인증관리</span>
             <ButtonContainer>
               <Button color="blue" size="md" text="신청승인" onClick={() => successCertify()} />
-              <Button color="blue" size="md" text="신청반려" onClick={() => deniedCertify()} />
+              <Button color="red" size="md" text="신청반려" onClick={() => deniedCertify()} />
             </ButtonContainer>
           </Header>
           <Table>
@@ -81,18 +69,20 @@ export default function Certify() {
               <Values className="checkBox">
                 <CheckBox />
               </Values>
-              <Values className="nickname">닉네임</Values>
-              <Values className="email">email</Values>
-              <Values className="requested">신청일</Values>
-              <Values className="businessCert">사업자등록증</Values>
-              <Values className="licenceCert">약사면허증</Values>
+              <Contaniner>
+                <Values className="nickname">닉네임</Values>
+                <Values className="email">email</Values>
+                <Values className="requested">신청일</Values>
+                <Values className="businessCert">사업자등록증</Values>
+                <Values className="licenceCert">약사면허증</Values>
+              </Contaniner>
             </Label>
             {certificates.length ? (
               <BelowLable>
                 {certificates.map((cert: any, i) => (
                   <Content>
                     <Values className="checkBox">
-                      <CheckBox onChange={(e: any) => onCheckedItem(e.target.checked, e.target.id)} />
+                      <CheckBox id={cert.userIdx} onChange={(e: any) => onCheckedItem(e.target.checked, e.target.id)} />
                     </Values>
                     <Cert key={i} cert={cert} />
                   </Content>
@@ -250,4 +240,11 @@ const Content = styled.article`
   :hover {
     background-color: var(--black-050);
   }
+`;
+const Contaniner = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-left: 8px;
+  width: 100%;
 `;

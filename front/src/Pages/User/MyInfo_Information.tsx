@@ -2,13 +2,13 @@ import { useDaumPostcodePopup } from "react-daum-postcode";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { validators } from "../../Components/SignUpForm/Validation";
 import SignUpInput from "../../Components/SignUpForm/SignUpInput";
 import InputAlert from "./InputAlert";
+import { APIS } from "../../Api/APIs";
 import Button from "../../Components/Ul/Button";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { MdOutlineAddAPhoto } from "react-icons/md";
-import { APIS } from "../../Api/APIs";
-import { validators } from "../../Components/SignUpForm/Validation";
 
 interface Props {
   scriptUrl?: string;
@@ -27,15 +27,14 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
   //! GET : 유저 정보
   useEffect(() => {
     const getReviews = async () => {
-      try {
-        //? userIdx 는 리덕스 툴킷에서 -> 1
-        const response = await axios.get(`${APIS.GET_USER_INFO}/${1}`);
-        setMyInfo(response.data.response);
-        setMyName(response.data.response.name);
-        setMyAddress(response.data.response.address);
-      } catch (error) {
-        console.log(error);
-      }
+      await axios
+        .get(`${APIS.GET_USER_INFO}/${1}`) //TODO - REDUX TOOLKIT
+        .then((response) => {
+          setMyInfo(response.data.response);
+          setMyName(response.data.response.name);
+          setMyAddress(response.data.response.address);
+        })
+        .catch((error) => console.log(error));
     };
     getReviews();
   }, []);
@@ -209,20 +208,27 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
       newPassword: newPassword,
     };
     const submitNewUserInfo: any = async () => {
-      try {
-        //? 수정 /api/users/{userIdx}=>리덕스에서 userIdx꺼내
-        await axios({
-          url: `${APIS.PATCH_USER_INFO}/${1}`,
-          method: "patch",
-          data: newUserData,
-        }).then(() => setIsEditing(false));
-      } catch (err: any) {
-        if (err.response.status === 406) {
-          alert("현재비밀번호가 가입시 비밀번호와 다릅니다");
-        }
-      }
+      await axios
+        .patch(`${APIS.PATCH_USER_INFO}/${1}`, newUserData)
+        .then(() => setIsEditing(false))
+        .catch((error) => {
+          error.response.status === 406
+            ? alert("현재비밀번호가 가입시 비밀번호와 다릅니다")
+            : console.log("내 정보 수정하던 중 에러 발생");
+          console.log(error);
+        });
+      await axios
+        .get(`${APIS.GET_USER_INFO}/${1}`)
+        .then((response) => {
+          setMyInfo(response.data.response);
+          setMyName(response.data.response.name);
+          setMyAddress(response.data.response.address);
+        })
+        .catch((error) => {
+          console.log("내 정보 다시 가져오던 중 에러 발생");
+          console.log(error);
+        });
     };
-    setMyInfo({ ...myInfo, ...newUserData });
     submitNewUserInfo();
   };
 
@@ -236,17 +242,18 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     //
 
     const submitNewImg: any = async () => {
-      try {
-        //? 수정 /api/users/{userIdx}=>리덕스에서 userIdx꺼내
-        await axios({
-          //TODO : {userIdx}/image 수정
-          url: `${APIS.PATCH_USER_IMG}/${1}/image`,
-          method: "patch",
-          data: formDataImgsubmit,
+      await axios.patch(`${APIS.PATCH_USER_IMG}/${1}/image`, formDataImgsubmit).catch((error) => console.log(error));
+      await axios
+        .get(`${APIS.GET_USER_INFO}/${1}`)
+        .then((response) => {
+          setMyInfo(response.data.response);
+          setMyName(response.data.response.name);
+          setMyAddress(response.data.response.address);
+        })
+        .catch((error) => {
+          console.log("내 이미지 수정하던 중 에러 발생");
+          console.log(error);
         });
-      } catch (error) {
-        console.log(error);
-      }
     };
     submitNewImg();
   };
