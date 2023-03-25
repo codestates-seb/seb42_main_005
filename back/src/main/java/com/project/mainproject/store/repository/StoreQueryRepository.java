@@ -85,7 +85,7 @@ public class StoreQueryRepository {
         return queryFactory
                 .select(new QDBStoreListDto(
                         store.storeIdx, store.name, store.address, store.latitude, store.longitude,
-                        round(review.rating.avg(),2),
+                        round(review.rating.avg(),2).as("rating"),
                         ExpressionUtils.as((
                                 acos(sin(radians(store.latitude))
                                         .multiply(sin(radians(latitude)))
@@ -94,8 +94,8 @@ public class StoreQueryRepository {
                                                 .multiply(cos(radians(store.longitude.subtract(longitude)))))
                                 ).multiply(RADIUS_EARTH_KM)
                         ), "distance"),
-                        pickedStore.storeId.count(),
-                        review.reviewIdx.count(),
+                        pickedStore.storeId.count().as("pickedStore"),
+                        review.reviewIdx.count().as("reviewCount"),
                         store.storeImages.imagePath,
                         store._super.modifiedAt,
                         new CaseBuilder()

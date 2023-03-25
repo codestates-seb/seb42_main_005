@@ -72,6 +72,7 @@ public interface StoreControllerTestHelper extends ControllerTestHelper {
         );
     }
 
+
     default List<FieldDescriptor> getStoreIdxDescriptors() {
         String parentPath = getDataParentPath(DataResponseType.SINGLE,"response");
         return List.of(
