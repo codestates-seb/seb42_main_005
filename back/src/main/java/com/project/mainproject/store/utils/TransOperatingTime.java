@@ -15,21 +15,21 @@ public class TransOperatingTime {
         DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();
         switch (dayOfWeek) {
             case MONDAY:
-                return dBStoreDetailDto.getMonday();
+                return dBStoreDetailDto.getMonday() == null ? new OperatingTime(null, null) :  dBStoreDetailDto.getMonday();
             case TUESDAY:
-                return dBStoreDetailDto.getThursday();
+                return dBStoreDetailDto.getTuesday() == null ? new OperatingTime(null, null) :  dBStoreDetailDto.getTuesday();
             case WEDNESDAY:
-                return dBStoreDetailDto.getWednesday();
+                return dBStoreDetailDto.getWednesday() == null ? new OperatingTime(null, null) :  dBStoreDetailDto.getWednesday();
             case THURSDAY:
-                return dBStoreDetailDto.getTuesday();
+                return dBStoreDetailDto.getThursday() == null ? new OperatingTime(null, null) :  dBStoreDetailDto.getThursday();
             case FRIDAY:
-                return dBStoreDetailDto.getFriday();
+                return dBStoreDetailDto.getFriday() == null ? new OperatingTime(null, null) :  dBStoreDetailDto.getFriday();
             case SATURDAY:
-                return dBStoreDetailDto.getSaturday();
+                return dBStoreDetailDto.getSaturday() == null ? new OperatingTime(null, null) :  dBStoreDetailDto.getSaturday();
             case SUNDAY:
-                return dBStoreDetailDto.getSunday();
+                return dBStoreDetailDto.getSunday() == null ? new OperatingTime(null, null) :  dBStoreDetailDto.getSunday();
             default:
-                return dBStoreDetailDto.getHoliday();
+                return dBStoreDetailDto.getHoliday() == null ? new OperatingTime(null, null) :  dBStoreDetailDto.getHoliday();
         }
     }
 
