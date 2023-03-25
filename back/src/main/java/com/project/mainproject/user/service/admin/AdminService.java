@@ -47,6 +47,7 @@ public class AdminService {
     }
 
     public SingleResponseDto rejectPharmacy(List<Long> userIdx) {
+        // 유저 검증 필요 (아무 숫자나 다 됨 => TEMPORARY인 "약국회원")
         userRepository.deleteUserByIdList(userIdx);
 
         return SingleResponseDto.builder()
