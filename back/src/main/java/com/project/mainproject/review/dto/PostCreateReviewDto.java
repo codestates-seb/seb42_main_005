@@ -2,9 +2,11 @@ package com.project.mainproject.review.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.util.Assert;
 
 @Getter
+@ToString
 @Builder
 public class PostCreateReviewDto {
     private Long userIdx;

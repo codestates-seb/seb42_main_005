@@ -81,6 +81,20 @@ public class AdminService {
                 .message(PROCESS_COMPLETED.getMessage())
                 .build();
     }
+    public SingleResponseDto restoreUsers(List<Long> userIdxs) {
+        List<User> findUsers = userRepository.findByIds(userIdxs);
+
+        for (User findUser : findUsers) {
+            findUser.setUserStatus(UserStatus.ACTIVE);
+        }
+
+        userBannedRepository.usersDelete(userIdxs); //벤당한 유저 삭제로직
+
+        return SingleResponseDto.builder()
+                .httpCode(PROCESS_COMPLETED.getHttpCode())
+                .message(PROCESS_COMPLETED.getMessage())
+                .build();
+    }
 
     // 내부 동작 메서드
 
