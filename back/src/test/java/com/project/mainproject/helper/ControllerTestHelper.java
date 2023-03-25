@@ -81,8 +81,9 @@ public interface ControllerTestHelper<T> {
         return get(uri)
                 .accept(MediaType.APPLICATION_JSON);
     }
-    default RequestBuilder getRequestBuilder(String url, MultiValueMap<String, String> queryParams) {
+    default RequestBuilder getRequestBuilder(String url, String accessToken, MultiValueMap<String, String> queryParams) {
         return get(url)
+                .header("Authorization", "Bearer " + accessToken)
                 .params(queryParams)
                 .accept(MediaType.APPLICATION_JSON);
     }
@@ -91,6 +92,14 @@ public interface ControllerTestHelper<T> {
                 .params(queryParams)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+    }
+    default RequestBuilder getRequestBuilder(String url, MultiValueMap<String, String> queryParams, String content, String accessToken) {
+        return get(url)
+                .params(queryParams)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + accessToken)
                 .content(content);
     }
     default RequestBuilder getRequestBuilder(String url, MultiValueMap<String, String> queryParams,long resourceId) {
