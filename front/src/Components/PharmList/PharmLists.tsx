@@ -1,8 +1,9 @@
 //홈화면 옆에 약국 리스트
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import PharmItem from "./PharmItem";
 import SearchBar from "./SearchBar";
+import SortButtons from "./SortButtons";
 import { zIndex_PharmList } from "../../Util/z-index";
 import { SELECT_HIDDEN } from "../../Util/type";
 import { RiHomeLine } from "react-icons/ri";
@@ -11,12 +12,48 @@ import { VscTriangleLeft } from "react-icons/vsc";
 interface Props {
   hidden: SELECT_HIDDEN;
   setHidden: Dispatch<SetStateAction<SELECT_HIDDEN>>;
+  sorted: any;
+  setSorted: any;
+  selected: any;
   totalPharmList: object[];
   setTotalPharmList: any;
+  makeMap: any;
+  getPharmLists: any;
 }
 
-export default function PharmLists({ hidden, setHidden, totalPharmList, setTotalPharmList }: Props) {
+export default function PharmLists({
+  hidden,
+  setHidden,
+  sorted,
+  setSorted,
+  selected,
+  totalPharmList,
+  setTotalPharmList,
+  makeMap,
+  getPharmLists,
+}: Props) {
+  const [displayedList, setDisplayedList] = useState(totalPharmList.slice(0, 10));
+  const listRef = useRef<HTMLDivElement>(null);
 
+  const handleScroll = (e: any) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.target;
+    if (scrollTop + clientHeight >= scrollHeight && displayedList.length < totalPharmList.length) {
+      setDisplayedList((prevList) => [...prevList, ...totalPharmList.slice(prevList.length, prevList.length + 10)]);
+    }
+  };
+  useEffect(() => {
+    setDisplayedList(totalPharmList.slice(0, 10));
+    if (listRef.current) {
+      listRef.current.scrollTop = 0;
+    }
+  }, [totalPharmList]);
+
+  //* 정렬기준 클릭 시
+  const ClickedSort = () => {
+    if (makeMap) {
+      getPharmLists(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
+    }
+  };
   return (
     <ContainerList className={hidden ? "hide" : ""}>
       <ContainerWrap className={hidden ? "" : "hide"}>
@@ -43,19 +80,26 @@ export default function PharmLists({ hidden, setHidden, totalPharmList, setTotal
                 <RiHomeLine className="logo" />
                 <span className="my_place">우리 약국</span>
               </ButtonMyPlace>
-              <SortContainer>
-                <ButtonSort>가까운순</ButtonSort>
-                <span className="partition" />
-                <ButtonSort>리뷰많은순</ButtonSort>
-                <span className="partition" />
-                <ButtonSort>별점높은순</ButtonSort>
-              </SortContainer>
+              <SortButtons
+                sorted={sorted}
+                onClickDistance={() => [setSorted("distance"), ClickedSort()]}
+                onClickReviewCount={() => [setSorted("reviewCount"), ClickedSort()]}
+                onClickRating={() => [setSorted("rating"), ClickedSort()]}
+              />
             </ButtonContainer>
           </ListHead>
-          <ListBody>
-            {totalPharmList?.map((pharm: any) => (
-              <PharmItem Pharm={pharm} key={pharm.storeIdx} storeIdx={pharm.storeIdx} />
-            ))}
+          <ListBody ref={listRef} onScroll={handleScroll}>
+            {totalPharmList.length > 0 ? (
+              displayedList.map((pharm: any) => (
+                <PharmItem Pharm={pharm} key={pharm.storeIdx} storeIdx={pharm.storeIdx} />
+              ))
+            ) : (
+              <NoPharm>
+                <img className="img" alt="지도를 보고있는 사람" src="Images/map.png" />
+                <span className="content">주변에 약국이 없습니다!</span>
+                <span className="content">다른 곳에서 검색을 시도해 보세요.</span>
+              </NoPharm>
+            )}
           </ListBody>
         </PharmList>
       </ContainerWrap>
@@ -137,6 +181,25 @@ const ListBody = styled.section`
   box-shadow: rgba(0, 0, 0, 0.05) 2px 2px 4px inset, rgba(0, 0, 0, 0.05) 0px 7px 7px -3px inset,
     rgba(0, 0, 0, 0.05) 0px -7px 7px -3px inset;
 `;
+const NoPharm = styled.div`
+  position: relative;
+  top: 26%;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .img {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 20px;
+    opacity: 0.7;
+  }
+  .content {
+    margin-top: 8px;
+    font-size: 1.1rem;
+    color: var(--black-300);
+  }
+`;
 
 //input
 const SearchContainer = styled.section`
@@ -192,29 +255,6 @@ const ButtonMyPlace = styled.button`
   :hover {
     font-weight: 600;
     color: var(--blue-600);
-    transition: 0.2s;
-  }
-`;
-const SortContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  .partition {
-    width: 1.4px;
-    height: 0.9rem;
-    margin: 0 15px;
-    background-color: var(--black-300);
-  }
-`;
-const ButtonSort = styled.button`
-  cursor: pointer;
-  border: none;
-  background-color: var(--white);
-  font-size: 0.9rem;
-  color: var(--black-350);
-  transition: 0.2s;
-  &:hover {
-    color: var(--blue-500);
     transition: 0.2s;
   }
 `;
