@@ -1,5 +1,6 @@
 package com.project.mainproject.user.dto;
 
+import com.project.mainproject.user.dto.db.DBUserInfo;
 import com.project.mainproject.user.entity.User;
 import com.project.mainproject.user.enums.UserStatus;
 import lombok.AllArgsConstructor;
@@ -22,9 +23,11 @@ public class UserInfoDto {
     private String userType;
     private UserStatus userStatus;
     private long reviewCount;
-    private int reportCount;
+    private Long reportCount;
+    private LocalDateTime bannedRestoreDate;
 
-    public UserInfoDto(User user) {
+
+    public UserInfoDto(DBUserInfo user) {
         this.userIdx = user.getUserIdx();
         this.createdAt = user.getCreatedAt();
         this.name = user.getName();
@@ -35,5 +38,6 @@ public class UserInfoDto {
         this.userStatus = user.getUserStatus();
         this.reviewCount = user.getReviewCount();
         this.reportCount = user.getReportCount();
+        this.bannedRestoreDate = user.getBannedUserRestoredDate();
     }
 }
