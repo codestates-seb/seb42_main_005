@@ -55,6 +55,10 @@ public class User extends Auditable{
     @OneToMany(mappedBy = "user")
     private List<Review> reviews = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name = "user_banned_idx")
+    private UserBanned userBanned;
+
     @Builder // For Mapper
     public User(Long userIdx) {
         this.userIdx = userIdx;

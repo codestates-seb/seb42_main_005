@@ -7,6 +7,7 @@ import com.project.mainproject.store.entity.Store;
 import com.project.mainproject.store.repository.StoreRepository;
 import com.project.mainproject.user.dto.UserInfoDto;
 import com.project.mainproject.user.dto.UserPatchDto;
+import com.project.mainproject.user.dto.db.DBUserInfo;
 import com.project.mainproject.user.entity.Normal;
 import com.project.mainproject.user.entity.Pharmacy;
 import com.project.mainproject.user.entity.User;
@@ -95,8 +96,8 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
-    public Page<User> findUsers(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<DBUserInfo> findUsers(Pageable pageable) {
+        return userRepository.findUserInfoWithBannedStoreDate(pageable);
 
     }
 

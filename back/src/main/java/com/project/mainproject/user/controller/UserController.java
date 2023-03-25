@@ -5,6 +5,7 @@ import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.dummy.CommonStub;
 import com.project.mainproject.user.dto.*;
+import com.project.mainproject.user.dto.db.DBUserInfo;
 import com.project.mainproject.user.entity.Pharmacy;
 import com.project.mainproject.user.entity.User;
 import com.project.mainproject.user.mapper.UserMapper;
@@ -110,7 +111,7 @@ public class UserController {
      */
     @GetMapping
     public ResponseEntity getUsers(Pageable pageable) {
-        Page<User> userPage = userService.findUsers(pageable);
+        Page<DBUserInfo> userPage = userService.findUsers(pageable);
         Page<UserInfoDto> userInfoDtoPage = userPage.map(UserInfoDto::new);
 
         PageInfo pageInfo = PageInfo.builder()

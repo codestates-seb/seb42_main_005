@@ -22,7 +22,7 @@ public class UserBanned {
     @Embedded
     private Duration duration;
 
-    @ManyToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY)
     private User user;
 
     @Builder
