@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.project.mainproject.store.exception.StoreExceptionCode.STORE_ADDRESS_NOT_FOUND;
 import static com.project.mainproject.store.exception.StoreExceptionCode.STORE_NOT_FOUND;
 import static com.project.mainproject.user.enums.UserStatus.TEMPORARY;
 
@@ -114,7 +115,8 @@ public class UserService implements UserDetailsService {
                 .filter(store -> store.getAddress().replace(" ", "")
                         .contains(removeSpace(address)))
                 .collect(Collectors.toList());
-        if (stores.size() != 1) throw new RuntimeException("으악");
+        if (stores.size() != 1)
+            throw new BusinessLogicException(STORE_ADDRESS_NOT_FOUND);
 
         return stores.get(0);
     }
@@ -122,7 +124,9 @@ public class UserService implements UserDetailsService {
     // 위치...
     private String removeSpace(String address) {
         String[] words = address.split(" ");
-        if (words.length < 4) throw new RuntimeException("수정필요!");
+        if (words.length < 4)
+            throw new BusinessLogicException(STORE_ADDRESS_NOT_FOUND);
+
         return words[1] + words[2] + words[3];
     }
 
