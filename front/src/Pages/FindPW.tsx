@@ -7,6 +7,7 @@ import ErrorAlert from "../Components/SignUpForm/ErrorAlert";
 import { BsPersonCircle } from "react-icons/bs";
 import { API_FindPW } from "../Api/APIs";
 import { validators } from "../Components/SignUpForm/Validation";
+import { useAppSelector } from "../Redux/hooks";
 
 export default function FindPW() {
   const [findPassword, setFindPassword] = useState("");
@@ -22,6 +23,9 @@ export default function FindPW() {
     setError(errors);
   };
 
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
   //! PATCH (?) 비밀번호 찾기
   const onSubmit: any = async (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
@@ -35,7 +39,7 @@ export default function FindPW() {
     } else
       await axios({
         //? userIdx 가 없는데 어떻게 보내지? 지금은 일단 임의로 1
-        url: `${API_FindPW.REAL_API}/${1}`,
+        url: `${API_FindPW.REAL_API}/${user.userIdx}`,
         method: "patch",
         data: {
           email,

@@ -47,7 +47,7 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
   const likeThisPharmacy = async () => {
     try {
       await axios({
-        url: `${API_PharmItem.REAL_API}/${storeIdx}/pick?userIdx=${user.userIdx}`, //! 리덕스 툴킷에서 유저인덱스 받아와야 함
+        url: `${API_PharmItem.REAL_API}/${storeIdx}/pick?userIdx=${user.userIdx}`,
         method: "post",
       });
     } catch (error) {
@@ -59,11 +59,18 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
   const nagigate = useNavigate();
   const leadToLogin = () => {
     nagigate("/login");
+    alert("약국 찜하기를 하시려면 로그인을 해주세요!");
   };
 
   const onClick = () => {
     const accessToken = getLocalStorage("access_token");
-    accessToken ? likeThisPharmacy() : leadToLogin();
+    if (!accessToken) {
+      return leadToLogin();
+    } else if (user.storeIdx) {
+      return alert("약사회원은 찜하기를 이용하실수 없습니다.");
+    } else if (user.userIdx && accessToken) {
+      return likeThisPharmacy();
+    }
   };
 
   return (
@@ -99,8 +106,6 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
             )}
           </LikeButton>
         </>
-
-        {/* 리덕스 툴킷에 유저인덱스가 없으면, -> 로그인 전*/}
       </InfoImgContainer>
       <PharmTitleBox>
         <PharmName onClick={() => setIsModalUp(true)}>{Pharm && Pharm.name}</PharmName>

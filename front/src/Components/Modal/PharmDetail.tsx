@@ -7,6 +7,8 @@ import Button from "../Ul/Button";
 import ReviewList from "./Reviews";
 import { zIndex_Modal } from "../../Util/z-index";
 import { HiXMark } from "react-icons/hi2";
+import { getLocalStorage } from "../../Api/localStorage";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,9 +31,13 @@ export default function PharmDetail({
   reviewList,
   setReviewList,
 }: Props) {
-
   const [isReviewFormShown, setIsReviewFormShown] = useState(false);
-
+  const token = getLocalStorage("access_token");
+  const navigate = useNavigate();
+  const returnLogin = () => {
+    alert("로그인을 해주세요!");
+    navigate("/login");
+  };
   return (
     <ModalBackDrop onClick={() => setIsModalUp(false)}>
       <ModalContainer onClick={(event) => event.stopPropagation()}>
@@ -52,7 +58,7 @@ export default function PharmDetail({
             Pharm={Pharm}
           />
         </Constant>
-        {isReviewFormShown ? (
+        {token && isReviewFormShown ? (
           <WriteReviewForm
             setIsReviewFormShown={setIsReviewFormShown}
             storeIdx={Pharm.storeIdx}
@@ -60,10 +66,13 @@ export default function PharmDetail({
             setReviewList={setReviewList}
           />
         ) : null}
-        {/* 로그인이 안된 상태일 경우, 버튼을 누르면 로그인 페이지로 랜딩 */}
-        {isReviewFormShown ? null : (
+        {token ? (
           <WriteReviewBtnContainer>
             <Button onClick={() => setIsReviewFormShown(true)} color="mint" size="md" text="리뷰쓰기" />
+          </WriteReviewBtnContainer>
+        ) : (
+          <WriteReviewBtnContainer>
+            <Button onClick={() => returnLogin()} color="mint" size="md" text="리뷰쓰기" />
           </WriteReviewBtnContainer>
         )}
       </ModalContainer>

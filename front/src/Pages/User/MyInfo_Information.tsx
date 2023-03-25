@@ -9,6 +9,7 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { API_MyInfoInformation } from "../../Api/APIs";
 import { validators } from "../../Components/SignUpForm/Validation";
+import { useAppSelector } from "../../Redux/hooks";
 
 interface Props {
   scriptUrl?: string;
@@ -24,13 +25,17 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
   const [imgFile, setImgFlie]: any = useState(null);
   const [myName, setMyName] = useState("");
   const [myAddress, setMyAddress] = useState("");
+
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
   //! GET : 유저 정보
   useEffect(() => {
     const getReviews = async () => {
       try {
         //TODO 실제 url 일때 -> /api/users/{userIdx}
         //? userIdx 는 리덕스 툴킷에서 -> 1
-        const response = await axios.get(`${API_MyInfoInformation.REAL_API}/${1}`);
+        const response = await axios.get(`${API_MyInfoInformation.REAL_API}/${user.userIdx}`);
         setMyInfo(response.data.response);
         setMyName(response.data.response.name);
         setMyAddress(response.data.response.address);
@@ -227,20 +232,16 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
   };
 
   const submitUserImg = (e: any) => {
+    //!이미지 업로드 안됌...
     e.preventDefault();
     const formDataImgsubmit = new FormData();
     formDataImgsubmit.append("image", imgFile);
-
-    // TODO : 리덕스 툴킷에서 userIdx가져와 [JSON.stringify(userIdx)] 수정 => 아래주석 코드 지우면 안돼!
-    //   formDataForsubmit.append("userIdx", new Blob([JSON.stringify(userIdx)], { type: "application/json" }));
-    //
+    formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(user.userIdx)], { type: "application/json" }));
 
     const submitNewImg: any = async () => {
       try {
-        //? 수정 /api/users/{userIdx}=>리덕스에서 userIdx꺼내
         await axios({
-          //TODO : {userIdx}/image 수정
-          url: `${API_MyInfoInformation.REAL_API}/${1}/image`,
+          url: `${API_MyInfoInformation.REAL_API}/${user.userIdx}/image`,
           method: "patch",
           data: formDataImgsubmit,
         });

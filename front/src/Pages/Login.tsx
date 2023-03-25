@@ -62,6 +62,7 @@ export default function Login() {
   };
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -86,12 +87,16 @@ export default function Login() {
           setLocalStorage("access_token", accessToken);
           setLocalStorage("refresh_token", refreshToken);
 
+          console.log(accessToken);
+          console.log(refreshToken);
+
           axios.defaults.headers.common["Authorization"] = `${accessToken}`;
 
           dispatch(getUserInfo(res.data));
         })
         .then(() => {
-          // navigate("/");
+          navigate("/");
+          console.log(user);
         })
         .catch((err) => {
           if (err.response.status === 401) {
@@ -102,10 +107,10 @@ export default function Login() {
     };
     postLogin();
   };
-  // const user = useAppSelector((state: any) => {
-  //   return state.userInfo.response;
-  // });
-  // console.log(user);
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+  console.log(user);
 
   //! POST : 로그인 - Auth
   const postAuthSignUp = async () => {
@@ -162,9 +167,7 @@ export default function Login() {
               />
             </InputContainer>
             <ErrorAlert Error={error.password} ErrorText={"문자 숫자 특수문자 조합 8자 이상으로 조합해주세요."} />
-            <button className="login_button" type="submit">
-              로그인
-            </button>
+            <button className="login_button">로그인</button>
           </LoginForm>
         </ContentContainer>
         <SearchContainer>

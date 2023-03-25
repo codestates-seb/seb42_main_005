@@ -9,6 +9,7 @@ import { API_ReviewUnit } from "../../Api/APIs"; // Review.json
 import { BsFillStarFill } from "react-icons/bs";
 import { HiXMark } from "react-icons/hi2";
 import { useAppSelector } from "../../Redux/hooks";
+import { getLocalStorage } from "../../Api/localStorage";
 
 interface Props {
   review: any;
@@ -16,9 +17,10 @@ interface Props {
   storeIdx: number;
   reviewList: any;
   setReviewList: any;
+  reviewUserName: string;
 }
 
-export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, setReviewList }: Props) {
+export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, setReviewList, reviewUserName }: Props) {
   const [isCommentFormShown, setIsCommentFormShown] = useState(false);
   const [isOnEdit, setIsOnEdit] = useState(false);
   const [reviewContent, setReviewContent] = useState(review.content);
@@ -41,7 +43,6 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
       e.stopPropagation();
     } else if (e.key === "Enter") {
       const data: any = {
-        //! userIdx 는 리덕스 툴킷에서 가져올거고 일단은 임의로
         userIdx: user.userIdx,
         content: reviewContent,
         rating: review.rating,
@@ -86,19 +87,14 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
         url: `${API_ReviewUnit.POST_REAL_API}/${storeIdx}/review/${reviewIdx}/report`,
         method: "post",
         data: {
-          userIdx: 1, //? 리덕스 툴킷에서 가져오고 지금은 임의로 1
+          //?????????
+          userIdx: user.userIdx,
           content: reviewContent,
         },
       });
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const newComment = {
-    storeIdx,
-    userIdx: 1,
-    content: commentContent,
   };
 
   //! POST : 리뷰의 댓글작성
@@ -114,39 +110,40 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
           await axios({
             url: `${API_ReviewUnit.POST_COMMENT_REAL_API}/review/${reviewIdx}/reply`,
             method: "post",
-            data: newComment,
+            data: {
+              storeIdx,
+              userIdx: user.userIdx,
+              content: commentContent,
+            },
           });
         } catch (error) {
           console.log(error);
         }
       };
       const show = {
-        //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
         storeIdx,
-        userIdx: 1,
+        userIdx: user.userIdx,
         content: commentContent,
-        userName: "내가 씀",
+        userName: user.name,
         createdAt: new Date().toLocaleDateString(),
       };
       setCommentContent("");
       setIsCommentFormShown(false);
       setReviewList(
-        [...reviewList].map(
-          (
-            rev, //? username 임의로 작성해둠, 나중에 리덕스 툴킷에서 가져오기
-          ) =>
-            rev.reviewIdx === reviewIdx
-              ? {
-                  ...rev,
-                  replies: [show, ...rev.replies],
-                }
-              : rev,
+        [...reviewList].map((rev) =>
+          rev.reviewIdx === reviewIdx
+            ? {
+                ...rev,
+                replies: [show, ...rev.replies],
+              }
+            : rev,
         ),
       );
       reply();
     }
   };
 
+  const token = getLocalStorage("access_token");
   return (
     <ReviewUnitContainer>
       <section>
@@ -164,12 +161,18 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
           {/* 여기 계정에 따른 로직 작성 필요 */}
           <ButtonContainer>
             {/* 일반계정이면 && 해당 리뷰의 userIdx 와 리덕스 툴킷의 내 userIdx 가 같을 때 => 수정 + 삭제 버튼이 보임 */}
-            <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsOnEdit(true)} />
-            <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReview()} />
-            {/* 약사계정이면 && 해당 약국의 storIdx 와 리덕스 툴킷의 내 storeIdx 가 같을 때 => 댓글 + 신고 버튼이 보임 */}
-            <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsCommentFormShown(true)} />
-            {/* 로그인 상태여야 함 */}
-            <Button color="l_black" size="sm" text="신 고" onClick={() => reportReview()} />
+            {user?.userRole === "일반회원" && user?.name === reviewUserName ? (
+              <>
+                <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsOnEdit(true)} />
+                <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReview()} />
+              </>
+            ) : null}
+            {user?.userRole === "약국회원" ? (
+              <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsCommentFormShown(true)} />
+            ) : null}
+            {token && user?.name !== reviewUserName ? (
+              <Button color="l_black" size="sm" text="신 고" onClick={() => reportReview()} />
+            ) : null}
           </ButtonContainer>
         </Upper>
         <Lower>

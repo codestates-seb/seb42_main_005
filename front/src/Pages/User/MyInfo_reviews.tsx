@@ -5,16 +5,20 @@ import MyReview from "../User/MyInfo_MyReview";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import axios from "axios";
 import { API_MyPharmacy } from "../../Api/APIs";
+import { useAppSelector } from "../../Redux/hooks";
 
 export default function MyInfoReviews() {
   const [reviews, setReviews] = useState([]);
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
 
   //! GET : 내가 작성한 리뷰 리스트
   useEffect(() => {
     const getMyReviews = async () => {
       try {
         //? userIdx 는 리덕스 툴킷에서 가져오고 일단은 임의로 1
-        const response = await axios.get(`${API_MyPharmacy.REAL_API}/${1}/review`);
+        const response = await axios.get(`${API_MyPharmacy.REAL_API}/${user.userIdx}/review`);
         setReviews(response.data);
       } catch (error) {
         console.log(error);

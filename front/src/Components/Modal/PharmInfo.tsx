@@ -15,14 +15,14 @@ interface Props {
 export default function PharmInfo({ like, setLike, Pharm }: Props) {
   const [isDropDownDown, setIsDropDownDown] = useState(false);
 
-  const a = useAppSelector((state: any) => {
+  const user = useAppSelector((state: any) => {
     return state.userInfo.response;
   });
   //! POST : 찜하기/찜취소
   const likeThisPharmacy = async () => {
     try {
       await axios({
-        url: `${API_PharmInfo.REAL_API}/${Pharm.storeIdx}/pick?userIdx=${1}`, //? 리덕스 툴킷에서 유저인덱스 받아와야 함
+        url: `${API_PharmInfo.REAL_API}/${Pharm.storeIdx}/pick?userIdx=${user.userIdx}`, //! 리덕스 툴킷에서 유저인덱스 받아와야 함
         method: "post",
       });
     } catch (error) {

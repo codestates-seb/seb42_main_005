@@ -23,15 +23,10 @@ export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, rev
   const handlerReviewOfReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContent(e.target.value);
   };
-  const a = useAppSelector((state: any) => {
+  const user = useAppSelector((state: any) => {
     return state.userInfo.response;
   });
-  const data = {
-    //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
-    storeIdx,
-    userIdx: a.userIdx,
-    content,
-  };
+
   //! PATCH : 리뷰의 댓글수정
   const editCommentKeyPress = (e: any) => {
     if (e.key === " " && e.getModifierState("Shift") === false) {
@@ -45,7 +40,11 @@ export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, rev
           await axios({
             url: `${API_ReviewOfReview.REAL_API}/${reviewIdx}/reply/${reply.replyIdx}`,
             method: "patch",
-            data,
+            data: {
+              storeIdx,
+              userIdx: user.userIdx,
+              content,
+            },
           }).then(() => setIsPatchFormShown(false));
         } catch (error) {
           console.log(error);
@@ -105,8 +104,12 @@ export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, rev
         </UserInfo>
         <ButtonContainer>
           {/* 약사계정이면 && 해당 약국의 storeIdx 와 리덕스 툴킷의 내 storeIdx 가 같을 때 => 버튼이 보임 */}
-          <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsPatchFormShown(true)} />
-          <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteComment()} />
+          {user?.userRole === "약국회원" && storeIdx === user?.storeIdx ? (
+            <>
+              <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsPatchFormShown(true)} />
+              <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteComment()} />
+            </>
+          ) : null}
         </ButtonContainer>
       </Upper>
       <Comment>{reply.content}</Comment>

@@ -5,10 +5,14 @@ import styled from "styled-components";
 import LikedPharmacyUnit from "../User/MyInfo_likedPharmacy";
 import { API_LikedPharmacyUnit } from "../../Api/APIs";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { useAppSelector } from "../../Redux/hooks";
 
 export default function MyInfoLikes() {
   const [likedPharmacies, setLikedPharmacies] = useState([]);
 
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
   //! GET : 내가 찜한 약국 리스트
   useEffect(() => {
     const getLikedPharmList = async () => {
@@ -16,7 +20,7 @@ export default function MyInfoLikes() {
         //TODO url 받았을때 -> /api/store/user/{userIdx}/pick
         //! 이거 안돼 => 찜하기 데이터가 없어서 안뜸?
         //? userIdx 는 리덕스 툴킷에서
-        const response = await axios.get(`${API_LikedPharmacyUnit.GET_REAL_API}/${1}/pick`);
+        const response = await axios.get(`${API_LikedPharmacyUnit.GET_REAL_API}/${user.userIdx}/pick`);
 
         setLikedPharmacies(response.data);
       } catch (error) {

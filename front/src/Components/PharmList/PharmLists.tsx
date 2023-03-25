@@ -7,6 +7,7 @@ import { zIndex_PharmList } from "../../Util/z-index";
 import { SELECT_HIDDEN } from "../../Util/type";
 import { RiHomeLine } from "react-icons/ri";
 import { VscTriangleLeft } from "react-icons/vsc";
+import { useAppSelector } from "../../Redux/hooks";
 
 interface Props {
   hidden: SELECT_HIDDEN;
@@ -15,6 +16,9 @@ interface Props {
 }
 
 export default function PharmLists({ hidden, setHidden, totalPharmList }: Props) {
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
 
   return (
     <ContainerList className={hidden ? "hide" : ""}>

@@ -27,17 +27,17 @@ export default function SignOut() {
       return setErrMsg(true);
     }
     const signOutDelete = async () => {
-      dispatch(DeleteUserInfo());
       await axios
         .delete(`${API_SignOut.REAL_API}/${user.userIdx}`)
         .then(() => {
-          removeLocalStorage("access_token");
-          removeLocalStorage("refresh_token");
+          localStorage.clear();
+          dispatch(DeleteUserInfo());
         })
         .catch((err) => {
           console.log(err);
         });
     };
+    alert("그동안 저희 사이트를 이용해주셔서 감사합니다.");
     navigate("/");
     signOutDelete();
   };

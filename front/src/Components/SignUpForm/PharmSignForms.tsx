@@ -82,14 +82,6 @@ export default function PharmSignForms() {
       ...pSignForm,
       [name]: value,
     });
-    let errors;
-    if (name === FORM_FIELD_NAMES.NAME) {
-      errors = validators.validateName(value);
-    }
-    setError({
-      ...error,
-      [name]: errors,
-    });
   };
 
   const changeAddressHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,6 +118,9 @@ export default function PharmSignForms() {
       address: address,
     };
 
+    console.log(businessImg);
+    console.log(pharmImg);
+
     const formDataForsubmit = new FormData();
     formDataForsubmit.append("businessCertificate", businessImg);
     formDataForsubmit.append("pharmacistCertificate", pharmImg);
@@ -143,7 +138,8 @@ export default function PharmSignForms() {
       }
     };
     postSignUp();
-    navigate("/login");
+    // navigate("/login");
+    console.log(data);
   };
 
   const BusinessImg = useRef<HTMLInputElement>(null);

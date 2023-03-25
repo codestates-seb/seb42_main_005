@@ -3,6 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { API_MyInfoInformation } from "../../Api/APIs";
+import { useAppSelector } from "../../Redux/hooks";
 
 interface Props {
   scriptUrl?: string;
@@ -18,12 +19,16 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
 
   const [imgFile, setImgFlie]: any = useState(null);
 
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
   //! GET : 유저 정보
   useEffect(() => {
     const getReviews = async () => {
       try {
         //? userIdx 는 리덕스 툴킷에서 -> 2
-        const response = await axios.get(`${API_MyInfoInformation.REAL_API}/${2}`);
+        const response = await axios.get(`${API_MyInfoInformation.REAL_API}/${user.userIdx}`);
         setMyInfo(response.data.response);
       } catch (error) {
         console.log(error);

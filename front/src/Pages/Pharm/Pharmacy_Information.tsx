@@ -8,6 +8,7 @@ import { MdOutlineAddAPhoto } from "react-icons/md";
 import { IoIosArrowDropright } from "react-icons/io";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { API_MyInfoInformation, API_PharmacyInformation } from "../../Api/APIs";
+import { useAppSelector } from "../../Redux/hooks";
 
 export default function PharmacyInformation() {
   const [pharmDetail, setPharmDetail]: any = useState();
@@ -31,13 +32,19 @@ export default function PharmacyInformation() {
     });
   };
 
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
   //! GET : 약국상세정보
   useEffect(() => {
     const getPharmDetail = async () => {
       try {
         //TODO 실제 url 일때 -> /api/store/{storeIdx}
         //? storeIdx 는 약사 계정으로 로그인 시 리덕스 툴킷에서 받아올 수 있음 일단 임의로 2
-        const response = await axios.get(`${API_PharmacyInformation.REAL_API}/${2}`);
+        const response = await axios.get(`${API_PharmacyInformation.REAL_API}/${user.storeIdx}`);
+
+        // console.log(response.data.response);
         setPharmDetail(response.data.response);
       } catch (error) {
         console.log(error);
@@ -45,14 +52,12 @@ export default function PharmacyInformation() {
     };
     getPharmDetail();
   }, []);
-
   const submitPharmImg = (e: any) => {
     e.preventDefault();
+    //!백엔드한테 키값 확인하기 => 이미지 보내는데 에러남
     const formDataImgsubmit = new FormData();
     formDataImgsubmit.append("image", imgFile);
-
-    // TODO : 리덕스 툴킷에서 userIdx가져와 [JSON.stringify(userIdx)] 수정 => 아래주석 코드 지우면 안돼!
-    // formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(userIdx)], { type: "application/json" }));
+    formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(user.userIdx)], { type: "application/json" }));
 
     const submitNewImg: any = async () => {
       try {
@@ -87,12 +92,12 @@ export default function PharmacyInformation() {
           <PharmImg src="Images/ImgPreparing.png" alt="image preparing" />
         )}
         {imageSrc ? (
-          <Label htmlFor="pharmImg">
+          <Label onClick={submitPharmImg}>
             <MdOutlineAddAPhoto aria-hidden="true" />
             우리약국 사진 수정완료
           </Label>
         ) : (
-          <Label onClick={submitPharmImg}>
+          <Label htmlFor="pharmImg">
             <MdOutlineAddAPhoto aria-hidden="true" />
             우리약국 사진 수정하기
           </Label>
@@ -131,10 +136,12 @@ export default function PharmacyInformation() {
                 onClick={() => setIsDropDownDown(!isDropDownDown)}
               />
             )}
-            {`${pharmDetail?.todayOperatingTime.operatingTime.startTime.slice(
-              0,
-              -3,
-            )}-${pharmDetail?.todayOperatingTime.operatingTime.endTime.slice(0, -3)}`}
+            {pharmDetail?.todayOperatingTime.operatingTime.startTime
+              ? `${pharmDetail?.todayOperatingTime.operatingTime.startTime?.slice(
+                  0,
+                  -3,
+                )}-${pharmDetail?.todayOperatingTime.operatingTime.endTime?.slice(0, -3)}`
+              : ""}
             {isDropDownDown ? (
               <DropDown setIsDropDownDown={setIsDropDownDown} workingHours={pharmDetail?.operatingTime} />
             ) : null}

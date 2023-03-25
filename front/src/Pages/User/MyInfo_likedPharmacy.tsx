@@ -5,6 +5,7 @@ import PharmDetail from "../../Components/Modal/PharmDetail";
 import { API_LikedPharmacyUnit } from "../../Api/APIs";
 import { IoIosArrowDropright } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { useAppSelector } from "../../Redux/hooks";
 
 interface Props {
   likedPharmacy: any;
@@ -39,10 +40,14 @@ export default function LikedPharmacyUnit({ likedPharmacy, likedPharmacies, setL
   };
 
   //! POST : 찜취소
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
   const unLikePharmacy = async (storeIdx: number) => {
     try {
       await axios({
-        url: `${API_LikedPharmacyUnit.GET_REAL_API}/${storeIdx}/pick?userIdx=${1}`, //? 리덕스 툴킷에서 유저인덱스 받아와야 함
+        url: `${API_LikedPharmacyUnit.GET_REAL_API}/${storeIdx}/pick?userIdx=${user.userIdx}`, //? 리덕스 툴킷에서 유저인덱스 받아와야 함
         method: "post",
       });
     } catch (error) {
