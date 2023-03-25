@@ -2,10 +2,12 @@ package com.project.mainproject.user.service;
 
 import com.project.mainproject.exception.BusinessLogicException;
 import com.project.mainproject.security.CustomAuthorityUtils;
+import com.project.mainproject.security.UserContext;
 import com.project.mainproject.store.entity.Store;
 import com.project.mainproject.store.repository.StoreRepository;
 import com.project.mainproject.user.dto.UserInfoDto;
 import com.project.mainproject.user.dto.UserPatchDto;
+import com.project.mainproject.user.dto.db.DBUserInfo;
 import com.project.mainproject.user.entity.Normal;
 import com.project.mainproject.user.entity.Pharmacy;
 import com.project.mainproject.user.entity.User;
@@ -14,7 +16,8 @@ import com.project.mainproject.user.exception.UserExceptionCode;
 import com.project.mainproject.user.mapper.UserMapper;
 import com.project.mainproject.user.repository.PharmacyRepository;
 import com.project.mainproject.user.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import com.project.mainproject.utils.FileUploader;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,27 +31,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
+import static com.project.mainproject.store.exception.StoreExceptionCode.STORE_NOT_FOUND;
+import static com.project.mainproject.user.enums.UserStatus.TEMPORARY;
 
 @Service
-@AllArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
+@Transactional
 public class UserService implements UserDetailsService {
 
-    private UserRepository userRepository;
-    private UserMapper userMapper;
-    private PharmacyRepository pharmacyRepository;
-    private PasswordEncoder encoder;
-    private CustomAuthorityUtils authorityUtils;
-    private StoreRepository storeRepository;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final PharmacyRepository pharmacyRepository;
+    private final PasswordEncoder encoder;
+    private final CustomAuthorityUtils authorityUtils;
+    private final StoreRepository storeRepository;
+    private final FileUploader fileUploader;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -56,12 +58,14 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByEmail(username).get();
         List<GrantedAuthority> authority = new ArrayList<>();
         authority.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(), user.getPassword(), authority);
+        String userId = user.getUserIdx().toString();
+//        return new org.springframework.security.core.userdetails.User(
+//                user.getEmail(), user.getPassword(), authority);
+        return new UserContext(userId, user.getEmail(), user.getPassword(), authority);
     }
 
     public void saveNormal(Normal normal) {
+        checkUserExist(normal.getEmail());
         normal.setUserType("일반회원");
         normal.setPassword(encoder.encode(normal.getPassword()));
         assignRole(normal);
@@ -70,53 +74,33 @@ public class UserService implements UserDetailsService {
 
     public void assignRole(Normal user) {
         List<String> roles = authorityUtils.createNormalRoles(user.getEmail());
+        user.setRole(roles); // 추가했습니다 03/25 예솔
+    }
+
+    public void assignRole(Pharmacy user) { // 추가했습니다 03/25 예솔
+        List<String> roles = authorityUtils.createPharmacyRoles(user.getEmail());
+        user.setRole(roles);
     }
 
     public void savePharmacy(Pharmacy pharmacy, MultipartFile businessCertificate, MultipartFile pharmacistCertificate) {
-        Optional<Store> store = storeRepository.findByNameContainingAndAddressContaining(pharmacy.getName(), pharmacy.getAddress());
-        if(store.isPresent()) {
-            pharmacy.setPassword(encoder.encode(pharmacy.getPassword()));
-            pharmacy.setStore(store.get());
-            pharmacy.setUserType("약국회원");
-            Pharmacy save = userRepository.save(pharmacy);
-            File businessFile = new File("/Users/gimjihyeong/businessCertificate");
-            if(!businessFile.exists()) businessFile.mkdirs();
+        checkUserExist(pharmacy.getEmail());
 
-            Path businessLocation = Paths.get("/Users/gimjihyeong/businessCertificate").toAbsolutePath().normalize();
-            String businessName = UUID.randomUUID().toString();
-            try {
-                Path targetLocation = businessLocation.resolve(businessName);
-                Files.copy(businessCertificate.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-                String path = targetLocation.toString();
+        Store store = storeRepository.findByNameContainingAndAddressContaining(
+                pharmacy.getName(), pharmacy.getAddress())
+                .orElseThrow(() -> new BusinessLogicException(STORE_NOT_FOUND));
 
-                Pharmacy pharmacyPath = pharmacyRepository.findById(save.getUserIdx()).get();
-                pharmacyPath.setBusinessCertificate(path);
+        pharmacy.setPassword(encoder.encode(pharmacy.getPassword()));
+        pharmacy.setStore(store);
+        pharmacy.setUserType("약국회원");
+        pharmacy.setUserStatus(TEMPORARY);
+        assignRole(pharmacy); // 추가했습니다 03/25 예솔
 
-                pharmacyRepository.save(pharmacyPath);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        String businessPath = fileUploader.saveImage(businessCertificate, "businessCertificate");
+        String pharmacyPath = fileUploader.saveImage(pharmacistCertificate, "pharmacistCertificate");
 
-            File pharmacistFile = new File("/Users/gimjihyeong/pharmacistCertificate");
-            if(!pharmacistFile.exists()) pharmacistFile.mkdirs();
-
-            Path pharmacistLocation = Paths.get("/Users/gimjihyeong/pharmacistCertificate").toAbsolutePath().normalize();
-            String pharmacistName = UUID.randomUUID().toString();
-            try {
-                Path targetLocation = pharmacistLocation.resolve(pharmacistName);
-                Files.copy(pharmacistCertificate.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-                String path = targetLocation.toString();
-
-                Pharmacy pharmacyPath = pharmacyRepository.findById(save.getUserIdx()).get();
-                pharmacyPath.setPharmacistCertificate(path);
-
-                pharmacyRepository.save(pharmacyPath);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return ; //TODO
-
+        pharmacy.setBusinessCertificate(businessPath);
+        pharmacy.setPharmacistCertificate(pharmacyPath);
+        userRepository.save(pharmacy);
     }
 
     @Transactional(readOnly = true)
@@ -127,41 +111,39 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
-    public Page<User> findUsers(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<DBUserInfo> findUsers(Pageable pageable) {
+        return userRepository.findUserInfoWithBannedStoreDate(pageable);
 
     }
 
     public Page<Pharmacy> findPharmacyRequest(Pageable pageable) {
-        return pharmacyRepository.findAllByUserStatusIs(UserStatus.TEMPORARY, pageable);
+        return pharmacyRepository.findAllByUserStatusIs(TEMPORARY, pageable);
     }
 
     public void patchUser(Long userIdx, UserPatchDto userPatchDto) {
         User user = userRepository.findById(userIdx).get();
-        userMapper.userPatchDtoToUser(userPatchDto, user);
-        userRepository.save(user);
+        if(userPatchDto.getAddress() != null) {
+            user.setAddress(userPatchDto.getAddress());
+        }
+        if(userPatchDto.getNewPassword() != null) {
+            if (encoder.matches(userPatchDto.getPassword(), user.getPassword())) {
+                user.setPassword(encoder.encode(userPatchDto.getNewPassword()));
+                userRepository.save(user);
+            } else {
+                throw new BusinessLogicException(UserExceptionCode.PASSWORD_NOT_MATCHED);
+            }
+        }
     }
 
-    public void patchUserProfile(Long userIdx, MultipartFile profileImage) {
-        User user = userRepository.findById(userIdx).get();
-        String deletePath = user.getImagePath();
-        System.out.println(deletePath);
-        File deleteFile = new File(deletePath);
-        System.out.println(deleteFile.exists());
-        if(deleteFile.exists()) {
-            deleteFile.delete();
+    public void patchUserProfile(Long userIdx, MultipartFile uploadFile) {
+        User findUser = validUser(userIdx);
+        String userProfile = "";
+        if (findUser.getImagePath() == null) {
+            userProfile = fileUploader.saveImage(uploadFile, "userProfile");
+        } else {
+            userProfile = fileUploader.patchImage(uploadFile, findUser.getImagePath(), "userProfile");
         }
-        Path fileLocation = Paths.get("/Users/gimjihyeong/profile").toAbsolutePath().normalize();
-        String profileName = UUID.randomUUID().toString();
-        try {
-            Path targetLocation = fileLocation.resolve(profileName);
-            Files.copy(profileImage.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            String path = targetLocation.toString();
-            user.setImagePath(path);
-            userRepository.save(user);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        findUser.setImagePath(userProfile);
     }
 
     public void deleteUser(Long userIdx) {
@@ -185,11 +167,11 @@ public class UserService implements UserDetailsService {
     /*
      * User가 존재하면 예외 처리를 수행한다.
      * */
-    public void checkUserExist(Long userIdx) {
-        Optional<User> findUser = userRepository.findById(userIdx);
-        findUser.ifPresent(
-                user -> new BusinessLogicException(UserExceptionCode.USER_EXIST)
-        );
+    public void checkUserExist(String email) {
+        Optional<User> findUser = userRepository.findByEmail(email);
+        if(findUser.isPresent()) {
+            throw new BusinessLogicException(UserExceptionCode.USER_EXIST);
+        }
     }
 
     /*
@@ -206,5 +188,17 @@ public class UserService implements UserDetailsService {
         if (!(user instanceof Pharmacy)) {
             throw new BusinessLogicException(UserExceptionCode.USER_NOT_PHARMACY);
         }
+    }
+
+    /*
+     * normal User인지 확인하는 로직
+     * */
+    public Normal checkIsNormal(Long userIdx) {
+        User findUser = validUser(userIdx);
+
+        if (!(findUser instanceof Normal)) {
+            throw new BusinessLogicException(UserExceptionCode.USER_NOT_NORMAL);
+        }
+        return (Normal) findUser;
     }
 }

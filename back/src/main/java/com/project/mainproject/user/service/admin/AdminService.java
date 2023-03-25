@@ -2,11 +2,7 @@ package com.project.mainproject.user.service.admin;
 
 import com.project.mainproject.VO.Duration;
 import com.project.mainproject.dto.SingleResponseDto;
-import com.project.mainproject.enums.ResultStatus;
 import com.project.mainproject.exception.BusinessLogicException;
-import com.project.mainproject.store.entity.Store;
-import com.project.mainproject.store.repository.StoreQueryRepository;
-import com.project.mainproject.user.entity.Pharmacy;
 import com.project.mainproject.user.entity.User;
 import com.project.mainproject.user.entity.UserBanned;
 import com.project.mainproject.user.enums.UserStatus;
@@ -14,7 +10,6 @@ import com.project.mainproject.user.exception.UserExceptionCode;
 import com.project.mainproject.user.repository.UserBannedRepository;
 import com.project.mainproject.user.repository.UserRepository;
 import com.project.mainproject.user.service.UserService;
-import com.project.mainproject.utils.FileUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.project.mainproject.enums.ResultStatus.*;
+import static com.project.mainproject.enums.ResultStatus.PROCESS_COMPLETED;
+import static com.project.mainproject.enums.ResultStatus.REJECT_PHARMACY;
 
 @Service
 @Transactional
@@ -51,6 +47,7 @@ public class AdminService {
     }
 
     public SingleResponseDto rejectPharmacy(List<Long> userIdx) {
+        // 유저 검증 필요 (아무 숫자나 다 됨 => TEMPORARY인 "약국회원")
         userRepository.deleteUserByIdList(userIdx);
 
         return SingleResponseDto.builder()
@@ -79,6 +76,20 @@ public class AdminService {
     public SingleResponseDto banishUsers(List<Long> userIdxs) {
         List<User> findUsers = userRepository.findByIds(userIdxs);
         findUsers.iterator().forEachRemaining(findUser -> findUser.setUserStatus(UserStatus.KICKEDOUT));
+
+        return SingleResponseDto.builder()
+                .httpCode(PROCESS_COMPLETED.getHttpCode())
+                .message(PROCESS_COMPLETED.getMessage())
+                .build();
+    }
+    public SingleResponseDto restoreUsers(List<Long> userIdxs) {
+        List<User> findUsers = userRepository.findByIds(userIdxs);
+
+        for (User findUser : findUsers) {
+            findUser.setUserStatus(UserStatus.ACTIVE);
+        }
+
+        userBannedRepository.usersDelete(userIdxs); //벤당한 유저 삭제로직
 
         return SingleResponseDto.builder()
                 .httpCode(PROCESS_COMPLETED.getHttpCode())

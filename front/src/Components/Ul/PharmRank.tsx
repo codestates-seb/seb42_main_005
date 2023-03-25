@@ -12,7 +12,7 @@ export default function PharmRank({ rating, likes, reviewCount }: Props) {
     <Container>
       <div>{rating ? <BsStarFill className="select_star" /> : <BsStar className="unSelect_star" />}</div>
       <Star>
-        {Number.isInteger(rating) ? rating :rating.toFixed(1)}
+        {rating ? rating.toFixed(1) : rating}
         <span className="rest">/5</span>
       </Star>
       <Selected>찜콩 {likes}</Selected>
@@ -58,12 +58,10 @@ const Star = styled.span`
 `;
 
 const Selected = styled.span`
-
   font-size: 0.9rem;
   color: var(--black-400);
 `;
 const TotalReview = styled.span`
-
   font-size: 0.9rem;
   color: var(--black-400);
 `;

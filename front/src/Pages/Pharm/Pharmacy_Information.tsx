@@ -13,6 +13,7 @@ export default function PharmacyInformation() {
   const [pharmDetail, setPharmDetail]: any = useState();
   const [isModalUp, setIsModalUp] = useState(false);
   const [like, setLike] = useState(false);
+  const [reviewList, setReviewList] = useState([]);
   const [isDropDownDown, setIsDropDownDown] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const onUpload = (e: any) => {
@@ -31,11 +32,8 @@ export default function PharmacyInformation() {
   useEffect(() => {
     const getPharmDetail = async () => {
       try {
-        //* dummy data 일때 -> Pharm.json
-        // const response = await axios.get(API_PharmacyInformation.DUMMY_API);
-        //TODO 실제 url 일때 -> /api/store/{storeIdx}
         //? storeIdx 는 약사 계정으로 로그인 시 리덕스 툴킷에서 받아올 수 있음 일단 임의로 2
-        const response = await axios.get(`${API_PharmacyInformation.REAL_API}/store${2}`);
+        const response = await axios.get(`${API_PharmacyInformation.REAL_API}/store/${2}`);
         setPharmDetail(response.data);
       } catch (error) {
         console.log(error);
@@ -43,16 +41,40 @@ export default function PharmacyInformation() {
     };
     getPharmDetail();
   }, []);
+  //! GET : 약국상세정보 + 리뷰리스트
+  const onModalUp = () => {
+    const pharmDetailsAndreviewList = async () => {
+      await axios
+        //? storeIdx 는 약사 계정으로 로그인 시 리덕스 툴킷에서 받아올 수 있음 일단 임의로 2
+        .get(`${API_PharmacyInformation.REAL_API}/${2}`)
+        .then((response) => {
+          setPharmDetail(response.data.response);
+          axios
+            .get(`${API_PharmacyInformation.REAL_API}/${2}/review`)
+            .then((response) => {
+              setReviewList(response.data.response.storeReviews);
+            })
+            .catch((err) => console.log("리뷰받아오던 중" + err));
+        })
+        .catch((err) => console.log("약국상세받아오던 중" + err));
+    };
+    pharmDetailsAndreviewList();
+    setIsModalUp(true);
+  };
 
   return (
     <Content>
-      //* dummy data 일때
-      {/* {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} pharmDetail={pharmDetail} />
-      ) : null} */}
-      //TODO 실제 url 일때
       {isModalUp ? (
-        <PharmDetail setIsModalUp={setIsModalUp} like={like} setLike={setLike} storeIdx={pharmDetail.storeIdx} Pharm={pharmDetail}/>
+        <PharmDetail
+          setIsModalUp={setIsModalUp}
+          like={like}
+          setLike={setLike}
+          //? storeIdx 는 약사 계정으로 로그인 시 리덕스 툴킷에서 받아올 수 있음 일단 임의로 2
+          storeIdx={2}
+          pharmDetail={pharmDetail}
+          reviewList={reviewList}
+          setReviewList={setReviewList}
+        />
       ) : null}
       <ImgContainer>
         <ImgInput id="pharmImg" type="file" onChange={(e) => onUpload(e)} accept="image/*" />
@@ -68,7 +90,7 @@ export default function PharmacyInformation() {
       </ImgContainer>
       <InfomationContainer>
         <Header>
-          <PharmName onClick={() => setIsModalUp(!isModalUp)}>킹갓약국</PharmName>
+          <PharmName onClick={() => onModalUp()}>킹갓약국</PharmName>
           <PharmRank
             rating={pharmDetail.rating}
             likes={pharmDetail.pickedStoreCount}

@@ -7,6 +7,8 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.Optional;
 
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 import static javax.persistence.InheritanceType.JOINED;
 
@@ -30,24 +33,31 @@ public class User extends Auditable{
     @GeneratedValue(strategy = IDENTITY)
     private Long userIdx;
     @Column(name = "USER_PASSWORD")
+    //@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&])[A-Za-z[0-9]$@$!%*#?&]{8,33}$", message = "비밀번호는 영문, 숫자, 특수문자를 포함해 8자리 이상이어야 합니다")
     private String password;
     @Column(name = "USER_EMAIL")
+    @Email
     private String email;
     @Column(name = "USER_NAME")
+    @NotBlank
     private String name;
     @Column(name = "USER_ADDRESS")
+    @NotBlank
     private String address;
     private String imagePath;
     private String userType;
     @Enumerated(value = STRING)
     @Builder.Default
-    private UserStatus userStatus = UserStatus.TEMPORARY;
+    private UserStatus userStatus = UserStatus.ACTIVE;
     private LocalDateTime lastConnectedDate;
     @ElementCollection(fetch = EAGER)
     @CollectionTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "USER_IDX"))
     private List<String> role;
     @OneToMany(mappedBy = "user")
     private List<Review> reviews = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user",fetch = LAZY)
+    private UserBanned userBanned;
 
     @Builder // For Mapper
     public User(Long userIdx) {

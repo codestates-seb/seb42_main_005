@@ -18,9 +18,10 @@ public class DBStoreListDto {
     private Long reviewCount;
     private String imagePath;
     private LocalDateTime modifiedAt;
+    private boolean isPicked;
 
     @QueryProjection
-    public DBStoreListDto(Long storeIdx, String name, String address, double latitude, double longitude, double rating, double distance, Long pickedStoreCount, Long reviewCount, String image, LocalDateTime modifiedAt) {
+    public DBStoreListDto(Long storeIdx, String name, String address, double latitude, double longitude, double rating, double distance, Long pickedStoreCount, Long reviewCount, String image, LocalDateTime modifiedAt,boolean isPicked) {
         this.storeIdx = storeIdx;
         this.name = name;
         this.address = address;
@@ -32,5 +33,6 @@ public class DBStoreListDto {
         this.reviewCount = reviewCount;
         this.imagePath = image;
         this.modifiedAt = modifiedAt;
+        this.isPicked = isPicked;
     }
 }

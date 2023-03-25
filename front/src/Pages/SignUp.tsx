@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import PharmSignForms from "../Components/SignUpForm/PharmSignForms";
 import SignUpFormTab from "../Components/SignUpForm/SignUpFormTab";

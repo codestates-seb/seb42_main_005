@@ -1,5 +1,5 @@
 //홈화면 옆에 약국 리스트
-import React, { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
+import { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import PharmItem from "./PharmItem";
 import SearchBar from "./SearchBar";

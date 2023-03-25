@@ -5,6 +5,7 @@ import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.dummy.CommonStub;
 import com.project.mainproject.user.dto.*;
+import com.project.mainproject.user.dto.db.DBUserInfo;
 import com.project.mainproject.user.entity.Pharmacy;
 import com.project.mainproject.user.entity.User;
 import com.project.mainproject.user.mapper.UserMapper;
@@ -13,6 +14,8 @@ import com.project.mainproject.utils.UriCreator;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -109,8 +112,8 @@ public class UserController {
         전체 회원 목록 조회
      */
     @GetMapping
-    public ResponseEntity getUsers(Pageable pageable) {
-        Page<User> userPage = userService.findUsers(pageable);
+    public ResponseEntity getUsers(@PageableDefault(sort = "createdAt",direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<DBUserInfo> userPage = userService.findUsers(pageable);
         Page<UserInfoDto> userInfoDtoPage = userPage.map(UserInfoDto::new);
 
         PageInfo pageInfo = PageInfo.builder()

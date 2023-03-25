@@ -33,9 +33,10 @@ public class DBStoreDetailDto {
     private OperatingTime holiday;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private boolean isPicked;
 
     @QueryProjection
-    public DBStoreDetailDto(Long storeIdx, String name, String address, Double longitude, Double latitude, String tel, String etc, Double rating, Long likeStoreCount,Long reviewCount, String image, OperatingTime monday, OperatingTime tuesday, OperatingTime wednesday, OperatingTime thursday, OperatingTime friday, OperatingTime saturday, OperatingTime sunday, OperatingTime holiday, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    public DBStoreDetailDto(Long storeIdx, String name, String address, Double longitude, Double latitude, String tel, String etc, Double rating, Long likeStoreCount,Long reviewCount, String image, OperatingTime monday, OperatingTime tuesday, OperatingTime wednesday, OperatingTime thursday, OperatingTime friday, OperatingTime saturday, OperatingTime sunday, OperatingTime holiday, LocalDateTime createdAt, LocalDateTime modifiedAt,boolean isPicked) {
         this.storeIdx = storeIdx;
         this.name = name;
         this.address = address;
@@ -57,5 +58,6 @@ public class DBStoreDetailDto {
         this.holiday = holiday;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
+        this.isPicked = isPicked;
     }
 }
