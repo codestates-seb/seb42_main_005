@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 import static javax.persistence.InheritanceType.JOINED;
 
@@ -55,8 +56,7 @@ public class User extends Auditable{
     @OneToMany(mappedBy = "user")
     private List<Review> reviews = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "user_banned_idx")
+    @OneToOne(mappedBy = "user",fetch = LAZY)
     private UserBanned userBanned;
 
     @Builder // For Mapper
