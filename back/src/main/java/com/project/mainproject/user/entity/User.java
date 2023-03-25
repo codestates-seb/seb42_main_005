@@ -33,7 +33,6 @@ public class User extends Auditable{
     @GeneratedValue(strategy = IDENTITY)
     private Long userIdx;
     @Column(name = "USER_PASSWORD")
-    //@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&])[A-Za-z[0-9]$@$!%*#?&]{8,33}$", message = "비밀번호는 영문, 숫자, 특수문자를 포함해 8자리 이상이어야 합니다")
     private String password;
     @Column(name = "USER_EMAIL")
     @Email
