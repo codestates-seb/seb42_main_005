@@ -14,6 +14,7 @@ import com.project.mainproject.utils.UriCreator;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -110,7 +111,7 @@ public class UserController {
         전체 회원 목록 조회
      */
     @GetMapping
-    public ResponseEntity getUsers(Pageable pageable) {
+    public ResponseEntity getUsers(@PageableDefault(sort = "createdAt") Pageable pageable) {
         Page<DBUserInfo> userPage = userService.findUsers(pageable);
         Page<UserInfoDto> userInfoDtoPage = userPage.map(UserInfoDto::new);
 

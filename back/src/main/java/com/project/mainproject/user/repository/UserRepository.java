@@ -33,7 +33,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             ") from User u " +
             "left join u.reviews r " +
             "left join u.userBanned ub " +
-            "group by u.userIdx"
+            "group by u.userIdx,ub.duration.endDate"
             )
     Page<DBUserInfo> findUserInfoWithBannedStoreDate(Pageable pageable);
 }
