@@ -3,7 +3,7 @@ import KakaoMap from "../Components/Map/KakaoMap";
 import PharmLists from "../Components/PharmList/PharmLists";
 import { SELECT_HIDDEN, SELECT_OPTION_MAP, SELECT_SORT_LIST } from "../Util/type";
 import useGeolocation from "../hooks/useGeolocation";
-import getPharmLists from "../hooks/useReMap";
+import { useViewMap, useSearch } from "../hooks/useMapMarker";
 import "../hooks/PharmacyOverlay.css";
 
 const { kakao } = window;
@@ -56,7 +56,7 @@ export default function Home() {
   //! GET : 약국리스트
   useEffect(() => {
     if (makeMap) {
-      getPharmLists(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
+      useViewMap(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
     }
   }, [makeMap]);
 
@@ -71,7 +71,7 @@ export default function Home() {
         totalPharmList={totalPharmList}
         setTotalPharmList={setTotalPharmList}
         makeMap={makeMap}
-        getPharmLists={getPharmLists}
+        useViewMap={useViewMap}
       />
       <PharmLists
         hidden={hidden}
@@ -82,7 +82,8 @@ export default function Home() {
         totalPharmList={totalPharmList}
         setTotalPharmList={setTotalPharmList}
         makeMap={makeMap}
-        getPharmLists={getPharmLists}
+        useViewMap={useViewMap}
+        useSearch={useSearch}
       />
     </>
   );

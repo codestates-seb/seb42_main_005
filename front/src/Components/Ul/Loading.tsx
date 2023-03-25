@@ -5,7 +5,7 @@ import { zIndex_Loading } from "../../Util/z-index";
 export default function Loading() {
   return (
     <WrapLoading>
-      <HashLoader color="#7472e9" size="60" speedMultiplier={1} />
+      <HashLoader color="#7472e9" size={60} speedMultiplier={1} />
     </WrapLoading>
   );
 }

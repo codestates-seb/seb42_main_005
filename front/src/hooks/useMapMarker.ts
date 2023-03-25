@@ -1,18 +1,18 @@
 import axios from "axios";
-import { API_PharmLists } from "../Api/APIs";
+import { API_PharmLists, API_Search } from "../Api/APIs";
 
 const { kakao } = window;
 
 let markers: any[] = [];
 let clusterer: any = null;
 
-const getPharmLists = async (
+export async function useViewMap(
   sorted: any,
   selected: any,
   totalPharmList: never[],
   setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>,
   makeMap: any,
-) => {
+) {
   if (makeMap) {
     const centerLat = makeMap.getCenter().getLat();
     const centerLng = makeMap.getCenter().getLng();
@@ -35,10 +35,10 @@ const getPharmLists = async (
           neLng,
           sortCondition: sorted,
           filterCondition: selected,
-          //? not | nightOperating | operatingTime
         },
         headers: { "Content-Type": "application/json" },
       });
+
       const pharmacies = response.data.response;
       setTotalPharmList(pharmacies);
 
@@ -121,5 +121,44 @@ const getPharmLists = async (
       console.log(error);
     }
   }
-};
-export default getPharmLists;
+}
+
+export async function useSearch(
+  keyword: string,
+  totalPharmList: never[],
+  setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>,
+  makeMap: any,
+) {
+  if (makeMap) {
+    try {
+      const response = await axios({
+        url: `${API_Search.GET_REAL_API}${keyword}`,
+        method: "get",
+      });
+      const pharmacies = response.data.response;
+      setTotalPharmList(pharmacies);
+
+      if (markers.length > 0) {
+        markers.forEach((marker: any) => marker.setMap(null));
+        clusterer.clear();
+      }
+
+      markers = pharmacies.map((pharmacy: { latitude: any; longitude: any; name: any }) => {
+        const PositionPharmacy = new kakao.maps.LatLng(pharmacy.latitude, pharmacy.longitude);
+        const content = '<div class="customoverlay">' + `<span class="title">${pharmacy.name}</span>` + "</div>";
+        const MarkerPharmacy = new kakao.maps.CustomOverlay({
+          position: PositionPharmacy,
+          content: content,
+          yAnchor: 1,
+          title: pharmacy.name,
+        });
+        MarkerPharmacy.setMap(makeMap);
+        const searchResultPos = new window.kakao.maps.LatLng(pharmacies[0].latitude, pharmacies[0].longitude);
+        makeMap.panTo(searchResultPos);
+        return MarkerPharmacy;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}

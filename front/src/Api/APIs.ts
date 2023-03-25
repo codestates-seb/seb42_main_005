@@ -103,3 +103,7 @@ export const API_Reports = {
   DELETE_REAL_API: `${API}/admin/reports`,
   POST_REAL_API: `${API}/admin/reports`,
 };
+// 약국 검색기능
+export const API_Search = {
+  GET_REAL_API: `${API}/store/search?keyword=`,
+};

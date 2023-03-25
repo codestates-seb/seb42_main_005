@@ -20,7 +20,7 @@ interface Props {
   totalPharmList: never[];
   setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>;
   makeMap: any;
-  getPharmLists: any;
+  useViewMap: any;
 }
 
 export default function KakaoMap({
@@ -32,12 +32,12 @@ export default function KakaoMap({
   totalPharmList,
   setTotalPharmList,
   makeMap,
-  getPharmLists,
+  useViewMap,
 }: Props) {
   //* 필터버튼 클릭 시
   const ClickedFilter = () => {
     if (makeMap) {
-      getPharmLists(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
+      useViewMap(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
     }
   };
   return (
@@ -65,7 +65,7 @@ export default function KakaoMap({
                 totalPharmList={totalPharmList}
                 setTotalPharmList={setTotalPharmList}
                 makeMap={makeMap}
-                getPharmLists={getPharmLists}
+                useViewMap={useViewMap}
               />
             </ControllerBottom>
           </>

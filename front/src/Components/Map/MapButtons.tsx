@@ -9,7 +9,7 @@ interface ButtonProps {
   totalPharmList: never[];
   setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>;
   makeMap: any;
-  getPharmLists: any;
+  useViewMap: any;
 }
 
 export default function MapButtons({
@@ -18,7 +18,7 @@ export default function MapButtons({
   totalPharmList,
   setTotalPharmList,
   makeMap,
-  getPharmLists,
+  useViewMap,
 }: ButtonProps) {
   //* 줌 인/아웃 버튼 클릭 시
   const zoomIn = () => {
@@ -63,7 +63,7 @@ export default function MapButtons({
   //* 현지도재검색 클릭 시
   const reMap = () => {
     if (makeMap) {
-      getPharmLists(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
+      useViewMap(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
     }
   };
 

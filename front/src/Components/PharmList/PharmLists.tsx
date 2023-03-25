@@ -18,7 +18,8 @@ interface Props {
   totalPharmList: object[];
   setTotalPharmList: any;
   makeMap: any;
-  getPharmLists: any;
+  useViewMap: any;
+  useSearch: any;
 }
 
 export default function PharmLists({
@@ -30,7 +31,8 @@ export default function PharmLists({
   totalPharmList,
   setTotalPharmList,
   makeMap,
-  getPharmLists,
+  useViewMap,
+  useSearch,
 }: Props) {
   const [displayedList, setDisplayedList] = useState(totalPharmList.slice(0, 10));
   const listRef = useRef<HTMLDivElement>(null);
@@ -51,7 +53,7 @@ export default function PharmLists({
   //* 정렬기준 클릭 시
   const ClickedSort = () => {
     if (makeMap) {
-      getPharmLists(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
+      useViewMap(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
     }
   };
   return (
@@ -64,7 +66,12 @@ export default function PharmLists({
           <h2 hidden>약국 리스트</h2>
           <ListHead>
             <SearchContainer>
-              <SearchBar />
+              <SearchBar
+                totalPharmList={totalPharmList}
+                setTotalPharmList={setTotalPharmList}
+                makeMap={makeMap}
+                useSearch={useSearch}
+              />
               {hidden ? (
                 <ButtonShow className="folded">
                   <VscTriangleLeft className={hidden ? "open" : ""} onClick={() => setHidden(false)} />
