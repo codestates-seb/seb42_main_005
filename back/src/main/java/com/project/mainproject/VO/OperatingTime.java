@@ -24,15 +24,15 @@ public class OperatingTime {
     }
     //편의 메서드
     public boolean checkOperating() {
-        if (LocalTime.now().isBefore(endTime) && startTime != null) {
-            return true;
+        if (endTime != null) {
+            return LocalTime.now().isBefore(endTime);
         }
         return false;
     }
     public boolean isNightOperating() {
 
-        if (endTime.getHour() > 22) {
-            return true;
+        if (endTime != null) {
+            return endTime.getHour() > 22;
         }
         return false;
     }
