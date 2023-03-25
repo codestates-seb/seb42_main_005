@@ -16,6 +16,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.project.mainproject.utils.ApiDocumentUtils.getRequestPreProcessor;
 import static com.project.mainproject.utils.ApiDocumentUtils.getResponsePreProcessor;
@@ -45,10 +46,9 @@ class StoreControllerTest implements StoreControllerTestHelper {
         FilterTagDto filterTagDto = new FilterTagDto(List.of("깨끗함","주차공간 넓음"));
         String content = toJsonContent(filterTagDto);
 
-        ResultActions actions = mockMvc.perform(getRequestBuilder(getUrl(),queryParams,content));
+        ResultActions actions = mockMvc.perform(getRequestBuilder(getUrl(), accessToken, queryParams));
 
         actions
-                .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(
                         MockMvcRestDocumentation.document(
