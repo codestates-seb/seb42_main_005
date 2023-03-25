@@ -73,6 +73,12 @@ public class UserService implements UserDetailsService {
 
     public void assignRole(Normal user) {
         List<String> roles = authorityUtils.createNormalRoles(user.getEmail());
+        user.setRole(roles); // 추가했습니다 03/25 예솔
+    }
+
+    public void assignRole(Pharmacy user) { // 추가했습니다 03/25 예솔
+        List<String> roles = authorityUtils.createPharmacyRoles(user.getEmail());
+        user.setRole(roles);
     }
 
     public void savePharmacy(Pharmacy pharmacy, MultipartFile businessCertificate, MultipartFile pharmacistCertificate) {
@@ -86,6 +92,7 @@ public class UserService implements UserDetailsService {
         pharmacy.setStore(store);
         pharmacy.setUserType("약국회원");
         pharmacy.setUserStatus(TEMPORARY);
+        assignRole(pharmacy); // 추가했습니다 03/25 예솔
 
         String businessPath = fileUploader.saveImage(businessCertificate, "businessCertificate");
         String pharmacyPath = fileUploader.saveImage(pharmacistCertificate, "pharmacistCertificate");
