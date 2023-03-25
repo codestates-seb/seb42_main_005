@@ -34,6 +34,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.project.mainproject.store.exception.StoreExceptionCode.STORE_NOT_FOUND;
+import static com.project.mainproject.user.enums.UserStatus.TEMPORARY;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -74,10 +77,15 @@ public class UserService implements UserDetailsService {
 
     public void savePharmacy(Pharmacy pharmacy, MultipartFile businessCertificate, MultipartFile pharmacistCertificate) {
         checkUserExist(pharmacy.getEmail());
-        Optional<Store> store = storeRepository.findByNameContainingAndAddressContaining(pharmacy.getName(), pharmacy.getAddress());
+
+        Store store = storeRepository.findByNameContainingAndAddressContaining(
+                pharmacy.getName(), pharmacy.getAddress())
+                .orElseThrow(() -> new BusinessLogicException(STORE_NOT_FOUND));
+
         pharmacy.setPassword(encoder.encode(pharmacy.getPassword()));
-        pharmacy.setStore(store.get());
+        pharmacy.setStore(store);
         pharmacy.setUserType("약국회원");
+        pharmacy.setUserStatus(TEMPORARY);
 
         String businessPath = fileUploader.saveImage(businessCertificate, "businessCertificate");
         String pharmacyPath = fileUploader.saveImage(pharmacistCertificate, "pharmacistCertificate");
@@ -101,7 +109,7 @@ public class UserService implements UserDetailsService {
     }
 
     public Page<Pharmacy> findPharmacyRequest(Pageable pageable) {
-        return pharmacyRepository.findAllByUserStatusIs(UserStatus.TEMPORARY, pageable);
+        return pharmacyRepository.findAllByUserStatusIs(TEMPORARY, pageable);
     }
 
     public void patchUser(Long userIdx, UserPatchDto userPatchDto) {
