@@ -37,7 +37,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.project.mainproject.store.exception.StoreExceptionCode.STORE_ADDRESS_NOT_FOUND;
-import static com.project.mainproject.store.exception.StoreExceptionCode.STORE_NOT_FOUND;
+import static com.project.mainproject.store.exception.StoreExceptionCode.STORE_NAME_NOT_FOUND;
 import static com.project.mainproject.user.enums.UserStatus.TEMPORARY;
 
 @Service
@@ -93,7 +93,7 @@ public class UserService implements UserDetailsService {
 
         List<Store> stores = storeRepository.findByNameContaining(pharmacy.getName()); // 검색 이슈로 추가 03/25 예솔
         if (stores.size() == 0)
-            throw new BusinessLogicException(STORE_NOT_FOUND);
+            throw new BusinessLogicException(STORE_NAME_NOT_FOUND);
         Store store = filterCorrcetStore(stores, pharmacy.getAddress());
 
         pharmacy.setPassword(encoder.encode(pharmacy.getPassword()));
