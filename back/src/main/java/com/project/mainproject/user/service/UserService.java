@@ -34,8 +34,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-import static com.project.mainproject.store.exception.StoreExceptionCode.STORE_NOT_FOUND;
+import static com.project.mainproject.store.exception.StoreExceptionCode.STORE_ADDRESS_NOT_FOUND;
+import static com.project.mainproject.store.exception.StoreExceptionCode.STORE_NAME_NOT_FOUND;
 import static com.project.mainproject.user.enums.UserStatus.TEMPORARY;
 
 @Service
@@ -66,6 +70,7 @@ public class UserService implements UserDetailsService {
 
     public void saveNormal(Normal normal) {
         checkUserExist(normal.getEmail());
+        checkPassword(normal.getPassword());
         normal.setUserType("일반회원");
         normal.setPassword(encoder.encode(normal.getPassword()));
         assignRole(normal);
@@ -84,10 +89,12 @@ public class UserService implements UserDetailsService {
 
     public void savePharmacy(Pharmacy pharmacy, MultipartFile businessCertificate, MultipartFile pharmacistCertificate) {
         checkUserExist(pharmacy.getEmail());
+        checkPassword(pharmacy.getPassword());
 
-        Store store = storeRepository.findByNameContainingAndAddressContaining(
-                pharmacy.getName(), pharmacy.getAddress())
-                .orElseThrow(() -> new BusinessLogicException(STORE_NOT_FOUND));
+        List<Store> stores = storeRepository.findByNameContaining(pharmacy.getName()); // 검색 이슈로 추가 03/25 예솔
+        if (stores.size() == 0)
+            throw new BusinessLogicException(STORE_NAME_NOT_FOUND);
+        Store store = filterCorrcetStore(stores, pharmacy.getAddress());
 
         pharmacy.setPassword(encoder.encode(pharmacy.getPassword()));
         pharmacy.setStore(store);
@@ -101,6 +108,26 @@ public class UserService implements UserDetailsService {
         pharmacy.setBusinessCertificate(businessPath);
         pharmacy.setPharmacistCertificate(pharmacyPath);
         userRepository.save(pharmacy);
+    }
+
+    private Store filterCorrcetStore(List<Store> stores, String address) {
+        stores = stores.stream()
+                .filter(store -> store.getAddress().replace(" ", "")
+                        .contains(removeSpace(address)))
+                .collect(Collectors.toList());
+        if (stores.size() != 1)
+            throw new BusinessLogicException(STORE_ADDRESS_NOT_FOUND);
+
+        return stores.get(0);
+    }
+
+    // 위치...
+    private String removeSpace(String address) {
+        String[] words = address.split(" ");
+        if (words.length < 4)
+            throw new BusinessLogicException(STORE_ADDRESS_NOT_FOUND);
+
+        return words[1] + words[2] + words[3];
     }
 
     @Transactional(readOnly = true)
@@ -200,5 +227,16 @@ public class UserService implements UserDetailsService {
             throw new BusinessLogicException(UserExceptionCode.USER_NOT_NORMAL);
         }
         return (Normal) findUser;
+    }
+
+    /*
+        비밀번호 검증 로직
+     */
+    public void checkPassword(String password) {
+        Pattern pattern = Pattern.compile("^(?=.[A-Za-z])(?=.\\d)(?=.[@$!%#?&])[A-Za-z\\d@$!%*#?&]{8,}$");
+        Matcher matcher = pattern.matcher(password);
+        if (!matcher.find()) {
+            throw new BusinessLogicException(UserExceptionCode.CONFLICT_PASSWORD_RULE);
+        }
     }
 }
