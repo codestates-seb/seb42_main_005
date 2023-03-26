@@ -4,34 +4,46 @@ import { BiTargetLock } from "react-icons/bi";
 import { MdReplayCircleFilled } from "react-icons/md";
 
 interface ButtonProps {
-  _map: any;
+  sorted: any;
+  selected: any;
+  totalPharmList: never[];
+  setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>;
+  makeMap: any;
+  useViewMap: any;
 }
 
-export default function MapButtons({ _map }: ButtonProps) {
+export default function MapButtons({
+  sorted,
+  selected,
+  totalPharmList,
+  setTotalPharmList,
+  makeMap,
+  useViewMap,
+}: ButtonProps) {
   //* 줌 인/아웃 버튼 클릭 시
   const zoomIn = () => {
-    _map.setLevel(_map.getLevel() - 1);
+    makeMap.setLevel(makeMap.getLevel() - 1);
   };
   const zoomOut = () => {
-    _map.setLevel(_map.getLevel() + 1);
+    makeMap.setLevel(makeMap.getLevel() + 1);
   };
 
   //* 현재 위치 버튼 클릭 시
-  const getCurrentLocBtn = () => {
+  const CurrentLocation = () => {
     navigator.geolocation.getCurrentPosition(
       (pos: any) => {
         const latitude = pos.coords.latitude;
         const longitude = pos.coords.longitude;
         const currentPos = new window.kakao.maps.LatLng(latitude, longitude);
 
-        _map.panTo(currentPos); // 지도 이동(기존 위치와 가깝다면 부드럽게 이동)
+        makeMap.panTo(currentPos); // 지도 이동(기존 위치와 가깝다면 부드럽게 이동)
 
         const currentImageSrc = "./Images/currentPos.png";
         const currentImageSize = new window.kakao.maps.Size(24, 35);
         const currentMarkerImage = new window.kakao.maps.MarkerImage(currentImageSrc, currentImageSize);
 
         // 기존 marker 삭제
-        const markers = _map.getMarkers();
+        const markers = makeMap.getMarkers();
         markers.setMap(null);
 
         // 새로운 marker 추가
@@ -40,19 +52,25 @@ export default function MapButtons({ _map }: ButtonProps) {
           title: "현 위치",
           image: currentMarkerImage,
         });
-        marker.setMap(_map);
+        marker.setMap(makeMap);
       },
       (error: any) => {
         alert("위치 정보를 가져오는데 실패했습니다.");
       },
     );
-    _map.setLevel(3);
+    makeMap.setLevel(3);
+  };
+  //* 현지도재검색 클릭 시
+  const reMap = () => {
+    if (makeMap) {
+      useViewMap(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
+    }
   };
 
   return (
     <ContainerButtons>
       <ControllerReMap>
-        <ButtonReMap onClick={getCurrentLocBtn}>
+        <ButtonReMap onClick={reMap}>
           <MdReplayCircleFilled className="icon" />
           <div className="label">
             현 지도로
@@ -62,7 +80,7 @@ export default function MapButtons({ _map }: ButtonProps) {
         </ButtonReMap>
       </ControllerReMap>
       <ControllerLocation>
-        <ButtonLocation onClick={getCurrentLocBtn}>
+        <ButtonLocation onClick={CurrentLocation}>
           <BiTargetLock className="icon" />
         </ButtonLocation>
       </ControllerLocation>
@@ -87,12 +105,16 @@ const ContainerButtons = styled.div`
 const ControllerReMap = styled.div`
   padding: 4px;
   border-radius: 30px;
-  background-color: var(--blue-400);
+  background-color: var(--blue-600);
   box-shadow: var(--bs-lg);
   transition: 0.2s;
   &:hover {
-    background-color: var(--blue-600);
+    background-color: var(--blue-700);
+    box-shadow: 0 0 8px 10px hsla(360, 100%, 100%, 0.2);
     transition: 0.2s;
+  }
+  &:active {
+    background-color: var(--blue-800);
   }
 `;
 const ButtonReMap = styled.button`
