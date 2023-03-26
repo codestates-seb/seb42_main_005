@@ -18,7 +18,10 @@ export default function Users() {
       await axios
         .get(APIS.GET_ADMIN_USERS)
         .then((response) => setUsers(response.data.response.content))
-        .catch((error) => {console.log("전체회원리스트 불러오던 중 에러 발생");console.log(error)});
+        .catch((error) => {
+          console.log("전체회원리스트 불러오던 중 에러 발생");
+          console.log(error);
+        });
     };
     getUsers();
   }, []);
@@ -33,13 +36,16 @@ export default function Users() {
     },
     [checkedList],
   );
-
+  console.log(users);
   const data = { userIdxs: checkedList };
   //! POST : 계정 정지
   const blockUsers = async () => {
     await axios
       .post(`${APIS.POST_ADMIN_BLOCK}?period=${time}`, data)
-      .catch((error) => {console.log("계정 정지하던 중 에러 발생");console.log(error)})
+      .catch((error) => {
+        console.log("계정 정지하던 중 에러 발생");
+        console.log(error);
+      })
       .then(() => location.reload());
   };
 
@@ -47,7 +53,10 @@ export default function Users() {
   const fireUsers = async () => {
     await axios
       .post(APIS.POST_ADMIN_FIRE, data)
-      .catch((error) => {console.log("계정 강퇴하던 중 에러 발생");console.log(error)})
+      .catch((error) => {
+        console.log("계정 강퇴하던 중 에러 발생");
+        console.log(error);
+      })
       .then(() => location.reload());
   };
 
@@ -55,9 +64,19 @@ export default function Users() {
   const restoreUsers = async () => {
     await axios
       .post(APIS.POST_ADMIN_RESTORE, data)
-      .catch((error) => {console.log("계정 복구하던 중 에러 발생");console.log(error)})
+      .catch((error) => {
+        console.log("계정 복구하던 중 에러 발생");
+        console.log(error);
+      })
       .then(() => location.reload());
   };
+
+  const returnAccountState = (accountState: any)=> {
+    if (accountState === "ACTIVE") return "활동회원"
+    if (accountState === "TEMPORARY") return "승인대기"
+    if (accountState === "SUSPENDED") return "강퇴회원"
+    if (accountState === "WITHDRAWN") return "탈퇴회원"
+  }
 
   return (
     <WholePage>
@@ -105,10 +124,10 @@ export default function Users() {
                       />
                     </Values>
                     <Values className="classification">{user.userType}</Values>
-                    <Values className="accountStatus">{user.userStatus}</Values>
+                    <Values className="accountStatus">{returnAccountState(user.userStatus)}</Values>
                     <Values className="nickname">{user.name}</Values>
                     <Values className="email">{user.email}</Values>
-                    <Values className="returnAt">{user.returnAt}</Values>
+                    <Values className="returnAt">{user.bannedRestoreDate ? new Date(user.bannedRestoreDate).toLocaleDateString() : ""}</Values>
                     <Values className="subscription">{new Date(user.createdAt).toLocaleDateString()}</Values>
                     <Values className="reviewCount">{user.reviewCount}</Values>
                     <Values className="reportCount">{user.reportCount}</Values>

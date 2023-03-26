@@ -13,7 +13,7 @@ export default function Cert({ cert }: Props) {
   return (
     <Contaniner>
       {isImgUp ? <ImageUp isImgUp={isImgUp} setIsImgUp={setIsImgUp} imgUrl={imgUrl} /> : null}
-      <Values className="nickname">{cert.name as any}</Values>
+      <Values className="nickname">{cert.name}</Values>
       <Values className="email">{cert.email}</Values>
       <Values className="requested">{new Date(cert.createdAt).toLocaleDateString()}</Values>
       <Values

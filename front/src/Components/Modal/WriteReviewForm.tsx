@@ -4,7 +4,7 @@ import axios from "axios";
 import { APIS } from "../../Api/APIs";
 import Textarea from "../Ul/Textarea";
 import Button from "../Ul/Button";
-import { TYPE_Pharm, TYPE_setIsReviewFormShown, TYPE_reviewList, TYPE_setReviewList } from "../../Api/TYPES";
+import { TYPE_Pharm, TYPE_setIsReviewFormShown, TYPE_setReviewList } from "../../Api/TYPES";
 import { zIndex_Modal } from "../../Util/z-index";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BiPhotoAlbum } from "react-icons/bi";
@@ -167,7 +167,7 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
               }
             />
           </StarContainer>
-          <RateNum readOnly type="text" name="rating" value={`${review.rating}`} onChange={handlerRate}></RateNum>
+          <RateNum readOnly type="text" name="rating" value={`${review.rating} / 5`} onChange={handlerRate}></RateNum>
         </Rating>
         <Button type="submit" color="blue" size="md" text="작성완료" icon={true} />
       </InputBot>
@@ -297,12 +297,11 @@ const Star = styled.img`
   width: 20px;
 `;
 const RateNum = styled.input`
-  display: none;
   margin-left: 3px;
   width: 4rem;
   color: var(--black-300);
-  font-size: 23px;
-  font-weight: bold;
+  font-size: 20px;
+  font-weight: 600;
   border: none;
   &:focus {
     border: none;
