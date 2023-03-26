@@ -51,6 +51,7 @@ export default function PharmLists({
     navigate("/login");
     alert("로그인을 먼저 해주세요!");
   };
+  console.log(displayedList)
 
   const handleScroll = (e: any) => {
     const { scrollTop, scrollHeight, clientHeight } = e.target;
