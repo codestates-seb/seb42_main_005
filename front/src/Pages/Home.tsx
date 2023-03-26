@@ -3,7 +3,7 @@ import axios from "axios";
 import PharmLists from "../Components/PharmList/PharmLists";
 import KakaoMap from "../Components/Map/KakaoMap";
 import { SELECT_HIDDEN } from "../Util/type";
-import { API_PharmLists } from "../Api/APIs";
+import { APIS } from "../Api/APIs";
 import useGeolocation from "../hooks/useGeolocation";
 import "../hooks/PharmacyOverlay.css";
 
@@ -106,7 +106,7 @@ export default function Home() {
 
           const response = await axios({
             method: "get",
-            url: API_PharmLists.REAL_API,
+            url: APIS.GET_PHARMLIST,
             params: {
               lat: 37.50123567,
               lng: 127.0266307826,

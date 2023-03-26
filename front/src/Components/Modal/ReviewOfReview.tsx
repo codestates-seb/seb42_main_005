@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useAppSelector } from "../../Redux/hooks";
 import axios from "axios";
 import Input from "../Ul/Input";
 import Button from "../Ul/Button";
-import { API_ReviewOfReview } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 import { BsArrowReturnRight } from "react-icons/bs";
 import { HiXMark } from "react-icons/hi2";
 
@@ -23,70 +24,56 @@ export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, rev
     setContent(e.target.value);
   };
 
-  const data = {
-    //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
-    storeIdx,
-    userIdx: 1,
-    content,
-  };
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
   //! PATCH : 리뷰의 댓글수정
-  const editCommentKeyPress = (e: any) => {
+  const editCommentKeyPress = async (e: any) => {
     if (e.key === " " && e.getModifierState("Shift") === false) {
       e.stopPropagation();
     } else if (e.key === " " && e.target.value.slice(-1) === " ") {
       e.stopPropagation();
     } else if (e.key === "Enter") {
       e.preventDefault();
-      const submitReviewOfReview = async () => {
-        try {
-          await axios({
-            url: `${API_ReviewOfReview.REAL_API}/${reviewIdx}/reply/${reply.replyIdx}`,
-            method: "patch",
-            data,
-          }).then(() => setIsPatchFormShown(false));
-        } catch (error) {
+      await axios
+        .patch(`${APIS.PATCH_REPLY}/${reviewIdx}/reply/${reply.replyIdx}`, {
+          storeIdx,
+          userIdx: user.userIdx,
+          content,
+        })
+        .then(() => setIsPatchFormShown(false))
+        .catch((error) => {
+          console.log("리뷰의 댓글을 수정하던 중 에러 발생");
           console.log(error);
-        }
-      };
-      const show = {
-        ...reply,
-        content,
-        createdAt: new Date().toLocaleDateString(),
-      };
-      setReviewList(
-        [...reviewList].map((rev) =>
-          rev.reviewIdx === reviewIdx
-            ? {
-                ...rev,
-                replies: [...review.replies].map((rep) => (rep.replyIdx === reply.replyIdx ? show : rep)),
-              }
-            : rev,
-        ),
-      );
-      submitReviewOfReview();
+        });
+      await axios
+        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+        .then((response) => {
+          setReviewList(response.data.response.storeReviews);
+        })
+        .catch((error) => {
+          console.log("리뷰리스트를 다시 불러오던 중 에러 발생");
+          console.log(error);
+        });
     }
   };
 
   // ! DELETE : 리뷰의 댓글삭제
   const deleteComment = async () => {
-    try {
-      await axios({
-        url: `${API_ReviewOfReview.REAL_API}/${reviewIdx}/reply/${reply.replyIdx}`,
-        method: "delete",
-      });
-    } catch (error) {
+    await axios.delete(`${APIS.DELETE_REPLY}/${reviewIdx}/reply/${reply.replyIdx}`).catch((error) => {
+      console.log("리뷰의 댓글을 삭제하던 중 에러 발생");
       console.log(error);
-    }
-    setReviewList(
-      [...reviewList].map((rev) =>
-        rev.reviewIdx === reviewIdx
-          ? {
-              ...rev,
-              replies: [...review.replies].filter((rep) => rep.replyIdx !== reply.replyIdx),
-            }
-          : rev,
-      ),
-    );
+    });
+    await axios
+      .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+      .then((response) => {
+        setReviewList(response.data.response.storeReviews);
+      })
+      .catch((error) => {
+        console.log("리뷰리스트를 다시 불러오던 중 에러 발생");
+        console.log(error);
+      });
   };
 
   return (
@@ -102,8 +89,12 @@ export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, rev
         </UserInfo>
         <ButtonContainer>
           {/* 약사계정이면 && 해당 약국의 storeIdx 와 리덕스 툴킷의 내 storeIdx 가 같을 때 => 버튼이 보임 */}
-          <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsPatchFormShown(true)} />
-          <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteComment()} />
+          {user?.userRole === "약국회원" && storeIdx === user?.storeIdx ? (
+            <>
+              <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsPatchFormShown(true)} />
+              <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteComment()} />
+            </>
+          ) : null}
         </ButtonContainer>
       </Upper>
       <Comment>{reply.content}</Comment>
@@ -132,7 +123,6 @@ export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, rev
 const CommentContainer = styled.section`
   display: flex;
   flex-direction: column;
-  margin-top: 10px;
   padding: 10px 0px 0px 6px;
   gap: 3px;
   border-top: 1px solid var(--black-075);

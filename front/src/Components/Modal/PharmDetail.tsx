@@ -1,22 +1,32 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import WriteReviewForm from "./WriteReviewForm";
-import PharmInfo from "./PharmInfo";
 import PharmRank from "../Ul/PharmRank";
-import Button from "../Ul/Button";
+import PharmInfo from "./PharmInfo";
 import ReviewList from "./Reviews";
+import Button from "../Ul/Button";
 import { zIndex_Modal } from "../../Util/z-index";
+import { getLocalStorage } from "../../Api/localStorage";
+import {
+  TYPE_Pharm,
+  TYPE_setIsModalUp,
+  TYPE_like,
+  TYPE_pharmDetail,
+  TYPE_reviewList,
+  TYPE_setReviewList,
+} from "../../Api/TYPES";
 import { HiXMark } from "react-icons/hi2";
 
 interface Props {
-  setIsModalUp: React.Dispatch<React.SetStateAction<boolean>>;
-  like?: boolean;
-  setLike?: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsModalUp: TYPE_setIsModalUp;
+  like: TYPE_like;
+  setLike: any;
   storeIdx: number;
-  Pharm?: any;
-  pharmDetail: any;
-  reviewList: any;
-  setReviewList: any;
+  Pharm?: TYPE_Pharm;
+  pharmDetail: TYPE_pharmDetail;
+  reviewList: TYPE_reviewList;
+  setReviewList: TYPE_setReviewList;
 }
 
 export default function PharmDetail({
@@ -29,21 +39,27 @@ export default function PharmDetail({
   reviewList,
   setReviewList,
 }: Props) {
+  const [isReviewFormShown, setIsReviewFormShown] = useState<React.SetStateAction<boolean>>(false);
 
-  const [isReviewFormShown, setIsReviewFormShown] = useState(false);
+  const token = getLocalStorage("access_token");
+  const navigate = useNavigate();
+  const returnLogin = () => {
+    alert("로그인을 해주세요!");
+    navigate("/login");
+  };
 
   return (
     <ModalBackDrop onClick={() => setIsModalUp(false)}>
-      <ModalContainer onClick={(event) => event.stopPropagation()}>
+      <ModalContainer onClick={(event: React.MouseEvent<HTMLButtonElement>) => event.stopPropagation()}>
         <CloseBtnContainer>
           <HiXMark id="close" onClick={() => setIsModalUp(false)} aria-hidden="true" />
         </CloseBtnContainer>
         <InfoHeader>
-          <InfoTitle>{Pharm.name}</InfoTitle>
-          <PharmRank rating={Pharm.rating} likes={Pharm.pickedStoreCount} reviewCount={Pharm.reviewCount} />
+          <InfoTitle>{Pharm?.name}</InfoTitle>
+          <PharmRank rating={Pharm?.rating} likes={Pharm?.pickedStoreCount} reviewCount={Pharm?.reviewCount} />
         </InfoHeader>
         <Constant>
-          <PharmInfo like={like} setLike={setLike} Pharm={pharmDetail} />
+          <PharmInfo like={like} setLike={setLike} pharmDetail={pharmDetail} />
           <ReviewList
             reviewList={reviewList}
             setReviewList={setReviewList}
@@ -52,18 +68,22 @@ export default function PharmDetail({
             Pharm={Pharm}
           />
         </Constant>
-        {isReviewFormShown ? (
+        {token && isReviewFormShown ? (
           <WriteReviewForm
+            Pharm={Pharm}
             setIsReviewFormShown={setIsReviewFormShown}
-            storeIdx={Pharm.storeIdx}
+            storeIdx={Pharm?.storeIdx}
             reviewList={reviewList}
             setReviewList={setReviewList}
           />
         ) : null}
-        {/* 로그인이 안된 상태일 경우, 버튼을 누르면 로그인 페이지로 랜딩 */}
-        {isReviewFormShown ? null : (
+        {token ? (
           <WriteReviewBtnContainer>
             <Button onClick={() => setIsReviewFormShown(true)} color="mint" size="md" text="리뷰쓰기" />
+          </WriteReviewBtnContainer>
+        ) : (
+          <WriteReviewBtnContainer>
+            <Button onClick={() => returnLogin()} color="mint" size="md" text="리뷰쓰기" />
           </WriteReviewBtnContainer>
         )}
       </ModalContainer>
