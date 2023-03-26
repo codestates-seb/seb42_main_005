@@ -36,7 +36,7 @@ export default function Account() {
         <ButtonLink to="/sign_up">회원가입</ButtonLink>
       </ContainerAccount>
     );
-  } else if (user.userRole === "약국회원") {
+  } else if (user?.userRole === "약국회원") {
     return (
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">
@@ -53,20 +53,20 @@ export default function Account() {
         {isOpen ? (
           <DropdownBackdrop onClick={DropdownHandler}>
             <Content>
-              <section>
+              <ul>
                 <Link to="/pharm-my_pharmacy" style={{ textDecoration: "none" }}>
-                  <button>마이페이지</button>
+                  <li>마이페이지</li>
                 </Link>
                 <Link to="/login" style={{ textDecoration: "none" }}>
-                  <button onClick={logOut}>로그아웃</button>
+                  <li onClick={logOut}>로그아웃</li>
                 </Link>
-              </section>
+              </ul>
             </Content>
           </DropdownBackdrop>
         ) : null}
       </ContainerAccount>
     );
-  } else if (user.userRole === "관리자") {
+  } else if (user?.userRole === "관리자") {
     return (
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">
@@ -83,11 +83,11 @@ export default function Account() {
         {isOpen ? (
           <DropdownBackdrop onClick={DropdownHandler}>
             <Content>
-              <section>
+              <ul>
                 <Link to="/login" style={{ textDecoration: "none" }}>
-                  <button onClick={logOut}>로그아웃</button>
+                  <li onClick={logOut}>로그아웃</li>
                 </Link>
-              </section>
+              </ul>
             </Content>
           </DropdownBackdrop>
         ) : null}
@@ -103,7 +103,7 @@ export default function Account() {
             alt="profile"
           />
         </Link>
-        <span className="name">{user.name}</span>
+        <span className="name">{user?.name}</span>
         <span className="identity">님</span>
         <DropdownButton onClick={DropdownHandler}>
           <IoIosArrowBack className={isOpen ? "close" : "open"} />
@@ -111,14 +111,14 @@ export default function Account() {
         {isOpen ? (
           <DropdownBackdrop onClick={DropdownHandler}>
             <Content>
-              <section>
+              <ul>
                 <Link to="/user-my_info" style={{ textDecoration: "none" }}>
-                  <button>마이페이지</button>
+                  <li>마이페이지</li>
                 </Link>
                 <Link to="/login" style={{ textDecoration: "none" }}>
-                  <button onClick={logOut}>로그아웃</button>
+                  <li onClick={logOut}>로그아웃</li>
                 </Link>
-              </section>
+              </ul>
             </Content>
           </DropdownBackdrop>
         ) : null}
@@ -195,13 +195,12 @@ const Content = styled.div`
   background-color: white;
   box-shadow: var(--bs-lg);
   transition: 0.2s;
-  section {
+  ul {
     position: relative;
     list-style-type: none;
     padding: 10px 0px 10px 0px;
   }
-  button {
-    border: none;
+  li {
     width: 110px;
     padding: 5px 10px 3px 15px;
     text-align: right;
@@ -210,7 +209,7 @@ const Content = styled.div`
     color: var(--black-600);
     transition: 0.2s;
   }
-  button:hover {
+  li:hover {
     cursor: pointer;
     background-color: var(--black-050);
     color: var(--black-800);

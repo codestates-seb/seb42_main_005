@@ -5,11 +5,16 @@ import CheckBox from "../../Components/Ul/CheckBox";
 import Button from "../../Components/Ul/Button";
 import { APIS } from "../../Api/APIs";
 import AdminTabs from "./AdminTabs";
+import { useAppSelector } from "../../Redux/hooks";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Reports() {
   const [reports, setReports] = useState([]);
   const [checkedList, setCheckedList] = useState<Array<any>>([]);
+
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
 
   //! GET : 신고리뷰 리스트 불러오기
   useEffect(() => {
@@ -17,7 +22,10 @@ export default function Reports() {
       await axios
         .get(APIS.GET_ADMIN_REPORTED)
         .then((response) => setReports(response.data.response.reportedReviews))
-        .catch((error) => {console.log("신고리뷰리스트 불러오던 중 에러 발생");console.log(error)});
+        .catch((error) => {
+          console.log("신고리뷰리스트 불러오던 중 에러 발생");
+          console.log(error);
+        });
     };
     getReports();
   }, []);
@@ -38,7 +46,10 @@ export default function Reports() {
   const deleteReview = async () => {
     await axios
       .delete(APIS.DELETE_ADMIN_REVIEW_DELETE, { data: { reviews: checkedList } })
-      .catch((error) => {console.log("신고누적리뷰 삭제하던 중 에러 발생");console.log(error)})
+      .catch((error) => {
+        console.log("신고누적리뷰 삭제하던 중 에러 발생");
+        console.log(error);
+      })
       .then(() => location.reload());
   };
 
@@ -46,7 +57,10 @@ export default function Reports() {
   const restoreReview = async () => {
     await axios
       .post(APIS.POST_ADMIN_REVIEW_RESTORE, { reviews: checkedList })
-      .catch((error) => {console.log("신고누적리뷰 복구하던 중 에러 발생");console.log(error)})
+      .catch((error) => {
+        console.log("신고누적리뷰 복구하던 중 에러 발생");
+        console.log(error);
+      })
       .then(() => location.reload());
   };
 
@@ -55,47 +69,60 @@ export default function Reports() {
       <Wrapper>
         <AdminTabs current="reports" />
         <Page>
-          <Header>
-            <span>신고리뷰관리</span>
-            <ButtonContainer>
-              <Button color="blue" size="md" text="선택복구" onClick={() => restoreReview()} />
-              <Button color="red" size="md" text="선택삭제" onClick={() => deleteReview()} />
-            </ButtonContainer>
-          </Header>
-          <Table>
-            <Label>
-              <Values className="checkBox">
-                <CheckBox onChange={(e: React.ChangeEvent<HTMLInputElement>) => onCheckedItem(e.target.checked, e.target.id)} />
-              </Values>
-              <Values className="content">내용</Values>
-              <Values className="email">email</Values>
-              <Values className="writtenAt">작성일</Values>
-              <Values className="reports">신고 수</Values>
-            </Label>
-            {reports.length ? (
-              <BelowLable>
-                {reports.map((report: any, i: number) => (
-                  <Content key={i}>
-                    <Values className="checkBox">
-                      <CheckBox
-                        id={report.reviewIdx}
-                        onChange={(e: any) => onCheckedItem(e.target.checked, e.target.id)}
-                      />
-                    </Values>
-                    <Values className="content">{report.content}</Values>
-                    <Values className="email">{report.email}</Values>
-                    <Values className="writtenAt">{new Date(report.createdAt).toLocaleDateString()}</Values>
-                    <Values className="reports">{report.reportCnt}</Values>
-                  </Content>
-                ))}
-              </BelowLable>
-            ) : (
-              <Instead>
-                <AiOutlineExclamationCircle aria-hidden="true" />
-                <span>신고된 리뷰가 없습니다.</span>
-              </Instead>
-            )}
-          </Table>
+          {user?.userRole === "관리자" ? (
+            <>
+              <Header>
+                <span>신고리뷰관리</span>
+                <ButtonContainer>
+                  <Button color="blue" size="md" text="선택복구" onClick={() => restoreReview()} />
+                  <Button color="red" size="md" text="선택삭제" onClick={() => deleteReview()} />
+                </ButtonContainer>
+              </Header>
+              <Table>
+                <Label>
+                  <Values className="checkBox">
+                    <CheckBox
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        onCheckedItem(e.target.checked, e.target.id)
+                      }
+                    />
+                  </Values>
+                  <Values className="content">내용</Values>
+                  <Values className="email">email</Values>
+                  <Values className="writtenAt">작성일</Values>
+                  <Values className="reports">신고 수</Values>
+                </Label>
+                {reports.length ? (
+                  <BelowLable>
+                    {reports.map((report: any, i: number) => (
+                      <Content key={i}>
+                        <Values className="checkBox">
+                          <CheckBox
+                            id={report.reviewIdx}
+                            onChange={(e: any) => onCheckedItem(e.target.checked, e.target.id)}
+                          />
+                        </Values>
+                        <Values className="content">{report.content}</Values>
+                        <Values className="email">{report.email}</Values>
+                        <Values className="writtenAt">{new Date(report.createdAt).toLocaleDateString()}</Values>
+                        <Values className="reports">{report.reportCnt}</Values>
+                      </Content>
+                    ))}
+                  </BelowLable>
+                ) : (
+                  <Instead>
+                    <AiOutlineExclamationCircle aria-hidden="true" />
+                    <span>신고된 리뷰가 없습니다.</span>
+                  </Instead>
+                )}
+              </Table>
+            </>
+          ) : (
+            <NonAdmin>
+              <AiOutlineExclamationCircle aria-hidden="true" />
+              <span>권한이 없습니다.</span>
+            </NonAdmin>
+          )}
         </Page>
       </Wrapper>
     </WholePage>
@@ -197,6 +224,18 @@ const Instead = styled.section`
   span {
     font-size: 2rem;
   }
+`;
+const NonAdmin = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  height: 100%;
+  width: 100%;
+  color: var(--black-100);
+  font-size: 3rem;
+  font-weight: bold;
 `;
 const Content = styled.article`
   display: flex;

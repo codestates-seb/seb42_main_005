@@ -28,8 +28,6 @@ export default function MyInfoReviews() {
     getMyReviews();
   }, []);
 
-  console.log(reviewList);
-
   return (
     <Content>
       <TableHead>

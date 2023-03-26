@@ -73,7 +73,7 @@ export default function ReplyOfReview({ reviewIdx, reply, storeIdx, reviewList, 
           <span id="reply">
             <BsArrowReturnRight aria-hidden="true" />
           </span>
-          <UserIcon src={reply.userImage} alt="pharmacist" />
+          <UserIcon src={reply.profileImage?reply.profileImage:"/Images/Pharm.png"} alt="pharmacist" />
           <UserName>{reply.userName}</UserName>
           <Created>{new Date(reply.createdAt).toLocaleDateString()}</Created>
         </UserInfo>

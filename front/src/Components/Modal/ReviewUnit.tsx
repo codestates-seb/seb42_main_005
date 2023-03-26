@@ -130,7 +130,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
       <section>
         <Upper>
           <UserInfo>
-            <UserIcon src={review.userImage} alt="일반계정 사용자의 이미지 입니다." />
+            <UserIcon src={review.profileImage?review.profileImage:"/Images/User.png"} alt="일반계정 사용자의 이미지 입니다." />
             <UserName>{review.userName}</UserName>
             <Created>{new Date(review.createdAt).toLocaleDateString()}</Created>
             <StarContainer>
@@ -140,7 +140,6 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
             </StarContainer>
           </UserInfo>
           <ButtonContainer>
-            <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsReplyFormShown(true)} />
             {user?.userRole === "일반회원" && user?.name === reviewUserName ? (
               <>
                 <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsOnEdit(true)} />
