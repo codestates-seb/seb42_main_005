@@ -1,15 +1,15 @@
-import { useDaumPostcodePopup } from "react-daum-postcode";
-import React, { useState, useEffect } from "react";
+import {useDaumPostcodePopup} from "react-daum-postcode";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { validators } from "../../Components/SignUpForm/Validation";
+import {validators} from "../../Components/SignUpForm/Validation";
 import SignUpInput from "../../Components/SignUpForm/SignUpInput";
 import InputAlert from "./InputAlert";
-import { APIS } from "../../Api/APIs";
+import {APIS} from "../../Api/APIs";
 import Button from "../../Components/Ul/Button";
-import { useAppSelector } from "../../Redux/hooks";
-import { AiOutlineExclamationCircle } from "react-icons/ai";
-import { MdOutlineAddAPhoto } from "react-icons/md";
+import {useAppSelector} from "../../Redux/hooks";
+import {AiOutlineExclamationCircle} from "react-icons/ai";
+import {MdOutlineAddAPhoto} from "react-icons/md";
 
 interface Props {
   scriptUrl?: string;
@@ -34,7 +34,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
   useEffect(() => {
     const getReviews = async () => {
       await axios
-        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`) //TODO - REDUX TOOLKIT
+        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`) 
         .then((response) => {
           setMyInfo(response.data.response);
           setMyName(response.data.response.name);

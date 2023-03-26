@@ -3,11 +3,10 @@ package com.project.mainproject.user.controller;
 import com.project.mainproject.dto.PageInfo;
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
-import com.project.mainproject.dummy.CommonStub;
+import com.project.mainproject.stub.CommonStub;
 import com.project.mainproject.user.dto.*;
 import com.project.mainproject.user.dto.db.DBUserInfo;
 import com.project.mainproject.user.entity.Pharmacy;
-import com.project.mainproject.user.entity.User;
 import com.project.mainproject.user.mapper.UserMapper;
 import com.project.mainproject.user.service.UserService;
 import com.project.mainproject.utils.UriCreator;
@@ -88,9 +87,9 @@ public class UserController {
     @PatchMapping("/password/{userIdx}")
     public ResponseEntity findPassword(@PathVariable("userIdx") Long userIdx,
                                        @RequestBody UserFindPasswordDto findPasswordDto) {
-        // TODO: Send Password Init Email
+//         TODO: Send Password Init Email
 
-        SingleResponseDto response = CommonStub.getSingleResponseStub();
+        SingleResponseDto response = CommonStub.getSingleResponseStub(PROCESS_COMPLETED);
         return ResponseEntity.ok().body(response);
     }
 

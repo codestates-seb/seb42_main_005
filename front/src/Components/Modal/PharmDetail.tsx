@@ -1,30 +1,22 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import WriteReviewForm from "./WriteReviewForm";
 import PharmRank from "../Ul/PharmRank";
 import PharmInfo from "./PharmInfo";
 import ReviewList from "./Reviews";
 import Button from "../Ul/Button";
-import { zIndex_Modal } from "../../Util/z-index";
-import { getLocalStorage } from "../../Api/localStorage";
-import {
-  TYPE_Pharm,
-  TYPE_setIsModalUp,
-  TYPE_like,
-  TYPE_pharmDetail,
-  TYPE_reviewList,
-  TYPE_setReviewList,
-} from "../../Api/TYPES";
-import { HiXMark } from "react-icons/hi2";
+import {zIndex_Modal} from "../../Util/z-index";
+import {getLocalStorage} from "../../Api/localStorage";
+import {TYPE_like, TYPE_reviewList, TYPE_setIsModalUp, TYPE_setReviewList,} from "../../Api/TYPES";
+import {HiXMark} from "react-icons/hi2";
 
 interface Props {
   setIsModalUp: TYPE_setIsModalUp;
   like: TYPE_like;
   setLike: any;
   storeIdx: number;
-  Pharm?: TYPE_Pharm;
-  pharmDetail: TYPE_pharmDetail;
+  pharmDetail: any;
   reviewList: TYPE_reviewList;
   setReviewList: TYPE_setReviewList;
 }
@@ -34,7 +26,6 @@ export default function PharmDetail({
   like,
   setLike,
   storeIdx,
-  Pharm,
   pharmDetail,
   reviewList,
   setReviewList,
@@ -47,6 +38,7 @@ export default function PharmDetail({
     alert("로그인을 해주세요!");
     navigate("/login");
   };
+  
 
   return (
     <ModalBackDrop onClick={() => setIsModalUp(false)}>
@@ -55,8 +47,8 @@ export default function PharmDetail({
           <HiXMark id="close" onClick={() => setIsModalUp(false)} aria-hidden="true" />
         </CloseBtnContainer>
         <InfoHeader>
-          <InfoTitle>{Pharm?.name}</InfoTitle>
-          <PharmRank rating={Pharm?.rating} likes={Pharm?.pickedStoreCount} reviewCount={Pharm?.reviewCount} />
+          <InfoTitle>{pharmDetail?.name}</InfoTitle>
+          <PharmRank rating={pharmDetail?.rating} likes={pharmDetail?.pickedStoreCount} reviewCount={pharmDetail?.reviewCount} />
         </InfoHeader>
         <Constant>
           <PharmInfo like={like} setLike={setLike} pharmDetail={pharmDetail} />
@@ -65,15 +57,14 @@ export default function PharmDetail({
             setReviewList={setReviewList}
             setIsReviewFormShown={setIsReviewFormShown}
             storeIdx={storeIdx}
-            Pharm={Pharm}
+            Pharm={pharmDetail}
           />
         </Constant>
         {token && isReviewFormShown ? (
           <WriteReviewForm
-            Pharm={Pharm}
+            Pharm={pharmDetail}
             setIsReviewFormShown={setIsReviewFormShown}
-            storeIdx={Pharm?.storeIdx}
-            reviewList={reviewList}
+            storeIdx={pharmDetail?.storeIdx}
             setReviewList={setReviewList}
           />
         ) : null}

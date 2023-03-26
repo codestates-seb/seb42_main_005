@@ -1,25 +1,24 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { APIS } from "../../Api/APIs";
+import {APIS} from "../../Api/APIs";
 import Textarea from "../Ul/Textarea";
 import Button from "../Ul/Button";
-import { TYPE_Pharm, TYPE_setIsReviewFormShown, TYPE_reviewList, TYPE_setReviewList } from "../../Api/TYPES";
-import { useAppSelector } from "../../Redux/hooks";
-import { zIndex_Modal } from "../../Util/z-index";
-import { MdOutlineAddAPhoto } from "react-icons/md";
-import { BiPhotoAlbum } from "react-icons/bi";
-import { HiXMark } from "react-icons/hi2";
+import {TYPE_Pharm, TYPE_setIsReviewFormShown, TYPE_setReviewList} from "../../Api/TYPES";
+import {useAppSelector} from "../../Redux/hooks";
+import {zIndex_Modal} from "../../Util/z-index";
+import {MdOutlineAddAPhoto} from "react-icons/md";
+import {BiPhotoAlbum} from "react-icons/bi";
+import {HiXMark} from "react-icons/hi2";
 
 interface Props {
   Pharm: TYPE_Pharm | undefined;
   setIsReviewFormShown: TYPE_setIsReviewFormShown;
   storeIdx: number | undefined;
-  reviewList: TYPE_reviewList;
   setReviewList: TYPE_setReviewList;
 }
 
-export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx, reviewList, setReviewList }: Props) {
+export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx, setReviewList }: Props) {
   const [imageSrc, setImageSrc]: any = useState(null);
   const [imgFile, setImgFile]: any = useState(null);
   const onUpload = (e: any) => {
@@ -65,7 +64,7 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
   const onSubmit: any = async (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
     let data: any = {
-      userIdx: user.userIdx, //TODO - REDUX TOOLKIT
+      userIdx: user.userIdx,
       content: review.content,
       rating: review.rating,
     };
@@ -127,53 +126,17 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
       <InputBot>
         <Rating>
           <StarContainer>
-            <Star
-              src={`${review.rating > 0 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+            {new Array(5).fill("").map((_, i)=><Star
+              src={`${review.rating > i ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
               onClick={() =>
                 setReview({
                   ...review,
-                  rating: 1,
+                  rating: i+1,
                 })
               }
-            />
-            <Star
-              src={`${review.rating > 1 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
-              onClick={() =>
-                setReview({
-                  ...review,
-                  rating: 2,
-                })
-              }
-            />
-            <Star
-              src={`${review.rating > 2 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
-              onClick={() =>
-                setReview({
-                  ...review,
-                  rating: 3,
-                })
-              }
-            />
-            <Star
-              src={`${review.rating > 3 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
-              onClick={() =>
-                setReview({
-                  ...review,
-                  rating: 4,
-                })
-              }
-            />
-            <Star
-              src={`${review.rating > 4 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
-              onClick={(e) =>
-                setReview({
-                  ...review,
-                  rating: 5,
-                })
-              }
-            />
+            />)}
           </StarContainer>
-          <RateNum readOnly type="text" name="rating" value={`${review.rating}`} onChange={handlerRate}></RateNum>
+          <RateNum readOnly type="text" name="rating" value={`${review.rating} / 5`} onChange={handlerRate}></RateNum>
         </Rating>
         <Button type="submit" color="blue" size="md" text="작성완료" icon={true} />
       </InputBot>
@@ -303,12 +266,11 @@ const Star = styled.img`
   width: 20px;
 `;
 const RateNum = styled.input`
-  display: none;
   margin-left: 3px;
   width: 4rem;
   color: var(--black-300);
-  font-size: 23px;
-  font-weight: bold;
+  font-size: 20px;
+  font-weight: 600;
   border: none;
   &:focus {
     border: none;

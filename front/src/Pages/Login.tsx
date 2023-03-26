@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
-import { BsPersonCircle } from "react-icons/bs";
+import {BsPersonCircle} from "react-icons/bs";
 import SignUpInput from "../Components/SignUpForm/SignUpInput";
-import { AiOutlineLock } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
-import { validators } from "../Components/SignUpForm/Validation";
+import {AiOutlineLock} from "react-icons/ai";
+import {Link, useNavigate} from "react-router-dom";
+import {validators} from "../Components/SignUpForm/Validation";
 import ErrorAlert from "../Components/SignUpForm/ErrorAlert";
 import axios from "axios";
-import { APIS } from "../Api/APIs";
-import { setLocalStorage } from "../Api/localStorage";
-import { useAppDispatch, useAppSelector } from "../Redux/hooks";
-import { getUserInfo } from "../Redux/slice/userSlice";
+import {APIS} from "../Api/APIs";
+import {setLocalStorage} from "../Api/localStorage";
+import {useAppDispatch, useAppSelector} from "../Redux/hooks";
+import {getUserInfo} from "../Redux/slice/userSlice";
 
 export default function Login() {
   const [loginForm, setLoginForms] = useState({
@@ -88,13 +88,10 @@ export default function Login() {
         .then((res) => {
           let accessToken = res.headers.authorization;
           let refreshToken = res.headers.refresh;
-
           setLocalStorage("access_token", accessToken);
           setLocalStorage("refresh_token", refreshToken);
-
           console.log(accessToken);
           console.log(refreshToken);
-
           axios.defaults.headers.common["Authorization"] = `${accessToken}`;
           dispatch(getUserInfo(res.data));
           return res;
@@ -105,11 +102,12 @@ export default function Login() {
           }
           navigate("/");
         })
-        .catch((err) => {
-          if (err?.response?.status === 401) {
+        .catch((error) => {
+          if (error?.response?.status === 401) {
             alert("ID 또는 비밀번호가 일치하지 않습니다.");
           }
-          console.log(err);
+          console.log("ID/PW 일치여부가 아닌 다른 에러 발생");
+          console.log(error);
         });
     };
     postLogin();
@@ -117,16 +115,11 @@ export default function Login() {
 
   //! POST : 로그인 - Auth
   const postAuthSignUp = async () => {
-    try {
-      //TODO /api/oauth2/authorization/{provider}
-      const provider = ""; //! 여기 수정 필요
-      await axios({
-        url: `${APIS.POST_LOGIN_AUTH}/${provider}`,
-        method: "post",
-      });
-    } catch (error) {
+    const provider = ""; //! 여기 수정 필요
+    await axios.post(`${APIS.POST_LOGIN_AUTH}/${provider}`).catch((error) => {
+      console.log("Auth 로그인하던 중 에러 발생");
       console.log(error);
-    }
+    });
   };
 
   return (

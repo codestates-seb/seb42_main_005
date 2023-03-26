@@ -1,13 +1,13 @@
 import styled from "styled-components";
-import { useState } from "react";
+import {useState} from "react";
 import axios from "axios";
-import { validators } from "../Components/SignUpForm/Validation";
+import {validators} from "../Components/SignUpForm/Validation";
 import SignUpInput from "../Components/SignUpForm/SignUpInput";
 import ErrorAlert from "../Components/SignUpForm/ErrorAlert";
 import Button from "../Components/Ul/Button";
-import { APIS } from "../Api/APIs";
-import { useAppSelector } from "../Redux/hooks";
-import { BsPersonCircle } from "react-icons/bs";
+import {APIS} from "../Api/APIs";
+import {useAppSelector} from "../Redux/hooks";
+import {BsPersonCircle} from "react-icons/bs";
 
 export default function FindPW() {
   const [findPassword, setFindPassword] = useState<string>("");
@@ -37,7 +37,6 @@ export default function FindPW() {
     }
     if (error === true) {
       return alert("항목을 다시 확인해주세요");
-      //!PATCH_FINDPW url 고치기   ${user.userIdx}
     } else
       await axios.patch(APIS.PATCH_FINDPW, { email }).catch((error) => {
         console.log("비밀번호 찾기 요청 보내던 중 에러 발생");

@@ -46,13 +46,13 @@ public class TransOperatingTime {
 
     public OperatingDayOfWeekDto transFromDBDataToResponseData(DBStoreDetailDto dbStoreDetailDto) {
         return OperatingDayOfWeekDto.builder().monday(Optional.ofNullable(dbStoreDetailDto.getMonday()).orElse(new OperatingTime(null, null)))
-                .tuesday(Optional.ofNullable(dbStoreDetailDto.getTuesday()).orElse(new OperatingTime(null, null)))
-                .wednesday(Optional.ofNullable(dbStoreDetailDto.getWednesday()).orElse(new OperatingTime(null, null)))
-                .thursday(Optional.ofNullable(dbStoreDetailDto.getThursday()).orElse(new OperatingTime(null, null)))
-                .friday(Optional.ofNullable(dbStoreDetailDto.getFriday()).orElse(new OperatingTime(null, null)))
-                .saturday(Optional.ofNullable(dbStoreDetailDto.getSaturday()).orElse(new OperatingTime(null, null)))
-                .sunday(Optional.ofNullable(dbStoreDetailDto.getSunday()).orElse(new OperatingTime(null, null)))
-                .holiday(Optional.ofNullable(dbStoreDetailDto.getHoliday()).orElse(new OperatingTime(null, null)))
+                .tuesday(Optional.ofNullable(dbStoreDetailDto.getTuesday()).orElse(null))
+                .wednesday(Optional.ofNullable(dbStoreDetailDto.getWednesday()).orElse(null))
+                .thursday(Optional.ofNullable(dbStoreDetailDto.getThursday()).orElse(null))
+                .friday(Optional.ofNullable(dbStoreDetailDto.getFriday()).orElse(null))
+                .saturday(Optional.ofNullable(dbStoreDetailDto.getSaturday()).orElse(null))
+                .sunday(Optional.ofNullable(dbStoreDetailDto.getSunday()).orElse(null))
+                .holiday(Optional.ofNullable(dbStoreDetailDto.getHoliday()).orElse(null))
                 .build();
     }
 }

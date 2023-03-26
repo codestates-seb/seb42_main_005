@@ -1,16 +1,21 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import styled from "styled-components";
 import axios from "axios";
 import AdminTabs from "./AdminTabs";
 import CheckBox from "../../Components/Ul/CheckBox";
+import {useAppSelector} from "../../Redux/hooks";
 import Button from "../../Components/Ul/Button";
-import { APIS } from "../../Api/APIs";
-import { AiOutlineExclamationCircle } from "react-icons/ai";
+import {APIS} from "../../Api/APIs";
+import {AiOutlineExclamationCircle} from "react-icons/ai";
 
 export default function Users() {
   const [users, setUsers] = useState<never[]>([]);
   const [time, setTime] = useState<number>(0);
   const [checkedList, setCheckedList] = useState<Array<any>>([]);
+
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
 
   //! GET : 전체 회원 리스트 불러오기
   useEffect(() => {
@@ -18,7 +23,10 @@ export default function Users() {
       await axios
         .get(APIS.GET_ADMIN_USERS)
         .then((response) => setUsers(response.data.response.content))
-        .catch((error) => {console.log("전체회원리스트 불러오던 중 에러 발생");console.log(error)});
+        .catch((error) => {
+          console.log("전체회원리스트 불러오던 중 에러 발생");
+          console.log(error);
+        });
     };
     getUsers();
   }, []);
@@ -33,13 +41,16 @@ export default function Users() {
     },
     [checkedList],
   );
-
+  console.log(users);
   const data = { userIdxs: checkedList };
   //! POST : 계정 정지
   const blockUsers = async () => {
     await axios
       .post(`${APIS.POST_ADMIN_BLOCK}?period=${time}`, data)
-      .catch((error) => {console.log("계정 정지하던 중 에러 발생");console.log(error)})
+      .catch((error) => {
+        console.log("계정 정지하던 중 에러 발생");
+        console.log(error);
+      })
       .then(() => location.reload());
   };
 
@@ -47,7 +58,10 @@ export default function Users() {
   const fireUsers = async () => {
     await axios
       .post(APIS.POST_ADMIN_FIRE, data)
-      .catch((error) => {console.log("계정 강퇴하던 중 에러 발생");console.log(error)})
+      .catch((error) => {
+        console.log("계정 강퇴하던 중 에러 발생");
+        console.log(error);
+      })
       .then(() => location.reload());
   };
 
@@ -55,8 +69,18 @@ export default function Users() {
   const restoreUsers = async () => {
     await axios
       .post(APIS.POST_ADMIN_RESTORE, data)
-      .catch((error) => {console.log("계정 복구하던 중 에러 발생");console.log(error)})
+      .catch((error) => {
+        console.log("계정 복구하던 중 에러 발생");
+        console.log(error);
+      })
       .then(() => location.reload());
+  };
+
+  const returnAccountState = (accountState: any) => {
+    if (accountState === "ACTIVE") return "활동회원";
+    if (accountState === "TEMPORARY") return "승인대기";
+    if (accountState === "SUSPENDED") return "강퇴회원";
+    if (accountState === "WITHDRAWN") return "탈퇴회원";
   };
 
   return (
@@ -64,64 +88,75 @@ export default function Users() {
       <Wrapper>
         <AdminTabs current="users" />
         <Page>
-          <Header>
-            <span>전체회원관리</span>
-            <ButtonContainer>
-              <Select onChange={(e: any) => setTime(e.target.value)}>
-                <Option value={0}>정지옵션</Option>
-                <option value={3}>3일</option>
-                <option value={7}>7일</option>
-                <option value={30}>30일</option>
-              </Select>
-              <Button color="blue" size="md" text="선택정지" onClick={() => blockUsers()} />
-              <Button color="mint" size="md" text="선택복구" onClick={() => restoreUsers()} />
-              <Button color="red" size="md" text="선택강퇴" onClick={() => fireUsers()} />
-            </ButtonContainer>
-          </Header>
-          <Table>
-            <Label>
-              <Values className="checkBox">
-                <CheckBox />
-              </Values>
-              <Values className="classification">구분</Values>
-              <Values className="accountStatus">계정상태</Values>
-              <Values className="nickname">닉네임</Values>
-              <Values className="email">email</Values>
-              <Values className="returnAt">복구예정일</Values>
-              <Values className="subscription">가입일</Values>
-              <Values className="reviewCount">리뷰 수</Values>
-              <Values className="reportCount">신고 수</Values>
-            </Label>
-            {users.length ? (
-              <BelowLable>
-                {users.map((user: any, i) => (
-                  <Content key={i} className={user.userStatus === "ACTIVE" ? "" : "suspended"}>
-                    <Values className="checkBox">
-                      <CheckBox
-                        id={user.userIdx}
-                        onChange={(e: any) => {
-                          onCheckedItem(e.target.checked, e.target.id);
-                        }}
-                      />
-                    </Values>
-                    <Values className="classification">{user.userType}</Values>
-                    <Values className="accountStatus">{user.userStatus}</Values>
-                    <Values className="nickname">{user.name}</Values>
-                    <Values className="email">{user.email}</Values>
-                    <Values className="returnAt">{user.returnAt}</Values>
-                    <Values className="subscription">{new Date(user.createdAt).toLocaleDateString()}</Values>
-                    <Values className="reviewCount">{user.reviewCount}</Values>
-                    <Values className="reportCount">{user.reportCount}</Values>
-                  </Content>
-                ))}
-              </BelowLable>
-            ) : (
-              <Instead>
-                <AiOutlineExclamationCircle aria-hidden="true" />
-                <span>가입된 회원이 없습니다.</span>
-              </Instead>
-            )}
-          </Table>
+          {user?.userRole === "관리자" ? (
+            <>
+              <Header>
+                <span>전체회원관리</span>
+                <ButtonContainer>
+                  <Select onChange={(e: any) => setTime(e.target.value)}>
+                    <Option value={0}>정지옵션</Option>
+                    <option value={3}>3일</option>
+                    <option value={7}>7일</option>
+                    <option value={30}>30일</option>
+                  </Select>
+                  <Button color="blue" size="md" text="선택정지" onClick={() => blockUsers()} />
+                  <Button color="mint" size="md" text="선택복구" onClick={() => restoreUsers()} />
+                  <Button color="red" size="md" text="선택강퇴" onClick={() => fireUsers()} />
+                </ButtonContainer>
+              </Header>
+              <Table>
+                <Label>
+                  <Values className="checkBox">
+                    <CheckBox />
+                  </Values>
+                  <Values className="classification">구분</Values>
+                  <Values className="accountStatus">계정상태</Values>
+                  <Values className="nickname">닉네임</Values>
+                  <Values className="email">email</Values>
+                  <Values className="returnAt">복구예정일</Values>
+                  <Values className="subscription">가입일</Values>
+                  <Values className="reviewCount">리뷰 수</Values>
+                  <Values className="reportCount">신고 수</Values>
+                </Label>
+                {users.length ? (
+                  <BelowLable>
+                    {users.map((user: any, i) => (
+                      <Content key={i} className={user.userStatus === "ACTIVE" ? "" : "suspended"}>
+                        <Values className="checkBox">
+                          <CheckBox
+                            id={user.userIdx}
+                            onChange={(e: any) => {
+                              onCheckedItem(e.target.checked, e.target.id);
+                            }}
+                          />
+                        </Values>
+                        <Values className="classification">{user.userType}</Values>
+                        <Values className="accountStatus">{returnAccountState(user.userStatus)}</Values>
+                        <Values className="nickname">{user.name}</Values>
+                        <Values className="email">{user.email}</Values>
+                        <Values className="returnAt">
+                          {user.bannedRestoreDate ? new Date(user.bannedRestoreDate).toLocaleDateString() : ""}
+                        </Values>
+                        <Values className="subscription">{new Date(user.createdAt).toLocaleDateString()}</Values>
+                        <Values className="reviewCount">{user.reviewCount}</Values>
+                        <Values className="reportCount">{user.reportCount}</Values>
+                      </Content>
+                    ))}
+                  </BelowLable>
+                ) : (
+                  <Instead>
+                    <AiOutlineExclamationCircle aria-hidden="true" />
+                    <span>가입된 회원이 없습니다.</span>
+                  </Instead>
+                )}
+              </Table>
+            </>
+          ) : (
+            <NonAdmin>
+              <AiOutlineExclamationCircle aria-hidden="true" />
+              <span>권한이 없습니다.</span>
+            </NonAdmin>
+          )}
         </Page>
       </Wrapper>
     </WholePage>
@@ -237,6 +272,18 @@ const Instead = styled.section`
   span {
     font-size: 2rem;
   }
+`;
+const NonAdmin = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  height: 100%;
+  width: 100%;
+  color: var(--black-100);
+  font-size: 3rem;
+  font-weight: bold;
 `;
 const Content = styled.article`
   display: flex;

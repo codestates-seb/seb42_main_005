@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import axios from "axios";
 import PharmDetail from "../../Components/Modal/PharmDetail";
-import { APIS } from "../../Api/APIs";
-import { useAppSelector } from "../../Redux/hooks";
-import { IoIosArrowDropright } from "react-icons/io";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import {APIS} from "../../Api/APIs";
+import {useAppSelector} from "../../Redux/hooks";
+import {IoIosArrowDropright} from "react-icons/io";
+import {RiDeleteBin6Line} from "react-icons/ri";
 
 interface Props {
   likedPharmacy: any;
@@ -53,7 +53,7 @@ export default function LikedPharmacyUnit({ likedPharmacy, setLikedPharmacies }:
       console.log(error);
     });
     await axios
-      .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`) //TODO - REDUX TOOLKIT
+      .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`)
       .then((response) => setLikedPharmacies(response.data))
       .catch((error) => {
         console.log("찜리스트 다시 받아오던 중 에러 발생");

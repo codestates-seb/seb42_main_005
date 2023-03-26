@@ -9,14 +9,11 @@ import com.project.mainproject.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
-import java.security.Principal;
 
 @Slf4j
 @RestController
@@ -66,7 +63,7 @@ public class StoreController {
     /*
      *  찜한 약국 보여주기
      * */
-    @GetMapping("/user/{userIdx}/pick/")
+    @GetMapping("/users/{userIdx}/pick")
     public ResponseEntity getPickedStoreList(@PathVariable Long userIdx) {
         SingleResponseDto pickedStoreList = storeGetService.getPickedStoreList(userIdx);
 
@@ -89,7 +86,8 @@ public class StoreController {
     @PostMapping("/image")
     public ResponseEntity updateImage(@RequestPart MultipartFile profileImage , @RequestParam Long userIdx) {
         SingleResponseDto updateImageResult = storeService.updateImage(userIdx, profileImage);
-        URI location = UriCreator.createUri("/api/user/{storeIdx}", userIdx);
+        URI location = UriCreator.createUri("/api/user/", userIdx);
+
         return ResponseEntity.ok().header("location",location.toString()).body(updateImageResult);
     }
 

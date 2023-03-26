@@ -15,4 +15,8 @@ public class UserContext extends User {
         super(username, password, authorities);
         this.userId = userId;
     }
+
+    public UserContext(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, authorities);
+    }
 }

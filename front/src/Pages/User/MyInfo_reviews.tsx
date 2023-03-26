@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 import styled from "styled-components";
 import MyReview from "../User/MyInfo_MyReview";
-import { APIS } from "../../Api/APIs";
+import {APIS} from "../../Api/APIs";
 import axios from "axios";
-import { useAppSelector } from "../../Redux/hooks";
-import { IoMdAddCircleOutline } from "react-icons/io";
+import {useAppSelector} from "../../Redux/hooks";
+import {IoMdAddCircleOutline} from "react-icons/io";
 
 export default function MyInfoReviews() {
   const [reviewList, setReviewList] = useState([]);
@@ -18,7 +18,7 @@ export default function MyInfoReviews() {
   useEffect(() => {
     const getMyReviews = async () => {
       await axios
-        .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`) //TODO - REDUX TOOLKIT
+        .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`) 
         .then((response) => setReviewList(response.data))
         .catch((error) => {
           console.log("내가 작성한 리뷰리스트 받아오던 중 에러 발생");
@@ -27,8 +27,6 @@ export default function MyInfoReviews() {
     };
     getMyReviews();
   }, []);
-
-  console.log(reviewList);
 
   return (
     <Content>

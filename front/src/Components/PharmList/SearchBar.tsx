@@ -1,12 +1,42 @@
-import { BsSearch } from "react-icons/bs";
+import {useState} from "react";
 import styled from "styled-components";
+import {BsSearch} from "react-icons/bs";
 
-export default function SearchBar() {
+interface Props {
+  totalPharmList: object[];
+  setTotalPharmList: any;
+  makeMap: any;
+  useSearch: any;
+}
+
+export default function SearchBar({ totalPharmList, setTotalPharmList, makeMap, useSearch }: Props) {
+  const [keyword, setKeyword] = useState("");
+
+  const handleInputChange = (e: any) => {
+    setKeyword(e.target.value);
+  };
+
+  const handleKeyPress = (e: any) => {
+    if (e.key === "Enter") {
+      useSearch(keyword, totalPharmList, setTotalPharmList, makeMap);
+    }
+  };
+
+  const searchPharm = async () => {
+    useSearch(keyword, totalPharmList, setTotalPharmList, makeMap);
+  };
+
   return (
     <WrapperSearch>
       <label htmlFor="search box" />
-      <InputSearch id="search box" placeholder="약국 검색.." />
-      <ButtonSearch>
+      <InputSearch
+        id="search box"
+        placeholder="약국 검색.."
+        value={keyword}
+        onChange={handleInputChange}
+        onKeyPress={handleKeyPress}
+      />
+      <ButtonSearch onClick={searchPharm}>
         <BsSearch className="searchIcon" aria-hidden="true" />
       </ButtonSearch>
     </WrapperSearch>

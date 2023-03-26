@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import axios from "axios";
 import PharmDetail from "../../Components/Modal/PharmDetail";
 import PharmRank from "../../Components/Ul/PharmRank";
-import { APIS } from "../../Api/APIs";
+import {APIS} from "../../Api/APIs";
 import DropDown from "./DropDown";
-import { useAppSelector } from "../../Redux/hooks";
-import { MdOutlineAddAPhoto } from "react-icons/md";
-import { IoIosArrowDropright } from "react-icons/io";
-import { IoIosArrowDropdown } from "react-icons/io";
+import {useAppSelector} from "../../Redux/hooks";
+import {MdOutlineAddAPhoto} from "react-icons/md";
+import {IoIosArrowDropdown, IoIosArrowDropright} from "react-icons/io";
 
 export default function PharmacyInformation() {
   const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
@@ -40,7 +39,7 @@ export default function PharmacyInformation() {
   const onModalUp = () => {
     const getPharmDetail = async () => {
       await axios
-        .get(`${APIS.GET_PHARMLIST}/${user.storeIdx}`) //TODO - REDUX TOOLKIT
+        .get(`${APIS.GET_PHARMLIST}/${user.storeIdx}`)
         .then((response) => setPharmDetail(response.data.response))
         .catch((error) => {
           console.log("약국 상세정보 받아오던 중 에러 발생");
@@ -49,7 +48,7 @@ export default function PharmacyInformation() {
     };
     const getReviewList = async () => {
       await axios
-        .get(`${APIS.GET_PHARMLIST}/${user.storeIdx}/review`) //TODO - REDUX TOOLKIT
+        .get(`${APIS.GET_PHARMLIST}/${user.storeIdx}/review`)
         .then((response) => setReviewList(response.data.response.storeReviews))
         .catch((error) => {
           console.log("약국 리뷰 받아오던 중 에러 발생");
@@ -62,22 +61,16 @@ export default function PharmacyInformation() {
 
   const submitPharmImg = (e: any) => {
     e.preventDefault();
-    //!백엔드한테 키값,url 확인하기 => 이미지 보내는데 에러남
     const formDataImgsubmit = new FormData();
     formDataImgsubmit.append("image", imgFile);
     formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(user.userIdx)], { type: "application/json" }));
 
     const submitNewImg: any = async () => {
-      try {
-        //!PATCH_USER_IMG는 바꿈
-        await axios({
-          url: `${APIS.PATCH_USER_IMG}/image`,
-          method: "patch",
-          data: formDataImgsubmit,
-        });
-      } catch (error) {
+      //! 키값, url 확인하기 => 이미지 보낼 시 에러남
+      await axios.patch(`${APIS.PATCH_PHARM_IMG}/image`, formDataImgsubmit).catch((error) => {
+        console.log("약국 사진 보내던 중 에러 발생");
         console.log(error);
-      }
+      });
     };
     submitNewImg();
   };
@@ -91,7 +84,7 @@ export default function PharmacyInformation() {
           setIsModalUp={setIsModalUp}
           like={like}
           setLike={setLike}
-          storeIdx={user.storeIdx} //TODO - REDUX TOOLKIT
+          storeIdx={user.storeIdx}
           pharmDetail={pharmDetail}
           reviewList={reviewList}
           setReviewList={setReviewList}

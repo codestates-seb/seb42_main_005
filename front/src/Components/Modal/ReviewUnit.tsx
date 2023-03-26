@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import axios from "axios";
-import ReviewOfReview from "./ReviewOfReview";
+import ReplyOfReview from "./ReplyOfReview";
 import Textarea from "../Ul/Textarea";
 import Button from "../Ul/Button";
 import Input from "../Ul/Input";
-import { APIS } from "../../Api/APIs";
-import { TYPE_setReviewList, TYPE_reviewList } from "../../Api/TYPES";
-import { useAppSelector } from "../../Redux/hooks";
-import { getLocalStorage } from "../../Api/localStorage";
-import { HiXMark } from "react-icons/hi2";
-import { BsFillStarFill } from "react-icons/bs";
+import {APIS} from "../../Api/APIs";
+import {TYPE_reviewList, TYPE_setReviewList} from "../../Api/TYPES";
+import {useAppSelector} from "../../Redux/hooks";
+import {getLocalStorage} from "../../Api/localStorage";
+import {HiXMark} from "react-icons/hi2";
+import {BsFillStarFill} from "react-icons/bs";
 
 interface Props {
   review: any;
@@ -22,16 +22,15 @@ interface Props {
 }
 
 export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, setReviewList, reviewUserName }: Props) {
-  const [isCommentFormShown, setIsCommentFormShown] = useState<React.SetStateAction<boolean>>(false);
+  const [isReplyFormShown, setIsReplyFormShown] = useState<React.SetStateAction<boolean>>(false);
   const [isOnEdit, setIsOnEdit] = useState<React.SetStateAction<boolean>>(false);
   const [reviewContent, setReviewContent] = useState<React.SetStateAction<any>>(review.content);
-  const [commentContent, setCommentContent] = useState<React.SetStateAction<any>>("");
-
+  const [replyContent, setReplyContent] = useState<React.SetStateAction<any>>("");
   const handleReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReviewContent(e.target.value);
   };
-  const handleComment = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCommentContent(e.target.value);
+  const handleReply = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setReplyContent(e.target.value);
   };
 
   const user = useAppSelector((state: any) => {
@@ -47,7 +46,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
     } else if (e.key === "Enter") {
       e.preventDefault();
       const data: any = {
-        userIdx: user.userIdx, //TODO - REDUX TOOLKIT
+        userIdx: user.userIdx, 
         content: reviewContent,
         rating: review.rating,
       };
@@ -103,19 +102,15 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
       e.stopPropagation();
     } else if (e.key === "Enter") {
       e.preventDefault();
-      const newComment = {
-        storeIdx,
-        userIdx: user.userIdx, //TODO - REDUX TOOLKIT
-        content: commentContent,
-      };
       await axios
-        .post(`${APIS.POST_REPLY}/${reviewIdx}/reply`, newComment)
-        .then(() => setCommentContent(""))
-        .then(() => setIsCommentFormShown(false))
-        .catch((error) => {
-          console.log("리뷰의 댓글을 작성하던 중 에러 발생");
-          console.log(error);
-        });
+        .post(`${APIS.POST_REPLY}/${reviewIdx}/reply`, {
+          storeIdx,
+          userIdx: user.userIdx,
+          content: replyContent,
+        })
+        .then(() => setReplyContent(""))
+        .then(() => setIsReplyFormShown(false))
+        .catch((error) => {console.log("리뷰의 댓글을 작성하던 중 에러 발생");console.log(error)});
       await axios
         .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
         .then((response) => {
@@ -135,7 +130,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
       <section>
         <Upper>
           <UserInfo>
-            <UserIcon src={review.userImage} alt="일반계정 사용자의 이미지 입니다." />
+            <UserIcon src={review.profileImage?review.profileImage:"/Images/User.png"} alt="일반계정 사용자의 이미지 입니다." />
             <UserName>{review.userName}</UserName>
             <Created>{new Date(review.createdAt).toLocaleDateString()}</Created>
             <StarContainer>
@@ -144,11 +139,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
               ))}
             </StarContainer>
           </UserInfo>
-          {/* 여기 계정에 따른 로직 작성 필요 */}
           <ButtonContainer>
-            {/* 일반계정이면 && 해당 리뷰의 userIdx 와 리덕스 툴킷의 내 userIdx 가 같을 때 => 수정 + 삭제 버튼이 보임 */}
-            {/* 약사계정이면 && 해당 약국의 storIdx 와 리덕스 툴킷의 내 storeIdx 가 같을 때 => 댓글 + 신고 버튼이 보임 */}
-            {/* 로그인 상태여야 함 */}
             {user?.userRole === "일반회원" && user?.name === reviewUserName ? (
               <>
                 <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsOnEdit(true)} />
@@ -156,7 +147,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
               </>
             ) : null}
             {user?.userRole === "약국회원" && user?.storeidx === storeIdx ? (
-              <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsCommentFormShown(true)} />
+              <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsReplyFormShown(true)} />
             ) : null}
             {token && user?.name !== reviewUserName ? (
               <Button color="l_black" size="sm" text="신 고" onClick={() => reportReview()} />
@@ -184,11 +175,11 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
           <ReviewImg src={review.reviewImage} />
         </Lower>
       </section>
-      {isCommentFormShown ? (
+      {isReplyFormShown ? (
         <WriteCommentForm>
           <Instruction>
             <p>댓글을 작성해주세요. 작성 완료 시 'Enter'를 눌러주세요.</p>
-            <HiXMark id="close" onClick={() => setIsCommentFormShown(false)} aria-hidden="true" />
+            <HiXMark id="close" onClick={() => setIsReplyFormShown(false)} aria-hidden="true" />
           </Instruction>
           <label htmlFor="comment of review" id="hide" />
           <Input
@@ -196,14 +187,14 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
             placeholder="감사합니다 :)"
             isValid={true}
             icon={true}
-            value={commentContent}
-            onChange={handleComment}
+            value={replyContent}
+            onChange={handleReply}
             onKeyPress={postReply}
           />
         </WriteCommentForm>
       ) : null}
       {review.replies?.map((reply: any) => (
-        <ReviewOfReview
+        <ReplyOfReview
           key={reply.replyIdx}
           reviewIdx={reviewIdx}
           reply={reply}
