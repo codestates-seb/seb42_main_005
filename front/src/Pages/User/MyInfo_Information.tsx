@@ -218,9 +218,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
         .patch(`${APIS.PATCH_USER_INFO}/${user.userIdx}`, newUserData)
         .then(() => setIsEditing(false))
         .catch((error) => {
-          error.response.status === 406
-            ? alert("현재비밀번호가 가입시 비밀번호와 다릅니다")
-            : console.log("내 정보 수정하던 중 에러 발생");
+          console.log("내 정보 수정하던 중 에러 발생");
           console.log(error);
         });
       await axios
