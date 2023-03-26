@@ -47,8 +47,6 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
     setIsModalUp(true);
   };
 
-  console.log(pharmDetail);
-
   //! POST : 찜하기/찜취소
   const likeThisPharmacy = async () => {
     await axios

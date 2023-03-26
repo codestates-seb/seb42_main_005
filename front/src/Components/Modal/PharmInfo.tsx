@@ -82,12 +82,12 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
         <InfoUnit>
           <InfoInfoTitle>영업시간</InfoInfoTitle>
           <InfoInfoContent>
-            {pharmDetail?.todayOperatingTime.operatingTime.startTime
+            {pharmDetail?.todayOperatingTime?.operatingTime?.startTime
               ? `${pharmDetail?.todayOperatingTime?.operatingTime?.startTime?.slice(
                   0,
                   -3,
                 )} - ${pharmDetail?.todayOperatingTime?.operatingTime?.endTime?.slice(0, -3)}`
-              : "정보가 없습니다."}
+              : "오늘은 휴무일입니다."}
             {!isDropDownDown ? (
               <More id={`dropDown ${isDropDownDown ? "close" : "open"}`} onClick={() => setIsDropDownDown(true)}>
                 영업시간 더보기
