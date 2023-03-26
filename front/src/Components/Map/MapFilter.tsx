@@ -6,32 +6,32 @@ import { RiHeartsLine } from "react-icons/ri";
 
 interface FilterProps {
   selected: string;
-  onClickMapHome?: (e: React.MouseEvent<HTMLSpanElement>) => void;
-  onClickInBusiness?: (e: React.MouseEvent<HTMLSpanElement>) => void;
-  onClickMidnight?: (e: React.MouseEvent<HTMLSpanElement>) => void;
+  onClickNot?: (e: React.MouseEvent<HTMLSpanElement>) => void;
+  onClickOperatingTime?: (e: React.MouseEvent<HTMLSpanElement>) => void;
+  onClickNightOperating?: (e: React.MouseEvent<HTMLSpanElement>) => void;
   onClickBookmarks?: (e: React.MouseEvent<HTMLSpanElement>) => void;
 }
 
 export default function MapFilter({
   selected,
-  onClickMapHome,
-  onClickInBusiness,
-  onClickMidnight,
+  onClickNot,
+  onClickOperatingTime,
+  onClickNightOperating,
   onClickBookmarks,
 }: FilterProps) {
   return (
     <ContainerFillter>
-      <ButtonFillter title={"map_home"} selected={selected} onClick={onClickMapHome}>
+      <ButtonFillter title={"not"} selected={selected} onClick={onClickNot}>
         <HiOutlineHome className="icon" />
         <div className="label">지도 홈</div>
       </ButtonFillter>
       <span className="partition" />
-      <ButtonFillter title={"in_business"} selected={selected} onClick={onClickInBusiness}>
+      <ButtonFillter title={"operatingTime"} selected={selected} onClick={onClickOperatingTime}>
         <AiOutlineMedicineBox className="icon" />
         <div className="label">영업 중</div>
       </ButtonFillter>
       <span className="partition" />
-      <ButtonFillter title={"midnight"} selected={selected} onClick={onClickMidnight}>
+      <ButtonFillter title={"nightOperating"} selected={selected} onClick={onClickNightOperating}>
         <IoCloudyNightOutline className="icon" />
         <div className="label">심 야</div>
       </ButtonFillter>

@@ -1,10 +1,10 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
+import Loading from "../Ul/Loading";
 import MapFilter from "./MapFilter";
 import MapButtons from "./MapButtons";
-// import { useMap } from "../../hooks/useMap";
 import { zIndex_KakaoMap } from "../../Util/z-index";
-import { SELECT_HIDDEN, SELECT_OPTION_MAP } from "../../Util/type";
+import { SELECT_HIDDEN } from "../../Util/type";
 
 declare global {
   interface Window {
@@ -12,32 +12,66 @@ declare global {
   }
 }
 interface Props {
+  loading: boolean;
+  sorted: any;
+  selected: any;
+  setSelected: any;
   hidden: SELECT_HIDDEN;
-  setHidden: Dispatch<SetStateAction<SELECT_HIDDEN>>;
-  totalPharmList: any;
-  setTotalPharmList: any;
-  _map: any
+  totalPharmList: never[];
+  setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>;
+  makeMap: any;
+  useViewMap: any;
 }
 
-export default function KakaoMap({ hidden, setHidden, totalPharmList, setTotalPharmList, _map }: Props) {
-  const [selected, setSelected] = useState<SELECT_OPTION_MAP>("map_home");
-  // const { _map } = useMap( totalPharmList, setTotalPharmList );
-
+export default function KakaoMap({
+  loading,
+  sorted,
+  selected,
+  setSelected,
+  hidden,
+  totalPharmList,
+  setTotalPharmList,
+  makeMap,
+  useViewMap,
+}: Props) {
+  //* 필터버튼 클릭 시
+  const ClickedFilter = () => {
+    if (makeMap) {
+      useViewMap(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
+    }
+  };
   return (
-    <ContainerMap id="map" className={hidden ? "close" : ""}>
-      <ControllerTop className={hidden ? "close" : ""}>
-        <MapFilter
-          selected={selected}
-          onClickMapHome={() => setSelected("map_home")}
-          onClickInBusiness={() => setSelected("in_business")}
-          onClickMidnight={() => setSelected("midnight")}
-          onClickBookmarks={() => setSelected("bookmarks")}
-        />
-      </ControllerTop>
-      <ControllerBottom>
-        <MapButtons _map={_map} />
-      </ControllerBottom>
-    </ContainerMap>
+    <>
+      <ContainerMap id="map" className={hidden ? "close" : ""}>
+        {loading ? (
+          <WrapLoading>
+            <Loading />
+          </WrapLoading>
+        ) : (
+          <>
+            <ControllerTop className={hidden ? "close" : ""}>
+              <MapFilter
+                selected={selected}
+                onClickNot={() => [setSelected("not"), ClickedFilter()]}
+                onClickOperatingTime={() => [setSelected("operatingTime"), ClickedFilter()]}
+                onClickNightOperating={() => [setSelected("nightOperating"), ClickedFilter()]}
+                onClickBookmarks={() => [setSelected("bookmarks"), ClickedFilter()]}
+              />
+            </ControllerTop>
+            <ControllerBottom>
+              <MapButtons
+                sorted={sorted}
+                selected={selected}
+                totalPharmList={totalPharmList}
+                setTotalPharmList={setTotalPharmList}
+                makeMap={makeMap}
+                useViewMap={useViewMap}
+              />
+            </ControllerBottom>
+          </>
+        )}
+      </ContainerMap>
+    </>
   );
 }
 
@@ -49,7 +83,6 @@ const ContainerMap = styled.div`
   justify-content: center;
   width: calc(100vw - 30rem);
   height: 100vh;
-  background-color: var(--black-200);
   z-index: ${zIndex_KakaoMap.MapContainer};
   transition: 0.2s;
   &.close {
@@ -85,4 +118,16 @@ const ControllerBottom = styled.div`
   bottom: 40px;
   z-index: ${zIndex_KakaoMap.MapButtons};
   transition: 0.2s;
+`;
+const WrapLoading = styled.div`
+  position: relative;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 100vh;
+  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) !important;
+  /* IE에서도 동작하도록 MS 프리픽스 추가 */
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70) !important;
+  opacity: 0.7 !important;
 `;
