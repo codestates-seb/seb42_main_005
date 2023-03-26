@@ -1,5 +1,5 @@
 //! API
-export const API = "http://ec2-54-180-29-60.ap-northeast-2.compute.amazonaws.com:8080";
+export const API = import.meta.env.VITE_APP_API_URL;
 
 export const APIS = {
   POST_USER_SIGNUP_JWT: `${API}/api/users/normal`,
