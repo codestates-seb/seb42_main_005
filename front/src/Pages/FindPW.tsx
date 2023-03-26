@@ -1,16 +1,17 @@
-import { useState } from "react";
 import styled from "styled-components";
+import { useState } from "react";
 import axios from "axios";
-import Button from "../Components/Ul/Button";
+import { validators } from "../Components/SignUpForm/Validation";
 import SignUpInput from "../Components/SignUpForm/SignUpInput";
 import ErrorAlert from "../Components/SignUpForm/ErrorAlert";
+import Button from "../Components/Ul/Button";
+import { APIS } from "../Api/APIs";
+import { useAppSelector } from "../Redux/hooks";
 import { BsPersonCircle } from "react-icons/bs";
-import { API_FindPW } from "../Api/APIs";
-import { validators } from "../Components/SignUpForm/Validation";
 
 export default function FindPW() {
-  const [findPassword, setFindPassword] = useState("");
-  const [error, setError] = useState(false);
+  const [findPassword, setFindPassword] = useState<string>("");
+  const [error, setError] = useState<boolean>(false);
 
   const changeEmailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -22,6 +23,10 @@ export default function FindPW() {
     setError(errors);
   };
 
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
   //! PATCH (?) 비밀번호 찾기
   const onSubmit: any = async (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
@@ -32,14 +37,11 @@ export default function FindPW() {
     }
     if (error === true) {
       return alert("항목을 다시 확인해주세요");
+      //!PATCH_FINDPW url 고치기   ${user.userIdx}
     } else
-      await axios({
-        //? userIdx 가 없는데 어떻게 보내지? 지금은 일단 임의로 1
-        url: `${API_FindPW.REAL_API}/${1}`,
-        method: "patch",
-        data: {
-          email,
-        },
+      await axios.patch(APIS.PATCH_FINDPW, { email }).catch((error) => {
+        console.log("비밀번호 찾기 요청 보내던 중 에러 발생");
+        console.log(error);
       });
   };
 

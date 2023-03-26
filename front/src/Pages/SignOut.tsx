@@ -1,28 +1,41 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import Button from "../Components/Ul/Button";
-import { API_SignOut } from "../Api/APIs";
+import { APIS } from "../Api/APIs";
+import { useAppDispatch, useAppSelector } from "../Redux/hooks";
+import { DeleteUserInfo } from "../Redux/slice/userSlice";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function SignOut() {
   const [isChecked, setIsChecked] = useState(false);
   const [errMsg, setErrMsg] = useState(false);
 
-  //! DELETE : 일반회원 회원가입 - JWT
-  //* 토큰 지우고 디스패치 날리기
-  const signOut = async () => {
-    isChecked ? setErrMsg(false) : setErrMsg(true);
-    try {
-      //TODO /api/users/{userIdx}
-      //? userIdx 는 리덕스 툴킷에서 가져오기 지금은 임의로 1
-      await axios({
-        url: `${API_SignOut.REAL_API}/${1}`,
-        method: "delete",
-      });
-    } catch (error) {
-      console.log(error);
+  const navigate = useNavigate();
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+  const dispatch = useAppDispatch();
+
+  const signOut = () => {
+    if (!isChecked) {
+      return setErrMsg(true);
     }
+    const signOutDelete = async () => {
+      await axios
+        .delete(`${APIS.DELETE_SIGNOUT}/${user.userIdx}`)
+        .then(() => {
+          localStorage.clear();
+          dispatch(DeleteUserInfo());
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    alert("그동안 저희 사이트를 이용해주셔서 감사합니다.");
+    navigate("/");
+    signOutDelete();
   };
 
   return (

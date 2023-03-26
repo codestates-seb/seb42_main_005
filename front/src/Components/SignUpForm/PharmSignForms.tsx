@@ -10,12 +10,12 @@ import { FaUserEdit, FaMapMarkerAlt } from "react-icons/fa";
 import ErrorAlert from "./ErrorAlert";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { API_PharmSignUpForms } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 
 export default function PharmSignForms() {
   const [businessImgName, setBusinessImgName] = useState<string>("");
   const [pharmImgName, setPharmImgName] = useState<string>("");
-  //에러날때를 대비해서 남겨둠!
+  // 에러날때를 대비해서 남겨둠!
   // const [businessImgFile, setbusinessImgFile]: any = useState(null);
   // const [pharmImgFile, setPharmImgFile]: any = useState(null);
   // 나중에 파일 넘겨줄때 businessImgFile, pharmImgFile 넘겨주면 돼!
@@ -134,9 +134,8 @@ export default function PharmSignForms() {
     //! POST : 약사회원 회원가입 - JWT
     const postSignUp = async () => {
       try {
-        //TODO api/users/store
         await axios({
-          url: API_PharmSignUpForms.REAL_API,
+          url: APIS.POST_PHARM_SIGNUP_JWT,
           method: "post",
           data: formDataForsubmit,
         });

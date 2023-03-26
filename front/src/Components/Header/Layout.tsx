@@ -2,15 +2,10 @@ import { Outlet } from "react-router";
 import styled from "styled-components";
 import Header from "./Header";
 
-interface AccountProps {
-  isLogin: boolean;
-  account?: string;
-}
-
-export default function Layout({ isLogin, account }: AccountProps) {
+export default function Layout() {
   return (
     <div>
-      <Header isLogin={isLogin} account={account} />
+      <Header />
       <MainContainer>
         <main className="main">
           <Outlet />

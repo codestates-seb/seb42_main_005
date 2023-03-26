@@ -7,8 +7,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { validators } from "../Components/SignUpForm/Validation";
 import ErrorAlert from "../Components/SignUpForm/ErrorAlert";
 import axios from "axios";
-import { API_UserLogIn } from "../Api/APIs";
+import { APIS } from "../Api/APIs";
 import { setLocalStorage } from "../Api/localStorage";
+import { useAppDispatch, useAppSelector } from "../Redux/hooks";
+import { getUserInfo } from "../Redux/slice/userSlice";
 
 export default function Login() {
   const [loginForm, setLoginForms] = useState({
@@ -60,6 +62,11 @@ export default function Login() {
   };
 
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
   const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -72,32 +79,34 @@ export default function Login() {
     if (error.email === true || error.password === true) {
       return alert("항목을 다시 확인해주세요");
     }
+
     // { withCredentials: true }
     //! POST : 로그인 - JWT
     const postLogin = async () => {
       await axios
-        .post(API_UserLogIn.REAL_API, { email: email, password: password })
+        .post(APIS.POST_LOGIN_JWT, { email: email, password: password })
         .then((res) => {
-         
           let accessToken = res.headers.authorization;
           let refreshToken = res.headers.refresh;
-          
-          //localStorage에 토큰 넣음
+
           setLocalStorage("access_token", accessToken);
           setLocalStorage("refresh_token", refreshToken);
 
-          // API 요청마다 헤더에 access토큰 담아서 요청보냄
+          console.log(accessToken);
+          console.log(refreshToken);
+
           axios.defaults.headers.common["Authorization"] = `${accessToken}`;
-          //dispatch써야해=> userIdx, userType, storeIdx
-          // console.log(res.data);
+          dispatch(getUserInfo(res.data));
+          return res;
         })
-        .then(() => {
-          //!로그인 성공하면 이거 주석 풀어!
-          // navigate("/");
+        .then((res) => {
+          if (res.data.userRole == "관리자") {
+            return navigate("/admin-reports");
+          }
+          navigate("/");
         })
         .catch((err) => {
-          //! 상태코드 물어봐서 고치기
-          if (err.response.status === 401) {
+          if (err?.response?.status === 401) {
             alert("ID 또는 비밀번호가 일치하지 않습니다.");
           }
           console.log(err);
@@ -112,7 +121,7 @@ export default function Login() {
       //TODO /api/oauth2/authorization/{provider}
       const provider = ""; //! 여기 수정 필요
       await axios({
-        url: `${API_UserLogIn.AUTH_REAL_API}/${provider}`,
+        url: `${APIS.POST_LOGIN_AUTH}/${provider}`,
         method: "post",
       });
     } catch (error) {

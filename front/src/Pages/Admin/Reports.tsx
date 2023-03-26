@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
 import styled from "styled-components";
-import AdminTabs from "./AdminTabs";
-import Button from "../../Components/Ul/Button";
+import axios from "axios";
 import CheckBox from "../../Components/Ul/CheckBox";
-import { API_Reports } from "../../Api/APIs";
+import Button from "../../Components/Ul/Button";
+import { APIS } from "../../Api/APIs";
+import AdminTabs from "./AdminTabs";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Reports() {
@@ -14,12 +14,10 @@ export default function Reports() {
   //! GET : 신고리뷰 리스트 불러오기
   useEffect(() => {
     const getReports = async () => {
-      try {
-        const response = await axios.get(API_Reports.GET_REAL_API);
-        setReports(response.data.response.reportedReviews);
-      } catch (error) {
-        console.log(error);
-      }
+      await axios
+        .get(APIS.GET_ADMIN_REPORTED)
+        .then((response) => setReports(response.data.response.reportedReviews))
+        .catch((error) => {console.log("신고리뷰리스트 불러오던 중 에러 발생");console.log(error)});
     };
     getReports();
   }, []);
@@ -38,30 +36,18 @@ export default function Reports() {
 
   //! DELETE : 신고누적리뷰 삭제
   const deleteReview = async () => {
-    try {
-      await axios({
-        url: API_Reports.DELETE_REAL_API,
-        method: "delete",
-        data: { reviews: checkedList },
-      }).then(() => location.reload());
-    } catch (error) {
-      console.log(error);
-    }
+    await axios
+      .delete(APIS.DELETE_ADMIN_REVIEW_DELETE, { data: { reviews: checkedList } })
+      .catch((error) => {console.log("신고누적리뷰 삭제하던 중 에러 발생");console.log(error)})
+      .then(() => location.reload());
   };
 
   //! POST : 신고누적리뷰 복구
   const restoreReview = async () => {
-    try {
-      await axios({
-        url: API_Reports.POST_REAL_API,
-        method: "post",
-        data: { reviews: checkedList },
-      }).then(() => {
-        location.reload();
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    await axios
+      .post(APIS.POST_ADMIN_REVIEW_RESTORE, { reviews: checkedList })
+      .catch((error) => {console.log("신고누적리뷰 복구하던 중 에러 발생");console.log(error)})
+      .then(() => location.reload());
   };
 
   return (
@@ -72,14 +58,14 @@ export default function Reports() {
           <Header>
             <span>신고리뷰관리</span>
             <ButtonContainer>
-              <Button color="blue" size="md" text="선택삭제" onClick={() => deleteReview()} />
               <Button color="blue" size="md" text="선택복구" onClick={() => restoreReview()} />
+              <Button color="red" size="md" text="선택삭제" onClick={() => deleteReview()} />
             </ButtonContainer>
           </Header>
           <Table>
             <Label>
               <Values className="checkBox">
-                <CheckBox onChange={(e: any) => onCheckedItem(e.target.checked, e.target.id)} />
+                <CheckBox onChange={(e: React.ChangeEvent<HTMLInputElement>) => onCheckedItem(e.target.checked, e.target.id)} />
               </Values>
               <Values className="content">내용</Values>
               <Values className="email">email</Values>
@@ -168,9 +154,6 @@ const Table = styled.figure`
   flex-direction: column;
   height: 450px;
   overflow-x: scroll;
-  ::-webkit-scrollbar {
-    display: none;
-  }
   @media (max-width: 768px) {
     overflow-x: scroll;
     ::-webkit-scrollbar {

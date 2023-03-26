@@ -6,7 +6,7 @@ import UserAdress from "./UserAdress";
 import ErrorAlert from "./ErrorAlert";
 import SignUpInput from "./SignUpInput";
 import { validators } from "./Validation";
-import { API_UserSignUpForms } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 import { AiOutlineLock } from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
 import { FaUserEdit, FaMapMarkerAlt } from "react-icons/fa";
@@ -123,7 +123,7 @@ export default function UserSignUpForms() {
     const postSignUp = async () => {
       try {
         await axios({
-          url: API_UserSignUpForms.REAL_API,
+          url: APIS.POST_USER_SIGNUP_JWT,
           method: "post",
           data: data,
         });

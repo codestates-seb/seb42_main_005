@@ -15,7 +15,7 @@ import java.util.List;
 public abstract class StoreMapper {
     protected final TransOperatingTime transOperatingTime = new TransOperatingTime();
 
-    @Mapping(target = "operatingTime", source = ".")
+    @Mapping(target = "operatingTime", expression = "java(transOperatingTime.transFromDBDataToResponseData(dbStoreDetailDto))")
     @Mapping(target = "isOperating",expression = "java(transOperatingTime.todayOperating(dbStoreDetailDto).checkOperating())")
     @Mapping(target = "isOperatingNight",expression = "java(transOperatingTime.todayOperating(dbStoreDetailDto).isNightOperating())")
     @Mapping(target = "todayOperatingTime.operatingTime" , expression ="java(transOperatingTime.todayOperating(dBStoreDetailDto))")
