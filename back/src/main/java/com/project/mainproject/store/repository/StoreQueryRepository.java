@@ -35,7 +35,7 @@ public class StoreQueryRepository {
     }
 
     public DBStoreDetailDto findData(Long storeIdx,Long userIdx) {
-        DBStoreDetailDto dbStoreDetailDto = queryFactory
+        List<DBStoreDetailDto> dbStoreDetailDto = queryFactory
                 .select(new QDBStoreDetailDto(
                         store.storeIdx, store.name, store.address, store.longitude, store.latitude, store.tel, store.etc,
                         review.rating.avg(),
@@ -63,8 +63,12 @@ public class StoreQueryRepository {
                 .leftJoin(pickedStore.normal,normal)
                 .where(store.storeIdx.eq(storeIdx))
                 .groupBy(store.storeIdx, storeImage.imagePath,normal.userIdx)
-                .fetchOne();
-        return dbStoreDetailDto;
+                .fetch();
+        if (dbStoreDetailDto == null) {
+            return null;
+        }
+
+        return dbStoreDetailDto.get(0);
     }
 
     /*
