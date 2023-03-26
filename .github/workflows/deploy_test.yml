@@ -20,7 +20,7 @@ jobs:
 
       - name: Create application.yml
         run: |
-          cd ./src/main/resources
+          cd ./back/src/main/resources
           touch ./application.yml
           echo "${{env.APPLICATION_YML}}" > ./application.yml
         shell: bash
@@ -38,8 +38,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
+            ~./back/.gradle/caches
+            ~./back/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -47,7 +47,7 @@ jobs:
       - name: Build with Gradle
         run: |
           cd ./back
-          ./gradlew clean bootJar
+          ./back/gradlew clean bootJar
 
       - name: web docker build and push
         run: |
