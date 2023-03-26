@@ -57,13 +57,13 @@ jobs:
           docker push ${{ secrets.DOCKER_REPO }}
 
       # TODO: Executing remote ssh commands and docker-compose up
-      ## docker compose up
       - name: Executing remote ssh commands and docker-compose up
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.8
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
+          username: ${{ secrets.EC2_USERNAME }}
+          password: ${{ secrets.EC2_PASSWORD }}
+          port: 22
           script: |
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_REPO }}
