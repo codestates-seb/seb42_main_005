@@ -26,10 +26,11 @@
     "react-toastify": "^9.1.1",
     "redux-persist": "^6.0.0",
     "styled-components": "^5.3.8",
-    "v6": "^0.0.0"
+    "v6": "^0.0.0",
+    "vite-plugin-html": "^3.2.0"
   },
   "devDependencies": {
-    "@types/node": "^18.15.3",
+    "@types/node": "^18.15.10",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@types/styled-components": "^5.1.26",

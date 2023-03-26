@@ -1,12 +1,15 @@
-package com.project.mainproject.dummy;
+package com.project.mainproject.stub;
 
 import com.project.mainproject.dto.PageInfo;
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
+import com.project.mainproject.enums.ResultStatus;
+import org.springframework.http.HttpStatus;
 
 import static com.project.mainproject.enums.ResultStatus.PROCESS_COMPLETED;
 
 public class CommonStub {
+
     public static PageInfo getPageInfoStub() {
         return PageInfo.builder()
                 .page(0)
@@ -18,17 +21,17 @@ public class CommonStub {
                 .build();
     }
 
-    public static SingleResponseDto getSingleResponseStub() {
+    public static SingleResponseDto getSingleResponseStub(ResultStatus resultStatus) {
         return SingleResponseDto.builder()
-                .message(PROCESS_COMPLETED.getMessage())
-                .httpCode(PROCESS_COMPLETED.getHttpCode())
+                .message(resultStatus.getMessage())
+                .httpCode(resultStatus.getHttpCode())
                 .build();
     }
 
-    public static PageResponseDto getPageResponseStub() {
+    public static PageResponseDto getPageResponseStub(ResultStatus resultStatus) {
         return PageResponseDto.builder()
-                .message(PROCESS_COMPLETED.getMessage())
-                .httpCode(PROCESS_COMPLETED.getHttpCode())
+                .message(resultStatus.getMessage())
+                .httpCode(resultStatus.getHttpCode())
                 .pageInfo(getPageInfoStub())
                 .build();
     }

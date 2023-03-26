@@ -2,6 +2,7 @@ package com.project.mainproject.store.dto.DBdto;
 
 import com.project.mainproject.VO.OperatingTime;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
+@Builder
 public class DBStoreDetailDto {
     private Long storeIdx;
     private String name;

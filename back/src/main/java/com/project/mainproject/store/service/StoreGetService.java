@@ -30,12 +30,14 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class StoreGetService {
-    private final StoreRepository storeRepository;
     private final StoreQueryRepository storeQueryRepository;
-    private final StoreValidService storeValidService;
     private final StoreMapper storeMapper;
     private final RedisRepository redisRepository;
 
+
+    /*
+    * 약국 상세 정보 stub o
+    * */
     public SingleResponseDto getStoreDetailDto(Long storeIdx,Long userIdx) {
         DBStoreDetailDto findDetailDto = storeQueryRepository.findData(storeIdx,userIdx);
         log.info("### findDetailDto = {}", findDetailDto);
@@ -45,7 +47,7 @@ public class StoreGetService {
     }
 
     /*
-    * 거리기준 랭킹기준 찜 기준
+    * 거리기준 랭킹기준 찜 기준 stub o
     * */
     public SingleResponseDto getStoreListDto(GetStoreListRequestDto request, Long userIdx) {
         Boolean isHoliday = getIsHoliday();
@@ -66,7 +68,7 @@ public class StoreGetService {
     }
 
     /*
-    * 찜한 약국 리스트 보내주는 메서드
+    * 찜한 약국 리스트 보내주는 메서드 stub o
     * */
     public SingleResponseDto getPickedStoreList(Long userIdx) {
         List<DBPickedStoredListDto> findPickedList = storeQueryRepository.getPickedStoreList(userIdx);
@@ -78,13 +80,16 @@ public class StoreGetService {
     }
 
     /*
-     * 검색한 약국 리스트 보내주는 메서드
+     * 검색한 약국 리스트 보내주는 메서드 stub o
      * */
     public SingleResponseDto getSearchStoreList(String keyword) {
-        List<DBStoreSearchDto> responseDto = storeQueryRepository.searchStoreByNameOrAddress(keyword);
+        List<DBStoreSearchDto> responseName = storeQueryRepository.searchStoreByName(keyword);
+        List<DBStoreSearchDto> responseAddress = storeQueryRepository.searchStoreByAddress(keyword);
+
+        responseName.addAll(responseAddress);
 
         return SingleResponseDto.<List<DBStoreSearchDto>>builder()
-                .response(responseDto)
+                .response(responseName)
                 .message(ResultStatus.PROCESS_COMPLETED.getMessage())
                 .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
                 .build();
