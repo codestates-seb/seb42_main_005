@@ -13,4 +13,4 @@ jobs:
     steps:
       - name: Print Completed Message
         run: |
-          echo The PR of Backend was merged!!
+          echo The PR of Backend was merged!
