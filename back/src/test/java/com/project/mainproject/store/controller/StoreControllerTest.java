@@ -73,7 +73,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
     @MockBean
     private UserService userService;
 
-//    @Test
+    @Test
     @DisplayName("약국 정보 리스트 조회 Test : 성공")
     @WithMockUser
     void getStoreListTest() throws Exception {
@@ -157,7 +157,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
                 .andReturn();
     }
 
-//    @Test
+    @Test
     @DisplayName("약국 상세 조회 Test : 성공")
     @WithMockUser
     void getStoreDetailTest() throws Exception {
@@ -268,7 +268,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
                 .andReturn();
     }
 
-//    @Test
+    @Test
     @DisplayName("찜한 약국 리스트 : 성공")
     void pickedStoreListTest() throws Exception {
         Long storeIdx = 1L;
@@ -317,7 +317,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
                 .andReturn();
     }
 
-//    @Test
+    @Test
     @DisplayName("찜하기 테스트 찜 성공 시: 성공")
     void pickedStoreTest() throws Exception{
         Long storeIdx = 1L;
@@ -374,7 +374,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
                 )
                 .andReturn();
     }
-//    @Test
+    @Test
     @DisplayName("찜하기 테스트 찜 취라 시: 성공")
     void pickedStoreTest2() throws Exception{
         Long storeIdx = 1L;
@@ -428,7 +428,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
                 .andReturn();
     }
 
-//    @Test
+    @Test
     @DisplayName("약국 검색 테스트 : 성공")
     void searchStoreTest() throws Exception {
         Long storeIdx = 1L;
@@ -485,7 +485,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
                 )
                 .andReturn();
     }
-//    @Test
+    @Test
     @DisplayName("약국 사진 업로드 테스트 : 성공")
     void updateImageTest() throws Exception {
         Long storeIdx = 1L;

@@ -14,6 +14,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 public interface StoreControllerTestHelper extends ControllerTestHelper {
     String STORE_URL = "/api/store";
     String REVIEW_URL = "/review";
+    String USER_URL ="/users";
     String PICK_URL = "/pick";
 
     String RESOURCE_URI_STORE = "/{storeIdx}";
@@ -35,7 +36,7 @@ public interface StoreControllerTestHelper extends ControllerTestHelper {
     }
 
     default String getPickListURI() {
-        return STORE_URL + "/user" + RESOURCE_URI_STORE + PICK_URL +"/";
+        return STORE_URL + USER_URL + RESOURCE_URI_STORE + PICK_URL ;
     }//TODO : 수정 필요
 
     default String getURITwoURI() {

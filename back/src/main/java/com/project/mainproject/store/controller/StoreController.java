@@ -66,7 +66,7 @@ public class StoreController {
     /*
      *  찜한 약국 보여주기
      * */
-    @GetMapping("/user/{userIdx}/pick/")
+    @GetMapping("/users/{userIdx}/pick")
     public ResponseEntity getPickedStoreList(@PathVariable Long userIdx) {
         SingleResponseDto pickedStoreList = storeGetService.getPickedStoreList(userIdx);
 
