@@ -32,7 +32,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        run: chmod +x ./back/gradlew
 
       - name: Gradle Caching
         uses: actions/cache@v3
