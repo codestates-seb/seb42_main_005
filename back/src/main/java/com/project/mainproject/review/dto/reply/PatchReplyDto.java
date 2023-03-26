@@ -1,12 +1,14 @@
 package com.project.mainproject.review.dto.reply;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.util.Assert;
 
 @Getter
 @ToString
+@Builder
 @AllArgsConstructor
 public class PatchReplyDto {
     private Long storeIdx;
