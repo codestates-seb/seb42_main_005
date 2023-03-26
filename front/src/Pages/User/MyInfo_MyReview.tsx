@@ -51,7 +51,7 @@ export default function MyReview({ review, storeIdx, reviewIdx, idx }: Props) {
   const deleteReview = async () => {
     await axios.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`).catch((error) => console.log(error));
     await axios
-      .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`) //TODO - REDUX TOOLKIT
+      .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`) 
       .then((response) => setReviewList(response.data))
       .catch((error) => console.log(error));
   };

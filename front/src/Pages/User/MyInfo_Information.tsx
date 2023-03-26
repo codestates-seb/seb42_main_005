@@ -34,7 +34,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
   useEffect(() => {
     const getReviews = async () => {
       await axios
-        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`) //TODO - REDUX TOOLKIT
+        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`) 
         .then((response) => {
           setMyInfo(response.data.response);
           setMyName(response.data.response.name);

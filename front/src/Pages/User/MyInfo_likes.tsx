@@ -13,19 +13,20 @@ export default function MyInfoLikes() {
   const user = useAppSelector((state: any) => {
     return state.userInfo.response;
   });
+  
   //! GET : 내가 찜한 약국 리스트
-  // useEffect(() => {
-  //   const getLikedPharmList = async () => {
-  //     await axios
-  //       .get(`${APIS.GET_MY_LIKES}/${user.userIdx}/pick`) //TODO - REDUX TOOLKIT
-  //       .then((response) => setLikedPharmacies(response.data))
-  //       .catch((error) => {
-  //         console.log("내가 찜한 약국리스트 받아오던 중 에러 발생");
-  //         console.log(error);
-  //       });
-  //   };
-  //   getLikedPharmList();
-  // }, []);
+  useEffect(() => {
+    const getLikedPharmList = async () => {
+      await axios
+        .get(`${APIS.GET_MY_LIKES}/${user.userIdx}/pick`)
+        .then((response) => setLikedPharmacies(response.data))
+        .catch((error) => {
+          console.log("내가 찜한 약국리스트 받아오던 중 에러 발생");
+          console.log(error);
+        });
+    };
+    getLikedPharmList();
+  }, []);
 
   return (
     <Content>

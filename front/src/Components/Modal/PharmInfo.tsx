@@ -6,7 +6,7 @@ import { useAppSelector } from "../../Redux/hooks";
 import PharmRank from "../Ul/PharmRank";
 import AnyDropDown from "./AnyDropDown";
 import { APIS } from "../../Api/APIs";
-import { TYPE_setLike, TYPE_pharmDetail, TYPE_like, TYPE_Detail } from "../../Api/TYPES";
+import { TYPE_setLike, TYPE_like } from "../../Api/TYPES";
 import { getLocalStorage } from "../../Api/localStorage";
 
 interface Props {
@@ -69,7 +69,6 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
           <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." />
         )}
         {/* like 의 상태가 아니라 약국 정보에 내가 이 약국을 찜했는지 여부의 boolean 으로 바꿔야 함 */}
-
         <LikeButton onClick={likeButton}>
           {/* like 의 상태가 아니라 약국 정보에 내가 이 약국을 찜했는지 여부의 boolean 으로 바꿔야 함 */}
           {like ? (
@@ -78,15 +77,6 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
             <img src="./Images/UnHeart.png" alt="좋아요 하기 전의 빈 하트모양입니다." />
           )}
         </LikeButton>
-        {/* {like ? (
-          <LikeButton onClick={() => likeThisPharmacy()}>
-            <img src="./Images/Heart.png" alt="좋아요 상태의 꽉찬 하트입니다." />
-          </LikeButton>
-        ) : (
-          <LikeButton onClick={() => likeThisPharmacy()}>
-            <img src="./Images/UnHeart.png" alt="좋아요 전 상태의 빈 하트입니다." />
-          </LikeButton>
-        )} */}
       </InfoImgContainer>
       <InfoInfo>
         <InfoUnit>

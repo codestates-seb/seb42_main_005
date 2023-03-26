@@ -53,7 +53,7 @@ export default function LikedPharmacyUnit({ likedPharmacy, setLikedPharmacies }:
       console.log(error);
     });
     await axios
-      .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`) //TODO - REDUX TOOLKIT
+      .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`)
       .then((response) => setLikedPharmacies(response.data))
       .catch((error) => {
         console.log("찜리스트 다시 받아오던 중 에러 발생");

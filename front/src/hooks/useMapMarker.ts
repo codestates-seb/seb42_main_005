@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import axios from "axios";
 import { APIS } from "../Api/APIs";
 
@@ -129,7 +130,6 @@ export async function useSearch(
   setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>,
   makeMap: any,
 ) {
-  console.log(keyword);
   if (makeMap) {
     try {
       const response = await axios({

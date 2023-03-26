@@ -80,7 +80,6 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
           setIsModalUp={setIsModalUp}
           like={like}
           setLike={setLike}
-          Pharm={Pharm}
           storeIdx={Pharm.storeIdx}
           pharmDetail={pharmDetail}
           reviewList={reviewList}
@@ -93,16 +92,13 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." onClick={() => onModalUp()} />
         )}
-        {/* 리덕스 툴킷에 유저인덱스가 있으면, (+스토어인덱스가 없으면 === 일반회원) -> 로그인 후*/}
         <LikeButton onClick={likeButton}>
-          {/* like 의 상태가 아니라 약국 정보에 내가 이 약국을 찜했는지 여부의 boolean 으로 바꿔야 함 */}
           {like ? (
             <img src="./Images/Heart.png" alt="좋아요가 선택된 상태의 꽉 찬 하트모양입니다." />
           ) : (
             <img src="./Images/UnHeart.png" alt="좋아요 하기 전의 빈 하트모양입니다." />
           )}
         </LikeButton>
-        {/* 리덕스 툴킷에 유저인덱스가 없으면, -> 로그인 전*/}
       </InfoImgContainer>
       <PharmTitleBox>
         <PharmName onClick={() => setIsModalUp(true)}>{Pharm && Pharm.name}</PharmName>

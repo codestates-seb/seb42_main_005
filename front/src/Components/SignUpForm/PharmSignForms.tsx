@@ -15,10 +15,6 @@ import { APIS } from "../../Api/APIs";
 export default function PharmSignForms() {
   const [businessImgName, setBusinessImgName] = useState<string>("");
   const [pharmImgName, setPharmImgName] = useState<string>("");
-  // 에러날때를 대비해서 남겨둠!
-  // const [businessImgFile, setbusinessImgFile]: any = useState(null);
-  // const [pharmImgFile, setPharmImgFile]: any = useState(null);
-  // 나중에 파일 넘겨줄때 businessImgFile, pharmImgFile 넘겨주면 돼!
 
   const [pSignForm, setpSignForms] = useState({
     email: "",
@@ -237,7 +233,6 @@ export default function PharmSignForms() {
             name="businessImg"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               e.target.files && setBusinessImgName(e.target.files[0].name);
-              // e.target.files && setbusinessImgFile(e.target.files[0]);
             }}
           />
         </InputContainer>
@@ -255,7 +250,6 @@ export default function PharmSignForms() {
             name="pharmImg"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               e.target.files && setPharmImgName(e.target.files[0].name);
-              // e.target.files && setPharmImgFile(e.target.files[0]);
             }}
           />
         </InputContainer>
