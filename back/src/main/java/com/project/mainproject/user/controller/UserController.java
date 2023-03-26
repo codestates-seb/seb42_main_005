@@ -3,6 +3,7 @@ package com.project.mainproject.user.controller;
 import com.project.mainproject.dto.PageInfo;
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
+import com.project.mainproject.dto.UserIdxRequestDto;
 import com.project.mainproject.enums.ResultStatus;
 import com.project.mainproject.stub.CommonStub;
 import com.project.mainproject.user.dto.*;
@@ -26,6 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.net.URI;
 
 import static com.project.mainproject.enums.ResultStatus.PROCESS_COMPLETED;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
 @RequestMapping("/api/users")
@@ -147,10 +150,10 @@ public class UserController {
     /*
         회원 프로필 이미지 등록&수정
      */
-    @PostMapping("/image")
-    public ResponseEntity postUserProfileImage(Long userIdx,
-                                                @RequestParam MultipartFile profileImage) {
-        userService.patchUserProfile(userIdx, profileImage);
+    @PostMapping(value = "/image", consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity postUserProfileImage(@RequestPart UserIdxRequestDto userIdx,
+                                                @RequestPart MultipartFile profileImage) {
+        userService.patchUserProfile(userIdx.getUserIdx(), profileImage);
 
         URI location = UriCreator.createUri(USERS_DEFAULT_URL + "/image");
         SingleResponseDto response = SingleResponseDto.builder()

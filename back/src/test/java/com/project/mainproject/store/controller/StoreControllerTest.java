@@ -1,6 +1,7 @@
 package com.project.mainproject.store.controller;
 
 import com.project.mainproject.dto.SingleResponseDto;
+import com.project.mainproject.dto.UserIdxRequestDto;
 import com.project.mainproject.enums.ResultStatus;
 import com.project.mainproject.helper.store.StoreControllerTestHelper;
 import com.project.mainproject.security.JwtHelper;
@@ -489,14 +490,11 @@ class StoreControllerTest implements StoreControllerTestHelper {
     @DisplayName("약국 사진 업로드 테스트 : 성공")
     void updateImageTest() throws Exception {
         Long storeIdx = 1L;
-        Long userIdx = 1L;
-        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("userIdx", "1");
 
-        MockMultipartFile content = new MockMultipartFile("name", "", "application/json", "imageProfile".getBytes());
+        String userIdx = toJsonContent(new UserIdxRequestDto(1L));
+        MockMultipartFile content = new MockMultipartFile("userIdx", "", "application/json", userIdx.getBytes());
 
         SingleResponseDto responseDto = CommonStub.getSingleResponseStub(ResultStatus.PROCESS_COMPLETED);
-
         String rawPassword = "passwor12qwe!@#!d";
         String password = passwordEncoder.encode(rawPassword);
 
@@ -520,9 +518,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
                 .file("profileImage","storeImage".getBytes())
                 .file(content)
                 .header("Authorization", "Bearer " + accessToken)
-                .contentType("multipart/form-data")
                 .characterEncoding("UTF-8")
-                .params(queryParams)
         );
 
 
@@ -539,7 +535,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
                                 ),
                                 requestParts(
                                         partWithName("profileImage").description("변경할 프로필 이미지"),
-                                        partWithName("name").description("테스트 이상 무") //TODO :이거 뭔데 생기냐
+                                        partWithName("userIdx").description("사용자 식별자 ID")
                                 ),
                                 requestHeaders(
                                         headerWithName("Authorization").description("ACCESS 토큰")
