@@ -49,7 +49,7 @@ jobs:
           cd ./back
           ./gradlew clean bootJar
 
-      - name: web docker build and push
+      - name: Web docker build and push
         run: |
           cd ./back
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
@@ -57,3 +57,15 @@ jobs:
           docker push ${{ secrets.DOCKER_REPO }}
 
       # TODO: Executing remote ssh commands and docker-compose up
+      ## docker compose up
+      - name: Executing remote ssh commands and docker-compose up
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker rm -f $(docker ps -qa)
+            sudo docker pull ${{ secrets.DOCKER_REPO }}
+            docker-compose up -d
+            docker image prune -f
