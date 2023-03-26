@@ -52,3 +52,12 @@ mail:
 data-api:
   service-key: ${SERVICE_KEY}
   service-url: https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?
+cloud:
+  aws:
+    s3:
+      bucket: main-005-image
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: ${S3_ACCESS_KEY}
+      secretKey: ${S3_SECRET_KEY}
