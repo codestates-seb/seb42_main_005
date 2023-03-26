@@ -1,6 +1,7 @@
 package com.project.mainproject.store.controller;
 
 import com.project.mainproject.dto.SingleResponseDto;
+import com.project.mainproject.dto.UserIdxRequestDto;
 import com.project.mainproject.store.dto.GetStoreListRequestDto;
 import com.project.mainproject.store.service.StoreGetService;
 import com.project.mainproject.store.service.StoreService;
@@ -17,6 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.security.Principal;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @Slf4j
 @RestController
@@ -86,10 +90,10 @@ public class StoreController {
     /*
     * 약국 사진 변경 
     * */
-    @PostMapping("/image")
-    public ResponseEntity updateImage(@RequestPart MultipartFile profileImage , @RequestParam Long userIdx) {
-        SingleResponseDto updateImageResult = storeService.updateImage(userIdx, profileImage);
-        URI location = UriCreator.createUri("/api/user/", userIdx);
+    @PostMapping(value = "/image",consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity updateImage(@RequestPart MultipartFile profileImage , @RequestPart UserIdxRequestDto userIdx) {
+        SingleResponseDto updateImageResult = storeService.updateImage(userIdx.getUserIdx(), profileImage);
+        URI location = UriCreator.createUri("/api/user/", userIdx.getUserIdx());
 
         return ResponseEntity.ok().header("location",location.toString()).body(updateImageResult);
     }
