@@ -11,9 +11,10 @@ interface Props {
   storeIdx: number;
   reviewIdx: number;
   idx: number;
+  setMyReviewList: any;
 }
 
-export default function MyReview({ review, storeIdx, reviewIdx, idx }: Props) {
+export default function MyReview({ review, storeIdx, reviewIdx, idx, setMyReviewList }: Props) {
   const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
   const [pharmDetail, setPharmDetail] = useState<React.SetStateAction<any>>();
   const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
@@ -49,11 +50,17 @@ export default function MyReview({ review, storeIdx, reviewIdx, idx }: Props) {
 
   //! DELETE : 리뷰삭제
   const deleteReview = async () => {
-    await axios.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`).catch((error) => console.log(error));
+    await axios.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`).catch((error) => {
+      console.log("리뷰 삭제하던 중 에러 발생");
+      console.log(error);
+    });
     await axios
-      .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`) 
-      .then((response) => setReviewList(response.data))
-      .catch((error) => console.log(error));
+      .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`)
+      .then((response) => setMyReviewList(response.data.response.reviews))
+      .catch((error) => {
+        console.log("내가 작성한 리뷰리스트 받아오던 중 에러 발생");
+        console.log(error);
+      });
   };
 
   return (
@@ -76,7 +83,7 @@ export default function MyReview({ review, storeIdx, reviewIdx, idx }: Props) {
         {review.storeName}
       </Text>
       <Text className="review">{review.content}</Text>
-      <Text className="number">{review.createdAt}</Text>
+      <Text className="number">{new Date(review.modifiedAt).toLocaleDateString()}</Text>
       <Text className="single icon">
         <RiDeleteBin6Line aria-hidden="true" onClick={() => deleteReview()} />
       </Text>

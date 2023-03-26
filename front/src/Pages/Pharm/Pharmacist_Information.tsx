@@ -23,7 +23,7 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
 
   //! GET : 유저 정보
   useEffect(() => {
-    const getReviews = async () => {
+    const getUserInfo = async () => {
       await axios
         .get(`${APIS.GET_USER_INFO}/${user.userIdx}`)
         .then((response) => setMyInfo(response.data.response))
@@ -31,8 +31,17 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
           console.log("유저정보 받아오던 중 에러 발생");
           console.log(error);
         });
+      await axios
+        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`)
+        .then((response) => {
+          setMyInfo(response.data.response);
+        })
+        .catch((error) => {
+          console.log("내 정보 다시 가져오던 중 에러 발생");
+          console.log(error);
+        });
     };
-    getReviews();
+    getUserInfo();
   }, []);
 
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
@@ -49,17 +58,24 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
     });
   };
 
-  //! PATCH : 유저 이미지 업로드
+  //! POST : 유저 이미지 업로드
   const submitUserImg = (e: any) => {
     e.preventDefault();
     const formDataImgsubmit = new FormData();
     formDataImgsubmit.append("image", imgFile);
     formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(user.userIdx)], { type: "application/json" }));
     const submitNewImg: any = async () => {
-      await axios.patch(`${APIS.PATCH_USER_IMG}/image`, formDataImgsubmit).catch((error) => {
+      await axios.post(APIS.POST_USER_IMG, formDataImgsubmit).catch((error) => {
         console.log("이미지 업로드 하던 중 에러 발생");
         console.log(error);
       });
+      await axios
+        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`)
+        .then((response) => setMyInfo(response.data.response))
+        .catch((error) => {
+          console.log("유저정보 받아오던 중 에러 발생");
+          console.log(error);
+        });
     };
     submitNewImg();
   };

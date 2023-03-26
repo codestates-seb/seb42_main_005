@@ -89,16 +89,16 @@ const DropDownContainer = styled.section`
   justify-content: center;
   align-items: flex-start;
   padding: 8px 0;
-  bottom: -175px;
-  right: 30px;
-  @media (max-width: 768px) {
-    right: 50px;
-  }
   gap: 3px;
+  right: 30px;
+  bottom: -175px;
   background: var(--black-050);
   box-shadow: var(--bs-lg);
   border-radius: 3px;
   z-index: ${zIndex_Modal.AnyDropDown};
+  @media (max-width: 768px) {
+    right: 50px;
+  }
 `;
 const CloseBtnContainer = styled.header`
   cursor: pointer;

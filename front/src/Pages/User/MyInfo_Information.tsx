@@ -34,7 +34,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
   useEffect(() => {
     const getReviews = async () => {
       await axios
-        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`) 
+        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`)
         .then((response) => {
           setMyInfo(response.data.response);
           setMyName(response.data.response.name);
@@ -238,16 +238,17 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     submitNewUserInfo();
   };
 
+  //! PATCH : 유저 이미지 업로드
   const submitUserImg = (e: any) => {
     e.preventDefault();
     const formDataImgsubmit = new FormData();
     formDataImgsubmit.append("image", imgFile);
-
-    // TODO : 리덕스 툴킷에서 userIdx가져와 [JSON.stringify(userIdx)] 수정 => 아래주석 코드 지우면 안돼!
     formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(user.userIdx)], { type: "application/json" }));
-
     const submitNewImg: any = async () => {
-      await axios.patch(`${APIS.PATCH_USER_IMG}/${1}/image`, formDataImgsubmit).catch((error) => console.log(error));
+      await axios.post(APIS.POST_USER_IMG, formDataImgsubmit).catch((error) => {
+        console.log("이미지 업로드 하던 중 에러 발생");
+        console.log(error);
+      });
       await axios
         .get(`${APIS.GET_USER_INFO}/${user.userIdx}`)
         .then((response) => {
@@ -256,7 +257,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
           setMyAddress(response.data.response.address);
         })
         .catch((error) => {
-          console.log("내 이미지 수정하던 중 에러 발생");
+          console.log("유저정보 받아오던 중 에러 발생");
           console.log(error);
         });
     };

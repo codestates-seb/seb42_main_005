@@ -50,9 +50,12 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
   //! POST : 찜하기/찜취소
   const likeThisPharmacy = async () => {
     await axios
-      .post(`${APIS.POST_LIKE}/${storeIdx}/pick?userIdx=${user.userId}`)
+      .post(`${APIS.POST_LIKE}/${storeIdx}/pick?userIdx=${user.userIdx}`)
       .then(() => setLike(!like))
-      .catch((error) => console.log(error));
+      .catch((err) => {
+        console.log("찜하기 또는 찜 취소 하던 중 에러 발생");
+        console.log(err);
+      });
   };
 
   const nagigate = useNavigate();
@@ -140,8 +143,10 @@ const LikeButton = styled.span`
 `;
 const PharmTitleBox = styled.header`
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  padding: 0 15px;
+  gap: 7px;
+  padding: 0 20px;
 `;
 const PharmName = styled.h1`
   cursor: pointer;

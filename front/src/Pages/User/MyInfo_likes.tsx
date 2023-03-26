@@ -19,7 +19,7 @@ export default function MyInfoLikes() {
     const getLikedPharmList = async () => {
       await axios
         .get(`${APIS.GET_MY_LIKES}/${user.userIdx}/pick`)
-        .then((response) => setLikedPharmacies(response.data))
+        .then((response) => setLikedPharmacies(response.data.response))
         .catch((error) => {
           console.log("내가 찜한 약국리스트 받아오던 중 에러 발생");
           console.log(error);
