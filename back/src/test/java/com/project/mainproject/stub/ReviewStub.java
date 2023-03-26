@@ -124,6 +124,11 @@ public class ReviewStub {
 
     //response
     public static ListReportedReviewDto getListReportedReviewStub() {
+        List<ListReportedReviewDto.ReportedReviewDto> result = getReportedReviewListStub();
+        return ListReportedReviewDto.builder().reportedReviews(result).build();
+    }
+
+    public static List<ListReportedReviewDto.ReportedReviewDto> getReportedReviewListStub() {
         List<ListReportedReviewDto.ReportedReviewDto> result = new ArrayList<>();
 
         for (long i = 1L; i < 3; i++) {
@@ -136,7 +141,7 @@ public class ReviewStub {
                     .build();
             result.add(build);
         }
-        return ListReportedReviewDto.builder().reportedReviews(result).build();
+        return result;
     }
 
     /*

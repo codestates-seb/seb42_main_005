@@ -20,7 +20,6 @@ import com.project.mainproject.stub.ReviewStub;
 import com.project.mainproject.user.entity.User;
 import com.project.mainproject.user.repository.UserRepository;
 import com.project.mainproject.user.service.UserService;
-import com.project.mainproject.utils.ResponseBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,8 +76,7 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
     private JwtHelper jwtHelper;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private ResponseBuilder responseBuilder;
+
     @MockBean
     private ReviewMapper reviewMapper;
     @MockBean
