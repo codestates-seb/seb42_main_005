@@ -46,6 +46,7 @@ public interface ReviewMapper {
 
     List<GetUserReviewDto> reviewsToUserReviewsDto(List<Review> reviews);
 
+    @Mapping(target = "storeIdx", source = "store.storeIdx")
     @Mapping(target = "storeName", source = "store.name")
     GetUserReviewDto reviewToGetReviewDto(Review reviews);
 

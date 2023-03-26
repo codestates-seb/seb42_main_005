@@ -16,6 +16,7 @@ public class ListGetUserReviewDto {
     @Builder
     public static class GetUserReviewDto {
         private Long reviewIdx;
+        private Long storeIdx;
         private String content;
         private int rating;
         private String storeName;
