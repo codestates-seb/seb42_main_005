@@ -98,6 +98,7 @@ export default function Account() {
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">
           <img
+            // 임시 이미지 URL
             src={"Images/User.png"}
             alt="profile"
           />
