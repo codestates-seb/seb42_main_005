@@ -11,5 +11,6 @@ jobs:
     
     runs-on: ubuntu-latest
     steps:
-    - run: |
-        echo The PR of Backend was merged!!
+      - name: Print Completed Message
+      - run: |
+          echo The PR of Backend was merged~!!
