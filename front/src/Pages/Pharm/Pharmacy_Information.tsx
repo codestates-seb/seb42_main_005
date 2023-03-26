@@ -53,7 +53,7 @@ export default function PharmacyInformation() {
           setIsModalUp={setIsModalUp}
           like={like}
           setLike={setLike}
-          storeIdx={2}
+          storeIdx={2} //TODO - REDUX TOOLKIT
           pharmDetail={pharmDetail}
           reviewList={reviewList}
           setReviewList={setReviewList}
