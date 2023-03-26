@@ -5,8 +5,10 @@ import ReviewOfReview from "./ReviewOfReview";
 import Textarea from "../Ul/Textarea";
 import Button from "../Ul/Button";
 import Input from "../Ul/Input";
-import { APIS } from "../../Api/APIs"; 
+import { APIS } from "../../Api/APIs";
 import { TYPE_setReviewList, TYPE_reviewList } from "../../Api/TYPES";
+import { useAppSelector } from "../../Redux/hooks";
+import { getLocalStorage } from "../../Api/localStorage";
 import { HiXMark } from "react-icons/hi2";
 import { BsFillStarFill } from "react-icons/bs";
 
@@ -16,19 +18,25 @@ interface Props {
   storeIdx: number;
   reviewList: TYPE_reviewList;
   setReviewList: TYPE_setReviewList;
+  reviewUserName: string;
 }
 
-export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, setReviewList }: Props) {
+export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, setReviewList, reviewUserName }: Props) {
   const [isCommentFormShown, setIsCommentFormShown] = useState<React.SetStateAction<boolean>>(false);
   const [isOnEdit, setIsOnEdit] = useState<React.SetStateAction<boolean>>(false);
   const [reviewContent, setReviewContent] = useState<React.SetStateAction<any>>(review.content);
   const [commentContent, setCommentContent] = useState<React.SetStateAction<any>>("");
+
   const handleReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReviewContent(e.target.value);
   };
   const handleComment = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCommentContent(e.target.value);
   };
+
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
 
   //! PATCH : 리뷰수정
   const editReview = async (e: any) => {
@@ -39,20 +47,24 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
     } else if (e.key === "Enter") {
       e.preventDefault();
       const data: any = {
-        userIdx: 1, //TODO - REDUX TOOLKIT
+        userIdx: user.userIdx, //TODO - REDUX TOOLKIT
         content: reviewContent,
         rating: review.rating,
       };
-      await axios
-        .patch(`${APIS.PATCH_REVIEWS}/${storeIdx}/review/${reviewIdx}`, data)
-        .catch((error) => {console.log("리뷰를 수정하던 중 에러 발생");console.log(error)});
+      await axios.patch(`${APIS.PATCH_REVIEWS}/${storeIdx}/review/${reviewIdx}`, data).catch((error) => {
+        console.log("리뷰를 수정하던 중 에러 발생");
+        console.log(error);
+      });
       await axios
         .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
         .then((response) => {
           setReviewList(response.data.response.storeReviews);
         })
         .then(() => setIsOnEdit(false))
-        .catch((error) => {console.log("리뷰리스트를 다시 불러오던 중 에러 발생");console.log(error)});
+        .catch((error) => {
+          console.log("리뷰리스트를 다시 불러오던 중 에러 발생");
+          console.log(error);
+        });
     }
   };
 
@@ -64,18 +76,23 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
       .then((response) => {
         setReviewList(response.data.response.storeReviews);
       })
-      .catch((error) => {console.log("리뷰를 삭제하던 중 에러 발생");console.log(error)});
+      .catch((error) => {
+        console.log("리뷰를 삭제하던 중 에러 발생");
+        console.log(error);
+      });
   };
 
-  const data = {
-    userIdx: 1, //TODO - REDUX TOOLKIT
-    content: reviewContent,
-  };
   //! POST : 리뷰신고
   const reportReview = async () => {
     await axios
-      .post(`${APIS.POST_REPORT_REVIEW}/${storeIdx}/review/${reviewIdx}/report`, data)
-      .catch((error) => {console.log("리뷰를 신고하던 중 에러 발생");console.log(error)});
+      .post(`${APIS.POST_REPORT_REVIEW}/${storeIdx}/review/${reviewIdx}/report`, {
+        userIdx: user.userIdx,
+        content: reviewContent,
+      })
+      .catch((error) => {
+        console.log("리뷰를 신고하던 중 에러 발생");
+        console.log(error);
+      });
   };
 
   //! POST : 리뷰의 댓글작성
@@ -88,22 +105,30 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
       e.preventDefault();
       const newComment = {
         storeIdx,
-        userIdx: 1,  //TODO - REDUX TOOLKIT
+        userIdx: user.userIdx, //TODO - REDUX TOOLKIT
         content: commentContent,
       };
       await axios
         .post(`${APIS.POST_REPLY}/${reviewIdx}/reply`, newComment)
         .then(() => setCommentContent(""))
         .then(() => setIsCommentFormShown(false))
-        .catch((error) => {console.log("리뷰의 댓글을 작성하던 중 에러 발생");console.log(error)});
+        .catch((error) => {
+          console.log("리뷰의 댓글을 작성하던 중 에러 발생");
+          console.log(error);
+        });
       await axios
         .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
         .then((response) => {
           setReviewList(response.data.response.storeReviews);
         })
-        .catch((error) => {console.log("리뷰리스트를 다시 불러오던 중 에러 발생");console.log(error)});
+        .catch((error) => {
+          console.log("리뷰리스트를 다시 불러오던 중 에러 발생");
+          console.log(error);
+        });
     }
   };
+
+  const token = getLocalStorage("access_token");
 
   return (
     <ReviewUnitContainer>
@@ -122,12 +147,20 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
           {/* 여기 계정에 따른 로직 작성 필요 */}
           <ButtonContainer>
             {/* 일반계정이면 && 해당 리뷰의 userIdx 와 리덕스 툴킷의 내 userIdx 가 같을 때 => 수정 + 삭제 버튼이 보임 */}
-            <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsOnEdit(true)} />
-            <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReview()} />
             {/* 약사계정이면 && 해당 약국의 storIdx 와 리덕스 툴킷의 내 storeIdx 가 같을 때 => 댓글 + 신고 버튼이 보임 */}
-            <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsCommentFormShown(true)} />
             {/* 로그인 상태여야 함 */}
-            <Button color="l_black" size="sm" text="신 고" onClick={() => reportReview()} />
+            {user?.userRole === "일반회원" && user?.name === reviewUserName ? (
+              <>
+                <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsOnEdit(true)} />
+                <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReview()} />
+              </>
+            ) : null}
+            {user?.userRole === "약국회원" && user?.storeidx === storeIdx ? (
+              <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsCommentFormShown(true)} />
+            ) : null}
+            {token && user?.name !== reviewUserName ? (
+              <Button color="l_black" size="sm" text="신 고" onClick={() => reportReview()} />
+            ) : null}
           </ButtonContainer>
         </Upper>
         <Lower>

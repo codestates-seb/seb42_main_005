@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useAppSelector } from "../../Redux/hooks";
 import axios from "axios";
 import Input from "../Ul/Input";
 import Button from "../Ul/Button";
@@ -23,6 +24,10 @@ export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, rev
     setContent(e.target.value);
   };
 
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
   //! PATCH : 리뷰의 댓글수정
   const editCommentKeyPress = async (e: any) => {
     if (e.key === " " && e.getModifierState("Shift") === false) {
@@ -31,35 +36,44 @@ export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, rev
       e.stopPropagation();
     } else if (e.key === "Enter") {
       e.preventDefault();
-      const data = {
-        storeIdx,
-        userIdx: 1,  //TODO - REDUX TOOLKIT
-        content,
-      };
       await axios
-        .patch(`${APIS.PATCH_REPLY}/${reviewIdx}/reply/${reply.replyIdx}`, data)
+        .patch(`${APIS.PATCH_REPLY}/${reviewIdx}/reply/${reply.replyIdx}`, {
+          storeIdx,
+          userIdx: user.userIdx,
+          content,
+        })
         .then(() => setIsPatchFormShown(false))
-        .catch((error) => {console.log("리뷰의 댓글을 수정하던 중 에러 발생");console.log(error)});
+        .catch((error) => {
+          console.log("리뷰의 댓글을 수정하던 중 에러 발생");
+          console.log(error);
+        });
       await axios
         .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
         .then((response) => {
           setReviewList(response.data.response.storeReviews);
         })
-        .catch((error) => {console.log("리뷰리스트를 다시 불러오던 중 에러 발생");console.log(error)});
+        .catch((error) => {
+          console.log("리뷰리스트를 다시 불러오던 중 에러 발생");
+          console.log(error);
+        });
     }
   };
 
   // ! DELETE : 리뷰의 댓글삭제
   const deleteComment = async () => {
-    await axios
-      .delete(`${APIS.DELETE_REPLY}/${reviewIdx}/reply/${reply.replyIdx}`)
-      .catch((error) => {console.log("리뷰의 댓글을 삭제하던 중 에러 발생");console.log(error)});
+    await axios.delete(`${APIS.DELETE_REPLY}/${reviewIdx}/reply/${reply.replyIdx}`).catch((error) => {
+      console.log("리뷰의 댓글을 삭제하던 중 에러 발생");
+      console.log(error);
+    });
     await axios
       .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
       .then((response) => {
         setReviewList(response.data.response.storeReviews);
       })
-      .catch((error) => {console.log("리뷰리스트를 다시 불러오던 중 에러 발생");console.log(error)});
+      .catch((error) => {
+        console.log("리뷰리스트를 다시 불러오던 중 에러 발생");
+        console.log(error);
+      });
   };
 
   return (
@@ -75,8 +89,12 @@ export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, rev
         </UserInfo>
         <ButtonContainer>
           {/* 약사계정이면 && 해당 약국의 storeIdx 와 리덕스 툴킷의 내 storeIdx 가 같을 때 => 버튼이 보임 */}
-          <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsPatchFormShown(true)} />
-          <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteComment()} />
+          {user?.userRole === "약국회원" && storeIdx === user?.storeIdx ? (
+            <>
+              <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsPatchFormShown(true)} />
+              <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteComment()} />
+            </>
+          ) : null}
         </ButtonContainer>
       </Upper>
       <Comment>{reply.content}</Comment>

@@ -4,24 +4,31 @@ import styled from "styled-components";
 import MyReview from "../User/MyInfo_MyReview";
 import { APIS } from "../../Api/APIs";
 import axios from "axios";
+import { useAppSelector } from "../../Redux/hooks";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
 export default function MyInfoReviews() {
   const [reviewList, setReviewList] = useState([]);
 
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
   //! GET : 내가 작성한 리뷰 리스트
   useEffect(() => {
     const getMyReviews = async () => {
       await axios
-      .get(`${APIS.GET_MYREVIEWS}/${1}`) //TODO - REDUX TOOLKIT
-      .then((response) => setReviewList(response.data))
-      .catch((error) => {
-        console.log("내가 작성한 리뷰리스트 받아오던 중 에러 발생");
-        console.log(error);
-      });
+        .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`) //TODO - REDUX TOOLKIT
+        .then((response) => setReviewList(response.data))
+        .catch((error) => {
+          console.log("내가 작성한 리뷰리스트 받아오던 중 에러 발생");
+          console.log(error);
+        });
     };
     getMyReviews();
   }, []);
+
+  console.log(reviewList);
 
   return (
     <Content>
