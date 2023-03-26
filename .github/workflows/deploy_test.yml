@@ -47,7 +47,7 @@ jobs:
       - name: Build with Gradle
         run: |
           cd ./back
-          ./back/gradlew clean bootJar
+          ./gradlew clean bootJar
 
       - name: web docker build and push
         run: |
