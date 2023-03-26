@@ -18,6 +18,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 public class ReviewReport extends AuditableWithBy {

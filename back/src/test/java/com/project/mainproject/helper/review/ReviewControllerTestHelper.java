@@ -16,14 +16,18 @@ public interface ReviewControllerTestHelper extends ControllerTestHelper {
 
     String STORE_URL = "/api/store";
     String REVIEW_URL = "/review";
-
+    String API_URL = "/api";
+    String USERS_URL="/users";
     String RESOURCE_URI_STORE = "/{storeIdx}";
     String RESOURCE_URI_REVIEW = "/{reviewIdx}";
+    String RESOURCE_URI_USER = "/{userIdx}";
 
     default String getUrl() {
         return STORE_URL;
     }
-
+    default String getMyReviewUrl() {
+        return API_URL + USERS_URL+ RESOURCE_URI_USER;
+    }
     default String getURI() {
         return STORE_URL + RESOURCE_URI_STORE;
     }
@@ -45,6 +49,10 @@ public interface ReviewControllerTestHelper extends ControllerTestHelper {
 
         return Arrays.asList(parameterWithName("storeIdx").description("약국 식별자 ID"),
                 parameterWithName("reviewIdx").description("리뷰 식별자 ID"));
+    }
+    default List<ParameterDescriptor> getUserPathParameterDescriptor() {
+
+        return Arrays.asList(parameterWithName("userIdx").description("사용자 식별자 ID"));
     }
 
     /*
@@ -91,10 +99,8 @@ public interface ReviewControllerTestHelper extends ControllerTestHelper {
 
         return List.of(
                 fieldWithPath("userIdx").type(JsonFieldType.NUMBER).description("사용자 식별 ID"),
-                fieldWithPath("tags").type(JsonFieldType.ARRAY).description("태그 정보").optional(),
-                fieldWithPath("tags[].tagIdx").type(JsonFieldType.NUMBER).description("태그 식별 ID").optional(),
+                fieldWithPath("storeIdx").type(JsonFieldType.NUMBER).description("사용자 식별 ID"),
                 fieldWithPath("content").type(JsonFieldType.STRING).description("리뷰 본문"),
-                fieldWithPath("image").type(JsonFieldType.STRING).description("리뷰 사진").optional(),
                 fieldWithPath("rating").type(JsonFieldType.NUMBER).description("별점")
         );
     }

@@ -4,6 +4,15 @@ import com.project.mainproject.review.dto.*;
 import com.project.mainproject.review.dto.reply.PatchReplyDto;
 import com.project.mainproject.review.dto.reply.PostReplyDto;
 import com.project.mainproject.review.dto.reply.SimpleReplyDto;
+import com.project.mainproject.review.entity.Review;
+import com.project.mainproject.review.entity.ReviewImage;
+import com.project.mainproject.review.entity.ReviewReply;
+import com.project.mainproject.review.entity.ReviewReport;
+import com.project.mainproject.review.enums.ReportStatus;
+import com.project.mainproject.review.enums.ReviewStatus;
+import com.project.mainproject.user.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,6 +49,11 @@ public class ReviewStub {
 
     //response
     public static ListGetStoreReviewDto getStoreReviewStub() {
+        List<ListGetStoreReviewDto.StoreReviewDto> result = getStoreReviewListStub();
+        return ListGetStoreReviewDto.builder().storeReviews(result).build();
+    }
+
+    public static List<ListGetStoreReviewDto.StoreReviewDto> getStoreReviewListStub() {
         List<ListGetStoreReviewDto.StoreReviewDto> result = new ArrayList<>();
         for (Long i = 1L; i < 3L; i++) {
             ListGetStoreReviewDto.StoreReviewDto build = ListGetStoreReviewDto.StoreReviewDto.builder()
@@ -56,7 +70,7 @@ public class ReviewStub {
                     .build();
             result.add(build);
         }
-        return ListGetStoreReviewDto.builder().storeReviews(result).build();
+        return result;
     }
 
     //리뷰 작성, 수정에 응답으로 사용된다.
@@ -69,6 +83,12 @@ public class ReviewStub {
     }
 
     public static ListGetUserReviewDto getListGetUserReviewStub() {
+        List<ListGetUserReviewDto.GetUserReviewDto> result = getGetUserReviewStubList();
+
+        return ListGetUserReviewDto.builder().reviews(result).build();
+    }
+
+    public static List<ListGetUserReviewDto.GetUserReviewDto> getGetUserReviewStubList() {
         List<ListGetUserReviewDto.GetUserReviewDto> result = new ArrayList<>();
 
         for (Long i = 1L; i < 3L; i++) {
@@ -82,8 +102,7 @@ public class ReviewStub {
                     .build();
             result.add(build);
         }
-
-        return ListGetUserReviewDto.builder().reviews(result).build();
+        return result;
     }
 
     /*
@@ -164,7 +183,53 @@ public class ReviewStub {
         return result;
     }
 
+    public static Review getReviewStub() {
+        return Review.builder()
+                .reviewIdx(1L)
+                .content("이곳은 리뷰 본문입니다.")
+                .reviewStatus(ReviewStatus.POSTED)
+                .reviewImages(List.of(ReviewImage.builder().build()))
+                .reviewReplies(List.of(ReviewReply.builder().build()))
+                .rating(4)
+                .user(getUserStub())
+                .reportCnt(3)
+                .build();
+    }
+    public static Review getReviewStub2() {
+        return Review.builder()
+                .reviewIdx(1L)
+                .content("이곳은 리뷰 본문입니다.")
+                .reviewStatus(ReviewStatus.POSTED)
+                .reviewImages(List.of(ReviewImage.builder().build()))
+                .reviewReplies(List.of(ReviewReply.builder().build()))
+                .rating(4)
+                .user(getUserStub())
+                .reportCnt(3)
+                .build();
+    }
 
+    public static ReviewReport getReviewReport() {
+        return ReviewReport.builder()
+                .reportIdx(1L)
+                .reportStatus(ReportStatus.REGISTERED)
+                .review(getReviewStub())
+                .content("신고 사유 본문입니다.")
+                .user(getUserStub())
+                .build();
+
+    }
+
+    public static Page<Review> getPageReviewStub() {
+        return new PageImpl<Review>(getListReviewStub());
+    }
+
+    public static List<Review> getListReviewStub() {
+        return List.of(getReviewStub(),getReviewStub2());
+    }
+
+    public static User getUserStub() {
+        return new User(1L,"12qwe123!@#qwe","admin@gmail.com","순대먹고시펑");
+    }
 }
 
 
