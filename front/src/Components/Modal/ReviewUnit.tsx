@@ -68,7 +68,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
   };
 
   const data = {
-    userIdx: 1, //? 리덕스 툴킷에서 가져오고 지금은 임의로 1
+    userIdx: 1, //TODO - REDUX TOOLKIT
     content: reviewContent,
   };
   //! POST : 리뷰신고
