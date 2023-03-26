@@ -121,51 +121,15 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
       <InputBot>
         <Rating>
           <StarContainer>
-            <Star
-              src={`${review.rating > 0 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+            {new Array(5).fill("").map((_, i)=><Star
+              src={`${review.rating > i ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
               onClick={() =>
                 setReview({
                   ...review,
-                  rating: 1,
+                  rating: i+1,
                 })
               }
-            />
-            <Star
-              src={`${review.rating > 1 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
-              onClick={() =>
-                setReview({
-                  ...review,
-                  rating: 2,
-                })
-              }
-            />
-            <Star
-              src={`${review.rating > 2 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
-              onClick={() =>
-                setReview({
-                  ...review,
-                  rating: 3,
-                })
-              }
-            />
-            <Star
-              src={`${review.rating > 3 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
-              onClick={() =>
-                setReview({
-                  ...review,
-                  rating: 4,
-                })
-              }
-            />
-            <Star
-              src={`${review.rating > 4 ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
-              onClick={(e) =>
-                setReview({
-                  ...review,
-                  rating: 5,
-                })
-              }
-            />
+            />)}
           </StarContainer>
           <RateNum readOnly type="text" name="rating" value={`${review.rating} / 5`} onChange={handlerRate}></RateNum>
         </Rating>
