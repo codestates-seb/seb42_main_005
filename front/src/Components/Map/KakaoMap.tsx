@@ -16,12 +16,11 @@ interface Props {
   setHidden: Dispatch<SetStateAction<SELECT_HIDDEN>>;
   totalPharmList: any;
   setTotalPharmList: any;
-  _map: any
+  _map: any;
 }
 
 export default function KakaoMap({ hidden, setHidden, totalPharmList, setTotalPharmList, _map }: Props) {
   const [selected, setSelected] = useState<SELECT_OPTION_MAP>("map_home");
-  // const { _map } = useMap( totalPharmList, setTotalPharmList );
 
   return (
     <ContainerMap id="map" className={hidden ? "close" : ""}>
