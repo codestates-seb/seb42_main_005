@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_PharmLists, API_Search } from "../Api/APIs";
+import { APIS } from "../Api/APIs";
 
 const { kakao } = window;
 
@@ -25,7 +25,7 @@ export async function useViewMap(
     try {
       const response = await axios({
         method: "get",
-        url: API_PharmLists.REAL_API,
+        url: APIS.GET_PHARMLIST,
         params: {
           lat: centerLat,
           lng: centerLng,
@@ -129,11 +129,13 @@ export async function useSearch(
   setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>,
   makeMap: any,
 ) {
+  console.log(keyword);
   if (makeMap) {
     try {
       const response = await axios({
-        url: `${API_Search.GET_REAL_API}${keyword}`,
+        url: `${APIS.GET_Search}${keyword}`,
         method: "get",
+        headers: { "Content-Type": "application/json" },
       });
       const pharmacies = response.data.response;
       setTotalPharmList(pharmacies);

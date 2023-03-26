@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import useSearch from "../../hooks/useSearch";
 import { BsSearch } from "react-icons/bs";
 
 interface Props {

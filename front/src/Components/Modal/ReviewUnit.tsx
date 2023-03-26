@@ -3,25 +3,30 @@ import styled from "styled-components";
 import axios from "axios";
 import ReviewOfReview from "./ReviewOfReview";
 import Textarea from "../Ul/Textarea";
-import Input from "../Ul/Input";
 import Button from "../Ul/Button";
-import { API_ReviewUnit } from "../../Api/APIs"; // Review.json
-import { BsFillStarFill } from "react-icons/bs";
+import Input from "../Ul/Input";
+import { APIS } from "../../Api/APIs";
+import { TYPE_setReviewList, TYPE_reviewList } from "../../Api/TYPES";
+import { useAppSelector } from "../../Redux/hooks";
+import { getLocalStorage } from "../../Api/localStorage";
 import { HiXMark } from "react-icons/hi2";
+import { BsFillStarFill } from "react-icons/bs";
 
 interface Props {
   review: any;
   reviewIdx: number;
   storeIdx: number;
-  reviewList: any;
-  setReviewList: any;
+  reviewList: TYPE_reviewList;
+  setReviewList: TYPE_setReviewList;
+  reviewUserName: string;
 }
 
-export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, setReviewList }: Props) {
-  const [isCommentFormShown, setIsCommentFormShown] = useState(false);
-  const [isOnEdit, setIsOnEdit] = useState(false);
-  const [reviewContent, setReviewContent] = useState(review.content);
-  const [commentContent, setCommentContent] = useState("");
+export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, setReviewList, reviewUserName }: Props) {
+  const [isCommentFormShown, setIsCommentFormShown] = useState<React.SetStateAction<boolean>>(false);
+  const [isOnEdit, setIsOnEdit] = useState<React.SetStateAction<boolean>>(false);
+  const [reviewContent, setReviewContent] = useState<React.SetStateAction<any>>(review.content);
+  const [commentContent, setCommentContent] = useState<React.SetStateAction<any>>("");
+
   const handleReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReviewContent(e.target.value);
   };
@@ -29,119 +34,101 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
     setCommentContent(e.target.value);
   };
 
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
   //! PATCH : 리뷰수정
-  const editReview = (e: any) => {
-    if (e.key === " " && e.getModifierState("Shift") === false) {
-      e.stopPropagation();
-    } else if (e.key === " " && e.target.value.slice(-1) === " ") {
-      e.stopPropagation();
-    } else if (e.key === "Enter") {
-      const data: any = {
-        //? userIdx 는 리덕스 툴킷에서 가져올거고 일단은 임의로 1
-        userIdx: 1,
-        content: reviewContent,
-        rating: review.rating,
-      };
-      const submitReview = async () => {
-        try {
-          await axios({
-            url: `${API_ReviewUnit.PATCH_REAL_API}/${storeIdx}/review/${reviewIdx}`,
-            method: "patch",
-            data,
-          }).then(() => setIsOnEdit(false));
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      const editedReview = {
-        ...review,
-        content: reviewContent,
-      };
-      setReviewList([...reviewList].map((rev) => (rev.reviewIdx === reviewIdx ? editedReview : rev)));
-      submitReview();
-    }
-  };
-
-  // ! DELETE : 리뷰삭제
-  const deleteReview = async () => {
-    try {
-      await axios({
-        url: `${API_ReviewUnit.DELETE_REAL_API}/${storeIdx}/review/${reviewIdx}`,
-        method: "delete",
-      });
-    } catch (error) {
-      console.log(error);
-    }
-    setReviewList([...reviewList].filter((review: any) => review.reviewIdx !== reviewIdx));
-  };
-
-  //! POST : 리뷰신고
-  const reportReview = async () => {
-    try {
-      await axios({
-        url: `${API_ReviewUnit.POST_REAL_API}/${storeIdx}/review/${reviewIdx}/report`,
-        method: "post",
-        data: {
-          userIdx: 1, //? 리덕스 툴킷에서 가져오고 지금은 임의로 1
-          content: reviewContent,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const newComment = {
-    storeIdx,
-    userIdx: 1,
-    content: commentContent,
-  };
-
-  //! POST : 리뷰의 댓글작성
-  const submitCommentKeyPress = (e: any) => {
+  const editReview = async (e: any) => {
     if (e.key === " " && e.getModifierState("Shift") === false) {
       e.stopPropagation();
     } else if (e.key === " " && e.target.value.slice(-1) === " ") {
       e.stopPropagation();
     } else if (e.key === "Enter") {
       e.preventDefault();
-      const reply = async () => {
-        try {
-          await axios({
-            url: `${API_ReviewUnit.POST_COMMENT_REAL_API}/review/${reviewIdx}/reply`,
-            method: "post",
-            data: newComment,
-          });
-        } catch (error) {
+      const data: any = {
+        userIdx: user.userIdx, //TODO - REDUX TOOLKIT
+        content: reviewContent,
+        rating: review.rating,
+      };
+      await axios.patch(`${APIS.PATCH_REVIEWS}/${storeIdx}/review/${reviewIdx}`, data).catch((error) => {
+        console.log("리뷰를 수정하던 중 에러 발생");
+        console.log(error);
+      });
+      await axios
+        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+        .then((response) => {
+          setReviewList(response.data.response.storeReviews);
+        })
+        .then(() => setIsOnEdit(false))
+        .catch((error) => {
+          console.log("리뷰리스트를 다시 불러오던 중 에러 발생");
           console.log(error);
-        }
-      };
-      const show = {
-        //? 리덕스 툴킷에서 현재 로그인한 유저의 userIdx 받아와야 함
-        storeIdx,
-        userIdx: 1,
-        content: commentContent,
-        userName: "내가 씀",
-        createdAt: new Date().toLocaleDateString(),
-      };
-      setCommentContent("");
-      setIsCommentFormShown(false);
-      setReviewList(
-        [...reviewList].map(
-          (
-            rev, //? username 임의로 작성해둠, 나중에 리덕스 툴킷에서 가져오기
-          ) =>
-            rev.reviewIdx === reviewIdx
-              ? {
-                  ...rev,
-                  replies: [show, ...rev.replies],
-                }
-              : rev,
-        ),
-      );
-      reply();
+        });
     }
   };
+
+  // ! DELETE : 리뷰삭제
+  const deleteReview = async () => {
+    await axios.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`).catch((error) => console.log(error));
+    await axios
+      .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+      .then((response) => {
+        setReviewList(response.data.response.storeReviews);
+      })
+      .catch((error) => {
+        console.log("리뷰를 삭제하던 중 에러 발생");
+        console.log(error);
+      });
+  };
+
+  //! POST : 리뷰신고
+  const reportReview = async () => {
+    await axios
+      .post(`${APIS.POST_REPORT_REVIEW}/${storeIdx}/review/${reviewIdx}/report`, {
+        userIdx: user.userIdx,
+        content: reviewContent,
+      })
+      .catch((error) => {
+        console.log("리뷰를 신고하던 중 에러 발생");
+        console.log(error);
+      });
+  };
+
+  //! POST : 리뷰의 댓글작성
+  const postReply = async (e: any) => {
+    if (e.key === " " && e.getModifierState("Shift") === false) {
+      e.stopPropagation();
+    } else if (e.key === " " && e.target.value.slice(-1) === " ") {
+      e.stopPropagation();
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const newComment = {
+        storeIdx,
+        userIdx: user.userIdx, //TODO - REDUX TOOLKIT
+        content: commentContent,
+      };
+      await axios
+        .post(`${APIS.POST_REPLY}/${reviewIdx}/reply`, newComment)
+        .then(() => setCommentContent(""))
+        .then(() => setIsCommentFormShown(false))
+        .catch((error) => {
+          console.log("리뷰의 댓글을 작성하던 중 에러 발생");
+          console.log(error);
+        });
+      await axios
+        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+        .then((response) => {
+          setReviewList(response.data.response.storeReviews);
+        })
+        .catch((error) => {
+          console.log("리뷰리스트를 다시 불러오던 중 에러 발생");
+          console.log(error);
+        });
+    }
+  };
+
+  const token = getLocalStorage("access_token");
 
   return (
     <ReviewUnitContainer>
@@ -160,12 +147,20 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
           {/* 여기 계정에 따른 로직 작성 필요 */}
           <ButtonContainer>
             {/* 일반계정이면 && 해당 리뷰의 userIdx 와 리덕스 툴킷의 내 userIdx 가 같을 때 => 수정 + 삭제 버튼이 보임 */}
-            <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsOnEdit(true)} />
-            <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReview()} />
             {/* 약사계정이면 && 해당 약국의 storIdx 와 리덕스 툴킷의 내 storeIdx 가 같을 때 => 댓글 + 신고 버튼이 보임 */}
-            <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsCommentFormShown(true)} />
             {/* 로그인 상태여야 함 */}
-            <Button color="l_black" size="sm" text="신 고" onClick={() => reportReview()} />
+            {user?.userRole === "일반회원" && user?.name === reviewUserName ? (
+              <>
+                <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsOnEdit(true)} />
+                <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReview()} />
+              </>
+            ) : null}
+            {user?.userRole === "약국회원" && user?.storeidx === storeIdx ? (
+              <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsCommentFormShown(true)} />
+            ) : null}
+            {token && user?.name !== reviewUserName ? (
+              <Button color="l_black" size="sm" text="신 고" onClick={() => reportReview()} />
+            ) : null}
           </ButtonContainer>
         </Upper>
         <Lower>
@@ -203,7 +198,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
             icon={true}
             value={commentContent}
             onChange={handleComment}
-            onKeyPress={submitCommentKeyPress}
+            onKeyPress={postReply}
           />
         </WriteCommentForm>
       ) : null}
@@ -226,7 +221,7 @@ const ReviewUnitContainer = styled.article`
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 15px 10px 10px 10px;
+  padding: 15px 10px;
   margin-bottom: 20px;
   border: 1px solid var(--black-100);
   border-radius: 5px;
@@ -237,7 +232,6 @@ const ReviewUnitContainer = styled.article`
     width: 420px;
   }
 `;
-
 const StarContainer = styled.span`
   color: var(--l_button-mint);
   font-size: 12px;
@@ -254,6 +248,8 @@ const Rest = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin-bottom: 0.6rem;
+  height: 80px;
   width: 280px;
   white-space: normal;
   word-break: break-all;
@@ -269,7 +265,6 @@ const EditRest = styled.section`
   flex-direction: column;
   justify-content: flex-end;
   width: 280px;
-  padding-top: 10px;
   p {
     position: absolute;
     top: 5px;
@@ -281,6 +276,7 @@ const EditRest = styled.section`
 `;
 const ReviewImg = styled.img`
   object-fit: cover;
+  margin-bottom: 0.6rem;
   height: 80px;
   width: 100px;
   border-radius: 5px;
@@ -291,7 +287,7 @@ const Upper = styled.section`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 5px;
+  margin-bottom: 10px;
 `;
 const UserInfo = styled.header`
   display: flex;
@@ -324,10 +320,9 @@ const ButtonContainer = styled.span`
 const WriteCommentForm = styled.form`
   display: flex;
   flex-direction: column;
-  margin: 10px 2px 0px 6px;
   padding: 10px;
   gap: 5px;
-  height: 80px;
+  height: 85px;
   border-radius: 10px;
   background-color: var(--white);
   border: 0.5px solid var(--blue-300);

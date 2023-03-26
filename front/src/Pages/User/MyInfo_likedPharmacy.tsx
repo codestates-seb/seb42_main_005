@@ -1,54 +1,64 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import styled from "styled-components";
+import axios from "axios";
 import PharmDetail from "../../Components/Modal/PharmDetail";
-import { API_LikedPharmacyUnit } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
+import { useAppSelector } from "../../Redux/hooks";
 import { IoIosArrowDropright } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface Props {
   likedPharmacy: any;
-  likedPharmacies: any;
-  setLikedPharmacies: any
+  setLikedPharmacies: any;
 }
 
-export default function LikedPharmacyUnit({ likedPharmacy,likedPharmacies, setLikedPharmacies }: Props) {
-  const [isModalUp, setIsModalUp] = useState(false);
-  const [pharmDetail, setPharmDetail] = useState();
-  const [reviewList, setReviewList] = useState([]);
+export default function LikedPharmacyUnit({ likedPharmacy, setLikedPharmacies }: Props) {
+  const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
+  const [pharmDetail, setPharmDetail] = useState<React.SetStateAction<any>>();
+  const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
   const [like, setLike] = useState(false);
 
-    //! GET : 약국상세정보 + 리뷰리스트
-    const onModalUp = () => {
-      const pharmDetailsAndreviewList = async () => {
-        await axios
-          .get(`${API_LikedPharmacyUnit.GET_REAL_API}/${likedPharmacy.storeIdx}`)
-          .then((response) => {
-            setPharmDetail(response.data.response);
-            axios
-              .get(`${API_LikedPharmacyUnit.GET_REAL_API}/${likedPharmacy.storeIdx}/review`)
-              .then((response) => {
-                setReviewList(response.data.response.storeReviews);
-              })
-              .catch((err) => console.log("리뷰받아오던 중" + err));
-          })
-          .catch((err) => console.log("약국상세받아오던 중" + err));
-      };
-      pharmDetailsAndreviewList();
-      setIsModalUp(true);
+  //! GET : 약국상세정보 + 리뷰리스트
+  const onModalUp = () => {
+    const getPharmDetail = async () => {
+      await axios
+        .get(`${APIS.GET_PHARMDETAILS}/${likedPharmacy.storeIdx}`)
+        .then((response) => setPharmDetail(response.data.response))
+        .catch((error) => {
+          console.log("약국 상세정보 받아오던 중 에러 발생");
+          console.log(error);
+        });
     };
+    const getReviewList = async () => {
+      await axios
+        .get(`${APIS.GET_REVIEWS}/${likedPharmacy.storeIdx}/review`)
+        .then((response) => setReviewList(response.data.response.storeReviews))
+        .catch((error) => {
+          console.log("약국 리뷰 받아오던 중 에러 발생");
+          console.log(error);
+        });
+    };
+    axios.all([getPharmDetail(), getReviewList()]);
+    setIsModalUp(true);
+  };
+
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
 
   //! POST : 찜취소
   const unLikePharmacy = async (storeIdx: number) => {
-    try {
-      await axios({
-        url: `${API_LikedPharmacyUnit.GET_REAL_API}/${storeIdx}/pick?userIdx=${1}`, //? 리덕스 툴킷에서 유저인덱스 받아와야 함
-        method: "post",
-      });
-    } catch (error) {
+    await axios.post(`${APIS.POST_LIKE}/${storeIdx}/pick?userIdx=${user.userIdx}`).catch((error) => {
+      console.log("찜취소 하던 중 에러 발생");
       console.log(error);
-    }
-    setLikedPharmacies([...likedPharmacies].filter(pharm=>pharm.storeIdx!==likedPharmacy.storeIdx));
+    });
+    await axios
+      .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`) //TODO - REDUX TOOLKIT
+      .then((response) => setLikedPharmacies(response.data))
+      .catch((error) => {
+        console.log("찜리스트 다시 받아오던 중 에러 발생");
+        console.log(error);
+      });
   };
 
   return (

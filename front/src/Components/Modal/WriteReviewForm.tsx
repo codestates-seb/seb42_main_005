@@ -1,22 +1,25 @@
 import React, { useState } from "react";
-import axios from "axios";
 import styled from "styled-components";
+import axios from "axios";
+import { APIS } from "../../Api/APIs";
 import Textarea from "../Ul/Textarea";
 import Button from "../Ul/Button";
+import { TYPE_Pharm, TYPE_setIsReviewFormShown, TYPE_reviewList, TYPE_setReviewList } from "../../Api/TYPES";
+import { useAppSelector } from "../../Redux/hooks";
+import { zIndex_Modal } from "../../Util/z-index";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BiPhotoAlbum } from "react-icons/bi";
 import { HiXMark } from "react-icons/hi2";
-import { zIndex_Modal } from "../../Util/z-index";
-import { API_WriteReviewForm } from "../../Api/APIs"; // Review.json
 
 interface Props {
-  setIsReviewFormShown: React.Dispatch<React.SetStateAction<boolean>>;
-  storeIdx: number;
-  reviewList: any;
-  setReviewList: any;
+  Pharm: TYPE_Pharm | undefined;
+  setIsReviewFormShown: TYPE_setIsReviewFormShown;
+  storeIdx: number | undefined;
+  reviewList: TYPE_reviewList;
+  setReviewList: TYPE_setReviewList;
 }
 
-export default function WriteReviewForm({ setIsReviewFormShown, storeIdx, reviewList, setReviewList }: Props) {
+export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx, reviewList, setReviewList }: Props) {
   const [imageSrc, setImageSrc]: any = useState(null);
   const [imgFile, setImgFile]: any = useState(null);
   const onUpload = (e: any) => {
@@ -53,60 +56,47 @@ export default function WriteReviewForm({ setIsReviewFormShown, storeIdx, review
       [name]: value,
     });
   };
-  const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
+
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
+  //! POST : 리뷰작성
+  const onSubmit: any = async (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const reviewContent = formData.get("content");
-    const star = formData.get("rating");
-
     let data: any = {
-      userIdx: 3,
+      userIdx: user.userIdx, //TODO - REDUX TOOLKIT
       content: review.content,
       rating: review.rating,
     };
-
-    const formDataForsubmit = new FormData();
-    formDataForsubmit.append("postDto", new Blob([JSON.stringify(data)], { type: "application/json" }));
-    formDataForsubmit.append("image", imgFile);
-
-    //! POST : 리뷰작성
-    const postReview = async () => {
-      try {
-        await axios({
-          url: `${API_WriteReviewForm.POST_REAL_API}/${storeIdx}/review`,
-          method: "post",
-          data: formDataForsubmit,
-        });
-      } catch (error) {
+    const formData = new FormData();
+    formData.append("postDto", new Blob([JSON.stringify(data)], { type: "application/json" }));
+    formData.append("image", imgFile);
+    await axios
+      .post(`${APIS.POST_REVIEWS}/${storeIdx}/review`, formData)
+      .then(() => setIsReviewFormShown(false))
+      .catch((error) => {
+        console.log("리뷰를 작성하던 중 에러 발생");
         console.log(error);
-      }
-    };
-
-    //* 새로고침 안되고 보여주는 로직
-    let show: any = {
-      userIdx: 1, //? 리덕스 툴킷에서 userIdx 가져오기
-      userImage: review.userImage,
-      userName: "나 회원 아니거든?", //? 리덕스 툴킷에서 name 가져오기
-      content: review.content,
-      rating: review.rating,
-      reviewImage: imageSrc,
-      createdAt: new Date().toLocaleDateString(),
-    };
-    setReviewList([show, ...reviewList]);
-    setReview({
-      reviewIdx: 0,
-      content: "",
-      rating: 0,
-      createdAt: "",
-    });
-    setImageSrc("");
-    postReview();
+      });
+    await axios
+      .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+      .then((response) => {
+        setReviewList(response.data.response.storeReviews);
+      })
+      .catch((error) => {
+        console.log("리뷰리스트를 다시 불러오던 중 에러 발생");
+        console.log(error);
+      });
   };
 
   return (
     <WriteReviewContainer onSubmit={onSubmit}>
-      <InputTop className="wide">
-        <HiXMark aria-hidden="true" className="except" onClick={() => setIsReviewFormShown(false)} />
+      <InputTop>
+        <span id="instruction">
+          <span id="name">{Pharm?.name}</span>에 리뷰를 남겨보세요!
+        </span>
+        <HiXMark id="close" aria-hidden="true" className="except" onClick={() => setIsReviewFormShown(false)} />
       </InputTop>
       <InputTop>
         <HiddenLabel htmlFor="review" />
@@ -205,18 +195,6 @@ const WriteReviewContainer = styled.form`
   border: 0.5px solid var(--blue-300);
   box-shadow: 0px 0px 5px var(--black-200);
   z-index: ${zIndex_Modal.WriteReviewContainer};
-  .wide {
-    display: flex;
-    justify-content: flex-end;
-    width: 400px;
-    font-size: 20px;
-    color: var(--black-300);
-    transition: 0.2s;
-    #close:hover {
-      color: var(--black-600);
-      transition: 0.2s;
-    }
-  }
   @media (max-width: 768px) {
     position: absolute;
     display: flex;
@@ -231,6 +209,31 @@ const InputTop = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding-right: 4px;
+  span {
+    padding-left: 2px;
+    &#instruction {
+      display: flex;
+      align-items: flex-end;
+      font-size: 16px;
+      color: var(--black-400);
+      font-weight: 400;
+    }
+    &#name {
+      margin-right: 5px;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--blue-600);
+    }
+  }
+  #close {
+    font-size: 20px;
+    color: var(--black-300);
+    :hover {
+      color: var(--black-600);
+      transition: 0.2s;
+    }
+  }
 `;
 const ReviewImgContainer = styled.section`
   display: inline-block;

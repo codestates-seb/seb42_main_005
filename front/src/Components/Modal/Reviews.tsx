@@ -1,11 +1,12 @@
 import styled from "styled-components";
+import { TYPE_setReviewList, TYPE_setIsReviewFormShown } from "../../Api/TYPES";
 import ReviewUnit from "./ReviewUnit";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 interface Props {
   reviewList: any;
-  setReviewList: any;
-  setIsReviewFormShown: any;
+  setReviewList: TYPE_setReviewList;
+  setIsReviewFormShown: TYPE_setIsReviewFormShown;
   storeIdx: number;
   Pharm: any;
 }
@@ -16,11 +17,12 @@ export default function ReviewList({ reviewList, setReviewList, setIsReviewFormS
       <ReviewTitle>리뷰</ReviewTitle>
       {reviewList.length ? (
         <Reviews>
-          {reviewList.map((review: any) => (
+          {reviewList.map((review: any, i: number) => (
             <ReviewUnit
-              key={review.reviewIdx}
+              key={i}
               review={review}
               reviewIdx={review.reviewIdx}
+              reviewUserName={review.userName}
               storeIdx={Pharm.storeIdx}
               setReviewList={setReviewList}
               reviewList={reviewList}
@@ -96,7 +98,6 @@ const Instead = styled.div`
   font-weight: 700;
   color: var(--black-300);
   border-radius: 5px;
-  background-color: var(--black-050);
   .bigger {
     font-size: 40px;
     margin-bottom: 10px;

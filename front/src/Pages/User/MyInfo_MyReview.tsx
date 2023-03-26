@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import PharmDetail from "../../Components/Modal/PharmDetail";
-import { API_MyInfoReviews } from "../../Api/APIs";
-import { API_MyReview } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
+import { useAppSelector } from "../../Redux/hooks";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface Props {
@@ -14,42 +14,46 @@ interface Props {
 }
 
 export default function MyReview({ review, storeIdx, reviewIdx, idx }: Props) {
-  const [isModalUp, setIsModalUp] = useState(false);
-  const [pharmDetail, setPharmDetail] = useState();
-  const [reviewList, setReviewList] = useState([]);
-  const [like, setLike] = useState(false);
+  const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
+  const [pharmDetail, setPharmDetail] = useState<React.SetStateAction<any>>();
+  const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
+  const [like, setLike] = useState<React.SetStateAction<boolean>>(false);
 
   //! GET : 약국상세정보 + 리뷰리스트
   const onModalUp = () => {
-    const pharmDetailsAndreviewList = async () => {
+    const getPharmDetail = async () => {
       await axios
-        .get(`${API_MyReview.REAL_API}/${storeIdx}`)
-        .then((response) => {
-          setPharmDetail(response.data.response);
-          axios
-            .get(`${API_MyReview.REAL_API}/${storeIdx}/review`)
-            .then((response) => {
-              setReviewList(response.data.response.storeReviews);
-            })
-            .catch((err) => console.log("리뷰받아오던 중" + err));
-        })
-        .catch((err) => console.log("약국상세받아오던 중" + err));
+        .get(`${APIS.GET_PHARMDETAILS}/${storeIdx}`)
+        .then((response) => setPharmDetail(response.data.response))
+        .catch((error) => {
+          console.log("약국 상세정보 받아오던 중 에러 발생");
+          console.log(error);
+        });
     };
-    pharmDetailsAndreviewList();
+    const getReviewList = async () => {
+      await axios
+        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+        .then((response) => setReviewList(response.data.response.storeReviews))
+        .catch((error) => {
+          console.log("약국 리뷰 받아오던 중 에러 발생");
+          console.log(error);
+        });
+    };
+    axios.all([getPharmDetail(), getReviewList()]);
     setIsModalUp(true);
   };
 
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
   //! DELETE : 리뷰삭제
   const deleteReview = async () => {
-    try {
-      await axios({
-        url: `${API_MyInfoReviews.REAL_API}/${storeIdx}/review/${reviewIdx}`,
-        method: "delete",
-      });
-    } catch (error) {
-      console.log(error);
-    }
-    setReviewList([...reviewList].filter((review: any) => review.reviewIdx !== reviewIdx));
+    await axios.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`).catch((error) => console.log(error));
+    await axios
+      .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`) //TODO - REDUX TOOLKIT
+      .then((response) => setReviewList(response.data))
+      .catch((error) => console.log(error));
   };
 
   return (

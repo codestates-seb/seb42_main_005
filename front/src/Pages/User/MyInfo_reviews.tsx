@@ -1,27 +1,34 @@
-import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import MyReview from "../User/MyInfo_MyReview";
-import { IoMdAddCircleOutline } from "react-icons/io";
+import { APIS } from "../../Api/APIs";
 import axios from "axios";
-import { API_MyPharmacy } from "../../Api/APIs";
+import { useAppSelector } from "../../Redux/hooks";
+import { IoMdAddCircleOutline } from "react-icons/io";
 
 export default function MyInfoReviews() {
-  const [reviews, setReviews] = useState([]);
+  const [reviewList, setReviewList] = useState([]);
+
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
 
   //! GET : 내가 작성한 리뷰 리스트
   useEffect(() => {
     const getMyReviews = async () => {
-      try {
-        //? userIdx 는 리덕스 툴킷에서 가져오고 일단은 임의로 1
-        const response = await axios.get(`${API_MyPharmacy.REAL_API}/${1}/review`);
-        setReviews(response.data);
-      } catch (error) {
-        console.log(error);
-      }
+      await axios
+        .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`) //TODO - REDUX TOOLKIT
+        .then((response) => setReviewList(response.data))
+        .catch((error) => {
+          console.log("내가 작성한 리뷰리스트 받아오던 중 에러 발생");
+          console.log(error);
+        });
     };
     getMyReviews();
   }, []);
+
+  console.log(reviewList);
 
   return (
     <Content>
@@ -32,9 +39,9 @@ export default function MyInfoReviews() {
         <Text className="number">작성일</Text>
         <Text className="single" />
       </TableHead>
-      {reviews.length ? (
+      {reviewList.length ? (
         <Rest>
-          {reviews.map((review: any, i: number) => (
+          {reviewList.map((review: any, i: number) => (
             <MyReview
               key={review.reviewIdx}
               review={review}
@@ -50,8 +57,8 @@ export default function MyInfoReviews() {
             <IoMdAddCircleOutline id="icon" aria-hidden="true" />
           </Add>
           <span>
-            <p>현재 찜한 약국이 없습니다.</p>
-            <p>마음에 드는 약국을 찜해보세요!</p>
+            <p>현재 내가 남긴 리뷰가 없습니다.</p>
+            <p>마음에 드는 약국에 리뷰를 남겨보세요!</p>
           </span>
         </WhenEmpty>
       )}

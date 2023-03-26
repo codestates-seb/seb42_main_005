@@ -3,12 +3,7 @@ import styled from "styled-components";
 import { zIndex_Header } from "../../Util/z-index";
 import Account from "./Account";
 
-interface AccountProps {
-  isLogin: boolean;
-  account?: string;
-}
-
-export default function Header({ isLogin, account }: AccountProps) {
+export default function Header() {
   return (
     <HeaderContainer>
       <div className="logo_container">
@@ -22,7 +17,7 @@ export default function Header({ isLogin, account }: AccountProps) {
         <span className="partition" />
       </EmptyContainer>
       <div className="account_container">
-        <Account isLogin={isLogin} account={account} />
+        <Account />
       </div>
     </HeaderContainer>
   );
