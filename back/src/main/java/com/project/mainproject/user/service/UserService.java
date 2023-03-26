@@ -19,6 +19,7 @@ import com.project.mainproject.user.repository.UserRepository;
 import com.project.mainproject.utils.FileUploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
@@ -55,6 +56,7 @@ public class UserService implements UserDetailsService {
     private final CustomAuthorityUtils authorityUtils;
     private final StoreRepository storeRepository;
     private final FileUploader fileUploader;
+    private final ApplicationEventPublisher publisher;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
