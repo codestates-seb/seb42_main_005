@@ -8,7 +8,7 @@ import { useAppSelector } from "../../Redux/hooks";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
 export default function MyInfoReviews() {
-  const [reviewList, setReviewList] = useState([]);
+  const [myReviewList, setMyReviewList] = useState([]);
 
   const user = useAppSelector((state: any) => {
     return state.userInfo.response;
@@ -18,8 +18,8 @@ export default function MyInfoReviews() {
   useEffect(() => {
     const getMyReviews = async () => {
       await axios
-        .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`) 
-        .then((response) => setReviewList(response.data))
+        .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`)
+        .then((response) => setMyReviewList(response.data.response.reviews))
         .catch((error) => {
           console.log("내가 작성한 리뷰리스트 받아오던 중 에러 발생");
           console.log(error);
@@ -37,15 +37,16 @@ export default function MyInfoReviews() {
         <Text className="number">작성일</Text>
         <Text className="single" />
       </TableHead>
-      {reviewList.length ? (
+      {myReviewList.length ? (
         <Rest>
-          {reviewList.map((review: any, i: number) => (
+          {myReviewList.map((review: any, i: number) => (
             <MyReview
               key={review.reviewIdx}
               review={review}
               idx={i}
               storeIdx={review.storeIdx}
               reviewIdx={review.reviewIdx}
+              setMyReviewList={setMyReviewList}
             />
           ))}
         </Rest>

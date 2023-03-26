@@ -128,8 +128,8 @@ export default function PharmLists({
           </ListHead>
           <ListBody ref={listRef} onScroll={handleScroll}>
             {totalPharmList.length > 0 ? (
-              displayedList.map((pharm: any) => (
-                <PharmItem Pharm={pharm} key={pharm.storeIdx} storeIdx={pharm.storeIdx} />
+              displayedList.map((pharm: any, i: number) => (
+                <PharmItem Pharm={pharm} key={i} storeIdx={pharm.storeIdx} />
               ))
             ) : (
               <NoPharm>

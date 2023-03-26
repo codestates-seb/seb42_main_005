@@ -126,7 +126,7 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
       <InputBot>
         <Rating>
           <StarContainer>
-            {new Array(5).fill("").map((_, i)=><Star
+            {new Array(5).fill("").map((_, i)=><Star key={i}
               src={`${review.rating > i ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
               onClick={() =>
                 setReview({

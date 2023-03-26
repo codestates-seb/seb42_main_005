@@ -53,7 +53,7 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
   return (
     <InfoContainer>
       <InfoHeader>
-        <InfoTitle>{pharmDetail.name}</InfoTitle>
+        <InfoTitle>{pharmDetail?.name}</InfoTitle>
         {pharmDetail && (
           <PharmRank
             rating={pharmDetail.rating}
@@ -63,8 +63,8 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
         )}
       </InfoHeader>
       <InfoImgContainer>
-        {pharmDetail.imagePath ? (
-          <PharmImg src={pharmDetail.imagePath} />
+        {pharmDetail?.imagePath ? (
+          <PharmImg src={pharmDetail?.imagePath} />
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." />
         )}
@@ -100,11 +100,11 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>주소</InfoInfoTitle>
-          <InfoInfoContent className="address">{pharmDetail.address}</InfoInfoContent>
+          <InfoInfoContent className="address">{pharmDetail?.address}</InfoInfoContent>
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>전화번호</InfoInfoTitle>
-          <InfoInfoContent>{pharmDetail.tel}</InfoInfoContent>
+          <InfoInfoContent>{pharmDetail?.tel}</InfoInfoContent>
         </InfoUnit>
       </InfoInfo>
     </InfoContainer>

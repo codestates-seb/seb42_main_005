@@ -46,7 +46,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
     } else if (e.key === "Enter") {
       e.preventDefault();
       const data: any = {
-        userIdx: user.userIdx, 
+        userIdx: user.userIdx,
         content: reviewContent,
         rating: review.rating,
       };
@@ -69,7 +69,10 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
 
   // ! DELETE : 리뷰삭제
   const deleteReview = async () => {
-    await axios.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`).catch((error) => console.log(error));
+    await axios.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`).catch((error) => {
+      console.log("리뷰 삭제하던 중 에러 발생");
+      console.log(error);
+    });
     await axios
       .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
       .then((response) => {
@@ -110,7 +113,10 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
         })
         .then(() => setReplyContent(""))
         .then(() => setIsReplyFormShown(false))
-        .catch((error) => {console.log("리뷰의 댓글을 작성하던 중 에러 발생");console.log(error)});
+        .catch((error) => {
+          console.log("리뷰의 댓글을 작성하던 중 에러 발생");
+          console.log(error);
+        });
       await axios
         .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
         .then((response) => {
@@ -130,7 +136,10 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
       <section>
         <Upper>
           <UserInfo>
-            <UserIcon src={review.profileImage?review.profileImage:"/Images/User.png"} alt="일반계정 사용자의 이미지 입니다." />
+            <UserIcon
+              src={review.profileImage ? review.profileImage : "/Images/User.png"}
+              alt="일반계정 사용자의 이미지 입니다."
+            />
             <UserName>{review.userName}</UserName>
             <Created>{new Date(review.createdAt).toLocaleDateString()}</Created>
             <StarContainer>

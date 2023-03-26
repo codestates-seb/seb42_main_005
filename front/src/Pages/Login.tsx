@@ -90,8 +90,6 @@ export default function Login() {
           let refreshToken = res.headers.refresh;
           setLocalStorage("access_token", accessToken);
           setLocalStorage("refresh_token", refreshToken);
-          console.log(accessToken);
-          console.log(refreshToken);
           axios.defaults.headers.common["Authorization"] = `${accessToken}`;
           dispatch(getUserInfo(res.data));
           return res;

@@ -16,7 +16,7 @@ export default function LikedPharmacyUnit({ likedPharmacy, setLikedPharmacies }:
   const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
   const [pharmDetail, setPharmDetail] = useState<React.SetStateAction<any>>();
   const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
-  const [like, setLike] = useState(false);
+  const [like, setLike] = useState(true);
 
   //! GET : 약국상세정보 + 리뷰리스트
   const onModalUp = () => {
@@ -47,18 +47,18 @@ export default function LikedPharmacyUnit({ likedPharmacy, setLikedPharmacies }:
   });
 
   //! POST : 찜취소
-  const unLikePharmacy = async (storeIdx: number) => {
-    await axios.post(`${APIS.POST_LIKE}/${storeIdx}/pick?userIdx=${user.userIdx}`).catch((error) => {
+  const unLikePharmacy = async () => {
+    await axios.post(`${APIS.POST_LIKE}/${likedPharmacy.storeIdx}/pick?userIdx=${user.userIdx}`).catch((error) => {
       console.log("찜취소 하던 중 에러 발생");
       console.log(error);
-    });
+    })
     await axios
-      .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`)
-      .then((response) => setLikedPharmacies(response.data))
-      .catch((error) => {
-        console.log("찜리스트 다시 받아오던 중 에러 발생");
-        console.log(error);
-      });
+    .get(`${APIS.GET_MY_LIKES}/${user.userIdx}/pick`)
+    .then((response) => setLikedPharmacies(response.data.response))
+    .catch((error) => {
+      console.log("내가 찜한 약국리스트 받아오던 중 에러 발생");
+      console.log(error);
+    });
   };
 
   return (
@@ -81,7 +81,7 @@ export default function LikedPharmacyUnit({ likedPharmacy, setLikedPharmacies }:
       <Text className="address">{likedPharmacy.address}</Text>
       <Text className="number">{likedPharmacy.tel}</Text>
       <Text className="single icon">
-        <RiDeleteBin6Line aria-hidden="true" onClick={(storeIdx: any) => unLikePharmacy(storeIdx)} />
+        <RiDeleteBin6Line aria-hidden="true" onClick={() => unLikePharmacy()} />
       </Text>
     </TableBody>
   );
@@ -111,7 +111,11 @@ const Text = styled.span`
     width: 150px;
   }
   &.address {
+    justify-content: flex-start;
     width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   &.number {
     width: 140px;

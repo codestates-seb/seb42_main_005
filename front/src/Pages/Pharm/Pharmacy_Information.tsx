@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import PharmDetail from "../../Components/Modal/PharmDetail";
@@ -32,6 +32,20 @@ export default function PharmacyInformation() {
     });
   };
 
+  //! GET : 약국 정보
+  useEffect(() => {
+    const getUserInfo = async () => {
+      await axios
+        .get(`${APIS.GET_PHARMDETAILS}/${user.storeIdx}`)
+        .then((response) => setPharmDetail(response.data.response))
+        .catch((error) => {
+          console.log("약국 상세정보 받아오던 중 에러 발생");
+          console.log(error);
+        });
+    };
+    getUserInfo();
+  }, []);
+
   const user = useAppSelector((state: any) => {
     return state.userInfo.response;
   });
@@ -60,23 +74,24 @@ export default function PharmacyInformation() {
     setIsModalUp(true);
   };
 
+  //! PATCH : 약국 이미지 업로드
   const submitPharmImg = (e: any) => {
     e.preventDefault();
     const formDataImgsubmit = new FormData();
-    formDataImgsubmit.append("image", imgFile);
+    formDataImgsubmit.append("profileImage", imgFile);
     formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(user.userIdx)], { type: "application/json" }));
 
     const submitNewImg: any = async () => {
-      //! 키값, url 확인하기 => 이미지 보낼 시 에러남
-      await axios.patch(`${APIS.PATCH_PHARM_IMG}/image`, formDataImgsubmit).catch((error) => {
-        console.log("약국 사진 보내던 중 에러 발생");
-        console.log(error);
-      });
+      await axios
+        .post(APIS.POST_PHARM_IMG, formDataImgsubmit)
+        .then(() => location.reload())
+        .catch((error) => {
+          console.log("약국 사진 보내던 중 에러 발생");
+          console.log(error);
+        });
     };
     submitNewImg();
   };
-
-  console.log(pharmDetail);
 
   return (
     <Content>
@@ -94,7 +109,9 @@ export default function PharmacyInformation() {
       <ImgContainer>
         <ImgInput id="pharmImg" type="file" onChange={(e) => onUpload(e)} accept="image/*" />
         {imageSrc ? (
-          <PharmImg src={imageSrc as string} />
+          <PharmImg src={`${imageSrc}`} />
+        ) : pharmDetail.imagePath ? (
+          <PharmImg src={`${pharmDetail.imagePath}`} alt="image preparing" />
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="image preparing" />
         )}
@@ -148,7 +165,7 @@ export default function PharmacyInformation() {
                   0,
                   -3,
                 )}-${pharmDetail?.todayOperatingTime?.operatingTime?.endTime?.slice(0, -3)}`
-              : ""}
+              : "오늘은 휴무일입니다."}
             {isDropDownDown ? (
               <DropDown setIsDropDownDown={setIsDropDownDown} workingHours={pharmDetail.operatingTime} />
             ) : null}
@@ -255,6 +272,18 @@ const Label = styled.label`
   :active {
     background-color: var(--black-025);
     box-shadow: var(--bs-btn-click);
+  }
+  :hover {
+    border: 1.2px solid var(--black-400);
+    color: var(--black-400);
+  }
+  &.mint {
+    border: 1.2px solid var(--l_button-mint);
+    color: var(--l_button-mint);
+    :hover {
+      border: 1.2px solid var(--l_button-mint-hover);
+      color: var(--l_button-mint-hover);
+    }
   }
   @media (max-width: 768px) {
     display: flex;

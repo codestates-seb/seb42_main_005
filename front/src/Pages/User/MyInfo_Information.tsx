@@ -34,13 +34,16 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
   useEffect(() => {
     const getReviews = async () => {
       await axios
-        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`) 
+        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`)
         .then((response) => {
           setMyInfo(response.data.response);
           setMyName(response.data.response.name);
           setMyAddress(response.data.response.address);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log("내 정보 가져오던 중 에러 발생");
+          console.log(error);
+        });
     };
     getReviews();
   }, []);
@@ -218,9 +221,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
         .patch(`${APIS.PATCH_USER_INFO}/${user.userIdx}`, newUserData)
         .then(() => setIsEditing(false))
         .catch((error) => {
-          error.response.status === 406
-            ? alert("현재비밀번호가 가입시 비밀번호와 다릅니다")
-            : console.log("내 정보 수정하던 중 에러 발생");
+          console.log("내 정보 수정하던 중 에러 발생");
           console.log(error);
         });
       await axios
@@ -238,25 +239,18 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     submitNewUserInfo();
   };
 
+  //! POST : 유저 이미지 업로드
   const submitUserImg = (e: any) => {
     e.preventDefault();
     const formDataImgsubmit = new FormData();
-    formDataImgsubmit.append("image", imgFile);
-
-    // TODO : 리덕스 툴킷에서 userIdx가져와 [JSON.stringify(userIdx)] 수정 => 아래주석 코드 지우면 안돼!
+    formDataImgsubmit.append("profileImage", imgFile);
     formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(user.userIdx)], { type: "application/json" }));
-
     const submitNewImg: any = async () => {
-      await axios.patch(`${APIS.PATCH_USER_IMG}/${1}/image`, formDataImgsubmit).catch((error) => console.log(error));
       await axios
-        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`)
-        .then((response) => {
-          setMyInfo(response.data.response);
-          setMyName(response.data.response.name);
-          setMyAddress(response.data.response.address);
-        })
+        .post(APIS.POST_USER_IMG, formDataImgsubmit)
+        .then(() => location.reload())
         .catch((error) => {
-          console.log("내 이미지 수정하던 중 에러 발생");
+          console.log("이미지 업로드 하던 중 에러 발생");
           console.log(error);
         });
     };
@@ -273,9 +267,15 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
           onChange={(e) => onUpload(e)}
           accept="image/*"
         ></ReviewImgInput>
-        {imageSrc ? <ReviewImg src={imageSrc as string} /> : <ReviewImg src="Images/User.png" alt="user" />}
         {imageSrc ? (
-          <Label onClick={submitUserImg}>
+          <ReviewImg src={`${imageSrc}`} />
+        ) : myInfo.imagePath ? (
+          <ReviewImg src={`${myInfo.imagePath}`} />
+        ) : (
+          <ReviewImg src="Images/User.png" alt="user" />
+        )}
+        {imageSrc ? (
+          <Label onClick={submitUserImg} className="mint">
             <MdOutlineAddAPhoto aria-hidden="true" />
             사진수정완료
           </Label>
@@ -537,6 +537,18 @@ const Label = styled.label`
   :active {
     background-color: var(--black-025);
     box-shadow: var(--bs-btn-click);
+  }
+  :hover {
+    border: 1.2px solid var(--black-400);
+    color: var(--black-400);
+  }
+  &.mint{
+    border: 1.2px solid var(--l_button-mint);
+    color: var(--l_button-mint);
+    :hover {
+    border: 1.2px solid var(--l_button-mint-hover);
+    color: var(--l_button-mint-hover);
+  }
   }
 `;
 const Content = styled.section`

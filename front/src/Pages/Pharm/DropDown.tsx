@@ -87,12 +87,11 @@ const DropDownContainer = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding: 8px 5px;
+  gap: 3px;
   top: 24px;
-  gap: 4px;
-  height: 200px;
-  width: 170px;
-  background: white;
+  background: var(--black-050);
   box-shadow: var(--bs-lg);
   border-radius: 3px;
   z-index: ${zIndex_MyPage.DropDown};
@@ -103,12 +102,12 @@ const DropDownContainer = styled.section`
 const Unit = styled.article`
   display: flex;
   align-items: center;
-  width: 150px;
 `;
 const Key = styled.h5`
   width: 45px;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 5px;
   color: var(--black-600);
 `;
 const Value = styled.span`
