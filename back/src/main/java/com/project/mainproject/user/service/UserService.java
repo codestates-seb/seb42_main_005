@@ -151,16 +151,16 @@ public class UserService implements UserDetailsService {
 
     public void patchUser(Long userIdx, UserPatchDto userPatchDto) {
         User user = userRepository.findById(userIdx).get();
-        if(userPatchDto.getAddress() != null) {
-            user.setAddress(userPatchDto.getAddress());
-        }
-        if(userPatchDto.getNewPassword() != null) {
-            if (encoder.matches(userPatchDto.getPassword(), user.getPassword())) {
+        if(encoder.matches(userPatchDto.getPassword(), user.getPassword())) {
+            if (userPatchDto.getAddress() != null) user.setAddress(userPatchDto.getAddress());
+            if (userPatchDto.getName() != null) user.setName(userPatchDto.getName());
+            if (userPatchDto.getNewPassword() != null) {
                 user.setPassword(encoder.encode(userPatchDto.getNewPassword()));
                 userRepository.save(user);
-            } else {
-                throw new BusinessLogicException(UserExceptionCode.PASSWORD_NOT_MATCHED);
             }
+        }
+        else {
+            throw new BusinessLogicException(UserExceptionCode.PASSWORD_NOT_MATCHED);
         }
     }
 
