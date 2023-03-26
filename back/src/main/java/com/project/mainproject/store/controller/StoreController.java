@@ -89,7 +89,8 @@ public class StoreController {
     @PostMapping("/image")
     public ResponseEntity updateImage(@RequestPart MultipartFile profileImage , @RequestParam Long userIdx) {
         SingleResponseDto updateImageResult = storeService.updateImage(userIdx, profileImage);
-        URI location = UriCreator.createUri("/api/user/{storeIdx}", userIdx);
+        URI location = UriCreator.createUri("/api/user/", userIdx);
+
         return ResponseEntity.ok().header("location",location.toString()).body(updateImageResult);
     }
 

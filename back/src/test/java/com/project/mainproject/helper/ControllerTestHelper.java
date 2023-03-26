@@ -34,6 +34,12 @@ public interface ControllerTestHelper<T> {
         return post(url, resourceId)
                 .accept(MediaType.APPLICATION_JSON);
     }
+    default RequestBuilder postRequestBuilder(String url,String accessToken, long resourceId, MultiValueMap<String, String> queryParams) {
+        return post(url, resourceId)
+                .params(queryParams)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + accessToken);
+    }
     default RequestBuilder postRequestBuilder(String url,String accessToken, long resourceId) {
         return post(url, resourceId)
                 .accept(MediaType.APPLICATION_JSON)
