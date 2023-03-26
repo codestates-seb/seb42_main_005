@@ -15,16 +15,16 @@ interface Props {
   reviewList: any;
   setReviewList: any;
 }
-export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, reviewList, setReviewList }: Props) {
+export default function ReplyOfReview({ reviewIdx, review, reply, storeIdx, reviewList, setReviewList }: Props) {
   const [isPatchFormShown, setIsPatchFormShown] = useState(false);
   const [content, setContent] = useState(reply.content);
 
-  const handlerReviewOfReview = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlerReplyOfReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContent(e.target.value);
   };
 
   //! PATCH : 리뷰의 댓글수정
-  const editCommentKeyPress = async (e: any) => {
+  const editReplyKeyPress = async (e: any) => {
     if (e.key === " " && e.getModifierState("Shift") === false) {
       e.stopPropagation();
     } else if (e.key === " " && e.target.value.slice(-1) === " ") {
@@ -50,7 +50,7 @@ export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, rev
   };
 
   // ! DELETE : 리뷰의 댓글삭제
-  const deleteComment = async () => {
+  const deleteReply = async () => {
     await axios
       .delete(`${APIS.DELETE_REPLY}/${reviewIdx}/reply/${reply.replyIdx}`)
       .catch((error) => {console.log("리뷰의 댓글을 삭제하던 중 에러 발생");console.log(error)});
@@ -76,12 +76,12 @@ export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, rev
         <ButtonContainer>
           {/* 약사계정이면 && 해당 약국의 storeIdx 와 리덕스 툴킷의 내 storeIdx 가 같을 때 => 버튼이 보임 */}
           <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsPatchFormShown(true)} />
-          <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteComment()} />
+          <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReply()} />
         </ButtonContainer>
       </Upper>
-      <Comment>{reply.content}</Comment>
+      <Reply>{reply.content}</Reply>
       {isPatchFormShown ? (
-        <WriteCommentForm>
+        <WriteReplyForm>
           <Instruction>
             <p>댓글을 수정해주세요. 작성 완료 시 'Enter'를 눌러주세요.</p>
             <HiXMark id="close" onClick={() => setIsPatchFormShown(false)} aria-hidden="true" />
@@ -93,10 +93,10 @@ export default function ReviewOfReview({ reviewIdx, review, reply, storeIdx, rev
             isValid={true}
             icon={true}
             value={content}
-            onChange={handlerReviewOfReview}
-            onKeyPress={editCommentKeyPress}
+            onChange={handlerReplyOfReview}
+            onKeyPress={editReplyKeyPress}
           />
-        </WriteCommentForm>
+        </WriteReplyForm>
       ) : null}
     </CommentContainer>
   );
@@ -109,8 +109,9 @@ const CommentContainer = styled.section`
   gap: 3px;
   border-top: 1px solid var(--black-075);
 `;
-const Comment = styled.div`
+const Reply = styled.div`
   padding: 10px;
+  margin-bottom: 10px;
   font-size: 14px;
   border-radius: 5px;
   background-color: var(--black-025);
@@ -151,7 +152,7 @@ const ButtonContainer = styled.span`
   gap: 5px;
   font-size: 10px;
 `;
-const WriteCommentForm = styled.form`
+const WriteReplyForm = styled.form`
   display: flex;
   flex-direction: column;
   margin: 10px 2px 0px 6px;

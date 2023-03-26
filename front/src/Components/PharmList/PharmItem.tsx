@@ -49,7 +49,6 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
           setIsModalUp={setIsModalUp}
           like={like}
           setLike={setLike}
-          Pharm={Pharm}
           storeIdx={Pharm.storeIdx}
           pharmDetail={pharmDetail}
           reviewList={reviewList}

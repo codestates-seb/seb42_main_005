@@ -4,7 +4,7 @@ import styled from "styled-components";
 import PharmRank from "../Ul/PharmRank";
 import AnyDropDown from "./AnyDropDown";
 import { APIS } from "../../Api/APIs";
-import { TYPE_setLike, TYPE_pharmDetail, TYPE_like, TYPE_Detail } from "../../Api/TYPES";
+import { TYPE_setLike, TYPE_like } from "../../Api/TYPES";
 
 interface Props {
   like: TYPE_like;

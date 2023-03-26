@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import ReviewOfReview from "./ReviewOfReview";
+import ReplyOfReview from "./ReplyOfReview";
 import Textarea from "../Ul/Textarea";
 import Button from "../Ul/Button";
 import Input from "../Ul/Input";
@@ -19,15 +19,15 @@ interface Props {
 }
 
 export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, setReviewList }: Props) {
-  const [isCommentFormShown, setIsCommentFormShown] = useState<React.SetStateAction<boolean>>(false);
+  const [isReplyFormShown, setIsReplyFormShown] = useState<React.SetStateAction<boolean>>(false);
   const [isOnEdit, setIsOnEdit] = useState<React.SetStateAction<boolean>>(false);
   const [reviewContent, setReviewContent] = useState<React.SetStateAction<any>>(review.content);
-  const [commentContent, setCommentContent] = useState<React.SetStateAction<any>>("");
+  const [replyContent, setReplyContent] = useState<React.SetStateAction<any>>("");
   const handleReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReviewContent(e.target.value);
   };
-  const handleComment = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCommentContent(e.target.value);
+  const handleReply = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setReplyContent(e.target.value);
   };
 
   //! PATCH : 리뷰수정
@@ -89,12 +89,12 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
       const newComment = {
         storeIdx,
         userIdx: 1,  //TODO - REDUX TOOLKIT
-        content: commentContent,
+        content: replyContent,
       };
       await axios
         .post(`${APIS.POST_REPLY}/${reviewIdx}/reply`, newComment)
-        .then(() => setCommentContent(""))
-        .then(() => setIsCommentFormShown(false))
+        .then(() => setReplyContent(""))
+        .then(() => setIsReplyFormShown(false))
         .catch((error) => {console.log("리뷰의 댓글을 작성하던 중 에러 발생");console.log(error)});
       await axios
         .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
@@ -125,7 +125,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
             <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsOnEdit(true)} />
             <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReview()} />
             {/* 약사계정이면 && 해당 약국의 storIdx 와 리덕스 툴킷의 내 storeIdx 가 같을 때 => 댓글 + 신고 버튼이 보임 */}
-            <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsCommentFormShown(true)} />
+            <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsReplyFormShown(true)} />
             {/* 로그인 상태여야 함 */}
             <Button color="l_black" size="sm" text="신 고" onClick={() => reportReview()} />
           </ButtonContainer>
@@ -151,11 +151,11 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
           <ReviewImg src={review.reviewImage} />
         </Lower>
       </section>
-      {isCommentFormShown ? (
+      {isReplyFormShown ? (
         <WriteCommentForm>
           <Instruction>
             <p>댓글을 작성해주세요. 작성 완료 시 'Enter'를 눌러주세요.</p>
-            <HiXMark id="close" onClick={() => setIsCommentFormShown(false)} aria-hidden="true" />
+            <HiXMark id="close" onClick={() => setIsReplyFormShown(false)} aria-hidden="true" />
           </Instruction>
           <label htmlFor="comment of review" id="hide" />
           <Input
@@ -163,14 +163,14 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
             placeholder="감사합니다 :)"
             isValid={true}
             icon={true}
-            value={commentContent}
-            onChange={handleComment}
+            value={replyContent}
+            onChange={handleReply}
             onKeyPress={postReply}
           />
         </WriteCommentForm>
       ) : null}
       {review.replies?.map((reply: any) => (
-        <ReviewOfReview
+        <ReplyOfReview
           key={reply.replyIdx}
           reviewIdx={reviewIdx}
           reply={reply}

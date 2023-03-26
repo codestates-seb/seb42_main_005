@@ -14,11 +14,10 @@ interface Props {
   Pharm: TYPE_Pharm | undefined;
   setIsReviewFormShown: TYPE_setIsReviewFormShown;
   storeIdx: number | undefined;
-  reviewList: TYPE_reviewList;
   setReviewList: TYPE_setReviewList;
 }
 
-export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx, reviewList, setReviewList }: Props) {
+export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx, setReviewList }: Props) {
   const [imageSrc, setImageSrc]: any = useState(null);
   const [imgFile, setImgFile]: any = useState(null);
   const onUpload = (e: any) => {

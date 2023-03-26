@@ -7,10 +7,8 @@ import ReviewList from "./Reviews";
 import Button from "../Ul/Button";
 import { zIndex_Modal } from "../../Util/z-index";
 import {
-  TYPE_Pharm,
   TYPE_setIsModalUp,
   TYPE_like,
-  TYPE_pharmDetail,
   TYPE_reviewList,
   TYPE_setReviewList,
 } from "../../Api/TYPES";
@@ -21,8 +19,7 @@ interface Props {
   like: TYPE_like;
   setLike: any;
   storeIdx: number;
-  Pharm?: TYPE_Pharm;
-  pharmDetail: TYPE_pharmDetail;
+  pharmDetail: any;
   reviewList: TYPE_reviewList;
   setReviewList: TYPE_setReviewList;
 }
@@ -32,7 +29,6 @@ export default function PharmDetail({
   like,
   setLike,
   storeIdx,
-  Pharm,
   pharmDetail,
   reviewList,
   setReviewList,
@@ -46,8 +42,8 @@ export default function PharmDetail({
           <HiXMark id="close" onClick={() => setIsModalUp(false)} aria-hidden="true" />
         </CloseBtnContainer>
         <InfoHeader>
-          <InfoTitle>{Pharm?.name}</InfoTitle>
-          <PharmRank rating={Pharm?.rating} likes={Pharm?.pickedStoreCount} reviewCount={Pharm?.reviewCount} />
+          <InfoTitle>{pharmDetail?.name}</InfoTitle>
+          <PharmRank rating={pharmDetail?.rating} likes={pharmDetail?.pickedStoreCount} reviewCount={pharmDetail?.reviewCount} />
         </InfoHeader>
         <Constant>
           <PharmInfo like={like} setLike={setLike} pharmDetail={pharmDetail} />
@@ -56,15 +52,14 @@ export default function PharmDetail({
             setReviewList={setReviewList}
             setIsReviewFormShown={setIsReviewFormShown}
             storeIdx={storeIdx}
-            Pharm={Pharm}
+            Pharm={pharmDetail}
           />
         </Constant>
         {isReviewFormShown ? (
           <WriteReviewForm
-            Pharm={Pharm}
+            Pharm={pharmDetail}
             setIsReviewFormShown={setIsReviewFormShown}
-            storeIdx={Pharm?.storeIdx}
-            reviewList={reviewList}
+            storeIdx={pharmDetail?.storeIdx}
             setReviewList={setReviewList}
           />
         ) : null}
