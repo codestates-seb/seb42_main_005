@@ -34,6 +34,11 @@ public interface ControllerTestHelper<T> {
         return post(url, resourceId)
                 .accept(MediaType.APPLICATION_JSON);
     }
+    default RequestBuilder postRequestBuilder(String url,String accessToken, long resourceId) {
+        return post(url, resourceId)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + accessToken);
+    }
     default RequestBuilder postRequestBuilder(String url, long resourceId, String content) {
         return post(url, resourceId)
                 .accept(MediaType.APPLICATION_JSON)
@@ -76,6 +81,11 @@ public interface ControllerTestHelper<T> {
     default RequestBuilder getRequestBuilder(String url, Long resourceId) {
         return get(url, resourceId)
                 .accept(MediaType.APPLICATION_JSON);
+    }
+    default RequestBuilder getRequestBuilder(String url,String accessToken, Long resourceId) {
+        return get(url, resourceId)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + accessToken);
     }
     default RequestBuilder getRequestBuilder(String uri) {
         return get(uri)
