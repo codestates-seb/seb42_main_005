@@ -1,9 +1,11 @@
 package com.project.mainproject.store.dto.DBdto;
 
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class DBPickedStoredListDto {
     private Long storeIdx;
     private String name;

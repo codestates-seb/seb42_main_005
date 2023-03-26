@@ -27,9 +27,16 @@ public interface StoreControllerTestHelper extends ControllerTestHelper {
         return STORE_URL + RESOURCE_URI_STORE;
     }
 
+    default String getPickPostURI() {
+        return STORE_URL + RESOURCE_URI_STORE +PICK_URL;
+    }
     default String getPickURI() {
         return STORE_URL + RESOURCE_URI_STORE + PICK_URL;
     }
+
+    default String getPickListURI() {
+        return STORE_URL + "/user" + RESOURCE_URI_STORE + PICK_URL +"/";
+    }//TODO : 수정 필요
 
     default String getURITwoURI() {
         return STORE_URL + RESOURCE_URI_STORE + REVIEW_URL + RESOURCE_URI_REVIEW;
@@ -71,6 +78,7 @@ public interface StoreControllerTestHelper extends ControllerTestHelper {
                 fieldWithPath("filterCondition").type(JsonFieldType.ARRAY).description("태그 필터 정보").optional()
         );
     }
+
 
     default List<FieldDescriptor> getStoreIdxDescriptors() {
         String parentPath = getDataParentPath(DataResponseType.SINGLE,"response");

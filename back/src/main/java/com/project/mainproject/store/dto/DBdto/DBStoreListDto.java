@@ -1,11 +1,13 @@
 package com.project.mainproject.store.dto.DBdto;
 
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Builder
 public class DBStoreListDto {
     private Long storeIdx;
     private String name;
