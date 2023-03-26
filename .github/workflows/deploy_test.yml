@@ -2,9 +2,9 @@ name: BE Deploy Test
 
 on:
   pull_request_target:
-    types: [closed, labeled]
     branches: [ "BE_deploy" ]
-      
+    types: [closed, labeled]
+
 jobs:
   if_merged:
     if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'be deploy')
@@ -12,5 +12,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print Completed Message
-      - run: |
+        run: |
           echo The PR of Backend was merged!!
