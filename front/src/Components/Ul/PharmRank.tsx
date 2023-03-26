@@ -3,9 +3,9 @@ import { BsStar } from "react-icons/bs";
 import { BsStarFill } from "react-icons/bs";
 
 interface Props {
-  rating: number;
-  likes: number;
-  reviewCount: number;
+  rating: number | undefined;
+  likes: number | undefined;
+  reviewCount: number | undefined;
 }
 export default function PharmRank({ rating, likes, reviewCount }: Props) {
   return (

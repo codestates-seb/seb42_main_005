@@ -1,31 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import styled from "styled-components";
+import axios from "axios";
 import LikedPharmacyUnit from "../User/MyInfo_likedPharmacy";
-import { API_LikedPharmacyUnit } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
 export default function MyInfoLikes() {
   const [likedPharmacies, setLikedPharmacies] = useState([]);
 
-//! GET : 내가 찜한 약국 리스트
-useEffect(() => {
-  const getLikedPharmList = async () => {
-    try {
-      //TODO url 받았을때 -> /api/store/user/{userIdx}/pick
-      //! 이거 안돼 => 찜하기 데이터가 없어서 안뜸?
-      //? userIdx 는 리덕스 툴킷에서
-      const response = await axios.get(`${API_LikedPharmacyUnit.GET_REAL_API}/${1}/pick`);
-
-      setLikedPharmacies(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  getLikedPharmList();
-}, []);
-
+  //! GET : 내가 찜한 약국 리스트
+  useEffect(() => {
+    const getLikedPharmList = async () => {
+      await axios
+        .get(`${APIS.GET_MY_LIKES}/${1}/pick`) //TODO - REDUX TOOLKIT
+        .then((response) => setLikedPharmacies(response.data))
+        .catch((error) => {
+          console.log("내가 찜한 약국리스트 받아오던 중 에러 발생");
+          console.log(error);
+        });
+    };
+    getLikedPharmList();
+  }, []);
 
   return (
     <Content>
@@ -42,7 +38,6 @@ useEffect(() => {
             <LikedPharmacyUnit
               key={likedPharmacy.storeIdx}
               likedPharmacy={likedPharmacy}
-              likedPharmacies={likedPharmacies}
               setLikedPharmacies={setLikedPharmacies}
             />
           ))}

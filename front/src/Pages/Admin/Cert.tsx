@@ -1,38 +1,38 @@
-import { useState } from "react";
 import styled from "styled-components";
+import { useState } from "react";
 import ImageUp from "./ImageUp";
+import { TYPE_Cert } from "../../Api/TYPES";
 
 interface Props {
-  cert: any;
+  cert: TYPE_Cert;
 }
 
 export default function Cert({ cert }: Props) {
-  const [isImgUp, setIsImgUp] = useState(false);
-  const [imgUrl, setImgUrl] = useState("");
-
+  const [isImgUp, setIsImgUp] = useState<React.SetStateAction<boolean>>(false);
+  const [imgUrl, setImgUrl] = useState<React.SetStateAction<string|any>>("");
   return (
     <Contaniner>
       {isImgUp ? <ImageUp isImgUp={isImgUp} setIsImgUp={setIsImgUp} imgUrl={imgUrl} /> : null}
-      <Values className="nickname">{cert.nickname as any}</Values>
+      <Values className="nickname">{cert.name as any}</Values>
       <Values className="email">{cert.email}</Values>
-      <Values className="requested">{cert.requested}</Values>
+      <Values className="requested">{new Date(cert.createdAt).toLocaleDateString()}</Values>
       <Values
         className="businessCert link"
         onClick={() => {
           setIsImgUp(!isImgUp);
-          setImgUrl(cert.businessCert);
+          setImgUrl(cert.businessCertificate);
         }}
       >
-        {cert.businessCert}
+        {cert.businessCertificate}
       </Values>
       <Values
         className="licenceCert link"
         onClick={() => {
           setIsImgUp(!isImgUp);
-          setImgUrl(cert.licenceCert);
+          setImgUrl(cert.pharmacistCertificate);
         }}
       >
-        {cert.licenceCert}
+        {cert.pharmacistCertificate}
       </Values>
     </Contaniner>
   );
@@ -40,11 +40,17 @@ export default function Cert({ cert }: Props) {
 
 const Contaniner = styled.div`
   display: flex;
+  justify-content: space-evenly;
   align-items: center;
-`
+  margin-left: 8px;
+  width: 100%;
+`;
 const Values = styled.span`
   display: flex;
   justify-content: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   &.checkBox {
     padding-left: 7px;
   }

@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { validators } from "../Components/SignUpForm/Validation";
 import ErrorAlert from "../Components/SignUpForm/ErrorAlert";
 import axios from "axios";
-import { API_UserLogIn } from "../Api/APIs";
+import { APIS } from "../Api/APIs";
 import { setLocalStorage } from "../Api/localStorage";
 
 export default function Login() {
@@ -76,7 +76,7 @@ export default function Login() {
     //! POST : 로그인 - JWT
     const postLogin = async () => {
       await axios
-        .post(API_UserLogIn.REAL_API, { email: email, password: password })
+        .post(APIS.POST_LOGIN_JWT, { email: email, password: password })
         .then((res) => {
          
           let accessToken = res.headers.authorization;
@@ -112,7 +112,7 @@ export default function Login() {
       //TODO /api/oauth2/authorization/{provider}
       const provider = ""; //! 여기 수정 필요
       await axios({
-        url: `${API_UserLogIn.AUTH_REAL_API}/${provider}`,
+        url: `${APIS.POST_LOGIN_AUTH}/${provider}`,
         method: "post",
       });
     } catch (error) {

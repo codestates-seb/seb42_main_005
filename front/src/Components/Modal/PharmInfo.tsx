@@ -3,39 +3,44 @@ import axios from "axios";
 import styled from "styled-components";
 import PharmRank from "../Ul/PharmRank";
 import AnyDropDown from "./AnyDropDown";
-import { API_PharmInfo } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
+import { TYPE_setLike, TYPE_pharmDetail, TYPE_like, TYPE_Detail } from "../../Api/TYPES";
 
 interface Props {
-  like: any;
-  setLike: any;
-  Pharm: any;
+  like: TYPE_like;
+  setLike: TYPE_setLike;
+  pharmDetail: any;
 }
 
-export default function PharmInfo({ like, setLike, Pharm }: Props) {
-  const [isDropDownDown, setIsDropDownDown] = useState(false);
-
+export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
+  const [isDropDownDown, setIsDropDownDown] = useState<boolean>(false);
+  const userIdx = 1; //TODO - REDUX TOOLKIT
   //! POST : 찜하기/찜취소
   const likeThisPharmacy = async () => {
-    try {
-      await axios({
-        url: `${API_PharmInfo.REAL_API}/${Pharm.storeIdx}/pick?userIdx=${1}`, //? 리덕스 툴킷에서 유저인덱스 받아와야 함
-        method: "post",
+    await axios
+      .post(`${APIS.POST_LIKE}/${pharmDetail.storeIdx}/pick?userIdx=${userIdx}`)
+      .then(() => setLike(!like))
+      .catch((error) => {
+        console.log("찜하기 또는 찜 취소 하던 중 에러 발생");
+        console.log(error);
       });
-    } catch (error) {
-      console.log(error);
-    }
-    setLike(!like);
   };
 
   return (
     <InfoContainer>
       <InfoHeader>
-        <InfoTitle>{Pharm.name}</InfoTitle>
-        {Pharm && <PharmRank rating={Pharm.rating} likes={Pharm.pickedStoreCount} reviewCount={Pharm.reviewCount} />}
+        <InfoTitle>{pharmDetail.name}</InfoTitle>
+        {pharmDetail && (
+          <PharmRank
+            rating={pharmDetail.rating}
+            likes={pharmDetail.pickedStoreCount}
+            reviewCount={pharmDetail.reviewCount}
+          />
+        )}
       </InfoHeader>
       <InfoImgContainer>
-        {Pharm.image ? (
-          <PharmImg src={Pharm.image as string} />
+        {pharmDetail.imagePath ? (
+          <PharmImg src={pharmDetail.imagePath} />
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." />
         )}
@@ -54,11 +59,16 @@ export default function PharmInfo({ like, setLike, Pharm }: Props) {
         <InfoUnit>
           <InfoInfoTitle>영업시간</InfoInfoTitle>
           <InfoInfoContent>
-            {Pharm.todayOperatingTime
-              ? `${Pharm.todayOperatingTime.operatingTime.startTime.slice(
-                  0,
-                  -3,
-                )} - ${Pharm.todayOperatingTime.operatingTime.endTime.slice(0, -3)}`
+            {pharmDetail.todayOperatingTime
+              ? `${
+                  pharmDetail.todayOperatingTime.operatingTime.startTime
+                    ? pharmDetail.todayOperatingTime.operatingTime.startTime.slice(0, -3)
+                    : ""
+                } - ${
+                  pharmDetail.todayOperatingTime.operatingTime.endTime
+                    ? pharmDetail.todayOperatingTime.operatingTime.endTime.slice(0, -3)
+                    : ""
+                }`
               : "정보가 없습니다."}
             {!isDropDownDown ? (
               <More id={`dropDown ${isDropDownDown ? "close" : "open"}`} onClick={() => setIsDropDownDown(true)}>
@@ -66,17 +76,17 @@ export default function PharmInfo({ like, setLike, Pharm }: Props) {
               </More>
             ) : null}
             {isDropDownDown ? (
-              <AnyDropDown setIsDropDownDown={setIsDropDownDown} workingHours={Pharm.operatingTime} />
+              <AnyDropDown setIsDropDownDown={setIsDropDownDown} workingHours={pharmDetail.operatingTime} />
             ) : null}
           </InfoInfoContent>
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>주소</InfoInfoTitle>
-          <InfoInfoContent className="address">{Pharm.address}</InfoInfoContent>
+          <InfoInfoContent className="address">{pharmDetail.address}</InfoInfoContent>
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>전화번호</InfoInfoTitle>
-          <InfoInfoContent>{Pharm.tel}</InfoInfoContent>
+          <InfoInfoContent>{pharmDetail.tel}</InfoInfoContent>
         </InfoUnit>
       </InfoInfo>
     </InfoContainer>
@@ -151,25 +161,27 @@ const InfoUnit = styled.article`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   gap: 20px;
 `;
 const InfoInfoTitle = styled.h2`
+  display: flex;
+  align-items: flex-start;
   width: 70px;
   color: var(--black-350);
-  font-size: 16px;
+  font-size: 17px;
   font-weight: bold;
 `;
 const InfoInfoContent = styled.span`
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   height: 25px;
   width: 350px;
   gap: 3px;
   font-size: 17px;
   &.address {
-    padding: 30px 0;
+    height: 60px;
     white-space: normal;
     word-break: normal;
   }

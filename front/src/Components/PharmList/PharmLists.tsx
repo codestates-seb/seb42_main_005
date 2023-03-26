@@ -1,12 +1,11 @@
-//홈화면 옆에 약국 리스트
 import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
-import PharmItem from "./PharmItem";
-import SearchBar from "./SearchBar";
 import { zIndex_PharmList } from "../../Util/z-index";
 import { SELECT_HIDDEN } from "../../Util/type";
-import { RiHomeLine } from "react-icons/ri";
+import PharmItem from "./PharmItem";
+import SearchBar from "./SearchBar";
 import { VscTriangleLeft } from "react-icons/vsc";
+import { RiHomeLine } from "react-icons/ri";
 
 interface Props {
   hidden: SELECT_HIDDEN;

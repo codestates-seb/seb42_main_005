@@ -3,8 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import PharmRank from "../Ul/PharmRank";
 import PharmDetail from "../Modal/PharmDetail";
-import { API_PharmItem } from "../../Api/APIs";
-import { API_PharmDetail } from "../../Api/APIs";
+import { APIS } from "../../Api/APIs";
 
 interface Props {
   Pharm: any;
@@ -12,42 +11,35 @@ interface Props {
 }
 
 export default function PharmItem({ Pharm, storeIdx }: Props) {
-  const [isModalUp, setIsModalUp] = useState(false);
-  const [pharmDetail, setPharmDetail] = useState({});
-  const [reviewList, setReviewList] = useState([]);
-  const [like, setLike] = useState(false);
+  const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
+  const [pharmDetail, setPharmDetail] = useState<React.SetStateAction<{}>>({});
+  const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
+  const [like, setLike] = useState<React.SetStateAction<boolean>>(false);
 
   //! GET : 약국상세정보 + 리뷰리스트
   const onModalUp = () => {
-    const pharmDetailsAndreviewList = async () => {
+    const getPharmDetail = async () => {
       await axios
-        .get(`${API_PharmItem.REAL_API}/${storeIdx}`)
-        .then((response) => {
-          setPharmDetail(response.data.response);
-          axios
-            .get(`${API_PharmDetail.REAL_API}/${storeIdx}/review`)
-            .then((response) => {
-              setReviewList(response.data.response.storeReviews);
-            })
-            .catch((err) => console.log("리뷰받아오던 중" + err));
-        })
-        .catch((err) => console.log("약국상세받아오던 중" + err));
+        .get(`${APIS.GET_PHARMLIST}/${storeIdx}`)
+        .then((response) => setPharmDetail(response.data.response))
+        .catch((err) => {console.log("약국상세받아오던 중 에러 발생");console.log(err)});
     };
-    pharmDetailsAndreviewList();
+    const getReviewList = async () => {
+      await axios
+        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+        .then((response) => setReviewList(response.data.response.storeReviews))
+        .catch((err) => {console.log("약국리뷰받아오던 중 에러 발생");console.log(err)});
+    };
+    axios.all([getPharmDetail(), getReviewList()]);
     setIsModalUp(true);
   };
 
   //! POST : 찜하기/찜취소
   const likeThisPharmacy = async () => {
-    try {
-      await axios({
-        url: `${API_PharmItem.REAL_API}/${storeIdx}/pick?userIdx=${1}`, //? 리덕스 툴킷에서 유저인덱스 받아와야 함
-        method: "post",
-      });
-    } catch (error) {
-      console.log(error);
-    }
-    setLike(!like);
+    await axios
+      .post(`${APIS.POST_LIKE}/${storeIdx}/pick?userIdx=${1}`)
+      .then(() => setLike(!like))
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -65,8 +57,8 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
         />
       ) : null}
       <InfoImgContainer>
-        {Pharm.image ? (
-          <PharmImg src={Pharm.image as string} onClick={() => onModalUp()} />
+        {Pharm.imagePath ? (
+          <PharmImg src={Pharm.imagePath} onClick={() => onModalUp()} />
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." onClick={() => onModalUp()} />
         )}
@@ -112,12 +104,6 @@ const InfoImgContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 10px 5px;
-`;
-const Img = styled.img`
-  object-fit: cover;
-  width: 23.75rem;
-  height: 15.625rem;
-  border-radius: 5px;
 `;
 const LikeButton = styled.span`
   position: absolute;

@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import PharmDetail from "../../Components/Modal/PharmDetail";
 import PharmRank from "../../Components/Ul/PharmRank";
+import { APIS } from "../../Api/APIs";
 import DropDown from "./DropDown";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { IoIosArrowDropright } from "react-icons/io";
 import { IoIosArrowDropdown } from "react-icons/io";
-import { API_PharmacyInformation } from "../../Api/APIs";
 
 export default function PharmacyInformation() {
-  const [pharmDetail, setPharmDetail]: any = useState();
-  const [isModalUp, setIsModalUp] = useState(false);
-  const [like, setLike] = useState(false);
-  const [reviewList, setReviewList] = useState([]);
+  const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
+  const [pharmDetail, setPharmDetail] = useState<React.SetStateAction<any>>({});
+  const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
+  const [like, setLike] = useState<React.SetStateAction<boolean>>(false);
   const [isDropDownDown, setIsDropDownDown] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const onUpload = (e: any) => {
@@ -28,37 +28,21 @@ export default function PharmacyInformation() {
     });
   };
 
-  //! GET : 약국상세정보
-  useEffect(() => {
-    const getPharmDetail = async () => {
-      try {
-        //? storeIdx 는 약사 계정으로 로그인 시 리덕스 툴킷에서 받아올 수 있음 일단 임의로 2
-        const response = await axios.get(`${API_PharmacyInformation.REAL_API}/store/${2}`);
-        setPharmDetail(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getPharmDetail();
-  }, []);
   //! GET : 약국상세정보 + 리뷰리스트
   const onModalUp = () => {
-    const pharmDetailsAndreviewList = async () => {
+    const getPharmDetail = async () => {
       await axios
-        //? storeIdx 는 약사 계정으로 로그인 시 리덕스 툴킷에서 받아올 수 있음 일단 임의로 2
-        .get(`${API_PharmacyInformation.REAL_API}/${2}`)
-        .then((response) => {
-          setPharmDetail(response.data.response);
-          axios
-            .get(`${API_PharmacyInformation.REAL_API}/${2}/review`)
-            .then((response) => {
-              setReviewList(response.data.response.storeReviews);
-            })
-            .catch((err) => console.log("리뷰받아오던 중" + err));
-        })
-        .catch((err) => console.log("약국상세받아오던 중" + err));
+        .get(`${APIS.GET_PHARMLIST}/${2}`) //TODO - REDUX TOOLKIT
+        .then((response) => setPharmDetail(response.data.response))
+        .catch((error) =>  {console.log("약국 상세정보 받아오던 중 에러 발생");console.log(error)});
     };
-    pharmDetailsAndreviewList();
+    const getReviewList = async () => {
+      await axios
+        .get(`${APIS.GET_PHARMLIST}/${2}/review`) //TODO - REDUX TOOLKIT
+        .then((response) => setReviewList(response.data.response.storeReviews))
+        .catch((error) => {console.log("약국 리뷰 받아오던 중 에러 발생");console.log(error)});
+    };
+    axios.all([getPharmDetail(), getReviewList()]);
     setIsModalUp(true);
   };
 
@@ -69,8 +53,7 @@ export default function PharmacyInformation() {
           setIsModalUp={setIsModalUp}
           like={like}
           setLike={setLike}
-          //? storeIdx 는 약사 계정으로 로그인 시 리덕스 툴킷에서 받아올 수 있음 일단 임의로 2
-          storeIdx={2}
+          storeIdx={2} //TODO - REDUX TOOLKIT
           pharmDetail={pharmDetail}
           reviewList={reviewList}
           setReviewList={setReviewList}
