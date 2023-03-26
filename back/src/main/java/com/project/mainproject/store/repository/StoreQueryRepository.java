@@ -174,7 +174,7 @@ public class StoreQueryRepository {
                 .fetchOne();
     }
 
-    public List<DBStoreSearchDto> searchStoreByNameOrAddress(String keyword) {
+    public List<DBStoreSearchDto> searchStoreByName(String keyword) {
         return queryFactory
                 .select(new QDBStoreSearchDto(
                         store.storeIdx, store.name, store.address, store.latitude, store.longitude,
@@ -188,7 +188,25 @@ public class StoreQueryRepository {
                 .leftJoin(store.reviews, review)
                 .leftJoin(store.pickedStores, pickedStore)
                 .leftJoin(store.storeImages, storeImage)
-                .where(store.address.contains(keyword).or(store.name.contains(keyword)))
+                .where(store.name.contains(keyword))
+                .groupBy(store.storeIdx,storeImage.imagePath)
+                .fetch();
+    }
+    public List<DBStoreSearchDto> searchStoreByAddress(String keyword) {
+        return queryFactory
+                .select(new QDBStoreSearchDto(
+                        store.storeIdx, store.name, store.address, store.latitude, store.longitude,
+                        review.rating.avg(),
+                        pickedStore.storeId.count(),
+                        review.reviewIdx.count(),
+                        storeImage.imagePath,
+                        store._super.modifiedAt
+                ))
+                .from(store)
+                .leftJoin(store.reviews, review)
+                .leftJoin(store.pickedStores, pickedStore)
+                .leftJoin(store.storeImages, storeImage)
+                .where(store.name.contains(keyword))
                 .groupBy(store.storeIdx,storeImage.imagePath)
                 .fetch();
     }
