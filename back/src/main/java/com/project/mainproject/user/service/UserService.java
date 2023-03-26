@@ -233,7 +233,7 @@ public class UserService implements UserDetailsService {
         비밀번호 검증 로직
      */
     public void checkPassword(String password) {
-        Pattern pattern = Pattern.compile("^(?=.[A-Za-z])(?=.\\d)(?=.[@$!%#?&])[A-Za-z\\d@$!%*#?&]{8,}$");
+        Pattern pattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$");
         Matcher matcher = pattern.matcher(password);
         if (!matcher.find()) {
             throw new BusinessLogicException(UserExceptionCode.CONFLICT_PASSWORD_RULE);

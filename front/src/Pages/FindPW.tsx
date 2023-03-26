@@ -6,6 +6,7 @@ import SignUpInput from "../Components/SignUpForm/SignUpInput";
 import ErrorAlert from "../Components/SignUpForm/ErrorAlert";
 import Button from "../Components/Ul/Button";
 import { APIS } from "../Api/APIs";
+import { useAppSelector } from "../Redux/hooks";
 import { BsPersonCircle } from "react-icons/bs";
 
 export default function FindPW() {
@@ -22,6 +23,10 @@ export default function FindPW() {
     setError(errors);
   };
 
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
   //! PATCH (?) 비밀번호 찾기
   const onSubmit: any = async (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
@@ -32,10 +37,11 @@ export default function FindPW() {
     }
     if (error === true) {
       return alert("항목을 다시 확인해주세요");
-    } else await axios.patch(APIS.PATCH_FINDPW, { email }).catch((error) => {
-      console.log("비밀번호 찾기 요청 보내던 중 에러 발생");
-      console.log(error);
-    });
+    } else
+      await axios.patch(APIS.PATCH_FINDPW, { email }).catch((error) => {
+        console.log("비밀번호 찾기 요청 보내던 중 에러 발생");
+        console.log(error);
+      });
   };
 
   return (

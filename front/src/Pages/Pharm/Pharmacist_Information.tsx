@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { APIS } from "../../Api/APIs";
+import { useAppSelector } from "../../Redux/hooks";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 
 interface Props {
@@ -15,14 +16,16 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
     email: "",
     address: "",
   });
-
   const [imgFile, setImgFlie]: any = useState(null);
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
 
   //! GET : 유저 정보
   useEffect(() => {
     const getReviews = async () => {
       await axios
-        .get(`${APIS.GET_USER_INFO}/${2}`) //TODO - REDUX TOOLKIT
+        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`)
         .then((response) => setMyInfo(response.data.response))
         .catch((error) => {
           console.log("유저정보 받아오던 중 에러 발생");
@@ -51,11 +54,7 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
     e.preventDefault();
     const formDataImgsubmit = new FormData();
     formDataImgsubmit.append("image", imgFile);
-
-    // TODO : 리덕스 툴킷에서 userIdx가져와 [JSON.stringify(userIdx)] 수정 => 아래주석 코드 지우면 안돼!
-    //   formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(userIdx)], { type: "application/json" }));
-    //
- //TODO - REDUX TOOLKIT
+    formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(user.userIdx)], { type: "application/json" }));
     const submitNewImg: any = async () => {
       await axios.patch(`${APIS.PATCH_USER_IMG}/image`, formDataImgsubmit).catch((error) => {
         console.log("이미지 업로드 하던 중 에러 발생");

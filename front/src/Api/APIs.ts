@@ -10,7 +10,7 @@ export const APIS = {
   POST_LOGIN_AUTH: `${API}/api/auth`,
   POST_REISSUE_REFRESH_TOKEN: "",
   POST_LOGOUT: `${API}/api/auth/logout`,
-  PATCH_FINDPW: "",
+  PATCH_FINDPW: "", //! 여기 확인 필요
   DELETE_SIGNOUT: `${API}/api/users`,
   GET_PHARMLIST: `${API}/api/store`,
   GET_PHARMDETAILS: `${API}/api/store`,
@@ -24,6 +24,7 @@ export const APIS = {
   DELETE_REPLY: `${API}/api/review`,
   GET_USER_INFO: `${API}/api/users`,
   PATCH_USER_IMG: `${API}/api/users/image`,
+  PATCH_PHARM_IMG: "", //! 여기 확인 필요
   PATCH_USER_INFO: `${API}/api/users`,
   GET_MYREVIEWS: `${API}/api/review/user`,
   GET_MY_LIKES:`${API}/api/store/user`,

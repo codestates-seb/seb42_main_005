@@ -3,6 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import PharmDetail from "../../Components/Modal/PharmDetail";
 import { APIS } from "../../Api/APIs";
+import { useAppSelector } from "../../Redux/hooks";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface Props {
@@ -42,11 +43,15 @@ export default function MyReview({ review, storeIdx, reviewIdx, idx }: Props) {
     setIsModalUp(true);
   };
 
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
   //! DELETE : 리뷰삭제
   const deleteReview = async () => {
     await axios.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`).catch((error) => console.log(error));
     await axios
-      .get(`${APIS.GET_MYREVIEWS}/${1}`) //TODO - REDUX TOOLKIT
+      .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`) 
       .then((response) => setReviewList(response.data))
       .catch((error) => console.log(error));
   };

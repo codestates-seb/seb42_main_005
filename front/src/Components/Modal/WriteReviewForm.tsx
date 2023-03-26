@@ -5,6 +5,7 @@ import { APIS } from "../../Api/APIs";
 import Textarea from "../Ul/Textarea";
 import Button from "../Ul/Button";
 import { TYPE_Pharm, TYPE_setIsReviewFormShown, TYPE_setReviewList } from "../../Api/TYPES";
+import { useAppSelector } from "../../Redux/hooks";
 import { zIndex_Modal } from "../../Util/z-index";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BiPhotoAlbum } from "react-icons/bi";
@@ -55,11 +56,15 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
     });
   };
 
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
   //! POST : 리뷰작성
   const onSubmit: any = async (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
     let data: any = {
-      userIdx: 4, //TODO - REDUX TOOLKIT
+      userIdx: user.userIdx,
       content: review.content,
       rating: review.rating,
     };

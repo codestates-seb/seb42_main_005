@@ -3,6 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import PharmDetail from "../../Components/Modal/PharmDetail";
 import { APIS } from "../../Api/APIs";
+import { useAppSelector } from "../../Redux/hooks";
 import { IoIosArrowDropright } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
@@ -41,14 +42,18 @@ export default function LikedPharmacyUnit({ likedPharmacy, setLikedPharmacies }:
     setIsModalUp(true);
   };
 
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
   //! POST : 찜취소
   const unLikePharmacy = async (storeIdx: number) => {
-    await axios.post(`${APIS.POST_LIKE}/${storeIdx}/pick?userIdx=${1}`).catch((error) => {
+    await axios.post(`${APIS.POST_LIKE}/${storeIdx}/pick?userIdx=${user.userIdx}`).catch((error) => {
       console.log("찜취소 하던 중 에러 발생");
       console.log(error);
     });
     await axios
-      .get(`${APIS.GET_MYREVIEWS}/${1}`) //TODO - REDUX TOOLKIT
+      .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`)
       .then((response) => setLikedPharmacies(response.data))
       .catch((error) => {
         console.log("찜리스트 다시 받아오던 중 에러 발생");

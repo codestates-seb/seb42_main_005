@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import WriteReviewForm from "./WriteReviewForm";
 import PharmRank from "../Ul/PharmRank";
@@ -6,6 +7,7 @@ import PharmInfo from "./PharmInfo";
 import ReviewList from "./Reviews";
 import Button from "../Ul/Button";
 import { zIndex_Modal } from "../../Util/z-index";
+import { getLocalStorage } from "../../Api/localStorage";
 import {
   TYPE_setIsModalUp,
   TYPE_like,
@@ -35,6 +37,13 @@ export default function PharmDetail({
 }: Props) {
   const [isReviewFormShown, setIsReviewFormShown] = useState<React.SetStateAction<boolean>>(false);
 
+  const token = getLocalStorage("access_token");
+  const navigate = useNavigate();
+  const returnLogin = () => {
+    alert("로그인을 해주세요!");
+    navigate("/login");
+  };
+
   return (
     <ModalBackDrop onClick={() => setIsModalUp(false)}>
       <ModalContainer onClick={(event: React.MouseEvent<HTMLButtonElement>) => event.stopPropagation()}>
@@ -55,7 +64,7 @@ export default function PharmDetail({
             Pharm={pharmDetail}
           />
         </Constant>
-        {isReviewFormShown ? (
+        {token && isReviewFormShown ? (
           <WriteReviewForm
             Pharm={pharmDetail}
             setIsReviewFormShown={setIsReviewFormShown}
@@ -63,10 +72,13 @@ export default function PharmDetail({
             setReviewList={setReviewList}
           />
         ) : null}
-        {/* 로그인이 안된 상태일 경우, 버튼을 누르면 로그인 페이지로 랜딩 */}
-        {isReviewFormShown ? null : (
+        {token ? (
           <WriteReviewBtnContainer>
             <Button onClick={() => setIsReviewFormShown(true)} color="mint" size="md" text="리뷰쓰기" />
+          </WriteReviewBtnContainer>
+        ) : (
+          <WriteReviewBtnContainer>
+            <Button onClick={() => returnLogin()} color="mint" size="md" text="리뷰쓰기" />
           </WriteReviewBtnContainer>
         )}
       </ModalContainer>

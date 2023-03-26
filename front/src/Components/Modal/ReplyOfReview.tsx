@@ -4,6 +4,7 @@ import axios from "axios";
 import Input from "../Ul/Input";
 import Button from "../Ul/Button";
 import { APIS } from "../../Api/APIs";
+import { useAppSelector } from "../../Redux/hooks";
 import { BsArrowReturnRight } from "react-icons/bs";
 import { HiXMark } from "react-icons/hi2";
 
@@ -15,13 +16,17 @@ interface Props {
   reviewList: any;
   setReviewList: any;
 }
-export default function ReplyOfReview({ reviewIdx, review, reply, storeIdx, reviewList, setReviewList }: Props) {
+export default function ReplyOfReview({ reviewIdx, reply, storeIdx, reviewList, setReviewList }: Props) {
   const [isPatchFormShown, setIsPatchFormShown] = useState(false);
   const [content, setContent] = useState(reply.content);
 
   const handlerReplyOfReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContent(e.target.value);
   };
+
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
 
   //! PATCH : 리뷰의 댓글수정
   const editReplyKeyPress = async (e: any) => {
@@ -31,13 +36,12 @@ export default function ReplyOfReview({ reviewIdx, review, reply, storeIdx, revi
       e.stopPropagation();
     } else if (e.key === "Enter") {
       e.preventDefault();
-      const data = {
-        storeIdx,
-        userIdx: 1,  //TODO - REDUX TOOLKIT
-        content,
-      };
       await axios
-        .patch(`${APIS.PATCH_REPLY}/${reviewIdx}/reply/${reply.replyIdx}`, data)
+        .patch(`${APIS.PATCH_REPLY}/${reviewIdx}/reply/${reply.replyIdx}`, {
+          storeIdx,
+          userIdx: user.userIdx,
+          content,
+        })
         .then(() => setIsPatchFormShown(false))
         .catch((error) => {console.log("리뷰의 댓글을 수정하던 중 에러 발생");console.log(error)});
       await axios
@@ -74,9 +78,12 @@ export default function ReplyOfReview({ reviewIdx, review, reply, storeIdx, revi
           <Created>{new Date(reply.createdAt).toLocaleDateString()}</Created>
         </UserInfo>
         <ButtonContainer>
-          {/* 약사계정이면 && 해당 약국의 storeIdx 와 리덕스 툴킷의 내 storeIdx 가 같을 때 => 버튼이 보임 */}
-          <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsPatchFormShown(true)} />
-          <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReply()} />
+          {user?.userRole === "약국회원" && storeIdx === user?.storeIdx ? (
+            <>
+              <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsPatchFormShown(true)} />
+              <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReply()} />
+            </>
+          ) : null}
         </ButtonContainer>
       </Upper>
       <Reply>{reply.content}</Reply>

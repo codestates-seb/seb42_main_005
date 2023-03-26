@@ -1,68 +1,51 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import { getLocalStorage, removeLocalStorage } from "../../Api/localStorage";
+import { DeleteUserInfo } from "../../Redux/slice/userSlice";
 import { zIndex_Header } from "../../Util/z-index";
 import { IoIosArrowBack } from "react-icons/io";
 
-interface AccountProps {
-  isLogin: boolean;
-  account?: string;
-}
-
-export default function Account({ isLogin, account }: AccountProps) {
+export default function Account() {
   const [isOpen, setIsOpen] = useState(false);
-  const menuArr = [
-    { link: "/user-my_info", type: "마이페이지" },
-    { link: "/login", type: "로그아웃" },
-  ];
-  const AdminArr = [{ link: "/login", type: "로그아웃" }];
+
   const DropdownHandler = () => {
     setIsOpen(!isOpen);
   };
 
-  if (isLogin && account === "User") {
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
+  const dispatch = useAppDispatch();
+
+  const logOut = () => {
+    removeLocalStorage("access_token");
+    removeLocalStorage("refresh_token");
+    dispatch(DeleteUserInfo());
+  };
+
+  const token = getLocalStorage("access_token");
+
+  if (!token) {
     return (
-      <ContainerAccount>
-        <Link to="/user-my_info" className="profile">
-          <img
-            // 임시 이미지 URL
-            src={"Images/User.png"}
-            alt="profile"
-          />
-        </Link>
-        <span className="name">킹갓 제너럴</span>
-        <span className="identity">님</span>
-        <DropdownButton onClick={DropdownHandler}>
-          <IoIosArrowBack className={isOpen ? "close" : "open"} />
-        </DropdownButton>
-        {isOpen ? (
-          <DropdownBackdrop onClick={DropdownHandler}>
-            <Content>
-              <ul>
-                {menuArr.map((item, idx) => {
-                  return (
-                    <Link to={item.link} key={idx} style={{ textDecoration: "none" }}>
-                      <li>{item.type}</li>
-                    </Link>
-                  );
-                })}
-              </ul>
-            </Content>
-          </DropdownBackdrop>
-        ) : null}
+      <ContainerAccount className="main_nav">
+        <ButtonLink to="/login">로그인</ButtonLink>
+        <Partition />
+        <ButtonLink to="/sign_up">회원가입</ButtonLink>
       </ContainerAccount>
     );
-  } else if (isLogin && account === "Pharm") {
+  } else if (user.userRole === "약국회원") {
     return (
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">
           <img
-            // 임시 이미지 URL
             src={"Images/Pharm.png"}
             alt="profile"
           />
         </Link>
-        <span className="name">킹갓</span>
+        <span className="name">{user.name}</span>
         <span className="identity">약사님</span>
         <DropdownButton onClick={DropdownHandler}>
           <IoIosArrowBack className={isOpen ? "close" : "open"} />
@@ -70,26 +53,24 @@ export default function Account({ isLogin, account }: AccountProps) {
         {isOpen ? (
           <DropdownBackdrop onClick={DropdownHandler}>
             <Content>
-              <ul>
-                {menuArr.map((item, idx) => {
-                  return (
-                    <Link to={item.link} key={idx} style={{ textDecoration: "none" }}>
-                      <li>{item.type}</li>
-                    </Link>
-                  );
-                })}
-              </ul>
+              <section>
+                <Link to="/pharm-my_pharmacy" style={{ textDecoration: "none" }}>
+                  <button>마이페이지</button>
+                </Link>
+                <Link to="/login" style={{ textDecoration: "none" }}>
+                  <button onClick={logOut}>로그아웃</button>
+                </Link>
+              </section>
             </Content>
           </DropdownBackdrop>
         ) : null}
       </ContainerAccount>
     );
-  } else if (isLogin && account === "Admin") {
+  } else if (user.userRole === "관리자") {
     return (
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">
           <img
-            // 임시 이미지 URL
             src={"Images/Admin.png"}
             alt="profile"
           />
@@ -102,15 +83,11 @@ export default function Account({ isLogin, account }: AccountProps) {
         {isOpen ? (
           <DropdownBackdrop onClick={DropdownHandler}>
             <Content>
-              <ul>
-                {AdminArr.map((item, idx) => {
-                  return (
-                    <Link to={item.link} key={idx} style={{ textDecoration: "none" }}>
-                      <li>{item.type}</li>
-                    </Link>
-                  );
-                })}
-              </ul>
+              <section>
+                <Link to="/login" style={{ textDecoration: "none" }}>
+                  <button onClick={logOut}>로그아웃</button>
+                </Link>
+              </section>
             </Content>
           </DropdownBackdrop>
         ) : null}
@@ -118,10 +95,32 @@ export default function Account({ isLogin, account }: AccountProps) {
     );
   } else
     return (
-      <ContainerAccount className="main_nav">
-        <ButtonLink to="/login">로그인</ButtonLink>
-        <Partition />
-        <ButtonLink to="/sign_up">회원가입</ButtonLink>
+      <ContainerAccount>
+        <Link to="/user-my_info" className="profile">
+          <img
+            src={"Images/User.png"}
+            alt="profile"
+          />
+        </Link>
+        <span className="name">{user.name}</span>
+        <span className="identity">님</span>
+        <DropdownButton onClick={DropdownHandler}>
+          <IoIosArrowBack className={isOpen ? "close" : "open"} />
+        </DropdownButton>
+        {isOpen ? (
+          <DropdownBackdrop onClick={DropdownHandler}>
+            <Content>
+              <section>
+                <Link to="/user-my_info" style={{ textDecoration: "none" }}>
+                  <button>마이페이지</button>
+                </Link>
+                <Link to="/login" style={{ textDecoration: "none" }}>
+                  <button onClick={logOut}>로그아웃</button>
+                </Link>
+              </section>
+            </Content>
+          </DropdownBackdrop>
+        ) : null}
       </ContainerAccount>
     );
 }
@@ -195,12 +194,13 @@ const Content = styled.div`
   background-color: white;
   box-shadow: var(--bs-lg);
   transition: 0.2s;
-  ul {
+  section {
     position: relative;
     list-style-type: none;
     padding: 10px 0px 10px 0px;
   }
-  li {
+  button {
+    border: none;
     width: 110px;
     padding: 5px 10px 3px 15px;
     text-align: right;
@@ -209,7 +209,7 @@ const Content = styled.div`
     color: var(--black-600);
     transition: 0.2s;
   }
-  li:hover {
+  button:hover {
     cursor: pointer;
     background-color: var(--black-050);
     color: var(--black-800);
