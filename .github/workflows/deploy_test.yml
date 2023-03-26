@@ -12,4 +12,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: |
-        echo The PR of Backend was merged
+        echo The PR of Backend was merged!
