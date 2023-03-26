@@ -273,7 +273,7 @@ const ButtonShow = styled.button`
 const ButtonContainer = styled.section`
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin: 25px 60px 3px 5px;
 `;
 //우리약국 가기
