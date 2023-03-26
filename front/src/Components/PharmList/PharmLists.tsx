@@ -6,6 +6,9 @@ import PharmItem from "./PharmItem";
 import SearchBar from "./SearchBar";
 import { VscTriangleLeft } from "react-icons/vsc";
 import { RiHomeLine } from "react-icons/ri";
+import { useAppSelector } from "../../Redux/hooks";
+import { getLocalStorage } from "../../Api/localStorage";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   hidden: SELECT_HIDDEN;
@@ -14,6 +17,17 @@ interface Props {
 }
 
 export default function PharmLists({ hidden, setHidden, totalPharmList }: Props) {
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
+  const token = getLocalStorage("access_token");
+  const navigate = useNavigate();
+
+  const gologin = () => {
+    navigate("/login");
+    alert("로그인을 먼저 해주세요!");
+  };
 
   return (
     <ContainerList className={hidden ? "hide" : ""}>
@@ -38,8 +52,24 @@ export default function PharmLists({ hidden, setHidden, totalPharmList }: Props)
             </SearchContainer>
             <ButtonContainer>
               <ButtonMyPlace>
-                <RiHomeLine className="logo" />
-                <span className="my_place">우리 약국</span>
+                {token && user?.userRole === "약국회원" ? (
+                  <>
+                    <RiHomeLine className="logo" />
+                    <span className="my_place">우리 약국</span>
+                  </>
+                ) : token && user?.userRole === "일반회원" ? (
+                  <>
+                    <RiHomeLine className="logo" />
+                    <span className="my_place">우리 집</span>
+                  </>
+                ) : (
+                  <>
+                    <RiHomeLine className="logo" />
+                    <span className="my_place" onClick={gologin}>
+                      우리 집
+                    </span>
+                  </>
+                )}
               </ButtonMyPlace>
               <SortContainer>
                 <ButtonSort>가까운순</ButtonSort>

@@ -7,6 +7,7 @@ import SignUpInput from "../../Components/SignUpForm/SignUpInput";
 import InputAlert from "./InputAlert";
 import { APIS } from "../../Api/APIs";
 import Button from "../../Components/Ul/Button";
+import { useAppSelector } from "../../Redux/hooks";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 
@@ -24,11 +25,16 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
   const [imgFile, setImgFlie]: any = useState(null);
   const [myName, setMyName] = useState("");
   const [myAddress, setMyAddress] = useState("");
+
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
   //! GET : 유저 정보
   useEffect(() => {
     const getReviews = async () => {
       await axios
-        .get(`${APIS.GET_USER_INFO}/${1}`) //TODO - REDUX TOOLKIT
+        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`) //TODO - REDUX TOOLKIT
         .then((response) => {
           setMyInfo(response.data.response);
           setMyName(response.data.response.name);
@@ -209,7 +215,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     };
     const submitNewUserInfo: any = async () => {
       await axios
-        .patch(`${APIS.PATCH_USER_INFO}/${1}`, newUserData)
+        .patch(`${APIS.PATCH_USER_INFO}/${user.userIdx}`, newUserData)
         .then(() => setIsEditing(false))
         .catch((error) => {
           error.response.status === 406
@@ -218,7 +224,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
           console.log(error);
         });
       await axios
-        .get(`${APIS.GET_USER_INFO}/${1}`)
+        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`)
         .then((response) => {
           setMyInfo(response.data.response);
           setMyName(response.data.response.name);
@@ -238,13 +244,12 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     formDataImgsubmit.append("image", imgFile);
 
     // TODO : 리덕스 툴킷에서 userIdx가져와 [JSON.stringify(userIdx)] 수정 => 아래주석 코드 지우면 안돼!
-    //   formDataForsubmit.append("userIdx", new Blob([JSON.stringify(userIdx)], { type: "application/json" }));
-    //
+    formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(user.userIdx)], { type: "application/json" }));
 
     const submitNewImg: any = async () => {
       await axios.patch(`${APIS.PATCH_USER_IMG}/${1}/image`, formDataImgsubmit).catch((error) => console.log(error));
       await axios
-        .get(`${APIS.GET_USER_INFO}/${1}`)
+        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`)
         .then((response) => {
           setMyInfo(response.data.response);
           setMyName(response.data.response.name);

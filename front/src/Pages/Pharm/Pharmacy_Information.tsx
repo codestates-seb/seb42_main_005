@@ -5,6 +5,7 @@ import PharmDetail from "../../Components/Modal/PharmDetail";
 import PharmRank from "../../Components/Ul/PharmRank";
 import { APIS } from "../../Api/APIs";
 import DropDown from "./DropDown";
+import { useAppSelector } from "../../Redux/hooks";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { IoIosArrowDropright } from "react-icons/io";
 import { IoIosArrowDropdown } from "react-icons/io";
@@ -16,8 +17,11 @@ export default function PharmacyInformation() {
   const [like, setLike] = useState<React.SetStateAction<boolean>>(false);
   const [isDropDownDown, setIsDropDownDown] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
+  const [imgFile, setImgFlie]: any = useState(null);
+
   const onUpload = (e: any) => {
     const file = e.target.files[0];
+    setImgFlie(file);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     return new Promise<void>((resolve) => {
@@ -28,23 +32,57 @@ export default function PharmacyInformation() {
     });
   };
 
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
   //! GET : 약국상세정보 + 리뷰리스트
   const onModalUp = () => {
     const getPharmDetail = async () => {
       await axios
-        .get(`${APIS.GET_PHARMLIST}/${2}`) //TODO - REDUX TOOLKIT
+        .get(`${APIS.GET_PHARMLIST}/${user.storeIdx}`) //TODO - REDUX TOOLKIT
         .then((response) => setPharmDetail(response.data.response))
-        .catch((error) =>  {console.log("약국 상세정보 받아오던 중 에러 발생");console.log(error)});
+        .catch((error) => {
+          console.log("약국 상세정보 받아오던 중 에러 발생");
+          console.log(error);
+        });
     };
     const getReviewList = async () => {
       await axios
-        .get(`${APIS.GET_PHARMLIST}/${2}/review`) //TODO - REDUX TOOLKIT
+        .get(`${APIS.GET_PHARMLIST}/${user.storeIdx}/review`) //TODO - REDUX TOOLKIT
         .then((response) => setReviewList(response.data.response.storeReviews))
-        .catch((error) => {console.log("약국 리뷰 받아오던 중 에러 발생");console.log(error)});
+        .catch((error) => {
+          console.log("약국 리뷰 받아오던 중 에러 발생");
+          console.log(error);
+        });
     };
     axios.all([getPharmDetail(), getReviewList()]);
     setIsModalUp(true);
   };
+
+  const submitPharmImg = (e: any) => {
+    e.preventDefault();
+    //!백엔드한테 키값,url 확인하기 => 이미지 보내는데 에러남
+    const formDataImgsubmit = new FormData();
+    formDataImgsubmit.append("image", imgFile);
+    formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(user.userIdx)], { type: "application/json" }));
+
+    const submitNewImg: any = async () => {
+      try {
+        //!PATCH_USER_IMG는 바꿈
+        await axios({
+          url: `${APIS.PATCH_USER_IMG}/image`,
+          method: "patch",
+          data: formDataImgsubmit,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    submitNewImg();
+  };
+
+  console.log(pharmDetail);
 
   return (
     <Content>
@@ -53,7 +91,7 @@ export default function PharmacyInformation() {
           setIsModalUp={setIsModalUp}
           like={like}
           setLike={setLike}
-          storeIdx={2} //TODO - REDUX TOOLKIT
+          storeIdx={user.storeIdx} //TODO - REDUX TOOLKIT
           pharmDetail={pharmDetail}
           reviewList={reviewList}
           setReviewList={setReviewList}
@@ -66,14 +104,21 @@ export default function PharmacyInformation() {
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="image preparing" />
         )}
-        <Label htmlFor="pharmImg">
-          <MdOutlineAddAPhoto aria-hidden="true" />
-          우리 약국 사진추가하기
-        </Label>
+        {imageSrc ? (
+          <Label onClick={submitPharmImg}>
+            <MdOutlineAddAPhoto aria-hidden="true" />
+            우리약국 사진 수정완료
+          </Label>
+        ) : (
+          <Label htmlFor="pharmImg">
+            <MdOutlineAddAPhoto aria-hidden="true" />
+            우리약국 사진 수정하기
+          </Label>
+        )}
       </ImgContainer>
       <InfomationContainer>
         <Header>
-          <PharmName onClick={() => onModalUp()}>킹갓약국</PharmName>
+          <PharmName onClick={() => onModalUp()}>{pharmDetail?.name}</PharmName>
           <PharmRank
             rating={pharmDetail.rating}
             likes={pharmDetail.pickedStoreCount}
@@ -82,11 +127,11 @@ export default function PharmacyInformation() {
         </Header>
         <Unit>
           <Key>주소</Key>
-          <Value>서울시 종로구 대학로 101</Value>
+          <Value>{pharmDetail?.address}</Value>
         </Unit>
         <Unit>
           <Key>전화번호</Key>
-          <Value>02-1234-1234</Value>
+          <Value>{pharmDetail?.tel}</Value>
         </Unit>
         <Unit>
           <Key>영업시간</Key>
@@ -104,7 +149,12 @@ export default function PharmacyInformation() {
                 onClick={() => setIsDropDownDown(!isDropDownDown)}
               />
             )}
-            09:00-21:00
+            {pharmDetail?.todayOperatingTime?.operatingTime?.startTime
+              ? `${pharmDetail?.todayOperatingTime.operatingTime.startTime?.slice(
+                  0,
+                  -3,
+                )}-${pharmDetail?.todayOperatingTime?.operatingTime?.endTime?.slice(0, -3)}`
+              : ""}
             {isDropDownDown ? (
               <DropDown setIsDropDownDown={setIsDropDownDown} workingHours={pharmDetail.operatingTime} />
             ) : null}
