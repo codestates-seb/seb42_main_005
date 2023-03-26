@@ -76,7 +76,6 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
     private JwtHelper jwtHelper;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @MockBean
     private ReviewMapper reviewMapper;
     @MockBean

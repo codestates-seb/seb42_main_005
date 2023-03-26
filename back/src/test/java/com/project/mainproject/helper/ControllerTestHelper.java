@@ -76,6 +76,12 @@ public interface ControllerTestHelper<T> {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
     }
+    default RequestBuilder patchRequestBuilder(String url, long resourceId, long resourceId2,String accessToken) {
+        return patch(url, resourceId,resourceId2)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                ;
+    }
 
     default RequestBuilder patchRequestBuilder(String uri, String content) {
         return patch(uri)
@@ -144,6 +150,14 @@ public interface ControllerTestHelper<T> {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
+    }
+    default RequestBuilder deleteRequestBuilder(String url, long resourceId, long resourceId2,String accessToken) {
+        return delete(url,resourceId,resourceId2)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + accessToken)
+
+                ;
     }
     default RequestBuilder deleteRequestBuilder(String url, long resourceId) {
         return delete(url, resourceId);

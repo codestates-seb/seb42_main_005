@@ -224,6 +224,23 @@ public class ReviewStub {
 
     }
 
+    public static ReviewReply getReviewReply() {
+        return ReviewReply.builder()
+                .replyIdx(1L)
+                .content("리플 본문입니다.")
+                .user(getUserStub())
+                .review(getReviewStub())
+                .build();
+    }
+    public static ReviewReply getReviewReply2() {
+        return ReviewReply.builder()
+                .replyIdx(2L)
+                .content("리플 본문입니다.")
+                .user(getUserStub())
+                .review(getReviewStub())
+                .build();
+    }
+
     public static Page<Review> getPageReviewStub() {
         return new PageImpl<Review>(getListReviewStub());
     }
