@@ -1,7 +1,6 @@
 buildscript {
 	ext {
 		queryDslVersion = "5.0.0"
-		springCloudVersion = "2021.0.5"
 	}
 }
 plugins {
@@ -70,9 +69,6 @@ dependencies {
 
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.6.3'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-
-	// Parameter Store
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws-parameter-store-config:2.2.6.RELEASE'
 }
 
 tasks.named('test') {
@@ -122,9 +118,3 @@ compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl // Q파일을 생성해준다.
 }
 //querydsl 추가 끝
-
-dependencyManagement {
-	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-	}
-}

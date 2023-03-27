@@ -61,9 +61,3 @@ cloud:
     credentials:
       accessKey: ${/deploy/main-005/S3_ACCESS_KEY}
       secretKey: ${/deploy/main-005/S3_SECRET_KEY}
-aws:
-  paramstore:
-    enabled: true
-    prefix: /deploy
-    name: main-005
-    profileSeparator: _
