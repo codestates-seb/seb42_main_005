@@ -9,7 +9,7 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 export default function MyInfoReviews() {
   const [myReviewList, setMyReviewList] = useState([]);
 
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 

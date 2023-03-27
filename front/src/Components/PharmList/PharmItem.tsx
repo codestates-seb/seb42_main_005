@@ -6,20 +6,21 @@ import { getLocalStorage } from "../../Api/localStorage";
 import { useAppSelector } from "../../Redux/hooks";
 import PharmDetail from "../Modal/PharmDetail";
 import PharmRank from "../Ul/PharmRank";
+import { TYPE_Pharm, TYPE_reviewList, TYPE_boolean, TYPE_Detail } from "../../Api/TYPES";
 
 interface Props {
-  Pharm: any;
+  Pharm: TYPE_Pharm;
   storeIdx: number;
 }
 
 export default function PharmItem({ Pharm, storeIdx }: Props) {
-  const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
-  const [pharmDetail, setPharmDetail] = useState<React.SetStateAction<{}>>({});
-  const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
-  const [like, setLike] = useState<React.SetStateAction<boolean>>(Pharm.picked);
+  const [isModalUp, setIsModalUp] = useState<TYPE_boolean>(false);
+  const [pharmDetail, setPharmDetail] = useState<TYPE_Detail>();
+  const [reviewList, setReviewList] = useState<TYPE_reviewList[]>([]);
+  const [like, setLike] = useState(Pharm.picked);
 
   const navigate = useNavigate();
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
@@ -37,7 +38,7 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
     } else if (user.storeIdx) {
       alert("약사회원은 찜하기를 이용하실수 없습니다.");
     } else if (user.userIdx && accessToken) {
-      likePharmacy(storeIdx, user.userIdx, like, setLike)
+      likePharmacy(storeIdx, user.userIdx, like, setLike);
     }
   };
 

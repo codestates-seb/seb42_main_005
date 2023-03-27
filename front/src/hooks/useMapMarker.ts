@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { APIS } from "../Api/APIs";
-import { SELECT_OPTION_MAP, SELECT_SORT_LIST } from "../Util/type";
+import { SELECT_SORT_LIST, SELECT_OPTION_MAP } from "../Api/TYPES";
+
 import { getLocalStorage } from "../Api/localStorage";
 let token = getLocalStorage("access_token");
 

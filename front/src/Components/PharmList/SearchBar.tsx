@@ -4,11 +4,10 @@ import { BsSearch } from "react-icons/bs";
 
 interface Props {
   totalPharmList: object[];
-  setTotalPharmList: any;
+  setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>;
   makeMap: any;
   useSearch: any;
 }
-
 export default function SearchBar({ totalPharmList, setTotalPharmList, makeMap, useSearch }: Props) {
   const [keyword, setKeyword] = useState("");
 

@@ -4,6 +4,7 @@ import { UserInstance, getDetailsAndReviews, deleteReview } from "../../Api/Axio
 import { useAppSelector } from "../../Redux/hooks";
 import PharmDetail from "../../Components/Modal/PharmDetail";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { TYPE_boolean, TYPE_Detail, TYPE_reviewList } from "../../Api/TYPES";
 
 interface Props {
   review: any;
@@ -14,12 +15,12 @@ interface Props {
 }
 
 export default function MyReview({ review, storeIdx, reviewIdx, idx, setMyReviewList }: Props) {
-  const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
-  const [pharmDetail, setPharmDetail] = useState<React.SetStateAction<any>>();
-  const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
-  const [like, setLike] = useState<React.SetStateAction<boolean>>(false);
+  const [isModalUp, setIsModalUp] = useState<TYPE_boolean>(false);
+  const [pharmDetail, setPharmDetail] = useState<TYPE_Detail>();
+  const [reviewList, setReviewList] = useState<TYPE_reviewList[]>([]);
+  const [like, setLike] = useState<TYPE_boolean>(false);
 
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
@@ -57,7 +58,7 @@ export default function MyReview({ review, storeIdx, reviewIdx, idx, setMyReview
       <Text className="review">{review.content}</Text>
       <Text className="number">{new Date(review.modifiedAt).toLocaleDateString()}</Text>
       <Text className="single icon">
-        <RiDeleteBin6Line aria-hidden="true" onClick={()=>deleteReviewAndRefresh()} />
+        <RiDeleteBin6Line aria-hidden="true" onClick={() => deleteReviewAndRefresh()} />
       </Text>
     </TableBody>
   );

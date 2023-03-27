@@ -1,12 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface User {
-  address?: string | null;
-  name?: string | null;
-  storeIdx?: number | null;
-  userIdx?: number | null;
-  userRole?: string | null;
-}
+import { User } from "../../Api/TYPES";
 
 const initialState: User = {
   address: "",
@@ -20,11 +13,11 @@ export const userSlice = createSlice({
   name: "userInfo",
   initialState,
   reducers: {
-    getUserInfo: (state: any, action: PayloadAction<User>) => {
+    getUserInfo: (state, action) => {
       state.response = action.payload;
     },
 
-    DeleteUserInfo: (state: any) => {
+    DeleteUserInfo: (state) => {
       state.response = null;
     },
   },

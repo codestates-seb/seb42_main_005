@@ -4,15 +4,12 @@ import { PharmInstance, postUserImg } from "../../Api/AxiosInstance";
 import { onUpload } from "../../Api/onUpload";
 import { useAppSelector } from "../../Redux/hooks";
 import { MdOutlineAddAPhoto } from "react-icons/md";
+import { TYPE_UserInfo } from "../../Api/TYPES";
 
-interface Props {
-  scriptUrl?: string;
-}
-
-export default function PharmacistInformation({ scriptUrl }: Props) {
+export default function PharmacistInformation() {
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
-  const [imgFile, setImgFlie]: any = useState(null);
-  const [myInfo, setMyInfo]: any = useState({
+  const [imgFile, setImgFlie] = useState<File | Blob | string>("");
+  const [myInfo, setMyInfo] = useState<TYPE_UserInfo>({
     createdAt: "",
     name: "",
     email: "",
@@ -27,7 +24,7 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
   useEffect(() => {
     PharmInstance.getPharmacistInfo(user.userIdx, setMyInfo);
   }, []);
-  console.log(user.storeIdx)
+  console.log(user.storeIdx);
 
   //! POST : 유저 이미지 업로드
   const submitUserImg = (e: any) => {
@@ -55,8 +52,8 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
           <ReviewImg src="Images/Pharm.png" />
         )}
         {imageSrc ? (
-          <Label onClick={(e: any)=>submitUserImg(e)} className="mint" >
-            <MdOutlineAddAPhoto aria-hidden="true"/>
+          <Label onClick={(e: any) => submitUserImg(e)} className="mint">
+            <MdOutlineAddAPhoto aria-hidden="true" />
             사진수정완료
           </Label>
         ) : (
@@ -153,13 +150,13 @@ const Label = styled.label`
     border: 1.2px solid var(--black-400);
     color: var(--black-400);
   }
-  &.mint{
+  &.mint {
     border: 1.2px solid var(--l_button-mint);
     color: var(--l_button-mint);
     :hover {
-    border: 1.2px solid var(--l_button-mint-hover);
-    color: var(--l_button-mint-hover);
-  }
+      border: 1.2px solid var(--l_button-mint-hover);
+      color: var(--l_button-mint-hover);
+    }
   }
 `;
 const Content = styled.section`

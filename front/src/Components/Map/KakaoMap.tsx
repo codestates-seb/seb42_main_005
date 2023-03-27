@@ -4,7 +4,7 @@ import Loading from "../Ul/Loading";
 import MapFilter from "./MapFilter";
 import MapButtons from "./MapButtons";
 import { zIndex_KakaoMap } from "../../Util/z-index";
-import { SELECT_HIDDEN } from "../../Util/type";
+import { SELECT_HIDDEN, SELECT_SORT_LIST, SELECT_OPTION_MAP } from "../../Api/TYPES";
 
 declare global {
   interface Window {
@@ -13,8 +13,8 @@ declare global {
 }
 interface Props {
   loading: boolean;
-  sorted: any;
-  selected: any;
+  sorted: SELECT_SORT_LIST;
+  selected: SELECT_OPTION_MAP;
   setSelected: any;
   hidden: SELECT_HIDDEN;
   totalPharmList: never[];

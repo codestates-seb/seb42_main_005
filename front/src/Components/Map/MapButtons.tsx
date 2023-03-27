@@ -2,10 +2,11 @@ import styled from "styled-components";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { BiTargetLock } from "react-icons/bi";
 import { MdReplayCircleFilled } from "react-icons/md";
+import { SELECT_SORT_LIST, SELECT_OPTION_MAP } from "../../Api/TYPES";
 
 interface ButtonProps {
-  sorted: any;
-  selected: any;
+  sorted: SELECT_SORT_LIST;
+  selected: SELECT_OPTION_MAP;
   totalPharmList: never[];
   setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>;
   makeMap: any;

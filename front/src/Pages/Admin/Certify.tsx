@@ -7,12 +7,13 @@ import AdminTabs from "./AdminTabs";
 import Button from "../../Components/Ul/Button";
 import CheckBox from "../../Components/Ul/CheckBox";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { Check } from "../../Api/TYPES";
 
 export default function Certify() {
   const [certificates, setCertificates] = useState([]);
-  const [checkedList, setCheckedList] = useState<Array<any>>([]);
+  const [checkedList, setCheckedList] = useState<Check[]>([]);
 
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 

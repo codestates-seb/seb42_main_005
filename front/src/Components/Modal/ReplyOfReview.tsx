@@ -6,14 +6,15 @@ import Button from "../Ul/Button";
 import { useAppSelector } from "../../Redux/hooks";
 import { BsArrowReturnRight } from "react-icons/bs";
 import { HiXMark } from "react-icons/hi2";
+import { TYPE_Detail, TYPE_reviewList, TYPE_setReviewList } from "../../Api/TYPES";
 
 interface Props {
   reviewIdx: number;
   reply: any;
-  storeIdx: any;
-  setReviewList: any;
+  Pharm: TYPE_Detail | undefined;
+  setReviewList: React.Dispatch<React.SetStateAction<TYPE_reviewList[]>>;
 }
-export default function ReplyOfReview({ reviewIdx, reply, storeIdx, setReviewList }: Props) {
+export default function ReplyOfReview({ reviewIdx, reply, Pharm, setReviewList }: Props) {
   const [isPatchFormShown, setIsPatchFormShown] = useState(false);
   const [content, setContent] = useState(reply.content);
 
@@ -21,7 +22,7 @@ export default function ReplyOfReview({ reviewIdx, reply, storeIdx, setReviewLis
     setContent(e.target.value);
   };
 
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
@@ -34,19 +35,19 @@ export default function ReplyOfReview({ reviewIdx, reply, storeIdx, setReviewLis
     } else if (e.key === "Enter") {
       e.preventDefault();
       const patchData = {
-        storeIdx,
+        storeIdx: Pharm?.storeIdx,
         userIdx: user.userIdx,
         content,
       };
       await patchReply(reviewIdx, reply.replyIdx, patchData, setIsPatchFormShown);
-      await getReview(storeIdx, setReviewList);
+      await getReview(Pharm?.storeIdx, setReviewList);
     }
   };
 
   // ! DELETE : 리뷰의 댓글삭제
   const deleteReplyAndRefresh = async () => {
     await deleteReply(reviewIdx, reply.replyIdx);
-    await getReview(storeIdx, setReviewList);
+    await getReview(Pharm?.storeIdx, setReviewList);
   };
 
   return (
@@ -61,7 +62,7 @@ export default function ReplyOfReview({ reviewIdx, reply, storeIdx, setReviewLis
           <Created>{new Date(reply.createdAt).toLocaleDateString()}</Created>
         </UserInfo>
         <ButtonContainer>
-          {user?.userRole === "약국회원" && storeIdx === user?.storeIdx ? (
+          {user?.userRole === "약국회원" && Pharm?.storeIdx === user?.storeIdx ? (
             <>
               <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsPatchFormShown(true)} />
               <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReplyAndRefresh()} />

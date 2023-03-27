@@ -1,11 +1,12 @@
-import React from "react"
+import React from "react";
 import styled from "styled-components";
 import { zIndex_Modal } from "../../Util/z-index";
 import { HiXMark } from "react-icons/hi2";
+import { TYPE_Working, TYPE_setLike } from "../../Api/TYPES";
 
 interface Props {
-  setIsDropDownDown: React.Dispatch<React.SetStateAction<boolean>>;
-  workingHours: any;
+  setIsDropDownDown: TYPE_setLike;
+  workingHours: TYPE_Working | undefined;
 }
 
 export default function AnyDropDown({ setIsDropDownDown, workingHours }: Props) {
@@ -16,7 +17,7 @@ export default function AnyDropDown({ setIsDropDownDown, workingHours }: Props) 
       </CloseBtnContainer>
       <Unit>
         <Key>월요일</Key>
-        {workingHours.monday ? (
+        {workingHours?.monday ? (
           <Value>{`${workingHours.monday.startTime.slice(0, -3)} - ${workingHours.monday.endTime.slice(0, -3)}`}</Value>
         ) : (
           <Value>휴무</Value>
@@ -24,31 +25,40 @@ export default function AnyDropDown({ setIsDropDownDown, workingHours }: Props) 
       </Unit>
       <Unit>
         <Key>화요일</Key>
-        {workingHours.tuesday ? (
-          <Value>{`${workingHours.tuesday.startTime.slice(0, -3)} - ${workingHours.tuesday.endTime.slice(0, -3)}`}</Value>
+        {workingHours?.tuesday ? (
+          <Value>{`${workingHours.tuesday.startTime.slice(0, -3)} - ${workingHours.tuesday.endTime.slice(
+            0,
+            -3,
+          )}`}</Value>
         ) : (
           <Value>휴무</Value>
         )}
       </Unit>
       <Unit>
         <Key>수요일</Key>
-        {workingHours.wednesday ? (
-          <Value>{`${workingHours.wednesday.startTime.slice(0, -3)} - ${workingHours.wednesday.endTime.slice(0, -3)}`}</Value>
+        {workingHours?.wednesday ? (
+          <Value>{`${workingHours.wednesday.startTime.slice(0, -3)} - ${workingHours.wednesday.endTime.slice(
+            0,
+            -3,
+          )}`}</Value>
         ) : (
           <Value>휴무</Value>
         )}
       </Unit>
       <Unit>
         <Key>목요일</Key>
-        {workingHours.thursday ? (
-          <Value>{`${workingHours.thursday.startTime.slice(0, -3)} - ${workingHours.thursday.endTime.slice(0, -3)}`}</Value>
+        {workingHours?.thursday ? (
+          <Value>{`${workingHours.thursday.startTime.slice(0, -3)} - ${workingHours.thursday.endTime.slice(
+            0,
+            -3,
+          )}`}</Value>
         ) : (
           <Value>휴무</Value>
         )}
       </Unit>
       <Unit>
         <Key>금요일</Key>
-        {workingHours.friday ? (
+        {workingHours?.friday ? (
           <Value>{`${workingHours.friday.startTime.slice(0, -3)} - ${workingHours.friday.endTime.slice(0, -3)}`}</Value>
         ) : (
           <Value>휴무</Value>
@@ -56,15 +66,18 @@ export default function AnyDropDown({ setIsDropDownDown, workingHours }: Props) 
       </Unit>
       <Unit>
         <Key>토요일</Key>
-        {workingHours.saturday ? (
-          <Value>{`${workingHours.saturday.startTime.slice(0, -3)} - ${workingHours.saturday.endTime.slice(0, -3)}`}</Value>
+        {workingHours?.saturday ? (
+          <Value>{`${workingHours.saturday.startTime.slice(0, -3)} - ${workingHours.saturday.endTime.slice(
+            0,
+            -3,
+          )}`}</Value>
         ) : (
           <Value>휴무</Value>
         )}
       </Unit>
       <Unit>
         <Key>일요일</Key>
-        {workingHours.sunday ? (
+        {workingHours?.sunday ? (
           <Value>{`${workingHours.sunday.startTime.slice(0, -3)} - ${workingHours.sunday.endTime.slice(0, -3)}`}</Value>
         ) : (
           <Value>휴무</Value>
@@ -72,8 +85,11 @@ export default function AnyDropDown({ setIsDropDownDown, workingHours }: Props) 
       </Unit>
       <Unit>
         <Key>공휴일</Key>
-        {workingHours.holiday ? (
-          <Value>{`${workingHours.holiday.startTime.slice(0, -3)} - ${workingHours.holiday.endTime.slice(0, -3)}`}</Value>
+        {workingHours?.holiday ? (
+          <Value>{`${workingHours.holiday.startTime.slice(0, -3)} - ${workingHours.holiday.endTime.slice(
+            0,
+            -3,
+          )}`}</Value>
         ) : (
           <Value>휴무</Value>
         )}

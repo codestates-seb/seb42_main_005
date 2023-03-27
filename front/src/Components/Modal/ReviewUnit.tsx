@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { patchReview, getReview, deleteReview, reportReview, postReply } from "../../Api/AxiosInstance";
-import { TYPE_setReviewList, TYPE_reviewList } from "../../Api/TYPES";
+import { TYPE_Review, TYPE_reviewList, TYPE_Detail } from "../../Api/TYPES";
 import { getLocalStorage } from "../../Api/localStorage";
 import { useAppSelector } from "../../Redux/hooks";
 import ReplyOfReview from "./ReplyOfReview";
@@ -12,20 +12,20 @@ import { HiXMark } from "react-icons/hi2";
 import { BsFillStarFill } from "react-icons/bs";
 
 interface Props {
-  review: any;
+  review: TYPE_Review | any;
   reviewIdx: number;
-  storeIdx: number;
-  reviewList: TYPE_reviewList;
-  setReviewList: TYPE_setReviewList;
+  Pharm: TYPE_Detail | undefined;
+  reviewList: TYPE_reviewList[] | TYPE_reviewList;
+  setReviewList: React.Dispatch<React.SetStateAction<TYPE_reviewList[]>>;
   reviewUserName: string;
 }
 
-export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, setReviewList, reviewUserName }: Props) {
+export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, reviewUserName }: Props) {
   const [isReplyFormShown, setIsReplyFormShown] = useState<React.SetStateAction<boolean>>(false);
   const [isOnEdit, setIsOnEdit] = useState<React.SetStateAction<boolean>>(false);
   const [reviewContent, setReviewContent] = useState<React.SetStateAction<any>>(review.content);
   const [replyContent, setReplyContent] = useState<React.SetStateAction<any>>("");
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
@@ -49,21 +49,22 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
         content: reviewContent,
         rating: review.rating,
       };
-      await patchReview(storeIdx, reviewIdx, data, setIsOnEdit);
-      await getReview(storeIdx, setReviewList);
+      await patchReview(Pharm?.storeIdx, reviewIdx, data, setIsOnEdit);
+      await getReview(Pharm?.storeIdx, setReviewList);
     }
   };
 
   // ! DELETE : 리뷰삭제
+  const storeidx: any = Pharm?.storeIdx;
   const deleteReviewAndRefresh = async () => {
-    await deleteReview(storeIdx, reviewIdx);
-    await getReview(storeIdx, setReviewList);
+    await deleteReview(storeidx, reviewIdx);
+    await getReview(storeidx, setReviewList);
   };
 
   //! POST : 리뷰신고
   // reportReview(storeIdx, reviewIdx, report)
   const report = {
-    userIdx: user.userIdx,
+    userIdx: user?.userIdx,
     content: reviewContent,
   };
 
@@ -76,12 +77,12 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
     } else if (e.key === "Enter") {
       e.preventDefault();
       const reply = {
-        storeIdx,
+        storeIdx: storeidx,
         userIdx: user.userIdx,
         content: replyContent,
       };
       await postReply(reviewIdx, reply, setReplyContent, setIsReplyFormShown);
-      await getReview(storeIdx, setReviewList);
+      await getReview(storeidx, setReviewList);
     }
   };
 
@@ -111,7 +112,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
                 <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReviewAndRefresh} />
               </>
             ) : null}
-            {user?.userRole === "약국회원" && storeIdx === user?.storeIdx ? (
+            {user?.userRole === "약국회원" && storeidx === user?.storeIdx ? (
               <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsReplyFormShown(true)} />
             ) : null}
             {token && user?.name !== reviewUserName ? (
@@ -119,7 +120,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
                 color="l_black"
                 size="sm"
                 text="신 고"
-                onClick={() => reportReview(storeIdx, reviewIdx, report)}
+                onClick={() => reportReview(storeidx, reviewIdx, report)}
               />
             ) : null}
           </ButtonContainer>
@@ -168,7 +169,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
           key={reply.replyIdx}
           reviewIdx={reviewIdx}
           reply={reply}
-          storeIdx={storeIdx}
+          Pharm={Pharm}
           setReviewList={setReviewList}
         />
       ))}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { TYPE_Pharm, TYPE_setIsReviewFormShown, TYPE_setReviewList } from "../../Api/TYPES";
+import { TYPE_Detail, TYPE_reviewList, TYPE_setBoolean } from "../../Api/TYPES";
 import { getReview, postReview } from "../../Api/AxiosInstance";
 import { useAppSelector } from "../../Redux/hooks";
 import { zIndex_Modal } from "../../Util/z-index";
@@ -12,23 +12,23 @@ import { BiPhotoAlbum } from "react-icons/bi";
 import { HiXMark } from "react-icons/hi2";
 
 interface Props {
-  Pharm: TYPE_Pharm | undefined;
-  setIsReviewFormShown: TYPE_setIsReviewFormShown;
+  Pharm: TYPE_Detail | undefined;
+  setIsReviewFormShown: TYPE_setBoolean;
   storeIdx: number | undefined;
-  setReviewList: TYPE_setReviewList;
+  setReviewList: React.Dispatch<React.SetStateAction<TYPE_reviewList[]>>;
 }
 
 export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx, setReviewList }: Props) {
   const [imageSrc, setImageSrc]: any = useState(null);
   const [imgFile, setImgFile]: any = useState(null);
-  const [review, setReview]: any = useState({
+  const [review, setReview] = useState({
     reviewIdx: 0,
     content: "",
     rating: 0,
     createdAt: "",
   });
 
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
@@ -50,7 +50,7 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
   //! POST : 리뷰작성
   const postReviewAndRefresh: any = async (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
-    let data: any = {
+    let data = {
       userIdx: user.userIdx,
       content: review.content,
       rating: review.rating,
@@ -58,8 +58,8 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
     const formData = new FormData();
     formData.append("postDto", new Blob([JSON.stringify(data)], { type: "application/json" }));
     formData.append("image", imgFile);
-    await postReview(storeIdx, formData, setIsReviewFormShown)
-    await getReview(storeIdx, setReviewList)
+    await postReview(storeIdx, formData, setIsReviewFormShown);
+    await getReview(storeIdx, setReviewList);
   };
 
   return (
@@ -83,7 +83,12 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
           onChange={handlerText}
         />
         <ReviewImgContainer>
-          <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e, setImgFile, setImageSrc)} accept="image/*" />
+          <ReviewImgInput
+            id="img"
+            type="file"
+            onChange={(e) => onUpload(e, setImgFile, setImageSrc)}
+            accept="image/*"
+          />
           {imageSrc ? (
             <ReviewImg src={imageSrc} />
           ) : (
@@ -99,15 +104,18 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
       <InputBot>
         <Rating>
           <StarContainer>
-            {new Array(5).fill("").map((_, i)=><Star key={i}
-              src={`${review.rating > i ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
-              onClick={() =>
-                setReview({
-                  ...review,
-                  rating: i+1,
-                })
-              }
-            />)}
+            {new Array(5).fill("").map((_, i) => (
+              <Star
+                key={i}
+                src={`${review.rating > i ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+                onClick={() =>
+                  setReview({
+                    ...review,
+                    rating: i + 1,
+                  })
+                }
+              />
+            ))}
           </StarContainer>
           <RateNum readOnly type="text" name="rating" value={`${review.rating} / 5`} onChange={handlerRate}></RateNum>
         </Rating>

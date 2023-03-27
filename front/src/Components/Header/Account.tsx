@@ -6,8 +6,12 @@ import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import { DeleteUserInfo } from "../../Redux/slice/userSlice";
 import { zIndex_Header } from "../../Util/z-index";
 import { IoIosArrowBack } from "react-icons/io";
+import { TYPE_UserInfo } from "../../Api/TYPES";
 
-export default function Account(userInfo: any) {
+interface Props {
+  userInfo: TYPE_UserInfo | undefined;
+}
+export default function Account({ userInfo }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const token = getLocalStorage("access_token");
   const dispatch = useAppDispatch();
@@ -17,7 +21,7 @@ export default function Account(userInfo: any) {
     dispatch(DeleteUserInfo());
   };
 
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
@@ -37,7 +41,7 @@ export default function Account(userInfo: any) {
     return (
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">
-          {userInfo.imagePath ? (
+          {userInfo?.imagePath ? (
             <img src={`${userInfo.imagePath}`} alt="profile" />
           ) : (
             <img src={"Images/Pharm.png"} alt="profile" />
@@ -49,7 +53,7 @@ export default function Account(userInfo: any) {
           <IoIosArrowBack className={isOpen ? "close" : "open"} />
         </DropdownButton>
         {isOpen ? (
-          <DropdownBackdrop onClick={()=>DropdownHandler()}>
+          <DropdownBackdrop onClick={() => DropdownHandler()}>
             <Content>
               <ul>
                 <Link to="/pharm-my_pharmacy" style={{ textDecoration: "none" }}>
@@ -68,7 +72,7 @@ export default function Account(userInfo: any) {
     return (
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">
-            <img src={"Images/Admin.png"} alt="profile" />
+          <img src={"Images/Admin.png"} alt="profile" />
         </Link>
         <span className="name">특수기호</span>
         <span className="identity">관리자님</span>
@@ -100,11 +104,11 @@ export default function Account(userInfo: any) {
         </Link>
         <span className="name">{user?.name}</span>
         <span className="identity">님</span>
-        <DropdownButton onClick={()=>DropdownHandler()}>
+        <DropdownButton onClick={() => DropdownHandler()}>
           <IoIosArrowBack className={isOpen ? "close" : "open"} />
         </DropdownButton>
         {isOpen ? (
-          <DropdownBackdrop onClick={()=>DropdownHandler()}>
+          <DropdownBackdrop onClick={() => DropdownHandler()}>
             <Content>
               <ul>
                 <Link to="/user-my_info" style={{ textDecoration: "none" }}>

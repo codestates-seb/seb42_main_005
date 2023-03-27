@@ -11,7 +11,7 @@ export default function Reports() {
   const [reports, setReports] = useState([]);
   const [checkedList, setCheckedList] = useState<Array<any>>([]);
 
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
@@ -44,7 +44,12 @@ export default function Reports() {
                 <span>신고리뷰관리</span>
                 <ButtonContainer>
                   <Button color="blue" size="md" text="선택복구" onClick={() => AdminInstance.restoreReview(data)} />
-                  <Button color="red" size="md" text="선택삭제" onClick={() => AdminInstance.deleteReportedReview(data)} />
+                  <Button
+                    color="red"
+                    size="md"
+                    text="선택삭제"
+                    onClick={() => AdminInstance.deleteReportedReview(data)}
+                  />
                 </ButtonContainer>
               </Header>
               <Table>

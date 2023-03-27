@@ -9,17 +9,17 @@ import DropDown from "./DropDown";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { IoIosArrowDropright } from "react-icons/io";
 import { IoIosArrowDropdown } from "react-icons/io";
+import { TYPE_Detail, TYPE_boolean, TYPE_reviewList } from "../../Api/TYPES";
 
 export default function PharmacyInformation() {
-  const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
-  const [pharmDetail, setPharmDetail] = useState<React.SetStateAction<any>>({});
-  const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
-  const [like, setLike] = useState<React.SetStateAction<boolean>>(false);
-  const [isDropDownDown, setIsDropDownDown] = useState(false);
+  const [isModalUp, setIsModalUp] = useState<TYPE_boolean>(false);
+  const [pharmDetail, setPharmDetail] = useState<TYPE_Detail>();
+  const [reviewList, setReviewList] = useState<TYPE_reviewList[]>([]);
+  const [like, setLike] = useState<TYPE_boolean>(false);
+  const [isDropDownDown, setIsDropDownDown] = useState<TYPE_boolean>(false);
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
-  const [imgFile, setImgFlie]: any = useState(null);
-
-  const user = useAppSelector((state: any) => {
+  const [imgFile, setImgFlie] = useState<File | Blob | string>("");
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
@@ -60,14 +60,14 @@ export default function PharmacyInformation() {
         <ImgInput id="pharmImg" type="file" onChange={(e) => onUpload(e, setImgFlie, setImageSrc)} accept="image/*" />
         {imageSrc ? (
           <PharmImg src={`${imageSrc}`} />
-        ) : pharmDetail.imagePath ? (
+        ) : pharmDetail?.imagePath ? (
           <PharmImg src={`${pharmDetail.imagePath}`} alt="image preparing" />
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="image preparing" />
         )}
 
         {imageSrc ? (
-          <Label onClick={(e: any)=>submitPharmImg(e)}>
+          <Label onClick={(e: any) => submitPharmImg(e)}>
             <MdOutlineAddAPhoto aria-hidden="true" />
             우리약국 사진 수정완료
           </Label>
@@ -80,11 +80,11 @@ export default function PharmacyInformation() {
       </ImgContainer>
       <InfomationContainer>
         <Header>
-          <PharmName onClick={()=>onModalUp()}>{pharmDetail?.name}</PharmName>
+          <PharmName onClick={() => onModalUp()}>{pharmDetail?.name}</PharmName>
           <PharmRank
-            rating={pharmDetail.rating}
-            likes={pharmDetail.pickedStoreCount}
-            reviewCount={pharmDetail.reviewCount}
+            rating={pharmDetail?.rating}
+            likes={pharmDetail?.pickedStoreCount}
+            reviewCount={pharmDetail?.reviewCount}
           />
         </Header>
         <Unit>
@@ -118,7 +118,7 @@ export default function PharmacyInformation() {
                 )}-${pharmDetail?.todayOperatingTime?.operatingTime?.endTime?.slice(0, -3)}`
               : "오늘은 휴무일입니다."}
             {isDropDownDown ? (
-              <DropDown setIsDropDownDown={setIsDropDownDown} workingHours={pharmDetail.operatingTime} />
+              <DropDown setIsDropDownDown={setIsDropDownDown} workingHours={pharmDetail?.operatingTime} />
             ) : null}
           </Value>
         </Unit>

@@ -5,6 +5,7 @@ import { UserInstance, getDetailsAndReviews, likePharmacy } from "../../Api/Axio
 import { useAppSelector } from "../../Redux/hooks";
 import { IoIosArrowDropright } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { TYPE_boolean, TYPE_reviewList, TYPE_Detail } from "../../Api/TYPES";
 
 interface Props {
   likedPharmacy: any;
@@ -12,9 +13,9 @@ interface Props {
 }
 
 export default function LikedPharmacyUnit({ likedPharmacy, setLikedPharmacies }: Props) {
-  const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
-  const [pharmDetail, setPharmDetail] = useState<React.SetStateAction<any>>();
-  const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
+  const [isModalUp, setIsModalUp] = useState<TYPE_boolean>(false);
+  const [pharmDetail, setPharmDetail] = useState<TYPE_Detail>();
+  const [reviewList, setReviewList] = useState<TYPE_reviewList[]>([]);
   const [like, setLike] = useState(true);
 
   const user = useAppSelector((state: any) => {
@@ -29,7 +30,7 @@ export default function LikedPharmacyUnit({ likedPharmacy, setLikedPharmacies }:
 
   //! POST : 찜하기/찜취소
   const likePharmacyAndRefresh = async () => {
-    await likePharmacy(likedPharmacy.storeIdx, user.userIdx, like, setLike)
+    await likePharmacy(likedPharmacy.storeIdx, like, setLike);
     await UserInstance.getLikedPharmList(user.userIdx, setLikedPharmacies);
   };
 
@@ -47,16 +48,13 @@ export default function LikedPharmacyUnit({ likedPharmacy, setLikedPharmacies }:
         />
       ) : null}
       <Text className="single icon">
-        <IoIosArrowDropright onClick={()=>onModalUp()} aria-hidden="true" />
+        <IoIosArrowDropright onClick={() => onModalUp()} aria-hidden="true" />
       </Text>
       <Text className="pharm">{likedPharmacy.name}</Text>
       <Text className="address">{likedPharmacy.address}</Text>
       <Text className="number">{likedPharmacy.tel}</Text>
       <Text className="single icon">
-        <RiDeleteBin6Line
-          aria-hidden="true"
-          onClick={()=>likePharmacyAndRefresh()}
-        />
+        <RiDeleteBin6Line aria-hidden="true" onClick={() => likePharmacyAndRefresh()} />
       </Text>
     </TableBody>
   );

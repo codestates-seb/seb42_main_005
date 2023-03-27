@@ -13,7 +13,7 @@ export default function SignOut() {
   const [errMsg, setErrMsg] = useState(false);
 
   const navigate = useNavigate();
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
   const dispatch = useAppDispatch();

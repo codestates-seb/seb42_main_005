@@ -10,6 +10,7 @@ import InputAlert from "./InputAlert";
 import Button from "../../Components/Ul/Button";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { MdOutlineAddAPhoto } from "react-icons/md";
+import { TYPE_UserInfo } from "../../Api/TYPES";
 
 interface Props {
   scriptUrl?: string;
@@ -18,10 +19,10 @@ interface Props {
 export default function MyInfoInformation({ scriptUrl }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
-  const [imgFile, setImgFlie]: any = useState(null);
+  const [imgFile, setImgFlie] = useState<File | Blob | string>("");
   const [myAddress, setMyAddress] = useState("");
   const [myName, setMyName] = useState("");
-  const [myInfo, setMyInfo]: any = useState({
+  const [myInfo, setMyInfo] = useState<TYPE_UserInfo>({
     createdAt: "",
     name: "",
     email: "",
@@ -41,7 +42,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     confirmNewPassword: false,
   });
 
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
