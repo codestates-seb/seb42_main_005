@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
+import { PharmInstance, getDetailsAndReviews } from "../../Api/AxiosInstance";
+import { useAppSelector } from "../../Redux/hooks";
+import { onUpload } from "../../Api/onUpload";
 import PharmDetail from "../../Components/Modal/PharmDetail";
 import PharmRank from "../../Components/Ul/PharmRank";
-import { APIS } from "../../Api/APIs";
 import DropDown from "./DropDown";
-import { useAppSelector } from "../../Redux/hooks";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { IoIosArrowDropright } from "react-icons/io";
 import { IoIosArrowDropdown } from "react-icons/io";
@@ -19,78 +19,28 @@ export default function PharmacyInformation() {
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const [imgFile, setImgFlie]: any = useState(null);
 
-  const onUpload = (e: any) => {
-    const file = e.target.files[0];
-    setImgFlie(file);
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    return new Promise<void>((resolve) => {
-      reader.onload = () => {
-        setImageSrc(reader.result || null);
-        resolve();
-      };
-    });
-  };
-
-  //! GET : 약국 정보
-  useEffect(() => {
-    const getUserInfo = async () => {
-      await axios
-        .get(`${APIS.GET_PHARMDETAILS}/${user.storeIdx}`)
-        .then((response) => setPharmDetail(response.data.response))
-        .catch((error) => {
-          console.log("약국 상세정보 받아오던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    getUserInfo();
-  }, []);
-
   const user = useAppSelector((state: any) => {
     return state.userInfo.response;
   });
 
+  //! GET : 약국 정보
+  useEffect(() => {
+    PharmInstance.getPharmInfo(user.storeIdx, setPharmDetail);
+  }, []);
+
   //! GET : 약국상세정보 + 리뷰리스트
   const onModalUp = () => {
-    const getPharmDetail = async () => {
-      await axios
-        .get(`${APIS.GET_PHARMLIST}/${user.storeIdx}`)
-        .then((response) => setPharmDetail(response.data.response))
-        .catch((error) => {
-          console.log("약국 상세정보 받아오던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    const getReviewList = async () => {
-      await axios
-        .get(`${APIS.GET_PHARMLIST}/${user.storeIdx}/review`)
-        .then((response) => setReviewList(response.data.response.storeReviews))
-        .catch((error) => {
-          console.log("약국 리뷰 받아오던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    axios.all([getPharmDetail(), getReviewList()]);
+    getDetailsAndReviews(setPharmDetail, setReviewList, user.storeIdx);
     setIsModalUp(true);
   };
 
-  //! PATCH : 약국 이미지 업로드
+  //! POST : 약국 이미지 업로드
   const submitPharmImg = (e: any) => {
     e.preventDefault();
     const formDataImgsubmit = new FormData();
     formDataImgsubmit.append("profileImage", imgFile);
     formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(user.userIdx)], { type: "application/json" }));
-
-    const submitNewImg: any = async () => {
-      await axios
-        .post(APIS.POST_PHARM_IMG, formDataImgsubmit)
-        .then(() => location.reload())
-        .catch((error) => {
-          console.log("약국 사진 보내던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    submitNewImg();
+    PharmInstance.postPharmImg(formDataImgsubmit);
   };
 
   return (
@@ -107,7 +57,7 @@ export default function PharmacyInformation() {
         />
       ) : null}
       <ImgContainer>
-        <ImgInput id="pharmImg" type="file" onChange={(e) => onUpload(e)} accept="image/*" />
+        <ImgInput id="pharmImg" type="file" onChange={(e) => onUpload(e, setImgFlie, setImageSrc)} accept="image/*" />
         {imageSrc ? (
           <PharmImg src={`${imageSrc}`} />
         ) : pharmDetail.imagePath ? (
@@ -115,8 +65,9 @@ export default function PharmacyInformation() {
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="image preparing" />
         )}
+
         {imageSrc ? (
-          <Label onClick={submitPharmImg}>
+          <Label onClick={(e: any)=>submitPharmImg(e)}>
             <MdOutlineAddAPhoto aria-hidden="true" />
             우리약국 사진 수정완료
           </Label>
@@ -129,7 +80,7 @@ export default function PharmacyInformation() {
       </ImgContainer>
       <InfomationContainer>
         <Header>
-          <PharmName onClick={() => onModalUp()}>{pharmDetail?.name}</PharmName>
+          <PharmName onClick={()=>onModalUp()}>{pharmDetail?.name}</PharmName>
           <PharmRank
             rating={pharmDetail.rating}
             likes={pharmDetail.pickedStoreCount}

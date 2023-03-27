@@ -1,13 +1,13 @@
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
+import { UserInstance, postUserImg } from "../../Api/AxiosInstance";
+import { useAppSelector } from "../../Redux/hooks";
 import { validators } from "../../Components/SignUpForm/Validation";
+import { onUpload } from "../../Api/onUpload";
 import SignUpInput from "../../Components/SignUpForm/SignUpInput";
 import InputAlert from "./InputAlert";
-import { APIS } from "../../Api/APIs";
 import Button from "../../Components/Ul/Button";
-import { useAppSelector } from "../../Redux/hooks";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 
@@ -16,54 +16,17 @@ interface Props {
 }
 
 export default function MyInfoInformation({ scriptUrl }: Props) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
+  const [imgFile, setImgFlie]: any = useState(null);
+  const [myAddress, setMyAddress] = useState("");
+  const [myName, setMyName] = useState("");
   const [myInfo, setMyInfo]: any = useState({
     createdAt: "",
     name: "",
     email: "",
     address: "",
   });
-  const [imgFile, setImgFlie]: any = useState(null);
-  const [myName, setMyName] = useState("");
-  const [myAddress, setMyAddress] = useState("");
-
-  const user = useAppSelector((state: any) => {
-    return state.userInfo.response;
-  });
-
-  //! GET : 유저 정보
-  useEffect(() => {
-    const getReviews = async () => {
-      await axios
-        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`)
-        .then((response) => {
-          setMyInfo(response.data.response);
-          setMyName(response.data.response.name);
-          setMyAddress(response.data.response.address);
-        })
-        .catch((error) => {
-          console.log("내 정보 가져오던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    getReviews();
-  }, []);
-
-  const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
-  const onUpload = (e: any) => {
-    const file = e.target.files[0];
-    setImgFlie(file);
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    return new Promise<void>((resolve) => {
-      reader.onload = () => {
-        setImageSrc(reader.result || null);
-        resolve();
-      };
-    });
-  };
-
-  const [isEditing, setIsEditing] = useState(false);
-
   const [signForm, setSignForms] = useState({
     name: myInfo.name,
     password: "",
@@ -77,6 +40,15 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     newPassword: false,
     confirmNewPassword: false,
   });
+
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
+  //! GET : 유저 정보
+  useEffect(() => {
+    UserInstance.getUserInfo(user.userIdx, setMyInfo, setMyName, setMyAddress);
+  }, []);
 
   const FORM_FIELD_NAMES = {
     NAME: "name",
@@ -185,7 +157,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
   };
 
   //! PATCH : 회원정보 수정
-  const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
+  const onSubmit: any = async (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const password = formData.get(FORM_FIELD_NAMES.PASSWORD);
@@ -193,7 +165,6 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     const address = formData.get(FORM_FIELD_NAMES.ADDRESS);
     const newPassword = formData.get(FORM_FIELD_NAMES.NEWPASSWORD);
     const confirmNewPassword = formData.get(FORM_FIELD_NAMES.CONFIRMNEWPASSWORD);
-
     if (!password || !name || !address) {
       return alert("필수값을 입력해주세요");
     }
@@ -205,38 +176,17 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     ) {
       return alert("항목을 다시 확인해주세요");
     }
-
     if (newPassword !== confirmNewPassword) {
       return alert("새 비밀번호를 한번 더 입력해주세요");
     }
-
     const newUserData = {
       name: name,
       address: address,
       password: password,
       newPassword: newPassword,
     };
-    const submitNewUserInfo: any = async () => {
-      await axios
-        .patch(`${APIS.PATCH_USER_INFO}/${user.userIdx}`, newUserData)
-        .then(() => setIsEditing(false))
-        .catch((error) => {
-          console.log("내 정보 수정하던 중 에러 발생");
-          console.log(error);
-        });
-      await axios
-        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`)
-        .then((response) => {
-          setMyInfo(response.data.response);
-          setMyName(response.data.response.name);
-          setMyAddress(response.data.response.address);
-        })
-        .catch((error) => {
-          console.log("내 정보 다시 가져오던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    submitNewUserInfo();
+    await UserInstance.patchUserInfo(user.userIdx, newUserData, setIsEditing);
+    await UserInstance.getUserInfo(user.userIdx, setMyInfo, setMyName, setMyAddress);
   };
 
   //! POST : 유저 이미지 업로드
@@ -245,16 +195,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     const formDataImgsubmit = new FormData();
     formDataImgsubmit.append("profileImage", imgFile);
     formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(user.userIdx)], { type: "application/json" }));
-    const submitNewImg: any = async () => {
-      await axios
-        .post(APIS.POST_USER_IMG, formDataImgsubmit)
-        .then(() => location.reload())
-        .catch((error) => {
-          console.log("이미지 업로드 하던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    submitNewImg();
+    postUserImg(formDataImgsubmit);
   };
 
   return (
@@ -264,7 +205,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
           name="reviewImg"
           id="img"
           type="file"
-          onChange={(e) => onUpload(e)}
+          onChange={(e) => onUpload(e, setImgFlie, setImageSrc)}
           accept="image/*"
         ></ReviewImgInput>
         {imageSrc ? (
@@ -275,7 +216,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
           <ReviewImg src="Images/User.png" alt="user" />
         )}
         {imageSrc ? (
-          <Label onClick={submitUserImg} className="mint">
+          <Label onClick={(e: any) => submitUserImg(e)} className="mint">
             <MdOutlineAddAPhoto aria-hidden="true" />
             사진수정완료
           </Label>
@@ -330,7 +271,12 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
                 value={myAddress}
                 onChange={changeAddressHandler}
               />
-              <Button color="l_blue" size="sm" text="주소 찾기" onClick={handleClick} />
+              <Button
+                color="l_blue"
+                size="sm"
+                text="주소 찾기"
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleClick(e)}
+              />
             </InputWrapper>
           ) : (
             <ContentValue>{myInfo.address}</ContentValue>
@@ -542,13 +488,13 @@ const Label = styled.label`
     border: 1.2px solid var(--black-400);
     color: var(--black-400);
   }
-  &.mint{
+  &.mint {
     border: 1.2px solid var(--l_button-mint);
     color: var(--l_button-mint);
     :hover {
-    border: 1.2px solid var(--l_button-mint-hover);
-    color: var(--l_button-mint-hover);
-  }
+      border: 1.2px solid var(--l_button-mint-hover);
+      color: var(--l_button-mint-hover);
+    }
   }
 `;
 const Content = styled.section`

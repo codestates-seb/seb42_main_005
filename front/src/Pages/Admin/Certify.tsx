@@ -1,12 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import axios from "axios";
-import CheckBox from "../../Components/Ul/CheckBox";
-import Button from "../../Components/Ul/Button";
-import { APIS } from "../../Api/APIs";
-import AdminTabs from "./AdminTabs";
+import { AdminInstance } from "../../Api/AxiosInstance";
 import { useAppSelector } from "../../Redux/hooks";
 import Cert from "./Cert";
+import AdminTabs from "./AdminTabs";
+import Button from "../../Components/Ul/Button";
+import CheckBox from "../../Components/Ul/CheckBox";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Certify() {
@@ -19,16 +18,7 @@ export default function Certify() {
 
   //! GET : 약사인증신청 리스트 불러오기
   useEffect(() => {
-    const getCertificates = async () => {
-      await axios
-        .get(`${APIS.GET_ADMIN_CERTS}`)
-        .then((response) => setCertificates(response.data.response.content))
-        .catch((error) => {
-          console.log("약사인증신청 리스트 불러오던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    getCertificates();
+    AdminInstance.getCertificates(setCertificates);
   }, []);
 
   //* 체크된 항목을 하나씩 담아주는 부분
@@ -42,29 +32,7 @@ export default function Certify() {
     },
     [checkedList],
   );
-
   const data = { userIdxs: checkedList };
-  //! POST : 약사인증신청 승인
-  const successCertify = async () => {
-    await axios
-      .post(APIS.POST_ADMIN_CERTIFY, data)
-      .catch((error) => {
-        console.log("약사인증 승인하던 중 에러 발생");
-        console.log(error);
-      })
-      .then(() => location.reload());
-  };
-
-  //! POST : 약사인증신청 반려
-  const deniedCertify = async () => {
-    await axios
-      .post(APIS.POST_ADMIN_DENY, data)
-      .catch((error) => {
-        console.log("약사인증 반려하던 중 에러 발생");
-        console.log(error);
-      })
-      .then(() => location.reload());
-  };
 
   return (
     <WholePage>
@@ -76,8 +44,8 @@ export default function Certify() {
               <Header>
                 <span>약사인증관리</span>
                 <ButtonContainer>
-                  <Button color="blue" size="md" text="신청승인" onClick={() => successCertify()} />
-                  <Button color="red" size="md" text="신청반려" onClick={() => deniedCertify()} />
+                  <Button color="blue" size="md" text="신청승인" onClick={() => AdminInstance.successCertify(data)} />
+                  <Button color="red" size="md" text="신청반려" onClick={() => AdminInstance.deniedCertify(data)} />
                 </ButtonContainer>
               </Header>
               <Table>

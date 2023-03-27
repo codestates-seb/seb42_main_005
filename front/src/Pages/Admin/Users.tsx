@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import axios from "axios";
-import AdminTabs from "./AdminTabs";
-import CheckBox from "../../Components/Ul/CheckBox";
+import { AdminInstance } from "../../Api/AxiosInstance";
 import { useAppSelector } from "../../Redux/hooks";
+import AdminTabs from "./AdminTabs";
 import Button from "../../Components/Ul/Button";
-import { APIS } from "../../Api/APIs";
+import CheckBox from "../../Components/Ul/CheckBox";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Users() {
@@ -19,17 +18,9 @@ export default function Users() {
 
   //! GET : 전체 회원 리스트 불러오기
   useEffect(() => {
-    const getUsers = async () => {
-      await axios
-        .get(APIS.GET_ADMIN_USERS)
-        .then((response) => setUsers(response.data.response.content))
-        .catch((error) => {
-          console.log("전체회원리스트 불러오던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    getUsers();
+    AdminInstance.getUsers(setUsers);
   }, []);
+
   //* 체크된 항목을 하나씩 담아주는 부분
   const onCheckedItem = useCallback(
     (checked: boolean, id: string) => {
@@ -42,44 +33,13 @@ export default function Users() {
     [checkedList],
   );
   const data = { userIdxs: checkedList };
-  //! POST : 계정 정지
-  const blockUsers = async () => {
-    await axios
-      .post(`${APIS.POST_ADMIN_BLOCK}?period=${time}`, data)
-      .catch((error) => {
-        console.log("계정 정지하던 중 에러 발생");
-        console.log(error);
-      })
-      .then(() => location.reload());
-  };
-
-  //! POST : 계정 강퇴
-  const fireUsers = async () => {
-    await axios
-      .post(APIS.POST_ADMIN_FIRE, data)
-      .catch((error) => {
-        console.log("계정 강퇴하던 중 에러 발생");
-        console.log(error);
-      })
-      .then(() => location.reload());
-  };
-
-  //! POST : 계정 복구
-  const restoreUsers = async () => {
-    await axios
-      .post(APIS.POST_ADMIN_RESTORE, data)
-      .catch((error) => {
-        console.log("계정 복구하던 중 에러 발생");
-        console.log(error);
-      })
-      .then(() => location.reload());
-  };
 
   const returnAccountState = (accountState: any) => {
     if (accountState === "ACTIVE") return "활동회원";
     if (accountState === "TEMPORARY") return "승인대기";
-    if (accountState === "SUSPENDED") return "강퇴회원";
+    if (accountState === "SUSPENDED") return "정지회원";
     if (accountState === "WITHDRAWN") return "탈퇴회원";
+    if (accountState === "KICKEDOUT") return "강퇴회원";
   };
 
   return (
@@ -98,9 +58,9 @@ export default function Users() {
                     <option value={7}>7일</option>
                     <option value={30}>30일</option>
                   </Select>
-                  <Button color="blue" size="md" text="선택정지" onClick={() => blockUsers()} />
-                  <Button color="mint" size="md" text="선택복구" onClick={() => restoreUsers()} />
-                  <Button color="red" size="md" text="선택강퇴" onClick={() => fireUsers()} />
+                  <Button color="blue" size="md" text="선택정지" onClick={() => AdminInstance.blockUsers(time, data)} />
+                  <Button color="mint" size="md" text="선택복구" onClick={() => AdminInstance.restoreUsers(data)} />
+                  <Button color="red" size="md" text="선택강퇴" onClick={() => AdminInstance.fireUsers(data)} />
                 </ButtonContainer>
               </Header>
               <Table>

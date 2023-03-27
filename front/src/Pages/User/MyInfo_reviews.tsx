@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import MyReview from "../User/MyInfo_MyReview";
-import { APIS } from "../../Api/APIs";
-import axios from "axios";
+import { UserInstance } from "../../Api/AxiosInstance";
 import { useAppSelector } from "../../Redux/hooks";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
@@ -16,16 +15,7 @@ export default function MyInfoReviews() {
 
   //! GET : 내가 작성한 리뷰 리스트
   useEffect(() => {
-    const getMyReviews = async () => {
-      await axios
-        .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`)
-        .then((response) => setMyReviewList(response.data.response.reviews))
-        .catch((error) => {
-          console.log("내가 작성한 리뷰리스트 받아오던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    getMyReviews();
+    UserInstance.getMyReviews(user.userIdx, setMyReviewList);
   }, []);
 
   return (

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
-import ImageUp from "./ImageUp";
 import { TYPE_Cert } from "../../Api/TYPES";
+import ImageUp from "./ImageUp";
 
 interface Props {
   cert: TYPE_Cert;

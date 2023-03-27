@@ -1,12 +1,11 @@
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from "react";
 import styled from "styled-components";
-import PharmRank from "../Ul/PharmRank";
-import PharmDetail from "../Modal/PharmDetail";
-import { APIS } from "../../Api/APIs";
+import { getDetailsAndReviews, likePharmacy } from "../../Api/AxiosInstance";
 import { getLocalStorage } from "../../Api/localStorage";
 import { useAppSelector } from "../../Redux/hooks";
+import PharmDetail from "../Modal/PharmDetail";
+import PharmRank from "../Ul/PharmRank";
 
 interface Props {
   Pharm: any;
@@ -19,60 +18,28 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
   const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
   const [like, setLike] = useState<React.SetStateAction<boolean>>(false);
 
+  const navigate = useNavigate();
   const user = useAppSelector((state: any) => {
     return state.userInfo.response;
   });
 
+  console.log(Pharm)
+
   //! GET : 약국상세정보 + 리뷰리스트
   const onModalUp = () => {
-    const getPharmDetail = async () => {
-      await axios
-        .get(`${APIS.GET_PHARMLIST}/${storeIdx}`)
-        .then((response) => setPharmDetail(response.data.response))
-        .catch((err) => {
-          console.log("약국상세받아오던 중 에러 발생");
-          console.log(err);
-        });
-    };
-    const getReviewList = async () => {
-      await axios
-        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
-        .then((response) => setReviewList(response.data.response.storeReviews))
-        .catch((err) => {
-          console.log("약국리뷰받아오던 중 에러 발생");
-          console.log(err);
-        });
-    };
-    axios.all([getPharmDetail(), getReviewList()]);
+    getDetailsAndReviews(setPharmDetail, setReviewList, storeIdx);
     setIsModalUp(true);
   };
 
-  //! POST : 찜하기/찜취소
-  const likeThisPharmacy = async () => {
-    await axios
-      .post(`${APIS.POST_LIKE}/${storeIdx}/pick?userIdx=${user.userIdx}`)
-      .then(() => setLike(!like))
-      .catch((err) => {
-        console.log("찜하기 또는 찜 취소 하던 중 에러 발생");
-        console.log(err);
-      });
-  };
-
-  const nagigate = useNavigate();
-
-  const leadToLogin = () => {
-    nagigate("/login");
-    alert("약국 찜하기를 하시려면 로그인을 해주세요!");
-  };
-
-  const likeButton = () => {
+  const likeThisPharmacy = () => {
     const accessToken = getLocalStorage("access_token");
     if (!accessToken) {
-      return leadToLogin();
+      navigate("/login");
+      alert("약국 찜하기를 하시려면 로그인을 해주세요!");
     } else if (user.storeIdx) {
-      return alert("약사회원은 찜하기를 이용하실수 없습니다.");
+      alert("약사회원은 찜하기를 이용하실수 없습니다.");
     } else if (user.userIdx && accessToken) {
-      return likeThisPharmacy();
+      likePharmacy(storeIdx, user.userIdx, like, setLike)
     }
   };
 
@@ -91,11 +58,11 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
       ) : null}
       <InfoImgContainer>
         {Pharm.imagePath ? (
-          <PharmImg src={Pharm.imagePath} onClick={() => onModalUp()} />
+          <PharmImg src={Pharm.imagePath} onClick={onModalUp} />
         ) : (
-          <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." onClick={() => onModalUp()} />
+          <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." onClick={onModalUp} />
         )}
-        <LikeButton onClick={likeButton}>
+        <LikeButton onClick={likeThisPharmacy}>
           {like ? (
             <img src="./Images/Heart.png" alt="좋아요가 선택된 상태의 꽉 찬 하트모양입니다." />
           ) : (
@@ -104,7 +71,7 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
         </LikeButton>
       </InfoImgContainer>
       <PharmTitleBox>
-        <PharmName onClick={() => setIsModalUp(true)}>{Pharm && Pharm.name}</PharmName>
+        <PharmName onClick={onModalUp}>{Pharm && Pharm.name}</PharmName>
         {Pharm && <PharmRank rating={Pharm.rating} likes={Pharm.pickedStoreCount} reviewCount={Pharm.reviewCount} />}
       </PharmTitleBox>
     </PharmCard>

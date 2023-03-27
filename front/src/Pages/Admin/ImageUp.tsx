@@ -1,5 +1,5 @@
-import React from "react";
 import styled from "styled-components";
+import React from "react";
 import { TYPE_isImgUp, TYPE_setIsImgUp } from "../../Api/TYPES";
 import { zIndex_AdminPage } from "../../Util/z-index";
 

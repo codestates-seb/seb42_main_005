@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import axios from "axios";
-import CheckBox from "../../Components/Ul/CheckBox";
-import Button from "../../Components/Ul/Button";
-import { APIS } from "../../Api/APIs";
-import AdminTabs from "./AdminTabs";
+import { AdminInstance } from "../../Api/AxiosInstance";
 import { useAppSelector } from "../../Redux/hooks";
+import AdminTabs from "./AdminTabs";
+import Button from "../../Components/Ul/Button";
+import CheckBox from "../../Components/Ul/CheckBox";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Reports() {
@@ -18,16 +17,7 @@ export default function Reports() {
 
   //! GET : 신고리뷰 리스트 불러오기
   useEffect(() => {
-    const getReports = async () => {
-      await axios
-        .get(APIS.GET_ADMIN_REPORTED)
-        .then((response) => setReports(response.data.response.reportedReviews))
-        .catch((error) => {
-          console.log("신고리뷰리스트 불러오던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    getReports();
+    AdminInstance.getReports(setReports);
   }, []);
 
   //* 체크된 항목을 하나씩 담아주는 부분
@@ -41,28 +31,7 @@ export default function Reports() {
     },
     [checkedList],
   );
-
-  //! DELETE : 신고누적리뷰 삭제
-  const deleteReview = async () => {
-    await axios
-      .delete(APIS.DELETE_ADMIN_REVIEW_DELETE, { data: { reviews: checkedList } })
-      .catch((error) => {
-        console.log("신고누적리뷰 삭제하던 중 에러 발생");
-        console.log(error);
-      })
-      .then(() => location.reload());
-  };
-
-  //! POST : 신고누적리뷰 복구
-  const restoreReview = async () => {
-    await axios
-      .post(APIS.POST_ADMIN_REVIEW_RESTORE, { reviews: checkedList })
-      .catch((error) => {
-        console.log("신고누적리뷰 복구하던 중 에러 발생");
-        console.log(error);
-      })
-      .then(() => location.reload());
-  };
+  const data = { userIdxs: checkedList };
 
   return (
     <WholePage>
@@ -74,8 +43,8 @@ export default function Reports() {
               <Header>
                 <span>신고리뷰관리</span>
                 <ButtonContainer>
-                  <Button color="blue" size="md" text="선택복구" onClick={() => restoreReview()} />
-                  <Button color="red" size="md" text="선택삭제" onClick={() => deleteReview()} />
+                  <Button color="blue" size="md" text="선택복구" onClick={() => AdminInstance.restoreReview(data)} />
+                  <Button color="red" size="md" text="선택삭제" onClick={() => AdminInstance.deleteReportedReview(data)} />
                 </ButtonContainer>
               </Header>
               <Table>
