@@ -6,8 +6,6 @@ import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.dto.UserIdxRequestDto;
 import com.project.mainproject.stub.CommonStub;
 import com.project.mainproject.user.dto.*;
-import com.project.mainproject.user.dto.db.DBUserInfo;
-import com.project.mainproject.user.entity.Pharmacy;
 import com.project.mainproject.user.mapper.UserMapper;
 import com.project.mainproject.user.service.UserService;
 import com.project.mainproject.utils.UriCreator;
@@ -71,15 +69,15 @@ public class UserController {
      */
     @GetMapping("/store")
     public ResponseEntity getStoreRequest(Pageable pageable) {
-        Page<Pharmacy> pharmacyPage = userService.findPharmacyRequest(pageable);
-        Page<PharmacyInfoDto> pharmacyInfoDtoPage = pharmacyPage.map(PharmacyInfoDto::new);
+        Page<PharmacyInfoDto> pharmacyPage = userService.findPharmacyRequest(pageable);
+//        Page<PharmacyInfoDto> pharmacyInfoDtoPage = pharmacyPage.map(PharmacyInfoDto::new);
 
         PageInfo pageInfo = PageInfo.builder()
                 .size(pageable.getPageSize()).page(pageable.getPageNumber())
-                .totalPage((int) pharmacyInfoDtoPage.getTotalElements()).totalPage(pharmacyInfoDtoPage.getTotalPages()).build();
+                .totalPage((int) pharmacyPage.getTotalElements()).totalPage(pharmacyPage.getTotalPages()).build();
 
         PageResponseDto<Object> response = PageResponseDto.builder()
-                .response(pharmacyInfoDtoPage).pageInfo(pageInfo)
+                .response(pharmacyPage).pageInfo(pageInfo)
                 .message(PROCESS_COMPLETED.getMessage()).httpCode(PROCESS_COMPLETED.getHttpCode())
                 .build();
         return ResponseEntity.ok().body(response);
@@ -116,15 +114,15 @@ public class UserController {
      */
     @GetMapping
     public ResponseEntity getUsers(@PageableDefault(sort = "createdAt",direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<DBUserInfo> userPage = userService.findUsers(pageable);
-        Page<UserInfoDto> userInfoDtoPage = userPage.map(UserInfoDto::new);
+        Page<UserInfoDto> userPage = userService.findUsers(pageable);
+//        Page<UserInfoDto> userInfoDtoPage = userPage.map(UserInfoDto::new);
 
         PageInfo pageInfo = PageInfo.builder()
                 .size(pageable.getPageSize()).page(pageable.getPageNumber())
-                .totalPage((int) userInfoDtoPage.getTotalElements()).totalPage(userInfoDtoPage.getTotalPages()).build();
+                .totalPage((int) userPage.getTotalElements()).totalPage(userPage.getTotalPages()).build();
 
         PageResponseDto<Object> response = PageResponseDto.builder()
-                .response(userInfoDtoPage).pageInfo(pageInfo)
+                .response(userPage.getContent()).pageInfo(pageInfo)
                 .message(PROCESS_COMPLETED.getMessage()).httpCode(PROCESS_COMPLETED.getHttpCode())
                 .build();
 
@@ -134,7 +132,7 @@ public class UserController {
     /*
         회원 기본 정보 수정
      */
-    @PatchMapping("{userIdx}")
+    @PatchMapping("/{userIdx}")
     public ResponseEntity patchUserInfo(@PathVariable("userIdx") Long userIdx,
                                         @RequestBody UserPatchDto userpatchDto) {
         userService.patchUser(userIdx, userpatchDto);
@@ -162,7 +160,7 @@ public class UserController {
     /*
         회원 탈퇴
      */
-    @DeleteMapping("{userIdx}")
+    @DeleteMapping("/{userIdx}")
     public ResponseEntity deleteUser(@PathVariable("userIdx") Long userIdx) {
         userService.deleteUser(userIdx);
 

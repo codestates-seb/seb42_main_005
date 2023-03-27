@@ -32,7 +32,8 @@ public interface UserControllerTestHelper extends ControllerTestHelper {
         return List.of(
                 fieldWithPath("name").type(JsonFieldType.STRING).description("닉네임").optional(),
                 fieldWithPath("address").type(JsonFieldType.STRING).description("주소").optional(),
-                fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호").optional() // 필수?
+                fieldWithPath("password").type(JsonFieldType.STRING).description("기존 비밀번호"),
+                fieldWithPath("newPassword").type(JsonFieldType.STRING).description("새 비밀번호").optional()// 필수?
         );
     }
     default List<FieldDescriptor> getDefaultUserFindPasswordRequestDescriptors() {
@@ -48,6 +49,15 @@ public interface UserControllerTestHelper extends ControllerTestHelper {
                 fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
                 fieldWithPath("address").type(JsonFieldType.STRING).description("주소"),
                 fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
+        );
+    }
+    default List<FieldDescriptor> getDefaultPharmacyUserSignUpRequestDescriptors() {
+        return List.of(
+                fieldWithPath("name").type(JsonFieldType.STRING).description("약국이름"),
+                fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+                fieldWithPath("address").type(JsonFieldType.STRING).description("약국주소"),
+                fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
+
         );
     }
     default List<FieldDescriptor> getDefaultUserResponseDescriptors(DataResponseType dataResponseType) {

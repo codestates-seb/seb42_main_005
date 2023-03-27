@@ -6,9 +6,9 @@ import com.project.mainproject.security.CustomAuthorityUtils;
 import com.project.mainproject.security.UserContext;
 import com.project.mainproject.store.entity.Store;
 import com.project.mainproject.store.repository.StoreRepository;
+import com.project.mainproject.user.dto.PharmacyInfoDto;
 import com.project.mainproject.user.dto.UserInfoDto;
 import com.project.mainproject.user.dto.UserPatchDto;
-import com.project.mainproject.user.dto.db.DBUserInfo;
 import com.project.mainproject.user.entity.Normal;
 import com.project.mainproject.user.entity.Pharmacy;
 import com.project.mainproject.user.entity.User;
@@ -151,13 +151,15 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
-    public Page<DBUserInfo> findUsers(Pageable pageable) {
+    public Page<UserInfoDto> findUsers(Pageable pageable) {
         return userRepository.findUserInfoWithBannedStoreDate(pageable);
 
     }
 
-    public Page<Pharmacy> findPharmacyRequest(Pageable pageable) {
-        return pharmacyRepository.findAllByUserStatusIs(TEMPORARY, pageable);
+    public Page<PharmacyInfoDto> findPharmacyRequest(Pageable pageable) {
+        Page<Pharmacy> pharmacyPage = pharmacyRepository.findAllByUserStatusIs(TEMPORARY, pageable);
+        Page<PharmacyInfoDto> pharmacyInfoDtoPage = pharmacyPage.map(PharmacyInfoDto::new);
+        return pharmacyInfoDtoPage;
     }
 
     @Transactional
