@@ -1,0 +1,63 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL}
+    password: ${DATABASE_PASSWORD}
+    username: ${DATABASE_USERNAME}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL55Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        highlight_sql: true
+        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 100
+    database: mysql
+  #      open-in-view: false
+  redis:
+    host: main-redis.f30h69.ng.0001.apn2.cache.amazonaws.com
+    port: 6379
+logging:
+  level:
+    org.hibernate.sql: error
+  file:
+    path: /log
+
+jwt:
+  key:
+    secret: ${JWT_KEY}
+  access-token-expiration-minutes: 300000
+  refresh-token-expiration-minutes: 420
+
+mail:
+  address:
+    admin: ${MAIL_ADMIN}
+  smtp:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_ID}
+    password: ${MAIL_PASSWORD}
+    auth: true
+    starttls:
+      enable: true
+  subject:
+    member:
+      registration: 가입~!
+  template:
+    name:
+      member:
+        join: email-registration-member
+data-api:
+  service-key: ${SERVICE_KEY}
+  service-url: https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?
+cloud:
+  aws:
+    s3:
+      bucket: main-005-image
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: ${S3_ACCESS_KEY}
+      secretKey: ${S3_SECRET_KEY}
