@@ -29,16 +29,16 @@ public class StoreService {
     private final UserService userService;
     private final FileUploader fileUploader;
 
-    public SingleResponseDto pickStore(Long userIdx, Long storeIdx, Long loginUserIdx) {
-        if (!userIdx.equals(loginUserIdx)) {
+    public SingleResponseDto pickStore(Long storeIdx, Long loginUserIdx) {
+        if (loginUserIdx.equals(-1)) {
             throw new BusinessLogicException(UserExceptionCode.USER_MISS_MATCH);
         }
-        Normal findUser = userService.checkIsNormal(userIdx);
+        Normal findUser = userService.checkIsNormal(loginUserIdx);
         Store findStore = storeQueryRepository.findStoreById(storeIdx);
         List<PickedStore> findPickedStores = storeQueryRepository.findPickedStoreById(storeIdx);    //store에 이미 존재
 
         for (PickedStore pickedStore : findPickedStores) {
-            if (pickedStore.getNormal().getUserIdx().equals(userIdx)) {
+            if (pickedStore.getNormal().getUserIdx().equals(loginUserIdx)) {
                 pickedStore.removePickedStore(findUser, findStore);
                 findPickedStores.remove(pickedStore);
                 pickedStoreRepository.delete(pickedStore);
