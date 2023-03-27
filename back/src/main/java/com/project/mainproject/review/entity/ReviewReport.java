@@ -3,10 +3,8 @@ package com.project.mainproject.review.entity;
 import com.project.mainproject.audit.AuditableWithBy;
 import com.project.mainproject.review.enums.ReportStatus;
 import com.project.mainproject.user.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.Builder.Default;
 
 import javax.persistence.*;
 
@@ -18,6 +16,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
@@ -27,8 +26,10 @@ public class ReviewReport extends AuditableWithBy {
     @Column(name = "REVIEW_REPORT_IDX")
     private Long reportIdx;
 
+    @Default
     private String content = "";
 
+    @Default
     @Enumerated(value = STRING)
     private ReportStatus reportStatus = REGISTERED;
 
