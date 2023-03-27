@@ -18,8 +18,8 @@ public interface AdminControllerTestHelper extends ControllerTestHelper {
     default List<FieldDescriptor> getDefaultUserListDescriptors() {
 
         return List.of(
-                fieldWithPath("users").type(JsonFieldType.ARRAY).description("유저목록")
-                , fieldWithPath("users[].userIdx").type(JsonFieldType.NUMBER).description("유저인덱스")
+                fieldWithPath("userIdxs").type(JsonFieldType.ARRAY).description("유저목록")
+                , fieldWithPath("userIdxs[].userIdx").type(JsonFieldType.NUMBER).description("유저인덱스")
         );
     }
 

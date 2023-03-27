@@ -16,7 +16,6 @@ import com.project.mainproject.user.repository.UserRepository;
 import com.project.mainproject.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,8 +23,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.restdocs.headers.HeaderDocumentation;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -42,16 +39,14 @@ import java.util.Optional;
 
 import static com.project.mainproject.utils.ApiDocumentUtils.getRequestPreProcessor;
 import static com.project.mainproject.utils.ApiDocumentUtils.getResponsePreProcessor;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -320,6 +315,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
 
     @Test
     @DisplayName("찜하기 테스트 찜 성공 시: 성공")
+    @WithMockUser
     void pickedStoreTest() throws Exception{
         Long storeIdx = 1L;
 
@@ -342,7 +338,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
 
         given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
         given(userService.loadUserByUsername(anyString())).willReturn(userContext);
-        given(storeService.pickStore(anyLong(),anyLong())).willReturn(responseDto);
+        given(storeService.pickStore(anyLong(),anyLong(),anyLong())).willReturn(responseDto);
 
         String accessToken = jwtHelper.createAccessToken(user.getEmail());
 
@@ -376,7 +372,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
                 .andReturn();
     }
     @Test
-    @DisplayName("찜하기 테스트 찜 취라 시: 성공")
+    @DisplayName("찜하기 테스트 찜 취소 시: 성공")
     void pickedStoreTest2() throws Exception{
         Long storeIdx = 1L;
 
@@ -400,7 +396,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
         given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
         given(userService.loadUserByUsername(anyString())).willReturn(userContext);
 //        doNothing().when(storeService).pickStore(anyLong(), anyLong());
-        given(storeService.pickStore(anyLong(),anyLong())).willReturn(responseDto);
+        given(storeService.pickStore(anyLong(),anyLong(),anyLong())).willReturn(responseDto);
 
 
         String accessToken = jwtHelper.createAccessToken(user.getEmail());
@@ -453,7 +449,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
 
         given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
         given(userService.loadUserByUsername(anyString())).willReturn(userContext);
-        given(storeService.pickStore(anyLong(),anyLong())).willReturn(responseDto);
+        given(storeService.pickStore(anyLong(),anyLong(),anyLong())).willReturn(responseDto);
 
         String accessToken = jwtHelper.createAccessToken(user.getEmail());
 
@@ -530,9 +526,6 @@ class StoreControllerTest implements StoreControllerTestHelper {
                                 "post-storeImageUpload",
                                 getRequestPreProcessor(),
                                 getResponsePreProcessor(),
-                                requestParameters(
-                                        parameterWithName("userIdx").description("사용자 식별자 ID")
-                                ),
                                 requestParts(
                                         partWithName("profileImage").description("변경할 프로필 이미지"),
                                         partWithName("userIdx").description("사용자 식별자 ID")

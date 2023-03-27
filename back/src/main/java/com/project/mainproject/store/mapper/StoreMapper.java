@@ -21,6 +21,18 @@ public abstract class StoreMapper {
     @Mapping(target = "todayOperatingTime.operatingTime" , expression ="java(transOperatingTime.todayOperating(dBStoreDetailDto))")
     public abstract GetStoreDetailDto getStoreDetailDto(DBStoreDetailDto dbStoreDetailDto);
 
+
+    @Mapping(target = "isOperatingNight",expression = "java(transOperatingTime.todayOperating(store).isNightOperating())")
+    @Mapping(target = "isOperating",expression = "java(transOperatingTime.todayOperating(store).checkOperating())")
+    @Mapping(target = "operatingTime", expression = "java(transOperatingTime.transFromDBDataToResponseData(store))")
+    @Mapping(target = "todayOperatingTime.operatingTime" , expression ="java(transOperatingTime.todayOperating(store))")
+    @Mapping(target = "imagePath",expression = "java(store.getStoreImagePath())")
+    @Mapping(target = "reviewCount", expression ="java(store.getReviewCount())" )
+    @Mapping(target = "pickedStoreCount", expression = "java(store.getPickedStoreCount())")
+    @Mapping(target = "rating", expression="java(store.getRatingAvg())")
+    public abstract GetStoreDetailDto getStoreDetailDto(Store store);
+
+
     public abstract List<Store> storeDataDtoListToStores(List<StoreDataDto> storeData);
 
     @Mapping(target = "mondayOperating.startTime",

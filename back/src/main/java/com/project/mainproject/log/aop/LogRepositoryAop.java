@@ -1,4 +1,4 @@
-package com.project.mainproject.log;
+package com.project.mainproject.log.aop;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;

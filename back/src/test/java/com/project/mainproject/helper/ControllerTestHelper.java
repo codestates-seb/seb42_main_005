@@ -51,6 +51,13 @@ public interface ControllerTestHelper<T> {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
     }
+    default RequestBuilder postRequestBuilder(String url,String accessToken, long resourceId, String content) {
+        return post(url, resourceId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content)
+                .header("Authorization", "Bearer " + accessToken);
+    }
     default RequestBuilder postRequestBuilder(String url, long resourceId, long resourceId2, String content) {
         return post(url, resourceId, resourceId2)
                 .accept(MediaType.APPLICATION_JSON)
@@ -63,11 +70,24 @@ public interface ControllerTestHelper<T> {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
     }
-    default RequestBuilder patchRequestBuilder(String url, long resourceId, long resourceId2, String content) {
+    default RequestBuilder patchRequestBuilder(String url, long resourceId, String content, String accessToken) {
+        return patch(url, resourceId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content)
+                .header("Authorization", "Bearer " + accessToken);
+    }
+    default RequestBuilder patchRequestBuilder(String url, long resourceId, long resourceId2, String content,String accessToken) {
         return patch(url, resourceId,resourceId2)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
+    }
+    default RequestBuilder patchRequestBuilder(String url, long resourceId, long resourceId2,String accessToken) {
+        return patch(url, resourceId,resourceId2)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                ;
     }
 
     default RequestBuilder patchRequestBuilder(String uri, String content) {
@@ -84,9 +104,11 @@ public interface ControllerTestHelper<T> {
                 .contentType(MediaType.APPLICATION_JSON);
 
     }
-    default RequestBuilder getRequestBuilder(String url, Long resourceId) {
+    default RequestBuilder getRequestBuilder(String url, Long resourceId,String accessToken) {
         return get(url, resourceId)
-                .accept(MediaType.APPLICATION_JSON);
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + accessToken)
+        ;
     }
     default RequestBuilder getRequestBuilder(String url,String accessToken, Long resourceId) {
         return get(url, resourceId)
@@ -118,10 +140,13 @@ public interface ControllerTestHelper<T> {
                 .header("Authorization", "Bearer " + accessToken)
                 .content(content);
     }
-    default RequestBuilder getRequestBuilder(String url, MultiValueMap<String, String> queryParams,long resourceId) {
+    default RequestBuilder getRequestBuilder(String url, MultiValueMap<String, String> queryParams,long resourceId,String accessToken) {
         return get(url,resourceId)
                 .params(queryParams)
-                .accept(MediaType.APPLICATION_JSON);
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + accessToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                ;
     }
     default RequestBuilder getRequestBuilder(String url,long resourceId,long resourceId2) {
         return get(url,resourceId,resourceId2)
@@ -132,6 +157,14 @@ public interface ControllerTestHelper<T> {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
+    }
+    default RequestBuilder deleteRequestBuilder(String url, long resourceId, long resourceId2,String accessToken) {
+        return delete(url,resourceId,resourceId2)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + accessToken)
+
+                ;
     }
     default RequestBuilder deleteRequestBuilder(String url, long resourceId) {
         return delete(url, resourceId);

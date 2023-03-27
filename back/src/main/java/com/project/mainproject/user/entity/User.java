@@ -70,7 +70,7 @@ public class User extends Auditable{
         this.email = email;
         this.name = name;
     }
-
+    @Builder
     public User(User user) {
         this.password = user.getPassword();
         this.email = user.getEmail();

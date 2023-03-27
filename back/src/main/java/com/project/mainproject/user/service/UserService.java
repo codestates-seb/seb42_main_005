@@ -1,13 +1,14 @@
 package com.project.mainproject.user.service;
 
 import com.project.mainproject.exception.BusinessLogicException;
+import com.project.mainproject.mail.event.UserFindPasswordApplicationEvent;
 import com.project.mainproject.security.CustomAuthorityUtils;
 import com.project.mainproject.security.UserContext;
 import com.project.mainproject.store.entity.Store;
 import com.project.mainproject.store.repository.StoreRepository;
+import com.project.mainproject.user.dto.PharmacyInfoDto;
 import com.project.mainproject.user.dto.UserInfoDto;
 import com.project.mainproject.user.dto.UserPatchDto;
-import com.project.mainproject.user.dto.db.DBUserInfo;
 import com.project.mainproject.user.entity.Normal;
 import com.project.mainproject.user.entity.Pharmacy;
 import com.project.mainproject.user.entity.User;
@@ -17,6 +18,7 @@ import com.project.mainproject.user.mapper.UserMapper;
 import com.project.mainproject.user.repository.PharmacyRepository;
 import com.project.mainproject.user.repository.UserRepository;
 import com.project.mainproject.utils.FileUploader;
+import com.project.mainproject.utils.PasswordCreator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -42,6 +44,7 @@ import java.util.stream.Collectors;
 import static com.project.mainproject.store.exception.StoreExceptionCode.STORE_ADDRESS_NOT_FOUND;
 import static com.project.mainproject.store.exception.StoreExceptionCode.STORE_NAME_NOT_FOUND;
 import static com.project.mainproject.user.enums.UserStatus.TEMPORARY;
+import static com.project.mainproject.user.exception.UserExceptionCode.USER_NOT_FOUND;
 
 @Service
 @Slf4j
@@ -112,6 +115,14 @@ public class UserService implements UserDetailsService {
         userRepository.save(pharmacy);
     }
 
+    public void findPassword(String email) {
+        User user = validUserByEmail(email);
+        String newPassword = PasswordCreator.getRandomPassword(10);
+        publisher.publishEvent(new UserFindPasswordApplicationEvent(this,user,newPassword));
+        user.setPassword(encoder.encode(newPassword));
+    }
+
+
     private Store filterCorrcetStore(List<Store> stores, String address) {
         stores = stores.stream()
                 .filter(store -> store.getAddress().replace(" ", "")
@@ -140,27 +151,31 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
-    public Page<DBUserInfo> findUsers(Pageable pageable) {
+    public Page<UserInfoDto> findUsers(Pageable pageable) {
         return userRepository.findUserInfoWithBannedStoreDate(pageable);
 
     }
 
-    public Page<Pharmacy> findPharmacyRequest(Pageable pageable) {
-        return pharmacyRepository.findAllByUserStatusIs(TEMPORARY, pageable);
+    public Page<PharmacyInfoDto> findPharmacyRequest(Pageable pageable) {
+        Page<Pharmacy> pharmacyPage = pharmacyRepository.findAllByUserStatusIs(TEMPORARY, pageable);
+        Page<PharmacyInfoDto> pharmacyInfoDtoPage = pharmacyPage.map(PharmacyInfoDto::new);
+        return pharmacyInfoDtoPage;
     }
 
+    @Transactional
     public void patchUser(Long userIdx, UserPatchDto userPatchDto) {
-        User user = userRepository.findById(userIdx).get();
-        if(userPatchDto.getAddress() != null) {
-            user.setAddress(userPatchDto.getAddress());
-        }
-        if(userPatchDto.getNewPassword() != null) {
-            if (encoder.matches(userPatchDto.getPassword(), user.getPassword())) {
+        User user = validUser(userIdx);
+        if(encoder.matches(userPatchDto.getPassword(), user.getPassword())) {
+            if (!userPatchDto.getAddress().isBlank())
+                user.setAddress(userPatchDto.getAddress());
+            if (!userPatchDto.getName().isBlank())
+                user.setName(userPatchDto.getName());
+            if (!userPatchDto.getNewPassword().isBlank()) {
                 user.setPassword(encoder.encode(userPatchDto.getNewPassword()));
-                userRepository.save(user);
-            } else {
-                throw new BusinessLogicException(UserExceptionCode.PASSWORD_NOT_MATCHED);
             }
+        }
+        else {
+            throw new BusinessLogicException(UserExceptionCode.PASSWORD_NOT_MATCHED);
         }
     }
 
@@ -190,7 +205,7 @@ public class UserService implements UserDetailsService {
         if (findUser.isPresent()) {
             return findUser.get();
         }
-        throw new BusinessLogicException(UserExceptionCode.USER_NOT_FOUND);
+        throw new BusinessLogicException(USER_NOT_FOUND);
     }
 
     /*
@@ -202,6 +217,15 @@ public class UserService implements UserDetailsService {
             throw new BusinessLogicException(UserExceptionCode.USER_EXIST);
         }
     }
+
+    /*
+     * email을 이용해서 검증을 진행한다.
+     * */
+    public User validUserByEmail(String email) {
+        Optional<User> findUser = userRepository.findByEmail(email);
+        return findUser.orElseThrow(()-> new BusinessLogicException(UserExceptionCode.USER_NOT_FOUND));
+    }
+
 
     /*
      * 약사인지 검증하는 로직

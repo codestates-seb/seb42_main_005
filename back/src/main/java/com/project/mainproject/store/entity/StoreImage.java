@@ -3,6 +3,7 @@ package com.project.mainproject.store.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -18,6 +19,7 @@ public class StoreImage {
     @GeneratedValue(strategy = IDENTITY)
     private Long storeImageIdx;
 
+    @Setter
     private String imagePath;
 
     @OneToOne(fetch = LAZY)
