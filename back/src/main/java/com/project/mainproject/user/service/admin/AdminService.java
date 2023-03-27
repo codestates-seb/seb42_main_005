@@ -1,7 +1,6 @@
 package com.project.mainproject.user.service.admin;
 
 import com.project.mainproject.VO.Duration;
-import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.exception.BusinessLogicException;
 import com.project.mainproject.user.entity.User;
 import com.project.mainproject.user.entity.UserBanned;
@@ -17,9 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.project.mainproject.enums.ResultStatus.PROCESS_COMPLETED;
-import static com.project.mainproject.enums.ResultStatus.REJECT_PHARMACY;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -28,9 +24,8 @@ public class AdminService {
     private final UserService userService;
     private final UserBannedRepository userBannedRepository;
 
-    public SingleResponseDto approvalPharmacy(List<Long> userIdxs) {
+    public void approvalPharmacy(List<Long> userIdxs) {
         List<User> findUsers = userRepository.findByIds(userIdxs);
-
 
         checkUserExist(userIdxs, findUsers);
         for (int i = 0; i < findUsers.size(); i++) {
@@ -39,24 +34,14 @@ public class AdminService {
             user.setUserStatus(UserStatus.ACTIVE);
             //TODO: user.setUserType 찍어야한다.
         }
-
-        return SingleResponseDto.builder()
-                .message(PROCESS_COMPLETED.getMessage())
-                .httpCode(PROCESS_COMPLETED.getHttpCode())
-                .build();
     }
 
-    public SingleResponseDto rejectPharmacy(List<Long> userIdx) {
+    public void rejectPharmacy(List<Long> userIdx) {
         // 유저 검증 필요 (아무 숫자나 다 됨 => TEMPORARY인 "약국회원")
         userRepository.deleteUserByIdList(userIdx);
-
-        return SingleResponseDto.builder()
-                .message(REJECT_PHARMACY.getMessage())
-                .httpCode(REJECT_PHARMACY.getHttpCode())
-                .build();
     }
 
-    public SingleResponseDto blockUsers(int period, List<Long> userIdxs) {
+    public void blockUsers(int period, List<Long> userIdxs) {
 
         List<User> findUsers = userRepository.findByIds(userIdxs);
         checkUserExist(userIdxs, findUsers);
@@ -66,23 +51,14 @@ public class AdminService {
             UserBanned userBanned = UserBanned.builder().user(findUser).duration(selectDuration(period)).build();
             userBannedRepository.save(userBanned);
         }
-
-        return SingleResponseDto.builder()
-                .httpCode(PROCESS_COMPLETED.getHttpCode())
-                .message(PROCESS_COMPLETED.getMessage())
-                .build();
     }
 
-    public SingleResponseDto banishUsers(List<Long> userIdxs) {
+    public void banishUsers(List<Long> userIdxs) {
         List<User> findUsers = userRepository.findByIds(userIdxs);
         findUsers.iterator().forEachRemaining(findUser -> findUser.setUserStatus(UserStatus.KICKEDOUT));
-
-        return SingleResponseDto.builder()
-                .httpCode(PROCESS_COMPLETED.getHttpCode())
-                .message(PROCESS_COMPLETED.getMessage())
-                .build();
     }
-    public SingleResponseDto restoreUsers(List<Long> userIdxs) {
+
+    public void restoreUsers(List<Long> userIdxs) {
         List<User> findUsers = userRepository.findByIds(userIdxs);
 
         for (User findUser : findUsers) {
@@ -90,11 +66,6 @@ public class AdminService {
         }
 
         userBannedRepository.usersDelete(userIdxs); //벤당한 유저 삭제로직
-
-        return SingleResponseDto.builder()
-                .httpCode(PROCESS_COMPLETED.getHttpCode())
-                .message(PROCESS_COMPLETED.getMessage())
-                .build();
     }
 
     // 내부 동작 메서드

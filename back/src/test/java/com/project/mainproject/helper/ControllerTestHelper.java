@@ -70,6 +70,13 @@ public interface ControllerTestHelper<T> {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
     }
+    default RequestBuilder patchRequestBuilder(String url, long resourceId, String content, String accessToken) {
+        return patch(url, resourceId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content)
+                .header("Authorization", "Bearer " + accessToken);
+    }
     default RequestBuilder patchRequestBuilder(String url, long resourceId, long resourceId2, String content,String accessToken) {
         return patch(url, resourceId,resourceId2)
                 .accept(MediaType.APPLICATION_JSON)

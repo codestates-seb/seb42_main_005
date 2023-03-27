@@ -4,16 +4,11 @@ import com.project.mainproject.dto.PageInfo;
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.dto.UserIdxRequestDto;
-import com.project.mainproject.enums.ResultStatus;
 import com.project.mainproject.stub.CommonStub;
 import com.project.mainproject.user.dto.*;
-import com.project.mainproject.user.dto.db.DBUserInfo;
-import com.project.mainproject.user.entity.Pharmacy;
-import com.project.mainproject.user.entity.User;
 import com.project.mainproject.user.mapper.UserMapper;
 import com.project.mainproject.user.service.UserService;
 import com.project.mainproject.utils.UriCreator;
-import com.sun.xml.bind.v2.TODO;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -73,15 +68,14 @@ public class UserController {
      */
     @GetMapping("/store")
     public ResponseEntity getStoreRequest(Pageable pageable) {
-        Page<Pharmacy> pharmacyPage = userService.findPharmacyRequest(pageable);
-        Page<PharmacyInfoDto> pharmacyInfoDtoPage = pharmacyPage.map(PharmacyInfoDto::new);
+        Page<PharmacyInfoDto> pharmacyPage = userService.findPharmacyRequest(pageable);
 
         PageInfo pageInfo = PageInfo.builder()
                 .size(pageable.getPageSize()).page(pageable.getPageNumber())
-                .totalPage((int) pharmacyInfoDtoPage.getTotalElements()).totalPage(pharmacyInfoDtoPage.getTotalPages()).build();
+                .totalPage((int) pharmacyPage.getTotalElements()).totalPage(pharmacyPage.getTotalPages()).build();
 
         PageResponseDto<Object> response = PageResponseDto.builder()
-                .response(pharmacyInfoDtoPage).pageInfo(pageInfo)
+                .response(pharmacyPage.getContent()).pageInfo(pageInfo)
                 .message(PROCESS_COMPLETED.getMessage()).httpCode(PROCESS_COMPLETED.getHttpCode())
                 .build();
         return ResponseEntity.ok().body(response);
@@ -136,7 +130,7 @@ public class UserController {
     /*
         회원 기본 정보 수정
      */
-    @PatchMapping("{userIdx}")
+    @PatchMapping("/{userIdx}")
     public ResponseEntity patchUserInfo(@PathVariable("userIdx") Long userIdx,
                                         @RequestBody UserPatchDto userpatchDto) {
         userService.patchUser(userIdx, userpatchDto);

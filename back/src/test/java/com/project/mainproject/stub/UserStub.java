@@ -1,9 +1,6 @@
 package com.project.mainproject.stub;
 
-import com.project.mainproject.user.dto.UserFindPasswordDto;
-import com.project.mainproject.user.dto.UserInfoDto;
-import com.project.mainproject.user.dto.UserPatchDto;
-import com.project.mainproject.user.dto.UserSignUpDto;
+import com.project.mainproject.user.dto.*;
 import com.project.mainproject.user.enums.UserStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -14,7 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UserStub {
+public class
+UserStub {
     private static Map<String, Object> Userdto;
 
     static {
@@ -36,9 +34,11 @@ public class UserStub {
                 new UserFindPasswordDto("zzanghd@gmail.com")
         );
     }
+
     public static Object getRequestBody(String dtoType) {
         return Userdto.get(dtoType);
     }
+
     public static UserInfoDto getUser() {
         return UserInfoDto.builder()
                 .userIdx(1L)
@@ -66,7 +66,7 @@ public class UserStub {
                     .imagePath(null)
                     .userType(i % 2 == 1 ? "약사회원" : "일반회원")
                     .userStatus(i % 3 == 1 ? UserStatus.TEMPORARY : UserStatus.ACTIVE)
-                    .reviewCount((long) i)
+                    .reviewCount(i)
                     .reportCount((long) 10-i)
                     .bannedRestoreDate(null)
                     .build();
@@ -74,7 +74,29 @@ public class UserStub {
         }
         return users;
     }
+
+    public static List<PharmacyInfoDto> getPharmacyRequests() {
+        List<PharmacyInfoDto> pharmacys = new ArrayList<>();
+        for (int i = 1; i <= 10; i++) {
+            PharmacyInfoDto pharmacy = PharmacyInfoDto.builder()
+                    .userIdx((long) i)
+                    .storeIdx((long) i)
+                    .createdAt(LocalDateTime.of(2023, 3, 20 + i, 0, 0, 0))
+                    .name("2" + i + "세기약국")
+                    .email("2" + i + "pharm@gmail.com")
+                    .address("서울특별시 서초구 서초동" + i)
+                    .businessCertificate("businessCertificate1")
+                    .pharmacistCertificate("pharmacistCertificate")
+                    .build();
+            pharmacys.add(pharmacy);
+        }
+        return pharmacys;
+    }
     public static Page<UserInfoDto> getPageUserInfoStub() {
         return new PageImpl<UserInfoDto>(getUsers());
     }
+    public static Page<PharmacyInfoDto> getPagePharmacyInfoStub() {
+        return new PageImpl<PharmacyInfoDto>(getPharmacyRequests());
+    }
+
 }

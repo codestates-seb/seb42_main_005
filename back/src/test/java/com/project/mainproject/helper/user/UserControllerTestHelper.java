@@ -32,7 +32,8 @@ public interface UserControllerTestHelper extends ControllerTestHelper {
         return List.of(
                 fieldWithPath("name").type(JsonFieldType.STRING).description("닉네임").optional(),
                 fieldWithPath("address").type(JsonFieldType.STRING).description("주소").optional(),
-                fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호").optional() // 필수?
+                fieldWithPath("password").type(JsonFieldType.STRING).description("기존 비밀번호"),
+                fieldWithPath("newPassword").type(JsonFieldType.STRING).description("새 비밀번호").optional()// 필수?
         );
     }
     default List<FieldDescriptor> getDefaultUserFindPasswordRequestDescriptors() {
