@@ -22,7 +22,7 @@ jobs:
         run: |
           cd ./back/src/main/resources
           touch ./application.yml
-          echo "${{env.APPLICATION_YML}}" > ./application.yml
+          echo "${{secrets.APPLICATION_YML}}" > ./application.yml
         shell: bash
 
       - name: Set up JDK 11
