@@ -63,9 +63,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo docker rm -f $(docker ps -qa)
-            sudo docker pull ${{ secrets.DOCKER_REPO }}
-            docker stop ${{ secrets.DOCKER_REPO }}
-            docker rm ${{ secrets.DOCKER_REPO }}
+            docker pull ${{ secrets.DOCKER_REPO }}
+            docker rm -f $(docker ps -qa)
             docker-compose up -d
             docker image prune -f
