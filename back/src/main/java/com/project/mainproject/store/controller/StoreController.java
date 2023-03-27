@@ -80,8 +80,9 @@ public class StoreController {
      * 약국 이름으로 검색하기
      * */
     @GetMapping("/search")
-    public ResponseEntity searchStore(@RequestParam String keyword) {
-        SingleResponseDto searchResult = storeGetService.getSearchStoreList(keyword);
+    public ResponseEntity searchStore(@RequestParam String keyword , @AuthenticationPrincipal Object principal) {
+        Long userIdx = CheckLoginUser.getContextIdx(principal);
+        SingleResponseDto searchResult = storeGetService.getSearchStoreList(keyword, userIdx);
 
         return ResponseEntity.ok(searchResult);
     }
