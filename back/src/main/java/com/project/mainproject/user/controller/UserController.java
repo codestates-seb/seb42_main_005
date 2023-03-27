@@ -4,17 +4,15 @@ import com.project.mainproject.dto.PageInfo;
 import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.dto.UserIdxRequestDto;
-import com.project.mainproject.enums.ResultStatus;
 import com.project.mainproject.stub.CommonStub;
 import com.project.mainproject.user.dto.*;
 import com.project.mainproject.user.dto.db.DBUserInfo;
 import com.project.mainproject.user.entity.Pharmacy;
-import com.project.mainproject.user.entity.User;
 import com.project.mainproject.user.mapper.UserMapper;
 import com.project.mainproject.user.service.UserService;
 import com.project.mainproject.utils.UriCreator;
-import com.sun.xml.bind.v2.TODO;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -37,7 +35,7 @@ public class UserController {
     public final static String USERS_DEFAULT_URL = "/api/users";
     private UserService userService;
     private UserMapper userMapper;
-
+    private final ApplicationEventPublisher publisher;
 
     /*
             일반 회원가입
@@ -90,10 +88,10 @@ public class UserController {
     /*
         비밀번호 찾기
      */
-    @PatchMapping("/password/{userIdx}")
-    public ResponseEntity findPassword(@PathVariable("userIdx") Long userIdx,
-                                       @RequestBody UserFindPasswordDto findPasswordDto) {
-//         TODO: Send Password Init Email
+    @PatchMapping("/password")
+    public ResponseEntity findPassword(@RequestBody UserFindPasswordDto findPasswordDto) {
+
+        userService.findPassword(findPasswordDto.getEmail());
 
         SingleResponseDto response = CommonStub.getSingleResponseStub(PROCESS_COMPLETED);
         return ResponseEntity.ok().body(response);
