@@ -1,6 +1,7 @@
 package com.project.mainproject.user.service;
 
 import com.project.mainproject.exception.BusinessLogicException;
+import com.project.mainproject.mail.event.UserFindPasswordApplicationEvent;
 import com.project.mainproject.security.CustomAuthorityUtils;
 import com.project.mainproject.security.UserContext;
 import com.project.mainproject.store.entity.Store;
@@ -17,6 +18,7 @@ import com.project.mainproject.user.mapper.UserMapper;
 import com.project.mainproject.user.repository.PharmacyRepository;
 import com.project.mainproject.user.repository.UserRepository;
 import com.project.mainproject.utils.FileUploader;
+import com.project.mainproject.utils.PasswordCreator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -112,6 +114,14 @@ public class UserService implements UserDetailsService {
         userRepository.save(pharmacy);
     }
 
+    public void findPassword(String email) {
+        User user = validUserByEmail(email);
+        String newPassword = PasswordCreator.getRandomPassword(10);
+        publisher.publishEvent(new UserFindPasswordApplicationEvent(this,user,newPassword));
+        user.setPassword(encoder.encode(newPassword));
+    }
+
+
     private Store filterCorrcetStore(List<Store> stores, String address) {
         stores = stores.stream()
                 .filter(store -> store.getAddress().replace(" ", "")
@@ -202,6 +212,15 @@ public class UserService implements UserDetailsService {
             throw new BusinessLogicException(UserExceptionCode.USER_EXIST);
         }
     }
+
+    /*
+     * email을 이용해서 검증을 진행한다.
+     * */
+    public User validUserByEmail(String email) {
+        Optional<User> findUser = userRepository.findByEmail(email);
+        return findUser.orElseThrow(()-> new BusinessLogicException(UserExceptionCode.USER_NOT_FOUND));
+    }
+
 
     /*
      * 약사인지 검증하는 로직
