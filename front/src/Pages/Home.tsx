@@ -4,6 +4,7 @@ import PharmLists from "../Components/PharmList/PharmLists";
 import { SELECT_HIDDEN, SELECT_OPTION_MAP, SELECT_SORT_LIST } from "../Util/type";
 import useGeolocation from "../hooks/useGeolocation";
 import { useViewMap, useSearch } from "../hooks/useMapMarker";
+import { useAppSelector } from "../Redux/hooks";
 import "../hooks/PharmacyOverlay.css";
 
 const { kakao } = window;
@@ -17,15 +18,20 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const location: any = useGeolocation();
 
+  const user = useAppSelector((state: any) => {
+    return state.userInfo.response;
+  });
+
   useEffect(() => {
     if (typeof location != "string" && kakao) {
+      //* 지도 객체 생성
       const container = document.getElementById("map");
       const options = {
         center: new kakao.maps.LatLng(location.latitude, location.longitude),
         level: 3,
       };
-      //* 지도 객체 생성
       const map = new kakao.maps.Map(container as HTMLElement, options);
+
       const PositionCurrent = new kakao.maps.LatLng(location.latitude, location.longitude);
       const ImageSrcCurrent = "./Images/currentPos.png";
       const ImageSizeCurrent = new kakao.maps.Size(24, 35);
@@ -36,22 +42,29 @@ export default function Home() {
         image: MarkerImageCurrent,
       });
 
-      const PositionMyPlace = new kakao.maps.LatLng(37.33370506366528, 127.09738924623072); //! user가 가입할 때 작성한 주소의 위도/경도를 get 필요
-      const ImageSrcMy = "./Images/myPlace.png";
-      const ImageSizeMy = new kakao.maps.Size(24, 35);
-      const MarkerImageMy = new kakao.maps.MarkerImage(ImageSrcMy, ImageSizeMy);
-      const MarkerMy = new kakao.maps.Marker({
-        position: PositionMyPlace,
-        title: "우리 집",
-        image: MarkerImageMy,
+      const address = user.address;
+      const geocoder = new kakao.maps.services.Geocoder();
+
+      geocoder.addressSearch(address, function (result: any, status: any) {
+        if (status === kakao.maps.services.Status.OK) {
+          const PositionMyPlace = new kakao.maps.LatLng(result[0].y, result[0].x);
+          const ImageSrcMy = "./Images/myPlace.png";
+          const ImageSizeMy = new kakao.maps.Size(24, 35);
+          const MarkerImageMy = new kakao.maps.MarkerImage(ImageSrcMy, ImageSizeMy);
+          const MarkerMy = new kakao.maps.Marker({
+            position: PositionMyPlace,
+            title: "우리 집",
+            image: MarkerImageMy,
+          });
+          MarkerMy.setMap(map);
+        }
       });
       MarkerCurrent.setMap(map);
-      MarkerMy.setMap(map);
       map.setMaxLevel(10);
       setMakeMap(map);
       setLoading(false);
     }
-  }, [kakao, location]);
+  }, [kakao, location, user.address]);
 
   //! GET : 약국리스트
   useEffect(() => {
@@ -84,6 +97,7 @@ export default function Home() {
         makeMap={makeMap}
         useViewMap={useViewMap}
         useSearch={useSearch}
+        kakao={kakao}
       />
     </>
   );
