@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 import static com.project.mainproject.store.exception.StoreExceptionCode.STORE_ADDRESS_NOT_FOUND;
 import static com.project.mainproject.store.exception.StoreExceptionCode.STORE_NAME_NOT_FOUND;
 import static com.project.mainproject.user.enums.UserStatus.TEMPORARY;
+import static com.project.mainproject.user.exception.UserExceptionCode.USER_NOT_FOUND;
 
 @Service
 @Slf4j
@@ -149,14 +150,16 @@ public class UserService implements UserDetailsService {
         return pharmacyRepository.findAllByUserStatusIs(TEMPORARY, pageable);
     }
 
+    @Transactional
     public void patchUser(Long userIdx, UserPatchDto userPatchDto) {
-        User user = userRepository.findById(userIdx).get();
+        User user = validUser(userIdx);
         if(encoder.matches(userPatchDto.getPassword(), user.getPassword())) {
-            if (userPatchDto.getAddress() != null) user.setAddress(userPatchDto.getAddress());
-            if (userPatchDto.getName() != null) user.setName(userPatchDto.getName());
-            if (userPatchDto.getNewPassword() != null) {
+            if (!userPatchDto.getAddress().isBlank())
+                user.setAddress(userPatchDto.getAddress());
+            if (!userPatchDto.getName().isBlank())
+                user.setName(userPatchDto.getName());
+            if (!userPatchDto.getNewPassword().isBlank()) {
                 user.setPassword(encoder.encode(userPatchDto.getNewPassword()));
-                userRepository.save(user);
             }
         }
         else {
@@ -190,7 +193,7 @@ public class UserService implements UserDetailsService {
         if (findUser.isPresent()) {
             return findUser.get();
         }
-        throw new BusinessLogicException(UserExceptionCode.USER_NOT_FOUND);
+        throw new BusinessLogicException(USER_NOT_FOUND);
     }
 
     /*
