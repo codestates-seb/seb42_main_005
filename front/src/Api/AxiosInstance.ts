@@ -1,6 +1,7 @@
 import { APIS } from "./APIs";
 import axios from "axios";
 import { getLocalStorage } from "../Api/localStorage";
+
 let token = getLocalStorage("access_token");
 export const BaseInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL,
