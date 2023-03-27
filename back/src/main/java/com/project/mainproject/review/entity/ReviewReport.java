@@ -44,6 +44,7 @@ public class ReviewReport extends AuditableWithBy {
         this.content = content;
         this.user = user;
         this.review = review;
+        this.reportStatus = REGISTERED;
     }
 
     //### 간단한 동작메서드 ###//
