@@ -5,18 +5,15 @@ import com.project.mainproject.enums.ResultStatus;
 import com.project.mainproject.openApi.entity.HolidayData;
 import com.project.mainproject.redis.repository.RedisRepository;
 import com.project.mainproject.store.dto.DBdto.DBPickedStoredListDto;
-import com.project.mainproject.store.dto.DBdto.DBStoreDetailDto;
 import com.project.mainproject.store.dto.DBdto.DBStoreListDto;
 import com.project.mainproject.store.dto.DBdto.DBStoreSearchDto;
 import com.project.mainproject.store.dto.GetStoreDetailDto;
 import com.project.mainproject.store.dto.GetStoreListRequestDto;
+import com.project.mainproject.store.entity.Store;
 import com.project.mainproject.store.mapper.StoreMapper;
 import com.project.mainproject.store.repository.StoreQueryRepository;
-import com.project.mainproject.store.repository.StoreRepository;
-import com.project.mainproject.utils.CheckLoginUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,9 +36,10 @@ public class StoreGetService {
     * 약국 상세 정보 stub o
     * */
     public SingleResponseDto getStoreDetailDto(Long storeIdx,Long userIdx) {
-        DBStoreDetailDto findDetailDto = storeQueryRepository.findData(storeIdx,userIdx);
-        log.info("### findDetailDto = {}", findDetailDto);
-        GetStoreDetailDto responseDto = storeMapper.getStoreDetailDto(findDetailDto);
+        Store store = storeQueryRepository.findData(storeIdx);
+
+        log.info("### store = {}", store);
+        GetStoreDetailDto responseDto = storeMapper.getStoreDetailDto(store);
 
         return SingleResponseDto.<GetStoreDetailDto>builder().response(responseDto).message(ResultStatus.PROCESS_COMPLETED.getMessage()).httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode()).build();
     }
