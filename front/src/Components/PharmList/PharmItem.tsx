@@ -23,8 +23,6 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
     return state.userInfo.response;
   });
 
-  console.log(Pharm)
-
   //! GET : 약국상세정보 + 리뷰리스트
   const onModalUp = () => {
     getDetailsAndReviews(setPharmDetail, setReviewList, storeIdx);

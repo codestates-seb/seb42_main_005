@@ -40,7 +40,6 @@ export async function useViewMap(
         },
         headers: {"Authorization": `${token}`,"Content-Type": "application/json" },
       });
-      // ,"Authorization": `${token}`
       const pharmacies = response.data.response;
       setTotalPharmList(pharmacies);
 
