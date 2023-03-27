@@ -16,8 +16,8 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
   const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
   const [pharmDetail, setPharmDetail] = useState<React.SetStateAction<{}>>({});
   const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
-  const [like, setLike] = useState<React.SetStateAction<boolean>>(false);
-  console.log(Pharm)
+  const [like, setLike] = useState<React.SetStateAction<boolean>>(Pharm.picked);
+
   const navigate = useNavigate();
   const user = useAppSelector((state: any) => {
     return state.userInfo.response;

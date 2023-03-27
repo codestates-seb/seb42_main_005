@@ -1,6 +1,7 @@
 import { APIS } from "./APIs";
 import axios from "axios";
-
+import { getLocalStorage } from "../Api/localStorage";
+let token = getLocalStorage("access_token");
 export const BaseInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL,
 });
@@ -9,7 +10,7 @@ export const BaseInstance = axios.create({
 //* GET : 약국상세정보와 약국리뷰 받아오기
 export const getDetailsAndReviews = (stateD: React.Dispatch<any>, stateR: React.Dispatch<any>, storeIdx: number) => {
   const getPharmDetail = async () => {
-    return BaseInstance.get(`${APIS.GET_PHARMDETAILS}/${storeIdx}`)
+    return BaseInstance.get(`${APIS.GET_PHARMDETAILS}/${storeIdx}`, { headers: { Authorization: token }})
       .then((response) => stateD(response.data.response))
       .catch((error) => {
         console.log("약국 상세정보 받아오던 중 에러 발생");
@@ -17,7 +18,7 @@ export const getDetailsAndReviews = (stateD: React.Dispatch<any>, stateR: React.
       });
   };
   const getReviewList = async () => {
-    return BaseInstance.get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+    return BaseInstance.get(`${APIS.GET_REVIEWS}/${storeIdx}/review`, { headers: { Authorization: token }})
       .then((response) => stateR(response.data.response.storeReviews))
       .catch((error) => {
         console.log("약국 리뷰 받아오던 중 에러 발생");
@@ -28,16 +29,18 @@ export const getDetailsAndReviews = (stateD: React.Dispatch<any>, stateR: React.
 };
 //* POST : 찜하기/찜취소
 export const likePharmacy = async (storeIdx: number, userIdx: number, value: any, state: any) => {
-  return BaseInstance.post(`${APIS.POST_LIKE}/${storeIdx}/pick?userIdx=${userIdx}`)
-    .then(() => state(!value))
-    .catch((error) => {
-      console.log("찜하기 또는 찜 취소 하던 중 에러 발생");
-      console.log(error);
-    });
+  return (
+    BaseInstance.post(`${APIS.POST_LIKE}/${storeIdx}/pick?userIdx=${userIdx}`, { headers: { Authorization: token } })
+      .then(() => state(!value))
+      .catch((error) => {
+        console.log("찜하기 또는 찜 취소 하던 중 에러 발생");
+        console.log(error);
+      })
+  );
 };
 //* GET : 계정 정보 받아오기
 export const getUser = async (userIdx: number, state: any) => {
-  return BaseInstance.get(`${APIS.GET_USER_INFO}/${userIdx}`)
+  return BaseInstance.get(`${APIS.GET_USER_INFO}/${userIdx}`, { headers: { Authorization: token }})
     .then((response) => state(response.data.response))
     .catch((error) => {
       console.log("내 정보 다시 가져오던 중 에러 발생");
@@ -46,7 +49,7 @@ export const getUser = async (userIdx: number, state: any) => {
 };
 //* POST : 유저 이미지 업로드
 export const postUserImg = async (data: object) => {
-  return BaseInstance.post(APIS.POST_USER_IMG, data)
+  return BaseInstance.post(APIS.POST_USER_IMG, data, { headers: { Authorization: token }})
     .catch((error) => {
       console.log("이미지 업로드 하던 중 에러 발생");
       console.log(error);
@@ -55,18 +58,18 @@ export const postUserImg = async (data: object) => {
 };
 //* PATCH : 비밀번호 찾기
 export const findPW = async (findPassword: string) => {
-  return BaseInstance.patch(APIS.PATCH_FINDPW, { email: findPassword }).catch((error) => {
+  return BaseInstance.patch(APIS.PATCH_FINDPW, { email: findPassword }, { headers: { Authorization: token }}).catch((error) => {
     console.log("비밀번호 찾기 요청 보내던 중 에러 발생");
     console.log(error);
   });
-}
+};
 //! 약국 상세 모달 CRUD ---------------------------------------------------------------
 //* GET : 리뷰리스트 불러오기
 export const getReview = async (
   storeIdx: number | undefined,
   state: React.SetStateAction<React.SetStateAction<any>>,
 ) => {
-  return BaseInstance.get(`${APIS.DELETE_REVIEWS}/${storeIdx}/review`)
+  return BaseInstance.get(`${APIS.DELETE_REVIEWS}/${storeIdx}/review`, { headers: { Authorization: token } })
     .then((response) => {
       state(response.data.response.storeReviews);
     })
@@ -81,7 +84,7 @@ export const postReview = async (
   data: any,
   state: React.SetStateAction<React.SetStateAction<any>>,
 ) => {
-  return BaseInstance.post(`${APIS.POST_REVIEWS}/${storeIdx}/review`, data)
+  return BaseInstance.post(`${APIS.POST_REVIEWS}/${storeIdx}/review`, data, { headers: { Authorization: token } })
     .then(() => state(false))
     .catch((error) => {
       console.log("리뷰를 작성하던 중 에러 발생");
@@ -95,7 +98,7 @@ export const patchReview = async (
   data: any,
   state: any,
 ) => {
-  return BaseInstance.patch(`${APIS.POST_REVIEWS}/${storeIdx}/review/${reviewIdx}`, data)
+  return BaseInstance.patch(`${APIS.POST_REVIEWS}/${storeIdx}/review/${reviewIdx}`, data, { headers: { Authorization: token }})
     .then(() => state(false))
     .catch((error) => {
       console.log("리뷰를 수정하던 중 에러 발생");
@@ -104,21 +107,21 @@ export const patchReview = async (
 };
 //* DELETE : 리뷰삭제
 export const deleteReview = async (storeIdx: number, reviewIdx: number) => {
-  return BaseInstance.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`).catch((error) => {
+  return BaseInstance.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`, { headers: { Authorization: token }}).catch((error) => {
     console.log("리뷰 삭제하던 중 에러 발생");
     console.log(error);
   });
 };
 //* POST : 리뷰신고
 export const reportReview = async (storeIdx: number, reviewIdx: number, data: object) => {
-  return BaseInstance.post(`${APIS.POST_REPORT_REVIEW}/${storeIdx}/review/${reviewIdx}/report`, data).catch((error) => {
+  return BaseInstance.post(`${APIS.POST_REPORT_REVIEW}/${storeIdx}/review/${reviewIdx}/report`, data, { headers: { Authorization: token }}).catch((error) => {
     console.log("리뷰 신고하던 중 에러 발생");
     console.log(error);
   });
 };
 //* POST : 리뷰의 댓글작성
 export const postReply = async (reviewIdx: number, data: object, stateC: any, stateF: any) => {
-  return BaseInstance.post(`${APIS.POST_REPLY}/${reviewIdx}/reply`, data)
+  return BaseInstance.post(`${APIS.POST_REPLY}/${reviewIdx}/reply`, data, { headers: { Authorization: token }})
     .then(() => stateC(""))
     .then(() => stateF(false))
     .catch((error) => {
@@ -128,7 +131,7 @@ export const postReply = async (reviewIdx: number, data: object, stateC: any, st
 };
 //* POST : 리뷰의 댓글수정
 export const patchReply = async (reviewIdx: number, replyIdx: number, data: any, stateF: any) => {
-  return BaseInstance.patch(`${APIS.PATCH_REPLY}/${reviewIdx}/reply/${replyIdx}`, data)
+  return BaseInstance.patch(`${APIS.PATCH_REPLY}/${reviewIdx}/reply/${replyIdx}`, data, { headers: { Authorization: token }})
     .then(() => stateF(false))
     .catch((error) => {
       console.log("리뷰의 댓글을 수정하던 중 에러 발생");
@@ -137,7 +140,7 @@ export const patchReply = async (reviewIdx: number, replyIdx: number, data: any,
 };
 //* POST : 리뷰의 댓글삭제
 export const deleteReply = async (reviewIdx: number, replyIdx: number) => {
-  return BaseInstance.delete(`${APIS.DELETE_REPLY}/${reviewIdx}/reply/${replyIdx}`).catch((error) => {
+  return BaseInstance.delete(`${APIS.DELETE_REPLY}/${reviewIdx}/reply/${replyIdx}`, { headers: { Authorization: token }}).catch((error) => {
     console.log("리뷰의 댓글을 삭제하던 중 에러 발생");
     console.log(error);
   });
@@ -150,7 +153,7 @@ const getUserInfo = async (
   stateN: React.Dispatch<React.SetStateAction<string>>,
   stateA: React.Dispatch<React.SetStateAction<string>>,
 ) => {
-  return BaseInstance.get(`${APIS.GET_USER_INFO}/${userIdx}`)
+  return BaseInstance.get(`${APIS.GET_USER_INFO}/${userIdx}`, { headers: { Authorization: token }})
     .then((response) => {
       stateI(response.data.response);
       stateN(response.data.response.name);
@@ -163,7 +166,7 @@ const getUserInfo = async (
 };
 //* PATCH : 회원 정보 수정하기
 const patchUserInfo = async (userIdx: number, data: object, state: React.Dispatch<React.SetStateAction<boolean>>) => {
-  return BaseInstance.patch(`${APIS.PATCH_USER_INFO}/${userIdx}`, data)
+  return BaseInstance.patch(`${APIS.PATCH_USER_INFO}/${userIdx}`, data, { headers: { Authorization: token }})
     .then(() => state(false))
     .catch((error) => {
       console.log("내 정보 수정하던 중 에러 발생");
@@ -172,7 +175,7 @@ const patchUserInfo = async (userIdx: number, data: object, state: React.Dispatc
 };
 //* GET : 내가 찜한 약국 리스트
 const getLikedPharmList = async (userIdx: number, state: React.Dispatch<React.SetStateAction<never[]>>) => {
-  return BaseInstance.get(`${APIS.GET_MY_LIKES}/${userIdx}/pick`)
+  return BaseInstance.get(`${APIS.GET_MY_LIKES}/${userIdx}/pick`, { headers: { Authorization: token }})
     .then((response) => state(response.data.response))
     .catch((error) => {
       console.log("내가 찜한 약국리스트 받아오던 중 에러 발생");
@@ -181,7 +184,7 @@ const getLikedPharmList = async (userIdx: number, state: React.Dispatch<React.Se
 };
 //* GET : 내가 작성한 리뷰 리스트
 const getMyReviews = async (userIdx: number, state: React.Dispatch<React.SetStateAction<never[]>>) => {
-  return BaseInstance.get(`${APIS.GET_MYREVIEWS}/${userIdx}`)
+  return BaseInstance.get(`${APIS.GET_MYREVIEWS}/${userIdx}`, { headers: { Authorization: token }})
     .then((response) => state(response.data.response.reviews))
     .catch((error) => {
       console.log("내가 작성한 리뷰리스트 받아오던 중 에러 발생");
@@ -197,7 +200,7 @@ export const UserInstance = {
 //! 약사 계정 ------------------------------------------------------------------------
 //* GET : 약국 정보 받아오기
 const getPharmInfo = async (storeIdx: number, state: React.Dispatch<any>) => {
-  return BaseInstance.get(`${APIS.GET_PHARMDETAILS}/${storeIdx}`)
+  return BaseInstance.get(`${APIS.GET_PHARMDETAILS}/${storeIdx}`, { headers: { Authorization: token }})
     .then((response) => state(response.data.response))
     .catch((error) => {
       console.log("약국 상세정보 받아오던 중 에러 발생");
@@ -206,7 +209,7 @@ const getPharmInfo = async (storeIdx: number, state: React.Dispatch<any>) => {
 };
 //* GET : 약사 정보 받아오기
 const getPharmacistInfo = async (userIdx: number, state: any) => {
-  return BaseInstance.get(`${APIS.GET_USER_INFO}/${userIdx}`)
+  return BaseInstance.get(`${APIS.GET_USER_INFO}/${userIdx}`, { headers: { Authorization: token }})
     .then((response) => state(response.data.response))
     .catch((error) => {
       console.log("내 정보 다시 가져오던 중 에러 발생");
@@ -215,10 +218,10 @@ const getPharmacistInfo = async (userIdx: number, state: any) => {
 };
 //* POST : 약국 이미지 업로드
 const postPharmImg = async (data: object) => {
-  return BaseInstance.post(APIS.POST_PHARM_IMG, data).catch((error) => {
+  return BaseInstance.post(APIS.POST_PHARM_IMG, data, { headers: { Authorization: token }}).catch((error) => {
     console.log("약국 사진 보내던 중 에러 발생");
     console.log(error);
-  })
+  });
   // .then(() => location.reload());
 };
 export const PharmInstance = {
@@ -229,7 +232,7 @@ export const PharmInstance = {
 //! 관리자 계정 ------------------------------------------------------------------------
 //* GET : 신고리뷰 리스트 불러오기
 const getReports = async (state: React.Dispatch<React.SetStateAction<never[]>>) => {
-  return BaseInstance.get(APIS.GET_ADMIN_REPORTED)
+  return BaseInstance.get(APIS.GET_ADMIN_REPORTED, { headers: { Authorization: token }})
     .then((response) => state(response.data.response.reportedReviews))
     .catch((error) => {
       console.log("신고리뷰리스트 불러오던 중 에러 발생");
@@ -237,6 +240,7 @@ const getReports = async (state: React.Dispatch<React.SetStateAction<never[]>>) 
     });
 };
 //* DELETE : 신고누적리뷰 삭제
+//! header 없음
 const deleteReportedReview = async (data: object) => {
   return BaseInstance.delete(APIS.DELETE_ADMIN_REVIEW_DELETE, data)
     .catch((error) => {
@@ -247,7 +251,7 @@ const deleteReportedReview = async (data: object) => {
 };
 //* POST : 신고누적리뷰 복구
 const restoreReview = async (data: object) => {
-  return BaseInstance.post(APIS.POST_ADMIN_REVIEW_RESTORE, data)
+  return BaseInstance.post(APIS.POST_ADMIN_REVIEW_RESTORE, data, { headers: { Authorization: token }})
     .catch((error) => {
       console.log("신고누적리뷰 복구하던 중 에러 발생");
       console.log(error);
@@ -256,7 +260,7 @@ const restoreReview = async (data: object) => {
 };
 //* GET : 전체 회원 리스트 불러오기
 const getUsers = async (state: React.Dispatch<React.SetStateAction<never[]>>) => {
-  return BaseInstance.get(APIS.GET_ADMIN_USERS)
+  return BaseInstance.get(APIS.GET_ADMIN_USERS, { headers: { Authorization: token }})
     .then((response) => state(response.data.response.content))
     .catch((error) => {
       console.log("전체회원리스트 불러오던 중 에러 발생");
@@ -266,7 +270,7 @@ const getUsers = async (state: React.Dispatch<React.SetStateAction<never[]>>) =>
 //* POST : 계정 정지
 const blockUsers = async (time: number, data: object) => {
   if (time === 0) alert("정지옵션을 선택해주세요");
-  return BaseInstance.post(`${APIS.POST_ADMIN_BLOCK}?period=${time}`, data)
+  return BaseInstance.post(`${APIS.POST_ADMIN_BLOCK}?period=${time}`, data, { headers: { Authorization: token }})
     .catch((error) => {
       console.log("계정 정지하던 중 에러 발생");
       console.log(error);
@@ -275,7 +279,7 @@ const blockUsers = async (time: number, data: object) => {
 };
 //* POST : 계정 강퇴
 const fireUsers = async (data: object) => {
-  return BaseInstance.post(APIS.POST_ADMIN_FIRE, data)
+  return BaseInstance.post(APIS.POST_ADMIN_FIRE, data, { headers: { Authorization: token }})
     .catch((error) => {
       console.log("계정 강퇴하던 중 에러 발생");
       console.log(error);
@@ -284,7 +288,7 @@ const fireUsers = async (data: object) => {
 };
 //* POST : 계정 복구
 const restoreUsers = async (data: object) => {
-  return BaseInstance.post(APIS.POST_ADMIN_RESTORE, data)
+  return BaseInstance.post(APIS.POST_ADMIN_RESTORE, data, { headers: { Authorization: token }})
     .catch((error) => {
       console.log("계정 복구하던 중 에러 발생");
       console.log(error);
@@ -293,7 +297,7 @@ const restoreUsers = async (data: object) => {
 };
 //* GET : 약사인증신청 리스트 불러오기
 const getCertificates = async (state: React.Dispatch<React.SetStateAction<never[]>>) => {
-  return BaseInstance.get(`${APIS.GET_ADMIN_CERTS}`)
+  return BaseInstance.get(`${APIS.GET_ADMIN_CERTS}`, { headers: { Authorization: token }})
     .then((response) => state(response.data.response.content))
     .catch((error) => {
       console.log("약사인증신청 리스트 불러오던 중 에러 발생");
@@ -302,7 +306,7 @@ const getCertificates = async (state: React.Dispatch<React.SetStateAction<never[
 };
 //* POST : 약사인증신청 승인
 const successCertify = async (data: object) => {
-  return BaseInstance.post(APIS.POST_ADMIN_CERTIFY, data)
+  return BaseInstance.post(APIS.POST_ADMIN_CERTIFY, data, { headers: { Authorization: token }})
     .catch((error) => {
       console.log("약사인증 승인하던 중 에러 발생");
       console.log(error);
@@ -311,7 +315,7 @@ const successCertify = async (data: object) => {
 };
 //* POST : 약사인증신청 반려
 const deniedCertify = async (data: object) => {
-  return BaseInstance.post(APIS.POST_ADMIN_DENY, data)
+  return BaseInstance.post(APIS.POST_ADMIN_DENY, data, { headers: { Authorization: token }})
     .catch((error) => {
       console.log("약사인증 반려하던 중 에러 발생");
       console.log(error);

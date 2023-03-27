@@ -12,7 +12,7 @@ export const APIS = {
   POST_LOGOUT: `${API}/api/auth/logout`,
   PATCH_FINDPW: "/api/users/password", //! 여기 확인 필요
   DELETE_SIGNOUT: `${API}/api/users`,
-  GET_PHARMLIST: `/api/store`,
+  GET_PHARMLIST: `${API}/api/store`,
   GET_PHARMDETAILS: `/api/store`,
   GET_REVIEWS: `/api/store`,
   POST_REVIEWS: `/api/store`,

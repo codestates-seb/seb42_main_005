@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { APIS } from "../Api/APIs";
 import { SELECT_OPTION_MAP, SELECT_SORT_LIST } from "../Util/type";
+import { getLocalStorage } from "../Api/localStorage";
+let token = getLocalStorage("access_token");
 
 const { kakao } = window;
 
@@ -38,7 +40,7 @@ export async function useViewMap(
           sortCondition: sorted,
           filterCondition: selected,
         },
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: token },
       });
 
       const pharmacies = response.data.response;
