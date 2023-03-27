@@ -22,7 +22,7 @@ jobs:
         run: |
           cd ./back
           touch ./.env
-          echo ./.env config > ./.env
+          echo ./.env > ./.env
 
       - name: Create application.yml
         run: |
@@ -69,6 +69,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            cat .env
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_REPO }}
             docker stop ${{ secrets.DOCKER_REPO }}
