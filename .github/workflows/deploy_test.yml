@@ -18,6 +18,12 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
+      - name: Create .env
+        run: |
+          cd ./back
+          touch ./.env
+          echo ./.env config > ./.env
+
       - name: Create application.yml
         run: |
           cd ./back/src/main/resources
@@ -48,10 +54,6 @@ jobs:
         run: |
           cd ./back
           ./gradlew clean bootJar
-
-      - name: Set environment variables
-        run: |
-          docker-compose --env-file ./.env config
 
       - name: Web docker build and push
         run: |
