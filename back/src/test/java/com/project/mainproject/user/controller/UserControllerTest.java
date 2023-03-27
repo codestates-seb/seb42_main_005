@@ -8,10 +8,7 @@ import com.project.mainproject.security.JwtHelper;
 import com.project.mainproject.security.UserContext;
 import com.project.mainproject.stub.CommonStub;
 import com.project.mainproject.stub.UserStub;
-import com.project.mainproject.user.dto.PharmacyInfoDto;
-import com.project.mainproject.user.dto.UserInfoDto;
-import com.project.mainproject.user.dto.UserPatchDto;
-import com.project.mainproject.user.dto.UserSignUpDto;
+import com.project.mainproject.user.dto.*;
 import com.project.mainproject.user.entity.Normal;
 import com.project.mainproject.user.entity.Pharmacy;
 import com.project.mainproject.user.entity.User;
@@ -264,7 +261,7 @@ class UserControllerTest implements UserControllerTestHelper {
     }
 
     @Test
-    @DisplayName("약사 가입신청 조회 : ")
+    @DisplayName("약사 가입신청 조회 : 성공")
     void getStoreRequestTest() throws Exception {
         List<PharmacyInfoDto> data = com.project.mainproject.stub.UserStub.getPharmacyRequests();
         PageResponseDto responseDto = CommonStub.getPageResponseStub(ResultStatus.PROCESS_COMPLETED);
@@ -311,27 +308,29 @@ class UserControllerTest implements UserControllerTestHelper {
                 .andReturn();
     }
     @Test
+    @DisplayName("비밀번호 찾기 : ")
     void findPasswordTest() throws Exception {
-//        long userIdx = 1L;
-//        UserFindPasswordDto requestBody = (UserFindPasswordDto) UserStub.getRequestBody("findPassword");
-//        String content = toJsonContent(requestBody);
-//
-//        ResultActions actions = mockMvc.perform(
-//                patchRequestBuilder(getUrl().concat("/password/{userIdx}"), userIdx, content)
-//        );
-//
-//        actions
-//                .andExpect(status().isOk())
-//                .andDo(
-//                        document("find-password",
-//                                getRequestPreProcessor(),
-//                                getResponsePreProcessor(),
-//                                pathParameters(getMemberRequestPathParameterDescriptor()),
-//                                requestFields(getDefaultUserFindPasswordRequestDescriptors()),
-//                                responseFields(
-//                                        getSingleResponseDescriptors(new ArrayList<FieldDescriptor>())
-//                                )
-//                        ));
+        long userIdx = 1L;
+        UserFindPasswordDto requestBody = (UserFindPasswordDto) UserStub.getRequestBody("findPassword");
+        String content = toJsonContent(requestBody);
+
+        ResultActions actions = mockMvc.perform(
+                patchRequestBuilder(getUrl().concat("/password"), userIdx, content)
+        );
+
+        actions
+                .andExpect(status().isOk())
+                .andDo(
+                        document("find-password",
+                                getRequestPreProcessor(),
+                                getResponsePreProcessor(),
+                                requestFields(getDefaultUserFindPasswordRequestDescriptors()),
+                                PayloadDocumentation.responseFields(
+                                        fieldWithPath("response").type(JsonFieldType.OBJECT).description("응답 데이터").optional(),
+                                        fieldWithPath("message").type(JsonFieldType.STRING).description("처리 상태 코드 작성"),
+                                        fieldWithPath("httpCode").type(JsonFieldType.NUMBER).description("처리 완료 메시지")
+                                )
+                        ));
     }
 
     @Test

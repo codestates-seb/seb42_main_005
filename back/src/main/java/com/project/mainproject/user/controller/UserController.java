@@ -10,6 +10,7 @@ import com.project.mainproject.user.mapper.UserMapper;
 import com.project.mainproject.user.service.UserService;
 import com.project.mainproject.utils.UriCreator;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,7 +33,7 @@ public class UserController {
     public final static String USERS_DEFAULT_URL = "/api/users";
     private UserService userService;
     private UserMapper userMapper;
-
+    private final ApplicationEventPublisher publisher;
 
     /*
             일반 회원가입
@@ -69,13 +70,14 @@ public class UserController {
     @GetMapping("/store")
     public ResponseEntity getStoreRequest(Pageable pageable) {
         Page<PharmacyInfoDto> pharmacyPage = userService.findPharmacyRequest(pageable);
+//        Page<PharmacyInfoDto> pharmacyInfoDtoPage = pharmacyPage.map(PharmacyInfoDto::new);
 
         PageInfo pageInfo = PageInfo.builder()
                 .size(pageable.getPageSize()).page(pageable.getPageNumber())
                 .totalPage((int) pharmacyPage.getTotalElements()).totalPage(pharmacyPage.getTotalPages()).build();
 
         PageResponseDto<Object> response = PageResponseDto.builder()
-                .response(pharmacyPage.getContent()).pageInfo(pageInfo)
+                .response(pharmacyPage).pageInfo(pageInfo)
                 .message(PROCESS_COMPLETED.getMessage()).httpCode(PROCESS_COMPLETED.getHttpCode())
                 .build();
         return ResponseEntity.ok().body(response);
@@ -84,10 +86,10 @@ public class UserController {
     /*
         비밀번호 찾기
      */
-    @PatchMapping("/password/{userIdx}")
-    public ResponseEntity findPassword(@PathVariable("userIdx") Long userIdx,
-                                       @RequestBody UserFindPasswordDto findPasswordDto) {
-//         TODO: Send Password Init Email
+    @PatchMapping("/password")
+    public ResponseEntity findPassword(@RequestBody UserFindPasswordDto findPasswordDto) {
+
+        userService.findPassword(findPasswordDto.getEmail());
 
         SingleResponseDto response = CommonStub.getSingleResponseStub(PROCESS_COMPLETED);
         return ResponseEntity.ok().body(response);

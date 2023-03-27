@@ -98,13 +98,14 @@ public class StoreQueryRepository {
                                                 .multiply(cos(radians(store.longitude.subtract(longitude)))))
                                 ).multiply(RADIUS_EARTH_KM)
                         ), "distance"),
-                        pickedStore.storeId.count().as("pickedStore"),
+                        pickedStore.storeId.count().as("pickedStoreCount"),
                         review.reviewIdx.count().as("reviewCount"),
                         store.storeImages.imagePath,
                         store._super.modifiedAt,
                         new CaseBuilder()
                                 .when(normal.userIdx.eq(userIdx)).then(true)
                                 .otherwise(false)
+                                .as("picked")
                 )).distinct()
                 .from(store)
                 .leftJoin(store.reviews, review)
@@ -126,7 +127,7 @@ public class StoreQueryRepository {
         return queryFactory
                 .select(new QDBStoreListDto(
                         store.storeIdx, store.name, store.address, store.latitude, store.longitude,
-                        review.rating.avg(),
+                        review.rating.avg().as("rating"),
                         ExpressionUtils.as((
                                 acos(sin(radians(store.latitude))
                                         .multiply(sin(radians(latitude)))
@@ -135,13 +136,14 @@ public class StoreQueryRepository {
                                                 .multiply(cos(radians(store.longitude.subtract(longitude)))))
                                 ).multiply(RADIUS_EARTH_KM)
                         ), "distance"),
-                        pickedStore.storeId.count(),
-                        review.reviewIdx.count(),
+                        pickedStore.storeId.count().as("pickedStoreCount"),
+                        review.reviewIdx.count().as("reviewCount"),
                         store.storeImages.imagePath,
                         store._super.modifiedAt,
                         new CaseBuilder()
                                 .when(normal.userIdx.eq(userIdx)).then(true)
                                 .otherwise(false)
+                                .as("picked")
                 )).distinct()
                 .from(store)
                 .leftJoin(store.reviews, review)
@@ -225,7 +227,7 @@ public class StoreQueryRepository {
 
     //내부 동작 쿼리 orderBy
     private OrderSpecifier orderByCondition(String sortCondition) {
-        return Expressions.stringPath(sortCondition).asc();
+        return Expressions.stringPath(sortCondition).desc();
     }
 
     //내부동작 쿼리 where 절

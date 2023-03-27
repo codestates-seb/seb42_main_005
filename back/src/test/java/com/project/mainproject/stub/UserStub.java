@@ -31,7 +31,7 @@ UserStub {
         );
         Userdto.put(
                 "findPassword",
-                new UserFindPasswordDto("zzanghd@gmail.com")
+                new UserFindPasswordDto("hgd@gmail.com")
         );
     }
 

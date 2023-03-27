@@ -315,6 +315,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
 
     @Test
     @DisplayName("찜하기 테스트 찜 성공 시: 성공")
+    @WithMockUser
     void pickedStoreTest() throws Exception{
         Long storeIdx = 1L;
 
@@ -337,7 +338,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
 
         given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
         given(userService.loadUserByUsername(anyString())).willReturn(userContext);
-        given(storeService.pickStore(anyLong(),anyLong())).willReturn(responseDto);
+        given(storeService.pickStore(anyLong(),anyLong(),anyLong())).willReturn(responseDto);
 
         String accessToken = jwtHelper.createAccessToken(user.getEmail());
 
@@ -395,7 +396,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
         given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
         given(userService.loadUserByUsername(anyString())).willReturn(userContext);
 //        doNothing().when(storeService).pickStore(anyLong(), anyLong());
-        given(storeService.pickStore(anyLong(),anyLong())).willReturn(responseDto);
+        given(storeService.pickStore(anyLong(),anyLong(),anyLong())).willReturn(responseDto);
 
 
         String accessToken = jwtHelper.createAccessToken(user.getEmail());
@@ -448,7 +449,7 @@ class StoreControllerTest implements StoreControllerTestHelper {
 
         given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
         given(userService.loadUserByUsername(anyString())).willReturn(userContext);
-        given(storeService.pickStore(anyLong(),anyLong())).willReturn(responseDto);
+        given(storeService.pickStore(anyLong(),anyLong(),anyLong())).willReturn(responseDto);
 
         String accessToken = jwtHelper.createAccessToken(user.getEmail());
 
