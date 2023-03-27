@@ -112,15 +112,15 @@ public class UserController {
      */
     @GetMapping
     public ResponseEntity getUsers(@PageableDefault(sort = "createdAt",direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<DBUserInfo> userPage = userService.findUsers(pageable);
-        Page<UserInfoDto> userInfoDtoPage = userPage.map(UserInfoDto::new);
+        Page<UserInfoDto> userPage = userService.findUsers(pageable);
+//        Page<UserInfoDto> userInfoDtoPage = userPage.map(UserInfoDto::new);
 
         PageInfo pageInfo = PageInfo.builder()
                 .size(pageable.getPageSize()).page(pageable.getPageNumber())
-                .totalPage((int) userInfoDtoPage.getTotalElements()).totalPage(userInfoDtoPage.getTotalPages()).build();
+                .totalPage((int) userPage.getTotalElements()).totalPage(userPage.getTotalPages()).build();
 
         PageResponseDto<Object> response = PageResponseDto.builder()
-                .response(userInfoDtoPage).pageInfo(pageInfo)
+                .response(userPage.getContent()).pageInfo(pageInfo)
                 .message(PROCESS_COMPLETED.getMessage()).httpCode(PROCESS_COMPLETED.getHttpCode())
                 .build();
 
@@ -158,7 +158,7 @@ public class UserController {
     /*
         회원 탈퇴
      */
-    @DeleteMapping("{userIdx}")
+    @DeleteMapping("/{userIdx}")
     public ResponseEntity deleteUser(@PathVariable("userIdx") Long userIdx) {
         userService.deleteUser(userIdx);
 
