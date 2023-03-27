@@ -1,4 +1,4 @@
-package com.project.mainproject.log;
+package com.project.mainproject.log.aop;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -22,7 +22,7 @@ public class LogControllerAop {
 
 
     // Pointcut에 의해 필터링된 경로로 들어오는 경우 메서드 호출 전에 적용
-    @Before("com.project.mainproject.log.PointCut.controllerPointCut()")
+    @Before("com.project.mainproject.log.aop.PointCut.controllerPointCut()")
     public void beforeParameterLog(JoinPoint joinPoint) {
         // 메서드 정보 받아오기
         Method method = getMethod(joinPoint);
@@ -42,7 +42,7 @@ public class LogControllerAop {
     }
 
     // Poincut에 의해 필터링된 경로로 들어오는 경우 메서드 리턴 후에 적용
-    @AfterReturning(value = "com.project.mainproject.log.PointCut.controllerPointCut()", returning = "returnObj")
+    @AfterReturning(value = "com.project.mainproject.log.aop.PointCut.controllerPointCut()", returning = "returnObj")
     public void afterReturnLog(JoinPoint joinPoint, Object returnObj) {
         // 메서드 정보 받아오기
         Method method = getMethod(joinPoint);

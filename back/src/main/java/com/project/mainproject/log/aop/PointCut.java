@@ -1,4 +1,4 @@
-package com.project.mainproject.log;
+package com.project.mainproject.log.aop;
 
 import org.aspectj.lang.annotation.Pointcut;
 
