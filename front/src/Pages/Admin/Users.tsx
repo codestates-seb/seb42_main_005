@@ -41,7 +41,6 @@ export default function Users() {
     },
     [checkedList],
   );
-  console.log(users);
   const data = { userIdxs: checkedList };
   //! POST : 계정 정지
   const blockUsers = async () => {

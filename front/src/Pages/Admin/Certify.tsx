@@ -96,7 +96,7 @@ export default function Certify() {
                 {certificates.length ? (
                   <BelowLable>
                     {certificates.map((cert: any, i) => (
-                      <Content>
+                      <Content key={i}>
                         <Values className="checkBox">
                           <CheckBox
                             id={cert.userIdx}
