@@ -67,9 +67,20 @@ public class StoreQueryRepository {
         if (dbStoreDetailDto == null) {
             return null;
         }
-
         return dbStoreDetailDto.get(0);
     }
+
+    public Store findData(Long storeIdx){
+        return queryFactory
+                .selectFrom(store)
+                .leftJoin(store.pickedStores,pickedStore)
+                .leftJoin(store.storeImages,storeImage)
+                .leftJoin(store.reviews,review)
+                .fetchJoin()
+                .where(store.storeIdx.eq(storeIdx))
+                .fetchOne();
+    }
+
 
     /*
      * swLat : 9시 위도 가로

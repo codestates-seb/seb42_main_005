@@ -10,7 +10,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.FetchType.LAZY;
@@ -106,5 +108,26 @@ public class Store extends Auditable {
 
     public void addStoreImage(StoreImage storeImages) {
         this.storeImages = storeImages;
+    }
+
+    public double getRatingAvg() {
+        int [] ratings = this.reviews.stream().mapToInt(r -> r.getRating()).toArray();
+        return Arrays.stream(ratings).average().orElse(0);
+    }
+
+    public long getPickedStoreCount() {
+        return  this.getPickedStores().size();
+    }
+
+    public long getReviewCount() {
+        return this.reviews.size();
+    }
+
+    public String getStoreImagePath() {
+        Optional<StoreImage> storeImages = Optional.ofNullable(this.storeImages);
+        if (storeImages.isPresent()) {
+            return storeImages.get().getImagePath();
+        }
+        return null;
     }
 }
