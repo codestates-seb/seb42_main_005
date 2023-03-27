@@ -6,22 +6,22 @@ import Textarea from "../Ul/Textarea";
 import Button from "../Ul/Button";
 import Input from "../Ul/Input";
 import { APIS } from "../../Api/APIs";
-import { TYPE_setReviewList, TYPE_reviewList } from "../../Api/TYPES";
+import { TYPE_setReviewList, TYPE_Review, TYPE_reviewList, TYPE_Detail } from "../../Api/TYPES";
 import { useAppSelector } from "../../Redux/hooks";
 import { getLocalStorage } from "../../Api/localStorage";
 import { HiXMark } from "react-icons/hi2";
 import { BsFillStarFill } from "react-icons/bs";
 
 interface Props {
-  review: any;
+  review: TYPE_Review | any;
   reviewIdx: number;
-  storeIdx: number;
-  reviewList: TYPE_reviewList;
-  setReviewList: TYPE_setReviewList;
+  Pharm: TYPE_Detail | undefined;
+  reviewList: TYPE_reviewList[] | TYPE_reviewList;
+  setReviewList: React.Dispatch<React.SetStateAction<TYPE_reviewList[]>>;
   reviewUserName: string;
 }
 
-export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, setReviewList, reviewUserName }: Props) {
+export default function ReviewUnit({ review, reviewIdx, Pharm, reviewList, setReviewList, reviewUserName }: Props) {
   const [isReplyFormShown, setIsReplyFormShown] = useState<React.SetStateAction<boolean>>(false);
   const [isOnEdit, setIsOnEdit] = useState<React.SetStateAction<boolean>>(false);
   const [reviewContent, setReviewContent] = useState<React.SetStateAction<any>>(review.content);
@@ -50,12 +50,12 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
         content: reviewContent,
         rating: review.rating,
       };
-      await axios.patch(`${APIS.PATCH_REVIEWS}/${storeIdx}/review/${reviewIdx}`, data).catch((error) => {
+      await axios.patch(`${APIS.PATCH_REVIEWS}/${Pharm?.storeIdx}/review/${reviewIdx}`, data).catch((error) => {
         console.log("리뷰를 수정하던 중 에러 발생");
         console.log(error);
       });
       await axios
-        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+        .get(`${APIS.GET_REVIEWS}/${Pharm?.storeIdx}/review`)
         .then((response) => {
           setReviewList(response.data.response.storeReviews);
         })
@@ -69,12 +69,12 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
 
   // ! DELETE : 리뷰삭제
   const deleteReview = async () => {
-    await axios.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`).catch((error) => {
+    await axios.delete(`${APIS.DELETE_REVIEWS}/${Pharm?.storeIdx}/review/${reviewIdx}`).catch((error) => {
       console.log("리뷰 삭제하던 중 에러 발생");
       console.log(error);
     });
     await axios
-      .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+      .get(`${APIS.GET_REVIEWS}/${Pharm?.storeIdx}/review`)
       .then((response) => {
         setReviewList(response.data.response.storeReviews);
       })
@@ -87,7 +87,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
   //! POST : 리뷰신고
   const reportReview = async () => {
     await axios
-      .post(`${APIS.POST_REPORT_REVIEW}/${storeIdx}/review/${reviewIdx}/report`, {
+      .post(`${APIS.POST_REPORT_REVIEW}/${Pharm?.storeIdx}/review/${reviewIdx}/report`, {
         userIdx: user.userIdx,
         content: reviewContent,
       })
@@ -107,7 +107,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
       e.preventDefault();
       await axios
         .post(`${APIS.POST_REPLY}/${reviewIdx}/reply`, {
-          storeIdx,
+          storeIdx: Pharm?.storeIdx,
           userIdx: user.userIdx,
           content: replyContent,
         })
@@ -118,7 +118,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
           console.log(error);
         });
       await axios
-        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+        .get(`${APIS.GET_REVIEWS}/${Pharm?.storeIdx}/review`)
         .then((response) => {
           setReviewList(response.data.response.storeReviews);
         })
@@ -128,7 +128,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
         });
     }
   };
-
+  console.log(review);
   const token = getLocalStorage("access_token");
 
   return (
@@ -155,7 +155,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
                 <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReview()} />
               </>
             ) : null}
-            {user?.userRole === "약국회원" && user?.storeidx === storeIdx ? (
+            {user?.userRole === "약국회원" && user?.storeidx === Pharm?.storeIdx ? (
               <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsReplyFormShown(true)} />
             ) : null}
             {token && user?.name !== reviewUserName ? (
@@ -207,8 +207,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
           key={reply.replyIdx}
           reviewIdx={reviewIdx}
           reply={reply}
-          review={review}
-          storeIdx={storeIdx}
+          Pharm={Pharm}
           reviewList={reviewList}
           setReviewList={setReviewList}
         />

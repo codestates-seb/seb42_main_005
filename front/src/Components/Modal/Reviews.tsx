@@ -1,14 +1,14 @@
 import styled from "styled-components";
-import { TYPE_setReviewList, TYPE_setIsReviewFormShown } from "../../Api/TYPES";
+import { TYPE_reviewList, TYPE_setBoolean, TYPE_Detail, TYPE_setReviewList } from "../../Api/TYPES";
 import ReviewUnit from "./ReviewUnit";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 interface Props {
-  reviewList: any;
+  reviewList: TYPE_reviewList[];
   setReviewList: TYPE_setReviewList;
-  setIsReviewFormShown: TYPE_setIsReviewFormShown;
+  setIsReviewFormShown: TYPE_setBoolean;
   storeIdx: number;
-  Pharm: any;
+  Pharm: TYPE_Detail | undefined;
 }
 
 export default function ReviewList({ reviewList, setReviewList, setIsReviewFormShown, storeIdx, Pharm }: Props) {
@@ -23,7 +23,8 @@ export default function ReviewList({ reviewList, setReviewList, setIsReviewFormS
               review={review}
               reviewIdx={review.reviewIdx}
               reviewUserName={review.userName}
-              storeIdx={Pharm.storeIdx}
+              // storeIdx={Pharm?.storeIdx}
+              Pharm={Pharm}
               setReviewList={setReviewList}
               reviewList={reviewList}
             />

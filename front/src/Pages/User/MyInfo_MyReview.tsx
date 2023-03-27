@@ -5,6 +5,7 @@ import PharmDetail from "../../Components/Modal/PharmDetail";
 import { APIS } from "../../Api/APIs";
 import { useAppSelector } from "../../Redux/hooks";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { TYPE_boolean, TYPE_Detail, TYPE_reviewList } from "../../Api/TYPES";
 
 interface Props {
   review: any;
@@ -15,10 +16,10 @@ interface Props {
 }
 
 export default function MyReview({ review, storeIdx, reviewIdx, idx, setMyReviewList }: Props) {
-  const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
-  const [pharmDetail, setPharmDetail] = useState<React.SetStateAction<any>>();
-  const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
-  const [like, setLike] = useState<React.SetStateAction<boolean>>(false);
+  const [isModalUp, setIsModalUp] = useState<TYPE_boolean>(false);
+  const [pharmDetail, setPharmDetail] = useState<TYPE_Detail>();
+  const [reviewList, setReviewList] = useState<TYPE_reviewList[]>([]);
+  const [like, setLike] = useState<TYPE_boolean>(false);
 
   //! GET : 약국상세정보 + 리뷰리스트
   const onModalUp = () => {
@@ -62,6 +63,8 @@ export default function MyReview({ review, storeIdx, reviewIdx, idx, setMyReview
         console.log(error);
       });
   };
+
+  console.log(reviewList);
 
   return (
     <TableBody>

@@ -8,7 +8,7 @@ import { validators } from "../Components/SignUpForm/Validation";
 import ErrorAlert from "../Components/SignUpForm/ErrorAlert";
 import axios from "axios";
 import { APIS } from "../Api/APIs";
-import { setLocalStorage } from "../Api/localStorage";
+import { getLocalStorage, setLocalStorage } from "../Api/localStorage";
 import { useAppDispatch, useAppSelector } from "../Redux/hooks";
 import { getUserInfo } from "../Redux/slice/userSlice";
 
@@ -64,7 +64,7 @@ export default function Login() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
   const onSubmit: any = (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
@@ -90,7 +90,8 @@ export default function Login() {
           let refreshToken = res.headers.refresh;
           setLocalStorage("access_token", accessToken);
           setLocalStorage("refresh_token", refreshToken);
-          axios.defaults.headers.common["Authorization"] = `${accessToken}`;
+          let token = getLocalStorage("access_token");
+          axios.defaults.headers.common.Authorization = token;
           dispatch(getUserInfo(res.data));
           return res;
         })

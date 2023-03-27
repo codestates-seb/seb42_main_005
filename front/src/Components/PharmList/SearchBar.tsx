@@ -4,7 +4,7 @@ import { BsSearch } from "react-icons/bs";
 
 interface Props {
   totalPharmList: object[];
-  setTotalPharmList: any;
+  setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>;
   makeMap: any;
   useSearch: any;
 }

@@ -5,21 +5,21 @@ import PharmItem from "./PharmItem";
 import SearchBar from "./SearchBar";
 import SortButtons from "./SortButtons";
 import { zIndex_PharmList } from "../../Util/z-index";
-import { SELECT_HIDDEN } from "../../Util/type";
 import { VscTriangleLeft } from "react-icons/vsc";
 import { RiHomeLine } from "react-icons/ri";
 import { useAppSelector } from "../../Redux/hooks";
 import { getLocalStorage } from "../../Api/localStorage";
 import { useNavigate } from "react-router-dom";
+import { SELECT_HIDDEN, SELECT_SORT_LIST, SELECT_OPTION_MAP } from "../../Api/TYPES";
 
 interface Props {
   hidden: SELECT_HIDDEN;
   setHidden: Dispatch<SetStateAction<SELECT_HIDDEN>>;
-  sorted: any;
-  setSorted: any;
-  selected: any;
+  sorted: SELECT_SORT_LIST;
+  setSorted: React.Dispatch<React.SetStateAction<SELECT_SORT_LIST>>;
+  selected: SELECT_OPTION_MAP;
   totalPharmList: object[];
-  setTotalPharmList: any;
+  setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>;
   makeMap: any;
   useViewMap: any;
   useSearch: any;
@@ -40,12 +40,14 @@ export default function PharmLists({
   const [displayedList, setDisplayedList] = useState(totalPharmList.slice(0, 10));
   const listRef = useRef<HTMLDivElement>(null);
 
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
   const token = getLocalStorage("access_token");
   const navigate = useNavigate();
+
+  console.log(displayedList);
 
   const gologin = () => {
     navigate("/login");

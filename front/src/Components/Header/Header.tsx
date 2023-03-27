@@ -2,8 +2,36 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { zIndex_Header } from "../../Util/z-index";
 import Account from "./Account";
+import { useAppSelector } from "../../Redux/hooks";
+import { useEffect } from "react";
+import axios from "axios";
+import { APIS } from "../../Api/APIs";
+import { useState } from "react";
+import { TYPE_UserInfo } from "../../Api/TYPES";
 
 export default function Header() {
+  const [userInfo, setUserInfo] = useState<TYPE_UserInfo>();
+
+  const user = useAppSelector((state) => {
+    return state.userInfo.response;
+  });
+
+  //! GET : 유저 정보
+  useEffect(() => {
+    const getUserInfo = async () => {
+      await axios
+        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`)
+        .then((response) => setUserInfo(response.data.response))
+        .catch((error) => {
+          console.log("내 정보 다시 가져오던 중 에러 발생");
+          console.log(error);
+        });
+    };
+    if (user) {
+      getUserInfo();
+    }
+  }, [user]);
+
   return (
     <HeaderContainer>
       <div className="logo_container">
@@ -17,7 +45,7 @@ export default function Header() {
         <span className="partition" />
       </EmptyContainer>
       <div className="account_container">
-        <Account />
+        <Account userInfo={userInfo} />
       </div>
     </HeaderContainer>
   );

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { APIS } from "../Api/APIs";
+import { SELECT_SORT_LIST, SELECT_OPTION_MAP } from "../Api/TYPES";
 
 const { kakao } = window;
 
@@ -8,8 +9,8 @@ let markers: any[] = [];
 let clusterer: any = null;
 
 export async function useViewMap(
-  sorted: any,
-  selected: any,
+  sorted: SELECT_SORT_LIST,
+  selected: SELECT_OPTION_MAP,
   totalPharmList: never[],
   setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>,
   makeMap: any,

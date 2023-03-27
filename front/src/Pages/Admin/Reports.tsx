@@ -64,6 +64,8 @@ export default function Reports() {
       .then(() => location.reload());
   };
 
+  console.log(checkedList);
+
   return (
     <WholePage>
       <Wrapper>

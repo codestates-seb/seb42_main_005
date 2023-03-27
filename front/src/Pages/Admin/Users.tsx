@@ -7,13 +7,14 @@ import { useAppSelector } from "../../Redux/hooks";
 import Button from "../../Components/Ul/Button";
 import { APIS } from "../../Api/APIs";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { Check, TYPE_AllUserInfo } from "../../Api/TYPES";
 
 export default function Users() {
-  const [users, setUsers] = useState<never[]>([]);
+  const [users, setUsers] = useState<TYPE_AllUserInfo[]>([]);
   const [time, setTime] = useState<number>(0);
-  const [checkedList, setCheckedList] = useState<Array<any>>([]);
+  const [checkedList, setCheckedList] = useState<Check[]>([]);
 
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
@@ -41,7 +42,7 @@ export default function Users() {
     },
     [checkedList],
   );
-  console.log(users);
+
   const data = { userIdxs: checkedList };
   //! POST : 계정 정지
   const blockUsers = async () => {

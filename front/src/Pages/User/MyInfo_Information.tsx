@@ -10,23 +10,25 @@ import Button from "../../Components/Ul/Button";
 import { useAppSelector } from "../../Redux/hooks";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { MdOutlineAddAPhoto } from "react-icons/md";
+import { TYPE_UserInfo } from "../../Api/TYPES";
+import { getLocalStorage } from "../../Api/localStorage";
 
 interface Props {
   scriptUrl?: string;
 }
 
 export default function MyInfoInformation({ scriptUrl }: Props) {
-  const [myInfo, setMyInfo]: any = useState({
+  const [myInfo, setMyInfo] = useState<TYPE_UserInfo>({
     createdAt: "",
     name: "",
     email: "",
     address: "",
   });
-  const [imgFile, setImgFlie]: any = useState(null);
+  const [imgFile, setImgFlie] = useState<File | Blob | string>("");
   const [myName, setMyName] = useState("");
   const [myAddress, setMyAddress] = useState("");
 
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
@@ -542,13 +544,13 @@ const Label = styled.label`
     border: 1.2px solid var(--black-400);
     color: var(--black-400);
   }
-  &.mint{
+  &.mint {
     border: 1.2px solid var(--l_button-mint);
     color: var(--l_button-mint);
     :hover {
-    border: 1.2px solid var(--l_button-mint-hover);
-    color: var(--l_button-mint-hover);
-  }
+      border: 1.2px solid var(--l_button-mint-hover);
+      color: var(--l_button-mint-hover);
+    }
   }
 `;
 const Content = styled.section`

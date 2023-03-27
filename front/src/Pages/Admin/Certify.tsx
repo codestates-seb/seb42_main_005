@@ -8,10 +8,11 @@ import AdminTabs from "./AdminTabs";
 import { useAppSelector } from "../../Redux/hooks";
 import Cert from "./Cert";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { Check } from "../../Api/TYPES";
 
 export default function Certify() {
   const [certificates, setCertificates] = useState([]);
-  const [checkedList, setCheckedList] = useState<Array<any>>([]);
+  const [checkedList, setCheckedList] = useState<Check[]>([]);
 
   const user = useAppSelector((state: any) => {
     return state.userInfo.response;

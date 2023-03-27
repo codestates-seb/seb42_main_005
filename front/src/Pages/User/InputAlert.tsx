@@ -1,9 +1,9 @@
-import React from "react"
+import React from "react";
 import styled from "styled-components";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 interface Props {
-  value?: any;
+  value?: string;
 }
 
 export default function InputAlert({ value }: Props) {

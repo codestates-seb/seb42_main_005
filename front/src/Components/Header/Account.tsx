@@ -1,23 +1,24 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import axios from "axios";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import { getLocalStorage, removeLocalStorage } from "../../Api/localStorage";
 import { DeleteUserInfo } from "../../Redux/slice/userSlice";
 import { zIndex_Header } from "../../Util/z-index";
 import { IoIosArrowBack } from "react-icons/io";
-import { APIS } from "../../Api/APIs";
+import { TYPE_UserInfo } from "../../Api/TYPES";
 
-export default function Account() {
+interface Props {
+  userInfo: TYPE_UserInfo | undefined;
+}
+export default function Account({ userInfo }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const [userInfo, setUserInfo]: any = useState({});
 
   const DropdownHandler = () => {
     setIsOpen(!isOpen);
   };
 
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
@@ -31,20 +32,6 @@ export default function Account() {
 
   const token = getLocalStorage("access_token");
 
-  //! GET : 유저 정보
-  useEffect(() => {
-    const getUserInfo = async () => {
-      await axios
-        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`)
-        .then((response) => setUserInfo(response.data.response))
-        .catch((error) => {
-          console.log("내 정보 다시 가져오던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    getUserInfo();
-  }, []);
-
   if (!token) {
     return (
       <ContainerAccount className="main_nav">
@@ -57,7 +44,7 @@ export default function Account() {
     return (
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">
-          {userInfo.imagePath ? (
+          {userInfo?.imagePath ? (
             <img src={`${userInfo.imagePath}`} alt="profile" />
           ) : (
             <img src={"Images/Pharm.png"} alt="profile" />
@@ -88,7 +75,7 @@ export default function Account() {
     return (
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">
-          {userInfo.imagePath ? (
+          {userInfo?.imagePath ? (
             <img src={`${userInfo.imagePath}`} alt="profile" />
           ) : (
             <img src={"Images/Admin.png"} alt="profile" />
@@ -116,7 +103,7 @@ export default function Account() {
     return (
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">
-          {userInfo.imagePath ? (
+          {userInfo?.imagePath ? (
             <img src={`${userInfo.imagePath}`} alt="profile" />
           ) : (
             <img src={"Images/User.png"} alt="profile" />

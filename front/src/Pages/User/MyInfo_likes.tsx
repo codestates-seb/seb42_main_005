@@ -8,12 +8,12 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { useAppSelector } from "../../Redux/hooks";
 
 export default function MyInfoLikes() {
-  const [likedPharmacies, setLikedPharmacies] = useState([]);
+  const [likedPharmacies, setLikedPharmacies] = useState<[]>([]);
 
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
-  
+
   //! GET : 내가 찜한 약국 리스트
   useEffect(() => {
     const getLikedPharmList = async () => {

@@ -4,20 +4,17 @@ import axios from "axios";
 import { APIS } from "../../Api/APIs";
 import { useAppSelector } from "../../Redux/hooks";
 import { MdOutlineAddAPhoto } from "react-icons/md";
+import { TYPE_UserInfo } from "../../Api/TYPES";
 
-interface Props {
-  scriptUrl?: string;
-}
-
-export default function PharmacistInformation({ scriptUrl }: Props) {
-  const [myInfo, setMyInfo]: any = useState({
+export default function PharmacistInformation() {
+  const [myInfo, setMyInfo] = useState<TYPE_UserInfo>({
     createdAt: "",
     name: "",
     email: "",
     address: "",
   });
-  const [imgFile, setImgFlie]: any = useState(null);
-  const user = useAppSelector((state: any) => {
+  const [imgFile, setImgFlie] = useState<File | Blob | string>("");
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 

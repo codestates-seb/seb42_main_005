@@ -6,25 +6,26 @@ import { useAppSelector } from "../../Redux/hooks";
 import PharmRank from "../Ul/PharmRank";
 import AnyDropDown from "./AnyDropDown";
 import { APIS } from "../../Api/APIs";
-import { TYPE_setLike, TYPE_like } from "../../Api/TYPES";
+import { TYPE_setLike, TYPE_Detail, TYPE_boolean } from "../../Api/TYPES";
 import { getLocalStorage } from "../../Api/localStorage";
 
 interface Props {
-  like: TYPE_like;
+  like: TYPE_boolean;
   setLike: TYPE_setLike;
-  pharmDetail: any;
+  pharmDetail: TYPE_Detail | undefined;
 }
 
 export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
   const [isDropDownDown, setIsDropDownDown] = useState<boolean>(false);
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
+  const token = getLocalStorage("access_token");
   //! POST : 찜하기/찜취소
   const likeThisPharmacy = async () => {
     await axios
-      .post(`${APIS.POST_LIKE}/${pharmDetail.storeIdx}/pick?userIdx=${user.userIdx}`)
+      .post(`${APIS.POST_LIKE}/${pharmDetail?.storeIdx}/pick?userIdx=${user.userIdx}`)
       .then(() => setLike(!like))
       .catch((error) => {
         console.log("찜하기 또는 찜 취소 하던 중 에러 발생");
@@ -94,7 +95,7 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
               </More>
             ) : null}
             {isDropDownDown ? (
-              <AnyDropDown setIsDropDownDown={setIsDropDownDown} workingHours={pharmDetail.operatingTime} />
+              <AnyDropDown setIsDropDownDown={setIsDropDownDown} workingHours={pharmDetail?.operatingTime} />
             ) : null}
           </InfoInfoContent>
         </InfoUnit>

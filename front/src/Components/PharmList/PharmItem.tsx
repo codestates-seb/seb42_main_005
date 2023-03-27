@@ -7,17 +7,18 @@ import PharmDetail from "../Modal/PharmDetail";
 import { APIS } from "../../Api/APIs";
 import { getLocalStorage } from "../../Api/localStorage";
 import { useAppSelector } from "../../Redux/hooks";
+import { TYPE_Pharm, TYPE_reviewList, TYPE_boolean, TYPE_Detail } from "../../Api/TYPES";
 
 interface Props {
-  Pharm: any;
+  Pharm: TYPE_Pharm;
   storeIdx: number;
 }
 
 export default function PharmItem({ Pharm, storeIdx }: Props) {
-  const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
-  const [pharmDetail, setPharmDetail] = useState<React.SetStateAction<{}>>({});
-  const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
-  const [like, setLike] = useState<React.SetStateAction<boolean>>(false);
+  const [isModalUp, setIsModalUp] = useState<TYPE_boolean>(false);
+  const [pharmDetail, setPharmDetail] = useState<TYPE_Detail>();
+  const [reviewList, setReviewList] = useState<TYPE_reviewList[]>([]);
+  const [like, setLike] = useState(Pharm.picked);
 
   const user = useAppSelector((state: any) => {
     return state.userInfo.response;
@@ -34,6 +35,7 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
           console.log(err);
         });
     };
+
     const getReviewList = async () => {
       await axios
         .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
@@ -47,7 +49,6 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
     setIsModalUp(true);
   };
 
-  //! POST : 찜하기/찜취소
   const likeThisPharmacy = async () => {
     await axios
       .post(`${APIS.POST_LIKE}/${storeIdx}/pick?userIdx=${user.userIdx}`)

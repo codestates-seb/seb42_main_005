@@ -5,13 +5,6 @@ import SignUpFormTab from "../Components/SignUpForm/SignUpFormTab";
 import UserSignUpForms from "../Components/SignUpForm/UserSignUpForms";
 import { SELECT_OPTIONS_TAP } from "../Util/type";
 
-export interface Form {
-  email: string;
-  password: string;
-  name: string;
-  address: string;
-}
-
 export default function SignUp() {
   const [tab, setTab] = useState<SELECT_OPTIONS_TAP>("user");
 

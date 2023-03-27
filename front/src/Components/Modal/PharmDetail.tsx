@@ -9,21 +9,23 @@ import Button from "../Ul/Button";
 import { zIndex_Modal } from "../../Util/z-index";
 import { getLocalStorage } from "../../Api/localStorage";
 import {
-  TYPE_setIsModalUp,
-  TYPE_like,
+  TYPE_setBoolean,
+  TYPE_boolean,
   TYPE_reviewList,
   TYPE_setReviewList,
+  TYPE_Detail,
+  TYPE_setLike,
 } from "../../Api/TYPES";
 import { HiXMark } from "react-icons/hi2";
 
 interface Props {
-  setIsModalUp: TYPE_setIsModalUp;
-  like: TYPE_like;
-  setLike: any;
+  setIsModalUp: TYPE_setBoolean;
+  like: TYPE_boolean;
+  setLike: TYPE_setLike;
   storeIdx: number;
-  pharmDetail: any;
-  reviewList: TYPE_reviewList;
-  setReviewList: TYPE_setReviewList;
+  pharmDetail: TYPE_Detail | undefined;
+  reviewList: TYPE_reviewList[];
+  setReviewList: React.Dispatch<React.SetStateAction<TYPE_reviewList[]>>;
 }
 
 export default function PharmDetail({
@@ -43,8 +45,6 @@ export default function PharmDetail({
     alert("로그인을 해주세요!");
     navigate("/login");
   };
-  
-
   return (
     <ModalBackDrop onClick={() => setIsModalUp(false)}>
       <ModalContainer onClick={(event: React.MouseEvent<HTMLButtonElement>) => event.stopPropagation()}>
@@ -53,7 +53,11 @@ export default function PharmDetail({
         </CloseBtnContainer>
         <InfoHeader>
           <InfoTitle>{pharmDetail?.name}</InfoTitle>
-          <PharmRank rating={pharmDetail?.rating} likes={pharmDetail?.pickedStoreCount} reviewCount={pharmDetail?.reviewCount} />
+          <PharmRank
+            rating={pharmDetail?.rating}
+            likes={pharmDetail?.pickedStoreCount}
+            reviewCount={pharmDetail?.reviewCount}
+          />
         </InfoHeader>
         <Constant>
           <PharmInfo like={like} setLike={setLike} pharmDetail={pharmDetail} />

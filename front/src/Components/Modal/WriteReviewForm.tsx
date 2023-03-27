@@ -4,7 +4,7 @@ import axios from "axios";
 import { APIS } from "../../Api/APIs";
 import Textarea from "../Ul/Textarea";
 import Button from "../Ul/Button";
-import { TYPE_Pharm, TYPE_setIsReviewFormShown, TYPE_setReviewList } from "../../Api/TYPES";
+import { TYPE_Detail, TYPE_reviewList, TYPE_setBoolean, TYPE_setReviewList } from "../../Api/TYPES";
 import { useAppSelector } from "../../Redux/hooks";
 import { zIndex_Modal } from "../../Util/z-index";
 import { MdOutlineAddAPhoto } from "react-icons/md";
@@ -12,10 +12,10 @@ import { BiPhotoAlbum } from "react-icons/bi";
 import { HiXMark } from "react-icons/hi2";
 
 interface Props {
-  Pharm: TYPE_Pharm | undefined;
-  setIsReviewFormShown: TYPE_setIsReviewFormShown;
+  Pharm: TYPE_Detail | undefined;
+  setIsReviewFormShown: TYPE_setBoolean;
   storeIdx: number | undefined;
-  setReviewList: TYPE_setReviewList;
+  setReviewList: React.Dispatch<React.SetStateAction<TYPE_reviewList[]>>;
 }
 
 export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx, setReviewList }: Props) {
@@ -126,15 +126,18 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
       <InputBot>
         <Rating>
           <StarContainer>
-            {new Array(5).fill("").map((_, i)=><Star key={i}
-              src={`${review.rating > i ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
-              onClick={() =>
-                setReview({
-                  ...review,
-                  rating: i+1,
-                })
-              }
-            />)}
+            {new Array(5).fill("").map((_, i) => (
+              <Star
+                key={i}
+                src={`${review.rating > i ? "./Images/fillstar.png" : "./Images/emstar.png"}`}
+                onClick={() =>
+                  setReview({
+                    ...review,
+                    rating: i + 1,
+                  })
+                }
+              />
+            ))}
           </StarContainer>
           <RateNum readOnly type="text" name="rating" value={`${review.rating} / 5`} onChange={handlerRate}></RateNum>
         </Rating>

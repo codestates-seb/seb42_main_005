@@ -7,16 +7,16 @@ import { APIS } from "../../Api/APIs";
 import { useAppSelector } from "../../Redux/hooks";
 import { BsArrowReturnRight } from "react-icons/bs";
 import { HiXMark } from "react-icons/hi2";
+import { TYPE_Detail, TYPE_reviewList, TYPE_setReviewList } from "../../Api/TYPES";
 
 interface Props {
   reviewIdx: number;
   reply: any;
-  review: any;
-  storeIdx: any;
-  reviewList: any;
-  setReviewList: any;
+  Pharm: TYPE_Detail | undefined;
+  reviewList: TYPE_reviewList[] | TYPE_reviewList;
+  setReviewList: React.Dispatch<React.SetStateAction<TYPE_reviewList[]>>;
 }
-export default function ReplyOfReview({ reviewIdx, reply, storeIdx, reviewList, setReviewList }: Props) {
+export default function ReplyOfReview({ reviewIdx, reply, Pharm, setReviewList }: Props) {
   const [isPatchFormShown, setIsPatchFormShown] = useState(false);
   const [content, setContent] = useState(reply.content);
 
@@ -38,32 +38,42 @@ export default function ReplyOfReview({ reviewIdx, reply, storeIdx, reviewList, 
       e.preventDefault();
       await axios
         .patch(`${APIS.PATCH_REPLY}/${reviewIdx}/reply/${reply.replyIdx}`, {
-          storeIdx,
+          storeIdx: Pharm?.storeIdx,
           userIdx: user.userIdx,
           content,
         })
         .then(() => setIsPatchFormShown(false))
-        .catch((error) => {console.log("리뷰의 댓글을 수정하던 중 에러 발생");console.log(error)});
+        .catch((error) => {
+          console.log("리뷰의 댓글을 수정하던 중 에러 발생");
+          console.log(error);
+        });
       await axios
-        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+        .get(`${APIS.GET_REVIEWS}/${Pharm?.storeIdx}/review`)
         .then((response) => {
           setReviewList(response.data.response.storeReviews);
         })
-        .catch((error) => {console.log("리뷰리스트를 다시 불러오던 중 에러 발생");console.log(error)});
+        .catch((error) => {
+          console.log("리뷰리스트를 다시 불러오던 중 에러 발생");
+          console.log(error);
+        });
     }
   };
 
   // ! DELETE : 리뷰의 댓글삭제
   const deleteReply = async () => {
+    await axios.delete(`${APIS.DELETE_REPLY}/${reviewIdx}/reply/${reply.replyIdx}`).catch((error) => {
+      console.log("리뷰의 댓글을 삭제하던 중 에러 발생");
+      console.log(error);
+    });
     await axios
-      .delete(`${APIS.DELETE_REPLY}/${reviewIdx}/reply/${reply.replyIdx}`)
-      .catch((error) => {console.log("리뷰의 댓글을 삭제하던 중 에러 발생");console.log(error)});
-    await axios
-      .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
+      .get(`${APIS.GET_REVIEWS}/${Pharm?.storeIdx}/review`)
       .then((response) => {
         setReviewList(response.data.response.storeReviews);
       })
-      .catch((error) => {console.log("리뷰리스트를 다시 불러오던 중 에러 발생");console.log(error)});
+      .catch((error) => {
+        console.log("리뷰리스트를 다시 불러오던 중 에러 발생");
+        console.log(error);
+      });
   };
 
   return (
@@ -73,12 +83,12 @@ export default function ReplyOfReview({ reviewIdx, reply, storeIdx, reviewList, 
           <span id="reply">
             <BsArrowReturnRight aria-hidden="true" />
           </span>
-          <UserIcon src={reply.profileImage?reply.profileImage:"/Images/Pharm.png"} alt="pharmacist" />
+          <UserIcon src={reply.profileImage ? reply.profileImage : "/Images/Pharm.png"} alt="pharmacist" />
           <UserName>{reply.userName}</UserName>
           <Created>{new Date(reply.createdAt).toLocaleDateString()}</Created>
         </UserInfo>
         <ButtonContainer>
-          {user?.userRole === "약국회원" && storeIdx === user?.storeIdx ? (
+          {user?.userRole === "약국회원" && Pharm?.storeIdx === user?.storeIdx ? (
             <>
               <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsPatchFormShown(true)} />
               <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReply()} />
