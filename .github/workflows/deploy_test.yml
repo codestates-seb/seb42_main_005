@@ -22,7 +22,7 @@ jobs:
         run: |
           cd ./back
           touch ./.env
-          echo ./.env config > ./.env
+          echo ./.env > ./.env
 
       - name: Create application.yml
         run: |
