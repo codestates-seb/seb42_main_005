@@ -1,6 +1,0 @@
-aws:
-  paramstore:
-    enabled: true
-    prefix: /deploy
-    name: main-005
-    profileSeparator: _
