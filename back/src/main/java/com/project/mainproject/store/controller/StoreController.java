@@ -10,14 +10,11 @@ import com.project.mainproject.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
-import java.security.Principal;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -58,9 +55,12 @@ public class StoreController {
      *  찜하기
      * */
     @PostMapping("/{storeIdx}/pick")
-    public ResponseEntity pickedStore(@PathVariable Long storeIdx, @RequestParam Long userIdx) {
-        SingleResponseDto responseDto = storeService.pickStore(userIdx, storeIdx);
+    public ResponseEntity pickedStore(@AuthenticationPrincipal Object principal,@PathVariable Long storeIdx ,@RequestParam Long userIdx) {
+        Long loginUserIdx = CheckLoginUser.getContextIdx(principal);
+
+        SingleResponseDto responseDto = storeService.pickStore(userIdx, storeIdx,loginUserIdx);
         //TODO : 로그인 기능 구현 완료 시 SecurityContext에서 UserIdx를 따로 뽑아 사용하게 변경해야한다.
+
         if (responseDto.getHttpCode() == 200) {
             return ResponseEntity.ok().body(responseDto);
         }

@@ -2,12 +2,14 @@ package com.project.mainproject.store.service;
 
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.enums.ResultStatus;
+import com.project.mainproject.exception.BusinessLogicException;
 import com.project.mainproject.store.entity.Store;
 import com.project.mainproject.store.entity.StoreImage;
 import com.project.mainproject.store.repository.StoreQueryRepository;
 import com.project.mainproject.user.entity.Normal;
 import com.project.mainproject.user.entity.Pharmacy;
 import com.project.mainproject.user.entity.PickedStore;
+import com.project.mainproject.user.exception.UserExceptionCode;
 import com.project.mainproject.user.repository.PickedStoreRepository;
 import com.project.mainproject.user.service.UserService;
 import com.project.mainproject.utils.FileUploader;
@@ -27,8 +29,11 @@ public class StoreService {
     private final UserService userService;
     private final FileUploader fileUploader;
 
-    public SingleResponseDto pickStore(Long userIdx, Long storeIdx) {
-        Normal findUser = (Normal) userService.validUser(userIdx);    //user 가 존재하는지 먼저 검증 시큐리티 적용 후 필요 없음
+    public SingleResponseDto pickStore(Long userIdx, Long storeIdx, Long loginUserIdx) {
+        if (!userIdx.equals(loginUserIdx)) {
+            throw new BusinessLogicException(UserExceptionCode.USER_MISS_MATCH);
+        }
+        Normal findUser = userService.checkIsNormal(userIdx);
         Store findStore = storeQueryRepository.findStoreById(storeIdx);
         List<PickedStore> findPickedStores = storeQueryRepository.findPickedStoreById(storeIdx);    //store에 이미 존재
 
