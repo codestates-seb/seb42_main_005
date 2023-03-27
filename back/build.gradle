@@ -70,7 +70,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 	// Parameter Store
-	implementation 'io.awspring.cloud:spring-cloud-aws-parameter-store-config:2.4.4'
+	implementation 'com.coveo:spring-boot-parameter-store-integration:1.1.2'
 }
 
 tasks.named('test') {
