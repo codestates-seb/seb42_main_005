@@ -50,6 +50,15 @@ public interface UserControllerTestHelper extends ControllerTestHelper {
                 fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
         );
     }
+    default List<FieldDescriptor> getDefaultPharmacyUserSignUpRequestDescriptors() {
+        return List.of(
+                fieldWithPath("name").type(JsonFieldType.STRING).description("약국이름"),
+                fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+                fieldWithPath("address").type(JsonFieldType.STRING).description("약국주소"),
+                fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
+
+        );
+    }
     default List<FieldDescriptor> getDefaultUserResponseDescriptors(DataResponseType dataResponseType) {
         String parentPath = getDataParentPath(dataResponseType, "response");
         return List.of(
