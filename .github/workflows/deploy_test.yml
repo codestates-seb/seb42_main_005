@@ -56,7 +56,6 @@ jobs:
           docker build -t ${{ secrets.DOCKER_REPO }} .
           docker push ${{ secrets.DOCKER_REPO }}
 
-      # TODO: Executing remote ssh commands and docker-compose up
       - name: Executing remote ssh commands and docker-compose up
         uses: appleboy/ssh-action@master
         with:
