@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${DATABASE_URL}
-    password: ${DATABASE_PASSWORD}
-    username: ${DATABASE_USERNAME}
+    url: ${/deploy/DATABASE_URL}
+    password: ${/deploy/DATABASE_PASSWORD}
+    username: ${/deploy/DATABASE_USERNAME}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQL55Dialect
@@ -27,18 +27,18 @@ logging:
 
 jwt:
   key:
-    secret: ${JWT_KEY}
+    secret: ${/deploy/JWT_KEY}
   access-token-expiration-minutes: 300000
   refresh-token-expiration-minutes: 420
 
 mail:
   address:
-    admin: ${MAIL_ADMIN}
+    admin: ${/deploy/MAIL_ADMIN}
   smtp:
     host: smtp.gmail.com
     port: 587
-    username: ${MAIL_ID}
-    password: ${MAIL_PASSWORD}
+    username: ${/deploy/MAIL_ID}
+    password: ${/deploy/MAIL_PASSWORD}
     auth: true
     starttls:
       enable: true
@@ -50,7 +50,7 @@ mail:
       member:
         join: email-registration-member
 data-api:
-  service-key: ${SERVICE_KEY}
+  service-key: ${/deploy/SERVICE_KEY}
   service-url: https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?
 cloud:
   aws:
@@ -59,5 +59,5 @@ cloud:
     stack.auto: false
     region.static: ap-northeast-2
     credentials:
-      accessKey: ${S3_ACCESS_KEY}
-      secretKey: ${S3_SECRET_KEY}
+      accessKey: ${/deploy/S3_ACCESS_KEY}
+      secretKey: ${/deploy/S3_SECRET_KEY}
