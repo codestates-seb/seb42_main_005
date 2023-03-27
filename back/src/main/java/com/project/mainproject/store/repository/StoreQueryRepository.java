@@ -191,7 +191,7 @@ public class StoreQueryRepository {
                 .fetchOne();
     }
 
-    public List<DBStoreSearchDto> searchStoreByName(String keyword) {
+    public List<DBStoreSearchDto> searchStoreByName(String keyword, Long userIdx) {
         return queryFactory
                 .select(new QDBStoreSearchDto(
                         store.storeIdx, store.name, store.address, store.latitude, store.longitude,
@@ -199,17 +199,22 @@ public class StoreQueryRepository {
                         pickedStore.storeId.count(),
                         review.reviewIdx.count(),
                         storeImage.imagePath,
-                        store._super.modifiedAt
+                        store._super.modifiedAt,
+                        new CaseBuilder()
+                                .when(normal.userIdx.eq(userIdx)).then(true)
+                                .otherwise(false)
+                                .as("picked")
                 ))
                 .from(store)
                 .leftJoin(store.reviews, review)
                 .leftJoin(store.pickedStores, pickedStore)
+                .leftJoin(pickedStore.normal,normal)
                 .leftJoin(store.storeImages, storeImage)
                 .where(store.name.contains(keyword))
-                .groupBy(store.storeIdx,storeImage.imagePath)
+                .groupBy(store.storeIdx,storeImage.imagePath, normal.userIdx)
                 .fetch();
     }
-    public List<DBStoreSearchDto> searchStoreByAddress(String keyword) {
+    public List<DBStoreSearchDto> searchStoreByAddress(String keyword, Long userIdx) {
         return queryFactory
                 .select(new QDBStoreSearchDto(
                         store.storeIdx, store.name, store.address, store.latitude, store.longitude,
@@ -217,14 +222,19 @@ public class StoreQueryRepository {
                         pickedStore.storeId.count(),
                         review.reviewIdx.count(),
                         storeImage.imagePath,
-                        store._super.modifiedAt
+                        store._super.modifiedAt,
+                        new CaseBuilder()
+                                .when(normal.userIdx.eq(userIdx)).then(true)
+                                .otherwise(false)
+                                .as("picked")
                 ))
                 .from(store)
                 .leftJoin(store.reviews, review)
                 .leftJoin(store.pickedStores, pickedStore)
+                .leftJoin(pickedStore.normal,normal)
                 .leftJoin(store.storeImages, storeImage)
-                .where(store.name.contains(keyword))
-                .groupBy(store.storeIdx,storeImage.imagePath)
+                .where(store.address.contains(keyword))
+                .groupBy(store.storeIdx,storeImage.imagePath, normal.userIdx)
                 .fetch();
     }
 
