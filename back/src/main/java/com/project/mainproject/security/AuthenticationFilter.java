@@ -64,6 +64,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         userRepository.save(successUser);
         Long userIdx = successUser.getUserIdx();
         String address = successUser.getAddress();
+        String userRole = successUser.getRole();
         String userType = successUser.getUserType();
         String name = successUser.getName();
 
@@ -71,9 +72,9 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         if (userType.equals("약국회원")) {
             Pharmacy findPharmacy = (Pharmacy) successUser;
             Long storeIdx = findPharmacy.getStore().getStoreIdx();
-            userLoginInfoResponse = new UserLoginInfoResponse(userIdx, name, userType, storeIdx, address);
+            userLoginInfoResponse = new UserLoginInfoResponse(userIdx, name, userRole, userType, storeIdx, address);
         } else {
-            userLoginInfoResponse = new UserLoginInfoResponse(userIdx, name, userType, address);
+            userLoginInfoResponse = new UserLoginInfoResponse(userIdx, name, userRole, userType, address);
         }
 
         response.setContentType("application/json");
