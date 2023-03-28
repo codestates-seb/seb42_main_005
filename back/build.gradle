@@ -10,6 +10,8 @@ plugins {
 	id "org.asciidoctor.jvm.convert" version "3.3.2"
 
 	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+
+	id "com.gorylenko.gradle-git-properties" version "2.4.1" //git info
 }
 
 group = 'com.project'
@@ -70,6 +72,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 
