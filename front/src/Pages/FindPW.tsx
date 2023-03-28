@@ -44,7 +44,9 @@ export default function FindPW() {
     <Wrapper>
       <LogoContainer>
         <img alt="logo" src="Images/Logo.png" />
-        <h1>Medi-Map</h1>
+        <span className="logo_text">
+          우리<span className="logo_text2">동네</span>약국<span className="logo_text2">지도</span>
+        </span>
       </LogoContainer>
       <Container onSubmit={onSubmit}>
         <Instruction>
@@ -87,14 +89,25 @@ const LogoContainer = styled.header`
   justify-content: center;
   align-items: center;
   margin-bottom: 40px;
+  padding-right: 15px;
   img {
-    padding-right: 1rem;
-    width: 3.5rem;
+    margin-right: 10px;
+    width: 3rem;
     height: 3rem;
   }
-  h1 {
+  .logo_text {
+    font-size: 2rem;
+    font-weight: 900;
     color: var(--blue-600);
-    font-size: 2.2rem;
+    letter-spacing: -1.5px;
+    .logo_text2 {
+      margin-right: 7px;
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--blue-600);
+      letter-spacing: -1.5px;
+      vertical-align: 5px;
+    }
   }
 `;
 const Container = styled.form`
