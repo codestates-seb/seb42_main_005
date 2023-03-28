@@ -11,7 +11,7 @@ interface Props {
   Pharm: TYPE_Detail | undefined;
 }
 
-export default function ReviewList({ reviewList, setReviewList, setIsReviewFormShown, storeIdx, Pharm }: Props) {
+export default function ReviewList({ reviewList, setReviewList, setIsReviewFormShown, Pharm }: Props) {
   return (
     <ReviewContainer>
       <ReviewTitle>리뷰</ReviewTitle>
