@@ -6,7 +6,7 @@ import Button from "../Ul/Button";
 import { useAppSelector } from "../../Redux/hooks";
 import { BsArrowReturnRight } from "react-icons/bs";
 import { HiXMark } from "react-icons/hi2";
-import { TYPE_Detail, TYPE_reviewList, TYPE_setReviewList } from "../../Api/TYPES";
+import { TYPE_Detail, TYPE_reviewList } from "../../Api/TYPES";
 
 interface Props {
   reviewIdx: number;

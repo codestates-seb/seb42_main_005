@@ -11,6 +11,8 @@ import { useAppSelector } from "../../Redux/hooks";
 import { getLocalStorage } from "../../Api/localStorage";
 import { useNavigate } from "react-router-dom";
 import { SELECT_HIDDEN, SELECT_SORT_LIST, SELECT_OPTION_MAP } from "../../Api/TYPES";
+import axios from "axios";
+import { APIS } from "../../Api/APIs";
 
 interface Props {
   hidden: SELECT_HIDDEN;
@@ -42,12 +44,27 @@ export default function PharmLists({
   const [keyword, setKeyword] = useState("");
   const [displayedList, setDisplayedList] = useState(totalPharmList.slice(0, 10));
   const listRef = useRef<HTMLDivElement>(null);
-
+  const [myAdress, setMyAdress] = useState("");
   const user = useAppSelector((state: any) => {
     return state.userInfo.response;
   });
 
-  const token = getLocalStorage("access_token");
+  let token = getLocalStorage("access_token");
+  const API = import.meta.env.VITE_APP_API_URL;
+  useEffect(() => {
+    const userNewInfo = async () => {
+      try {
+        const response = await axios.get(`${API}${APIS.GET_USER_INFO}/${user.userIdx}`, {
+          headers: { Authorization: token },
+        });
+        setMyAdress(response.data.response.address);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    userNewInfo();
+  }, []);
+
   const navigate = useNavigate();
 
   const gologin = () => {
@@ -77,7 +94,7 @@ export default function PharmLists({
 
   //* 우리집,우리약국 클릭 시
   const MoveToMyPlace = () => {
-    const address = user.address;
+    const address = myAdress;
     const geocoder = new kakao.maps.services.Geocoder();
 
     geocoder.addressSearch(address, function (result: any, status: any) {

@@ -1,8 +1,8 @@
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { UserInstance, postUserImg } from "../../Api/AxiosInstance";
-import { useAppSelector } from "../../Redux/hooks";
+import { UserInstance, postUserImg, BaseInstance } from "../../Api/AxiosInstance";
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import { validators } from "../../Components/SignUpForm/Validation";
 import { onUpload } from "../../Api/onUpload";
 import SignUpInput from "../../Components/SignUpForm/SignUpInput";
@@ -11,6 +11,10 @@ import Button from "../../Components/Ul/Button";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { TYPE_UserInfo } from "../../Api/TYPES";
+import { APIS } from "../../Api/APIs";
+import { get } from "../../Redux/slice/userSlice";
+import axios from "axios";
+import { getLocalStorage } from "../../Api/localStorage";
 
 interface Props {
   scriptUrl?: string;
@@ -189,6 +193,25 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     await UserInstance.patchUserInfo(user.userIdx, newUserData, setIsEditing);
     await UserInstance.getUserInfo(user.userIdx, setMyInfo, setMyName, setMyAddress);
   };
+
+  const dispatch = useAppDispatch();
+  let token = getLocalStorage("access_token");
+  const API = import.meta.env.VITE_APP_API_URL;
+  useEffect(() => {
+    const userNewInfo = async () => {
+      try {
+        const response = await axios.get(`${API}${APIS.GET_USER_INFO}/${user.userIdx}`, {
+          headers: { Authorization: token },
+        });
+        dispatch(get(response.data.response));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    userNewInfo();
+  }, []);
+
+  console.log(user);
 
   //! POST : 유저 이미지 업로드
   const submitUserImg = (e: any) => {

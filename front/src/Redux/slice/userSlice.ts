@@ -13,7 +13,7 @@ export const userSlice = createSlice({
   name: "userInfo",
   initialState,
   reducers: {
-    getUserInfo: (state, action) => {
+    get: (state, action) => {
       state.response = action.payload;
     },
 
@@ -22,5 +22,5 @@ export const userSlice = createSlice({
     },
   },
 });
-export const { getUserInfo, DeleteUserInfo } = userSlice.actions;
+export const { get, DeleteUserInfo } = userSlice.actions;
 export default userSlice.reducer;

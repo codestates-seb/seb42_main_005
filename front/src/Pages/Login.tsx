@@ -10,7 +10,7 @@ import axios from "axios";
 import { APIS } from "../Api/APIs";
 import { setLocalStorage } from "../Api/localStorage";
 import { useAppDispatch, useAppSelector } from "../Redux/hooks";
-import { getUserInfo } from "../Redux/slice/userSlice";
+import { get } from "../Redux/slice/userSlice";
 import { getLocalStorage } from "../Api/localStorage";
 
 export default function Login() {
@@ -93,7 +93,7 @@ export default function Login() {
           setLocalStorage("refresh_token", refreshToken);
           let token = getLocalStorage("access_token");
           axios.defaults.headers.common.Authorization = token;
-          dispatch(getUserInfo(res.data));
+          dispatch(get(res.data));
           return res;
         })
         .then((res) => {
