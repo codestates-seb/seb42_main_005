@@ -50,6 +50,21 @@ export interface TYPE_Review {
   userName: string;
 }
 
+// export interface TYPE_UserInfo {
+//   address: string;
+//   businessCertificate?: string | null;
+//   createdAt: string;
+//   email: string;
+//   name: string;
+//   pharmacistCertificate?: string | null;
+//   storeIdx?: number;
+//   userIdx?: number;
+//   imagePath?: string;
+//   reportCount?: number;
+//   reviewCount?: number;
+//   [prop: string]: any;
+// }
+
 export interface TYPE_UserInfo {
   address: string;
   businessCertificate?: string | null;

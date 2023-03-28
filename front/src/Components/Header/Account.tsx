@@ -47,7 +47,7 @@ export default function Account({ userInfo }: Props) {
             <Img src={"Images/Pharm.png"} alt="약사계정의 기본 이미지입니다." />
           )}
         </Link>
-        <span className="name">{user.name}</span>
+        <span className="name">{userInfo?.name}</span>
         <span className="identity">약사님</span>
         <DropdownButton onClick={() => DropdownHandler()}>
           <IoIosArrowBack className={isOpen ? "close" : "open"} />
@@ -102,7 +102,7 @@ export default function Account({ userInfo }: Props) {
             <Img src={"Images/User.png"} alt="profile" />
           )}
         </Link>
-        <span className="name">{user?.name}</span>
+        <span className="name">{userInfo?.name}</span>
         <span className="identity">님</span>
         <DropdownButton onClick={() => DropdownHandler()}>
           <IoIosArrowBack className={isOpen ? "close" : "open"} />
@@ -260,6 +260,8 @@ const Partition = styled.span`
   }
 `;
 const Img = styled.img`
-  border-radius: 50%;
   object-fit: cover;
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
 `;

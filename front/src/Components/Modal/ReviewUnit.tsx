@@ -18,9 +18,10 @@ interface Props {
   reviewList: TYPE_reviewList[] | TYPE_reviewList;
   setReviewList: React.Dispatch<React.SetStateAction<TYPE_reviewList[]>>;
   reviewUserName: string;
+  page: number
 }
 
-export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, reviewUserName }: Props) {
+export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, reviewUserName,page }: Props) {
   const [isReplyFormShown, setIsReplyFormShown] = useState<React.SetStateAction<boolean>>(false);
   const [isOnEdit, setIsOnEdit] = useState<React.SetStateAction<boolean>>(false);
   const [reviewContent, setReviewContent] = useState<React.SetStateAction<any>>(review.content);
@@ -50,7 +51,7 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
         rating: review.rating,
       };
       await patchReview(Pharm?.storeIdx, reviewIdx, data, setIsOnEdit);
-      await getReview(Pharm?.storeIdx, setReviewList);
+      await getReview(Pharm?.storeIdx, setReviewList, page);
     }
   };
 
@@ -58,7 +59,7 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
   const storeidx: any = Pharm?.storeIdx;
   const deleteReviewAndRefresh = async () => {
     await deleteReview(storeidx, reviewIdx);
-    await getReview(storeidx, setReviewList);
+    await getReview(storeidx, setReviewList, page);
   };
 
   //! POST : 리뷰신고
@@ -82,7 +83,7 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
         content: replyContent,
       };
       await postReply(reviewIdx, reply, setReplyContent, setIsReplyFormShown);
-      await getReview(storeidx, setReviewList);
+      await getReview(storeidx, setReviewList, page);
     }
   };
 
@@ -109,7 +110,7 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
             {user?.userRole === "일반회원" && user?.name === reviewUserName ? (
               <>
                 <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsOnEdit(true)} />
-                <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReviewAndRefresh} />
+                <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReviewAndRefresh()} />
               </>
             ) : null}
             {user?.userRole === "약국회원" && storeidx === user?.storeIdx ? (
@@ -171,6 +172,7 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
           reply={reply}
           Pharm={Pharm}
           setReviewList={setReviewList}
+          page={page}
         />
       ))}
     </ReviewUnitContainer>

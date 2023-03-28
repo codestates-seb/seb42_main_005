@@ -40,7 +40,7 @@ export default function Certify() {
       <Wrapper>
         <AdminTabs current="certify" />
         <Page>
-          {user?.userRole === "관리자" ? (
+          {user?.userType === "관리자" ? (
             <>
               <Header>
                 <span>약사인증관리</span>
@@ -169,6 +169,7 @@ const Label = styled.header`
   background-color: var(--black-050);
 `;
 const BelowLable = styled.section`
+/* border: 1px solid red; //! */
   display: flex;
   flex-direction: column;
   height: 26rem;

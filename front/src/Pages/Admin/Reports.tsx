@@ -38,7 +38,7 @@ export default function Reports() {
       <Wrapper>
         <AdminTabs current="reports" />
         <Page>
-          {user?.userRole === "관리자" ? (
+          {user?.userType === "관리자" ? (
             <>
               <Header>
                 <span>신고리뷰관리</span>

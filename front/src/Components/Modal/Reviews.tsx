@@ -1,22 +1,79 @@
 import styled from "styled-components";
+import { useRef, useEffect, useState } from "react";
 import { TYPE_reviewList, TYPE_setBoolean, TYPE_Detail, TYPE_setReviewList } from "../../Api/TYPES";
+import { patchReview, getReview, deleteReview, reportReview, getFinish } from "../../Api/AxiosInstance";
 import ReviewUnit from "./ReviewUnit";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { APIS } from "../../Api/APIs";
 
 interface Props {
   reviewList: TYPE_reviewList[];
-  setReviewList: TYPE_setReviewList;
+  setReviewList: any;
   setIsReviewFormShown: TYPE_setBoolean;
   storeIdx: number;
   Pharm: TYPE_Detail | undefined;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
+// export const API = import.meta.env.VITE_APP_API_URL;
+export default function ReviewList({
+  reviewList,
+  setReviewList,
+  setIsReviewFormShown,
+  storeIdx,
+  Pharm,
+  page,
+  setPage,
+}: Props) {
+  // const [displayedList, setDisplayedList] = useState(reviewList);
+  // const [isFinish, setIsFinish] = useState<boolean>(false);
+  // const listRef = useRef<HTMLDivElement>(null);
+  // // useEffect(() => {
+  // //   getFinish(`${APIS.GET_REVIEWS}/${storeIdx}/review`, setIsFinish);
+  // // }, []);
+  // useEffect(() => {
+  //   // getReview(storeIdx, setReviewList, page);
+  //   // getFinish(`${APIS.GET_REVIEWS}/${storeIdx}/review`, setIsFinish);
+  //   if (listRef.current) {
+  //     listRef.current.scrollTop = 0;
+  //   }
+  // }, [reviewList]);
+  // const handleScroll = (e: any) => {
+  //   const { scrollTop, scrollHeight, clientHeight } = e.target;
+  //   // getFinish(`${APIS.GET_REVIEWS}/${storeIdx}/review`, setIsFinish);
+  //   if (scrollTop + clientHeight >= scrollHeight) {
+  //     setPage(page + 1);
+  //     // if (isFinish){
+  //     getReview(storeIdx, setReviewList, page);
+  //     // }
+  //     setReviewList((prevList: any) => [...prevList, reviewList]);
+  //   }
+  // };
+  //! 되는거
+  const listRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.scrollTop = 0;
+    }
+  }, [reviewList]);
+  const handleScroll = (e: any) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.target; // 3479, 448, 
+    console.log(clientHeight)
+    console.log()
+    console.log()
+    if (scrollTop + clientHeight >= scrollHeight) {
+      setPage(page + 1);
+      getReview(storeIdx, setReviewList, page);
+      setReviewList((prevList: any) => [...prevList, reviewList]);
+    }
+  };
+  //! 되는거
 
-export default function ReviewList({ reviewList, setReviewList, setIsReviewFormShown, storeIdx, Pharm }: Props) {
   return (
     <ReviewContainer>
       <ReviewTitle>리뷰</ReviewTitle>
       {reviewList.length ? (
-        <Reviews>
+        <Reviews ref={listRef} onScroll={handleScroll}>
           {reviewList.map((review: any, i: number) => (
             <ReviewUnit
               key={i}
@@ -26,6 +83,7 @@ export default function ReviewList({ reviewList, setReviewList, setIsReviewFormS
               Pharm={Pharm}
               setReviewList={setReviewList}
               reviewList={reviewList}
+              page={page}
             />
           ))}
         </Reviews>

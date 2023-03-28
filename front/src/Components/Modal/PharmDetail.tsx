@@ -31,6 +31,7 @@ export default function PharmDetail({
   setReviewList,
 }: Props) {
   const [isReviewFormShown, setIsReviewFormShown] = useState<TYPE_boolean>(false);
+  const [page, setPage] = useState<number>(0)
 
   const token = getLocalStorage("access_token");
   const navigate = useNavigate();
@@ -61,6 +62,8 @@ export default function PharmDetail({
             setIsReviewFormShown={setIsReviewFormShown}
             storeIdx={storeIdx}
             Pharm={pharmDetail}
+            page={page}
+            setPage={setPage}
           />
         </Constant>
         {token && isReviewFormShown ? (
@@ -69,6 +72,7 @@ export default function PharmDetail({
             setIsReviewFormShown={setIsReviewFormShown}
             storeIdx={pharmDetail?.storeIdx}
             setReviewList={setReviewList}
+            page={page}
           />
         ) : null}
         {token ? (

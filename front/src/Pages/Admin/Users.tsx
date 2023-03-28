@@ -1,25 +1,30 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import styled from "styled-components";
-import { AdminInstance } from "../../Api/AxiosInstance";
+import { AdminInstance, getFinish } from "../../Api/AxiosInstance";
 import { useAppSelector } from "../../Redux/hooks";
 import AdminTabs from "./AdminTabs";
 import Button from "../../Components/Ul/Button";
 import CheckBox from "../../Components/Ul/CheckBox";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { Check, TYPE_AllUserInfo } from "../../Api/TYPES";
+import { APIS } from "../../Api/APIs";
 
 export default function Users() {
   const [users, setUsers] = useState<TYPE_AllUserInfo[]>([]);
   const [time, setTime] = useState<number>(0);
   const [checkedList, setCheckedList] = useState<Check[]>([]);
-
+  const pageIndexRef = useRef<number>(0);
+  const root = useRef<HTMLDivElement>(null);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+  const [isPageEnd, setIsPageEnd] = useState<boolean>(false);
+  console.log(pageIndexRef.current);
   const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
   //! GET : 전체 회원 리스트 불러오기
   useEffect(() => {
-    AdminInstance.getUsers(setUsers);
+    AdminInstance.getUsers(setUsers, pageIndexRef.current);
   }, []);
 
   //* 체크된 항목을 하나씩 담아주는 부분
@@ -43,12 +48,42 @@ export default function Users() {
     if (accountState === "KICKEDOUT") return "강퇴회원";
   };
 
+  const getList = useCallback(async () => {
+    await AdminInstance.getUsers(setUsers, pageIndexRef.current);
+    setUsers((prevList) => [...prevList, ...users]);
+    pageIndexRef.current++;
+    setIsPageEnd(users.length < 20 ? true : false);
+  }, []);
+
+  const handleObserver = useCallback(
+    async ([entry]: IntersectionObserverEntry[], observer: IntersectionObserver) => {
+      if (entry.isIntersecting) {
+        observer.unobserve(entry.target);
+        await getList();
+        observer.observe(entry.target);
+      }
+    },
+    [getList],
+  );
+
+  useEffect(() => {
+    if (!loadMoreRef.current) return;
+    const option = {
+      root: root.current,
+      rootMargin: "1px",
+      threshold: 1,
+    };
+      const observer = new IntersectionObserver(handleObserver, option);
+      loadMoreRef.current && observer.observe(loadMoreRef.current);
+    return () => observer && observer.disconnect();
+  }, [handleObserver, isPageEnd]);
+  console.log(users);
   return (
     <WholePage>
       <Wrapper>
         <AdminTabs current="users" />
         <Page>
-          {user?.userRole === "관리자" ? (
+          {user?.userType === "관리자" ? (
             <>
               <Header>
                 <span>전체회원관리</span>
@@ -79,7 +114,7 @@ export default function Users() {
                   <Values className="reportCount">신고 수</Values>
                 </Label>
                 {users?.length ? (
-                  <BelowLable>
+                  <BelowLable ref={root}>
                     {users.map((user: any, i) => (
                       <Content key={i} className={user.userStatus === "ACTIVE" ? "" : "suspended"}>
                         <Values className="checkBox">
@@ -102,6 +137,7 @@ export default function Users() {
                         <Values className="reportCount">{user.reportCount}</Values>
                       </Content>
                     ))}
+                    {!isPageEnd && <div ref={loadMoreRef}></div>}
                   </BelowLable>
                 ) : (
                   <Instead>
@@ -210,6 +246,7 @@ const Label = styled.header`
   background-color: var(--black-050);
 `;
 const BelowLable = styled.section`
+  /* border: 1px solid red; //! */
   display: flex;
   flex-direction: column;
   height: 26rem;
