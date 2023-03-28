@@ -18,10 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -84,12 +82,21 @@ public class StoreGetService {
      * */
     public SingleResponseDto getSearchStoreList(String keyword, Long userIdx) {
         List<DBStoreSearchDto> responseName = storeQueryRepository.searchStoreByName(keyword, userIdx);
+        for (DBStoreSearchDto dbStoreSearchDto : responseName) {
+            log.info("###store name = {}",dbStoreSearchDto.getName());
+        }
         List<DBStoreSearchDto> responseAddress = storeQueryRepository.searchStoreByAddress(keyword, userIdx);
+        for (DBStoreSearchDto address : responseAddress) {
+            log.info("@@@@store name = {}",address.getName());
+        }
+        responseAddress.stream().forEach(response-> responseName.add(response));
+        for (DBStoreSearchDto dbStoreSearchDto : responseName) {
+            log.info("%%%%store name = {}",dbStoreSearchDto.getName());
+        }
+        List<DBStoreSearchDto> response = responseName.stream().distinct().collect(Collectors.toList());
 
-        responseName.addAll(responseAddress);
-
-        return SingleResponseDto.<Set<DBStoreSearchDto>>builder()
-                .response(new HashSet<>(responseName))
+        return SingleResponseDto.<List<DBStoreSearchDto>>builder()
+                .response(response)
                 .message(ResultStatus.PROCESS_COMPLETED.getMessage())
                 .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
                 .build();
