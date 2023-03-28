@@ -211,8 +211,6 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     userNewInfo();
   }, []);
 
-  console.log(user);
-
   //! POST : 유저 이미지 업로드
   const submitUserImg = (e: any) => {
     e.preventDefault();

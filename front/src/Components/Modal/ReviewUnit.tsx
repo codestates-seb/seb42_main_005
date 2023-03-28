@@ -105,13 +105,13 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
             </StarContainer>
           </UserInfo>
           <ButtonContainer>
-            {user?.userRole === "일반회원" && user?.name === reviewUserName ? (
+            {user?.userType === "일반회원" && user?.name === reviewUserName ? (
               <>
                 <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsOnEdit(true)} />
                 <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReviewAndRefresh()} />
               </>
             ) : null}
-            {user?.userRole === "약국회원" && Pharm?.storeIdx === user?.storeIdx ? (
+            {user?.userType === "약국회원" && Pharm?.storeIdx === user?.storeIdx ? (
               <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsReplyFormShown(true)} />
             ) : null}
             {token && user?.name !== reviewUserName ? (

@@ -54,7 +54,7 @@ export default function PharmLists({
   useEffect(() => {
     const userNewInfo = async () => {
       try {
-        const response = await axios.get(`${API}${APIS.GET_USER_INFO}/${user.userIdx}`, {
+        const response = await axios.get(`${API}${APIS.GET_USER_INFO}/${user?.userIdx}`, {
           headers: { Authorization: token },
         });
         setMyAdress(response.data.response.address);
@@ -136,14 +136,14 @@ export default function PharmLists({
             </SearchContainer>
             <ButtonContainer>
               <ButtonMyPlace>
-                {token && user?.userRole === "약국회원" ? (
+                {token && user?.userType === "약국회원" ? (
                   <>
                     <RiHomeLine className="logo" />
                     <span className="my_place" onClick={MoveToMyPlace}>
                       우리 약국
                     </span>
                   </>
-                ) : token && user?.userRole === "일반회원" ? (
+                ) : token && user?.userType === "일반회원" ? (
                   <>
                     <RiHomeLine className="logo" />
                     <span className="my_place" onClick={MoveToMyPlace}>

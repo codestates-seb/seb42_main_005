@@ -15,7 +15,6 @@ export default function Account({ userInfo }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const token = getLocalStorage("access_token");
   const dispatch = useAppDispatch();
-
   const logOut = () => {
     removeLocalStorage("access_token");
     removeLocalStorage("refresh_token");
@@ -38,7 +37,7 @@ export default function Account({ userInfo }: Props) {
         <ButtonLink to="/sign_up">회원가입</ButtonLink>
       </ContainerAccount>
     );
-  } else if (user?.userRole === "약국회원") {
+  } else if (user?.userType === "약국회원") {
     return (
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">
@@ -48,7 +47,7 @@ export default function Account({ userInfo }: Props) {
             <Img src={"Images/Pharm.png"} alt="약사계정의 기본 이미지입니다." />
           )}
         </Link>
-        <span className="name">{userInfo?.name}</span>
+        <span className="name">{user.name}</span>
         <span className="identity">약사님</span>
         <DropdownButton onClick={() => DropdownHandler()}>
           <IoIosArrowBack className={isOpen ? "close" : "open"} />
@@ -69,7 +68,7 @@ export default function Account({ userInfo }: Props) {
         ) : null}
       </ContainerAccount>
     );
-  } else if (user?.userRole === "관리자") {
+  } else if (user?.userType === "관리자") {
     return (
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">
@@ -103,7 +102,7 @@ export default function Account({ userInfo }: Props) {
             <Img src={"Images/User.png"} alt="profile" />
           )}
         </Link>
-        <span className="name">{userInfo?.name}</span>
+        <span className="name">{user?.name}</span>
         <span className="identity">님</span>
         <DropdownButton onClick={() => DropdownHandler()}>
           <IoIosArrowBack className={isOpen ? "close" : "open"} />

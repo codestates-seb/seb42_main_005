@@ -6,6 +6,7 @@ const initialState: User = {
   name: "",
   storeIdx: null,
   userIdx: null,
+  userType: "",
   userRole: "",
 };
 
