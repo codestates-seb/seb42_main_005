@@ -24,7 +24,6 @@ export default function PharmacistInformation() {
   useEffect(() => {
     PharmInstance.getPharmacistInfo(user.userIdx, setMyInfo);
   }, []);
-  console.log(user.storeIdx);
 
   //! POST : 유저 이미지 업로드
   const submitUserImg = (e: any) => {

@@ -3,9 +3,6 @@ import axios from "axios";
 import { APIS } from "../Api/APIs";
 import { SELECT_SORT_LIST, SELECT_OPTION_MAP } from "../Api/TYPES";
 
-import { getLocalStorage } from "../Api/localStorage";
-let token = getLocalStorage("access_token");
-
 const { kakao } = window;
 
 let markers: any[] = [];
@@ -140,7 +137,7 @@ export async function useSearch(
       const response = await axios({
         url: `${APIS.GET_Search}${keyword}`,
         method: "get",
-        headers: { "Content-Type": "application/json", Authorization: token  },
+        headers: { "Content-Type": "application/json" },
       });
       const pharmacies = response.data.response;
       setTotalPharmList(pharmacies);

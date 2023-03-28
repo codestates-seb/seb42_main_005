@@ -67,8 +67,8 @@ export default function PharmacyInformation() {
         )}
 
         {imageSrc ? (
-          <Label onClick={(e: any) => submitPharmImg(e)}>
-            <MdOutlineAddAPhoto aria-hidden="true" />
+          <Label onClick={(e: any) => submitPharmImg(e)} className="mint">
+            <MdOutlineAddAPhoto aria-hidden="true"/>
             우리약국 사진 수정완료
           </Label>
         ) : (

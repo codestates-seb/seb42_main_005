@@ -6,8 +6,8 @@ let token = getLocalStorage("access_token");
 export const BaseInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL,
   headers: {
-    Authorization: token
-  }
+    Authorization: token,
+  },
 });
 import { TYPE_UserInfo, TYPE_setLike, TYPE_boolean } from "./TYPES";
 
@@ -15,7 +15,7 @@ import { TYPE_UserInfo, TYPE_setLike, TYPE_boolean } from "./TYPES";
 //* GET : 약국상세정보와 약국리뷰 받아오기
 export const getDetailsAndReviews = (stateD: React.Dispatch<any>, stateR: React.Dispatch<any>, storeIdx: number) => {
   const getPharmDetail = async () => {
-    return BaseInstance.get(`${APIS.GET_PHARMDETAILS}/${storeIdx}`, { headers: { Authorization: token } })
+    return BaseInstance.get(`${APIS.GET_PHARMDETAILS}/${storeIdx}`)
       .then((response) => stateD(response.data.response))
       .catch((error) => {
         console.log("약국 상세정보 받아오던 중 에러 발생");
@@ -23,14 +23,14 @@ export const getDetailsAndReviews = (stateD: React.Dispatch<any>, stateR: React.
       });
   };
   const getReviewList = async () => {
-    return BaseInstance.get(`${APIS.GET_REVIEWS}/${storeIdx}/review`, { headers: { Authorization: token } })
+    return BaseInstance.get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
       .then((response) => stateR(response.data.response.storeReviews))
       .catch((error) => {
         console.log("약국 리뷰 받아오던 중 에러 발생");
         console.log(error);
       });
   };
-  axios.all([getPharmDetail(), getReviewList()]).then(() => (axios.defaults.headers.common.Authorization = token));
+  axios.all([getPharmDetail(), getReviewList()]);
 };
 //* POST : 찜하기/찜취소
 export const likePharmacy = async (storeidx: number, value: TYPE_boolean, state: TYPE_setLike) => {
@@ -56,11 +56,11 @@ export const getUser = async (
 //* POST : 유저 이미지 업로드
 export const postUserImg = async (data: object) => {
   return BaseInstance.post(APIS.POST_USER_IMG, data)
+    .then(() => location.reload())
     .catch((error) => {
       console.log("이미지 업로드 하던 중 에러 발생");
       console.log(error);
-    })
-    .then(() => location.reload());
+    });
 };
 //* PATCH : 비밀번호 찾기
 export const findPW = async (findPassword: string) => {
@@ -113,9 +113,7 @@ export const patchReview = async (
 };
 //* DELETE : 리뷰삭제
 export const deleteReview = async (storeIdx: number, reviewIdx: number) => {
-  return BaseInstance.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`, {
-    headers: { Authorization: token },
-  }).catch((error) => {
+  return BaseInstance.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`).catch((error) => {
     console.log("리뷰 삭제하던 중 에러 발생");
     console.log(error);
   });
@@ -226,11 +224,12 @@ const getPharmacistInfo = async (userIdx: number, state: any) => {
 };
 //* POST : 약국 이미지 업로드
 const postPharmImg = async (data: object) => {
-  return BaseInstance.post(APIS.POST_PHARM_IMG, data).catch((error) => {
-    console.log("약국 사진 보내던 중 에러 발생");
-    console.log(error);
-  });
-  // .then(() => location.reload());
+  return BaseInstance.post(APIS.POST_PHARM_IMG, data)
+    .then(() => location.reload())
+    .catch((error) => {
+      console.log("약국 사진 보내던 중 에러 발생");
+      console.log(error);
+    });
 };
 export const PharmInstance = {
   getPharmInfo,
@@ -250,20 +249,20 @@ const getReports = async (state: React.Dispatch<React.SetStateAction<never[]>>) 
 //* DELETE : 신고누적리뷰 삭제
 const deleteReportedReview = async (data: object) => {
   return BaseInstance.delete(APIS.DELETE_ADMIN_REVIEW_DELETE, data)
+  .then(() => location.reload())
     .catch((error) => {
       console.log("신고누적리뷰 삭제하던 중 에러 발생");
       console.log(error);
     })
-    .then(() => location.reload());
 };
 //* POST : 신고누적리뷰 복구
 const restoreReview = async (data: object) => {
   return BaseInstance.post(APIS.POST_ADMIN_REVIEW_RESTORE, data)
+  .then(() => location.reload())
     .catch((error) => {
       console.log("신고누적리뷰 복구하던 중 에러 발생");
       console.log(error);
     })
-    .then(() => location.reload());
 };
 //* GET : 전체 회원 리스트 불러오기
 const getUsers = async (state: any) => {
@@ -278,29 +277,29 @@ const getUsers = async (state: any) => {
 const blockUsers = async (time: number, data: object) => {
   if (time === 0) alert("정지옵션을 선택해주세요");
   return BaseInstance.post(`${APIS.POST_ADMIN_BLOCK}?period=${time}`, data)
+  .then(() => location.reload())
     .catch((error) => {
       console.log("계정 정지하던 중 에러 발생");
       console.log(error);
     })
-    .then(() => location.reload());
 };
 //* POST : 계정 강퇴
 const fireUsers = async (data: object) => {
   return BaseInstance.post(APIS.POST_ADMIN_FIRE, data)
+  .then(() => location.reload())
     .catch((error) => {
       console.log("계정 강퇴하던 중 에러 발생");
       console.log(error);
     })
-    .then(() => location.reload());
 };
 //* POST : 계정 복구
 const restoreUsers = async (data: object) => {
   return BaseInstance.post(APIS.POST_ADMIN_RESTORE, data)
+  .then(() => location.reload())
     .catch((error) => {
       console.log("계정 복구하던 중 에러 발생");
       console.log(error);
     })
-    .then(() => location.reload());
 };
 //* GET : 약사인증신청 리스트 불러오기
 const getCertificates = async (state: React.Dispatch<React.SetStateAction<never[]>>) => {
@@ -314,20 +313,20 @@ const getCertificates = async (state: React.Dispatch<React.SetStateAction<never[
 //* POST : 약사인증신청 승인
 const successCertify = async (data: object) => {
   return BaseInstance.post(APIS.POST_ADMIN_CERTIFY, data)
+  .then(() => location.reload())
     .catch((error) => {
       console.log("약사인증 승인하던 중 에러 발생");
       console.log(error);
     })
-    .then(() => location.reload());
 };
 //* POST : 약사인증신청 반려
 const deniedCertify = async (data: object) => {
   return BaseInstance.post(APIS.POST_ADMIN_DENY, data)
+  .then(() => location.reload())
     .catch((error) => {
       console.log("약사인증 반려하던 중 에러 발생");
       console.log(error);
     })
-    .then(() => location.reload());
 };
 export const AdminInstance = {
   getReports,

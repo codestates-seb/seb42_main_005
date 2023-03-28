@@ -42,7 +42,7 @@ export default function Home() {
         image: MarkerImageCurrent,
       });
 
-      const address = user.address;
+      const address = user?.address;
       const geocoder = new kakao.maps.services.Geocoder();
 
       geocoder.addressSearch(address, function (result: any, status: any) {
@@ -64,7 +64,7 @@ export default function Home() {
       setMakeMap(map);
       setLoading(false);
     }
-  }, [kakao, location, user.address]);
+  }, [kakao, location, user?.address]);
 
   //! GET : 약국리스트
   useEffect(() => {
