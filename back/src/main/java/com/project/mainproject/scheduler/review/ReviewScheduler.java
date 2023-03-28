@@ -14,7 +14,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class ReviewScheduler {
-
     private final ReviewRepository reviewRepository;
     private final ReviewReportRepository reviewReportRepository;
 
