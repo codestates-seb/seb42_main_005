@@ -2,6 +2,7 @@ package com.project.mainproject.user.repository;
 
 import com.project.mainproject.user.dto.UserInfoDto;
 import com.project.mainproject.user.entity.User;
+import com.project.mainproject.user.enums.UserStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -47,7 +48,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query(value = "" +
             " UPDATE User u " +
-            "    SET u.userStatus = 'SLEEPED' " +
+            "    SET u.userStatus = :userStatus " +
             "  WHERE u.userIdx IN :usersIdx")
-    int UpdateUserStatusByUserIdx(@Param("usersIdx") List<Long> usersIdx);
+    int UpdateUserStatusByUserIdx(@Param("usersIdx") List<Long> usersIdx,
+                                  @Param("userStatus") UserStatus userStatus);
 }
