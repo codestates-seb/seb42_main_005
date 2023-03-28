@@ -130,11 +130,11 @@ public class ReviewService {
         2. 리뷰 상태 -> DELETED
     */
     @Transactional
-    public void deleteReportedReviews(ReviewIdxDto deleteReviewIdxs) {
+    public void deleteReportedReviews(ReviewIdxDto deleteReviewsIdx) {
         List<Long> idxs =
-                deleteReviewIdxs.getReviews().stream().map(el -> el.getReviewIdx()).collect(Collectors.toList());
+                deleteReviewsIdx.getReviews().stream().map(el -> el.getReviewIdx()).collect(Collectors.toList());
         List<Review> reviews = reviewRepository.findAllById(idxs);
-        if (reviews.size() != deleteReviewIdxs.getReviews().size())
+        if (reviews.size() != deleteReviewsIdx.getReviews().size())
             throw new BusinessLogicException(REVIEW_NOT_EXIST);
 
         reviews.stream().forEach(review -> review.changeReportStatus(SUCCESS));
