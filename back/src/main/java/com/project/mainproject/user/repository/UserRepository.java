@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,4 +35,19 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "group by u.userIdx,ub.duration.endDate"
             )
     Page<UserInfoDto> findUserInfoWithBannedStoreDate(Pageable pageable);
+
+    @Query(value = "" +
+            " SELECT u " +
+            "   FROM User u "+
+            "  WHERE (u.lastConnectedDate < :beforeOneYear OR u.lastConnectedDate = null) " +
+            "        AND u.userStatus = 'ACTIVE' "
+    )
+    List<User> findByLastConnectedDateGreaterThan(@Param("beforeOneYear") LocalDateTime beforeOneYear);
+
+    @Modifying
+    @Query(value = "" +
+            " UPDATE User u " +
+            "    SET u.userStatus = 'SLEEPED' " +
+            "  WHERE u.userIdx IN :usersIdx")
+    int UpdateUserStatusByUserIdx(@Param("usersIdx") List<Long> usersIdx);
 }
