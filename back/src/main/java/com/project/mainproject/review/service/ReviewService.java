@@ -35,8 +35,8 @@ public class ReviewService {
 
     public Page<Review> getReviews(Long storeIdx, Pageable pageable) {
         storeService.storeValidation(storeIdx);
-        return reviewRepository.findAllByStoreStoreIdxAndReviewStatusOrderByCreatedAtDesc(
-                storeIdx, POSTED, pageable);
+        return reviewRepository.findAllByStoreStoreIdxAndReviewStatusNotOrderByCreatedAtDesc(
+                storeIdx, DELETED, pageable);
     }
 
     @Transactional
