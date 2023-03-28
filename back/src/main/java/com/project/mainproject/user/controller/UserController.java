@@ -113,13 +113,16 @@ public class UserController {
         전체 회원 목록 조회
      */
     @GetMapping
-    public ResponseEntity getUsers(@PageableDefault(sort = "createdAt",direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity getUsers(
+            @PageableDefault(size = 20, sort = "createdAt",direction = Sort.Direction.DESC) Pageable pageable) {
         Page<UserInfoDto> userPage = userService.findUsers(pageable);
-//        Page<UserInfoDto> userInfoDtoPage = userPage.map(UserInfoDto::new);
 
         PageInfo pageInfo = PageInfo.builder()
-                .size(pageable.getPageSize()).page(pageable.getPageNumber())
-                .totalPage((int) userPage.getTotalElements()).totalPage(userPage.getTotalPages()).build();
+                .size(pageable.getPageSize())
+                .page(pageable.getPageNumber())
+                .totalPage((int) userPage.getTotalElements())
+                .totalPage(userPage.getTotalPages())
+                .build();
 
         PageResponseDto<Object> response = PageResponseDto.builder()
                 .response(userPage.getContent()).pageInfo(pageInfo)
