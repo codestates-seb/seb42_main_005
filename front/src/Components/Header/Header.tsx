@@ -108,10 +108,11 @@ const LogoContainer = styled(Link)`
     letter-spacing: 0.1px;
     .logo_text2 {
       margin-right: 7px;
-      font-size: 1.33rem;
+      font-size: 1.3rem;
       font-weight: 300;
       color: var(--white);
       letter-spacing: 0.1px;
+      vertical-align: 3px;
     }
   }
   :hover {
