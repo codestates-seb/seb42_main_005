@@ -3,15 +3,22 @@ import styled from "styled-components";
 import { BsSearch } from "react-icons/bs";
 
 interface Props {
+  keyword: any;
+  setKeyword: any;
   totalPharmList: object[];
   setTotalPharmList: any;
   makeMap: any;
   useSearch: any;
 }
 
-export default function SearchBar({ totalPharmList, setTotalPharmList, makeMap, useSearch }: Props) {
-  const [keyword, setKeyword] = useState("");
-
+export default function SearchBar({
+  keyword,
+  setKeyword,
+  totalPharmList,
+  setTotalPharmList,
+  makeMap,
+  useSearch,
+}: Props) {
   const handleInputChange = (e: any) => {
     setKeyword(e.target.value);
   };

@@ -23,6 +23,7 @@ interface Props {
   makeMap: any;
   useViewMap: any;
   useSearch: any;
+  kakao: any;
 }
 
 export default function PharmLists({
@@ -36,7 +37,9 @@ export default function PharmLists({
   makeMap,
   useViewMap,
   useSearch,
+  kakao,
 }: Props) {
+  const [keyword, setKeyword] = useState("");
   const [displayedList, setDisplayedList] = useState(totalPharmList.slice(0, 10));
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -71,6 +74,21 @@ export default function PharmLists({
       useViewMap(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
     }
   };
+
+  //* 우리집,우리약국 클릭 시
+  const MoveToMyPlace = () => {
+    const address = user.address;
+    const geocoder = new kakao.maps.services.Geocoder();
+
+    geocoder.addressSearch(address, function (result: any, status: any) {
+      if (status === kakao.maps.services.Status.OK) {
+        const myPlacePos = new kakao.maps.LatLng(result[0].y, result[0].x);
+        makeMap.panTo(myPlacePos);
+        makeMap.setLevel(3);
+      }
+    });
+  };
+
   return (
     <ContainerList className={hidden ? "hide" : ""}>
       <ContainerWrap className={hidden ? "" : "hide"}>
@@ -82,6 +100,8 @@ export default function PharmLists({
           <ListHead>
             <SearchContainer>
               <SearchBar
+                keyword={keyword}
+                setKeyword={setKeyword}
                 totalPharmList={totalPharmList}
                 setTotalPharmList={setTotalPharmList}
                 makeMap={makeMap}
@@ -102,12 +122,16 @@ export default function PharmLists({
                 {token && user?.userRole === "약국회원" ? (
                   <>
                     <RiHomeLine className="logo" />
-                    <span className="my_place">우리 약국</span>
+                    <span className="my_place" onClick={MoveToMyPlace}>
+                      우리 약국
+                    </span>
                   </>
                 ) : token && user?.userRole === "일반회원" ? (
                   <>
                     <RiHomeLine className="logo" />
-                    <span className="my_place">우리 집</span>
+                    <span className="my_place" onClick={MoveToMyPlace}>
+                      우리 집
+                    </span>
                   </>
                 ) : (
                   <>
