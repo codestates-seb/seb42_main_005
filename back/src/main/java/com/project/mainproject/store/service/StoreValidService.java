@@ -14,7 +14,7 @@ import java.util.Optional;
 public class StoreValidService {
     private final StoreRepository storeRepository;
 
-    protected Store storeValidation(Long storeIdx) {
+    public Store storeValidation(Long storeIdx) {
         Optional<Store> findStore = storeRepository.findById(storeIdx);
 
         if (!findStore.isPresent()) {
