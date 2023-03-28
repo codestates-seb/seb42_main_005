@@ -4,6 +4,7 @@ import com.project.mainproject.exception.BusinessLogicException;
 import com.project.mainproject.review.dto.ReviewIdxDto;
 import com.project.mainproject.review.entity.Review;
 import com.project.mainproject.review.repository.ReviewRepository;
+import com.project.mainproject.store.service.StoreValidService;
 import com.project.mainproject.utils.FileUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,10 +29,11 @@ import static com.project.mainproject.review.exception.ReviewExceptionCode.REVIE
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final StoreValidService storeService;
     private final FileUploader fileUploader;
 
     public Page<Review> getReviews(Long storeIdx, Pageable pageable) {
-        // TODO: 존재하는 약국 검증 추가 (StoreService)
+        storeService.storeValidation(storeIdx);
         return reviewRepository.findAllByStoreStoreIdxAndReviewStatusOrderByCreatedAtDesc(
                 storeIdx, POSTED, pageable);
     }
