@@ -73,8 +73,11 @@ public class UserController {
 //        Page<PharmacyInfoDto> pharmacyInfoDtoPage = pharmacyPage.map(PharmacyInfoDto::new);
 
         PageInfo pageInfo = PageInfo.builder()
-                .size(pageable.getPageSize()).page(pageable.getPageNumber())
-                .totalPage((int) pharmacyPage.getTotalElements()).totalPage(pharmacyPage.getTotalPages()).build();
+                .size(pageable.getPageSize())
+                .page(pageable.getPageNumber())
+                .totalElement(pharmacyPage.getTotalElements())
+                .totalPage(pharmacyPage.getTotalPages())
+                .build();
 
         PageResponseDto<Object> response = PageResponseDto.builder()
                 .response(pharmacyPage).pageInfo(pageInfo)
@@ -120,7 +123,7 @@ public class UserController {
         PageInfo pageInfo = PageInfo.builder()
                 .size(pageable.getPageSize())
                 .page(pageable.getPageNumber())
-                .totalPage((int) userPage.getTotalElements())
+                .totalElement(userPage.getTotalElements())
                 .totalPage(userPage.getTotalPages())
                 .build();
 
