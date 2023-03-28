@@ -48,7 +48,7 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
 
   //! GET : 유저 정보
   useEffect(() => {
-    UserInstance.getUserInfo(user.userIdx, setMyInfo, setMyName, setMyAddress);
+    UserInstance.getUserInfo(user?.userIdx, setMyInfo, setMyName, setMyAddress);
   }, []);
 
   const FORM_FIELD_NAMES = {

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { useAppSelector } from "../../Redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import { zIndex_Header } from "../../Util/z-index";
 import { getUser } from "../../Api/AxiosInstance";
 import Account from "./Account";
 import { TYPE_UserInfo } from "../../Api/TYPES";
+import { get } from "../../Redux/slice/userSlice";
 
 export default function Header() {
   const [userInfo, setUserInfo] = useState<TYPE_UserInfo>();
@@ -13,9 +14,10 @@ export default function Header() {
   const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
-
+  const dispatch = useAppDispatch();
   useEffect(() => {
     if (user) getUser(user.userIdx, setUserInfo);
+    // dispatch(get(setUserInfo));
   }, [user]);
 
   return (

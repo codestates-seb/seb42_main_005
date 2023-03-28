@@ -23,6 +23,7 @@ export default function ReviewList({ reviewList, setReviewList, setIsReviewFormS
               review={review}
               reviewIdx={review.reviewIdx}
               reviewUserName={review.userName}
+              // storeIdx={Pharm?.storeIdx}
               Pharm={Pharm}
               setReviewList={setReviewList}
               reviewList={reviewList}

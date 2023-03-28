@@ -15,7 +15,7 @@ export default function MyInfoLikes() {
 
   //! GET : 내가 찜한 약국 리스트
   useEffect(() => {
-    UserInstance.getLikedPharmList(user.userIdx, setLikedPharmacies);
+    // UserInstance.getLikedPharmList(user.userIdx, setLikedPharmacies);
   }, []);
 
   return (
