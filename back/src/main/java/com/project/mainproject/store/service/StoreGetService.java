@@ -18,8 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -80,14 +82,14 @@ public class StoreGetService {
     /*
      * 검색한 약국 리스트 보내주는 메서드 stub o
      * */
-    public SingleResponseDto getSearchStoreList(String keyword) {
-        List<DBStoreSearchDto> responseName = storeQueryRepository.searchStoreByName(keyword);
-        List<DBStoreSearchDto> responseAddress = storeQueryRepository.searchStoreByAddress(keyword);
+    public SingleResponseDto getSearchStoreList(String keyword, Long userIdx) {
+        List<DBStoreSearchDto> responseName = storeQueryRepository.searchStoreByName(keyword, userIdx);
+        List<DBStoreSearchDto> responseAddress = storeQueryRepository.searchStoreByAddress(keyword, userIdx);
 
         responseName.addAll(responseAddress);
 
-        return SingleResponseDto.<List<DBStoreSearchDto>>builder()
-                .response(responseName)
+        return SingleResponseDto.<Set<DBStoreSearchDto>>builder()
+                .response(new HashSet<>(responseName))
                 .message(ResultStatus.PROCESS_COMPLETED.getMessage())
                 .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
                 .build();

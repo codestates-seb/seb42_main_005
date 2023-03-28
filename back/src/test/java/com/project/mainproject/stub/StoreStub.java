@@ -2,7 +2,6 @@ package com.project.mainproject.stub;
 
 import com.project.mainproject.VO.OperatingTime;
 import com.project.mainproject.store.dto.DBdto.DBPickedStoredListDto;
-import com.project.mainproject.store.dto.DBdto.DBStoreDetailDto;
 import com.project.mainproject.store.dto.DBdto.DBStoreListDto;
 import com.project.mainproject.store.dto.DBdto.DBStoreSearchDto;
 import com.project.mainproject.store.dto.GetStoreDetailDto;
@@ -82,7 +81,7 @@ public class StoreStub {
         List<DBStoreSearchDto> result = new ArrayList<>();
 
         for (Long i = 1L; i < 3; i++) {
-            DBStoreSearchDto build = new DBStoreSearchDto(i,"한사랑 상호 "+i+"호점","서울특별시 송파구 롯데타워 30" + i + "호점",203.12312312,111.22323311,4.2,4L,4L,"https://flexible.img.hani.co.kr/flexible/normal/658/479/imgdb/original/2023/0115/20230115501377.jpg",LocalDateTime.now());
+            DBStoreSearchDto build = new DBStoreSearchDto(i,"한사랑 상호 "+i+"호점","서울특별시 송파구 롯데타워 30" + i + "호점",203.12312312,111.22323311,4.2,4L,4L,"https://flexible.img.hani.co.kr/flexible/normal/658/479/imgdb/original/2023/0115/20230115501377.jpg",LocalDateTime.now(), true);
             result.add(build);
         }
         return result;

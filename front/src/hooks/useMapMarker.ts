@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import axios from "axios";
 import { APIS } from "../Api/APIs";
 import { SELECT_SORT_LIST, SELECT_OPTION_MAP } from "../Api/TYPES";
@@ -133,6 +133,7 @@ export async function useSearch(
   totalPharmList: never[],
   setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>,
   makeMap: any,
+  onModalUp: () => void,
 ) {
   if (makeMap) {
     try {
@@ -161,6 +162,12 @@ export async function useSearch(
         MarkerPharmacy.setMap(makeMap);
         const searchResultPos = new window.kakao.maps.LatLng(pharmacies[0].latitude, pharmacies[0].longitude);
         makeMap.panTo(searchResultPos);
+
+        // Add event listener to marker
+        kakao.maps.event.addListener(MarkerPharmacy, "click", () => {
+          // Call onModalUp function here
+          onModalUp();
+        });
         return MarkerPharmacy;
       });
     } catch (error) {

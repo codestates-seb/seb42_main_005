@@ -55,11 +55,10 @@ public class StoreController {
      *  찜하기
      * */
     @PostMapping("/{storeIdx}/pick")
-    public ResponseEntity pickedStore(@AuthenticationPrincipal Object principal,@PathVariable Long storeIdx ,@RequestParam Long userIdx) {
+    public ResponseEntity pickedStore(@AuthenticationPrincipal Object principal,@PathVariable Long storeIdx) {
         Long loginUserIdx = CheckLoginUser.getContextIdx(principal);
 
-        SingleResponseDto responseDto = storeService.pickStore(userIdx, storeIdx,loginUserIdx);
-        //TODO : 로그인 기능 구현 완료 시 SecurityContext에서 UserIdx를 따로 뽑아 사용하게 변경해야한다.
+        SingleResponseDto responseDto = storeService.pickStore(storeIdx,loginUserIdx);
 
         if (responseDto.getHttpCode() == 200) {
             return ResponseEntity.ok().body(responseDto);
@@ -81,8 +80,9 @@ public class StoreController {
      * 약국 이름으로 검색하기
      * */
     @GetMapping("/search")
-    public ResponseEntity searchStore(@RequestParam String keyword) {
-        SingleResponseDto searchResult = storeGetService.getSearchStoreList(keyword);
+    public ResponseEntity searchStore(@RequestParam String keyword , @AuthenticationPrincipal Object principal) {
+        Long userIdx = CheckLoginUser.getContextIdx(principal);
+        SingleResponseDto searchResult = storeGetService.getSearchStoreList(keyword, userIdx);
 
         return ResponseEntity.ok(searchResult);
     }
