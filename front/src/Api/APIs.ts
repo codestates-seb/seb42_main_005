@@ -10,8 +10,8 @@ export const APIS = {
   POST_LOGIN_AUTH: `${API}/api/auth`,
   POST_REISSUE_REFRESH_TOKEN: "",
   POST_LOGOUT: `${API}/api/auth/logout`,
-  PATCH_FINDPW: "/api/users/password", //! 여기 확인 필요
-  DELETE_SIGNOUT: `${API}/api/users`,
+  PATCH_FINDPW: "/api/users/password",
+  DELETE_SIGNOUT: `${API}/api/users`, //! 여기 확인 필요
   GET_PHARMLIST: `${API}/api/store`,
   GET_PHARMDETAILS: `/api/store`,
   GET_REVIEWS: `/api/store`,

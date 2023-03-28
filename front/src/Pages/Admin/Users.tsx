@@ -78,7 +78,7 @@ export default function Users() {
                   <Values className="reviewCount">리뷰 수</Values>
                   <Values className="reportCount">신고 수</Values>
                 </Label>
-                {users.length ? (
+                {users?.length ? (
                   <BelowLable>
                     {users.map((user: any, i) => (
                       <Content key={i} className={user.userStatus === "ACTIVE" ? "" : "suspended"}>

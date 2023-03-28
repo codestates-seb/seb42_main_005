@@ -38,7 +38,7 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
     } else if (user.storeIdx) {
       alert("약사회원은 찜하기를 이용하실수 없습니다.");
     } else if (user.userIdx && accessToken) {
-      likePharmacy(storeIdx, user.userIdx, like, setLike);
+      likePharmacy(storeIdx, like, setLike);
     }
   };
 

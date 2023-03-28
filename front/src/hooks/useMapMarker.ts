@@ -41,7 +41,7 @@ export async function useViewMap(
           sortCondition: sorted,
           filterCondition: selected,
         },
-        headers: { "Content-Type": "application/json", Authorization: token },
+        headers: { "Content-Type": "application/json" },
       });
 
       const pharmacies = response.data.response;
@@ -139,7 +139,7 @@ export async function useSearch(
       const response = await axios({
         url: `${APIS.GET_Search}${keyword}`,
         method: "get",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: token  },
       });
       const pharmacies = response.data.response;
       setTotalPharmList(pharmacies);

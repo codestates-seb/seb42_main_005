@@ -42,9 +42,9 @@ export default function Account({ userInfo }: Props) {
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">
           {userInfo?.imagePath ? (
-            <img src={`${userInfo.imagePath}`} alt="profile" />
+            <Img src={`${userInfo.imagePath}`} alt="profile" />
           ) : (
-            <img src={"Images/Pharm.png"} alt="profile" />
+            <Img src={"Images/Pharm.png"} alt="약사계정의 기본 이미지입니다." />
           )}
         </Link>
         <span className="name">{user.name}</span>
@@ -72,7 +72,7 @@ export default function Account({ userInfo }: Props) {
     return (
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">
-          <img src={"Images/Admin.png"} alt="profile" />
+          <Img src={"Images/Admin.png"} alt="관리자계정의 기본 이미지입니다." />
         </Link>
         <span className="name">특수기호</span>
         <span className="identity">관리자님</span>
@@ -97,9 +97,9 @@ export default function Account({ userInfo }: Props) {
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">
           {userInfo?.imagePath ? (
-            <img src={`${userInfo.imagePath}`} alt="profile" />
+            <Img src={`${userInfo.imagePath}`} alt="일반계정의 기본 이미지입니다." />
           ) : (
-            <img src={"Images/User.png"} alt="profile" />
+            <Img src={"Images/User.png"} alt="profile" />
           )}
         </Link>
         <span className="name">{user?.name}</span>
@@ -258,4 +258,8 @@ const Partition = styled.span`
     margin: 0 10px;
     transition: 0.2s;
   }
+`;
+const Img = styled.img`
+  border-radius: 50%;
+  object-fit: cover;
 `;
