@@ -23,7 +23,9 @@ export default function Header() {
       <div className="logo_container">
         <LogoContainer to="/">
           <img className="logo_img" alt="logo" src="Images/Logo.png" />
-          <span className="logo_text">우리동네 약국지도</span>
+          <span className="logo_text">
+            우리<span className="logo_text2">동네</span>약국<span className="logo_text2">지도</span>
+          </span>
         </LogoContainer>
       </div>
       <EmptyContainer>
@@ -101,9 +103,16 @@ const LogoContainer = styled(Link)`
   }
   .logo_text {
     font-size: 1.3rem;
-    font-weight: 900;
+    font-weight: 600;
     color: var(--white);
-    letter-spacing: 1px;
+    letter-spacing: 0.1px;
+    .logo_text2 {
+      margin-right: 7px;
+      font-size: 1.33rem;
+      font-weight: 300;
+      color: var(--white);
+      letter-spacing: 0.1px;
+    }
   }
   :hover {
     background-color: var(--blue-700);
