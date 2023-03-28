@@ -21,6 +21,7 @@ import static com.project.mainproject.review.enums.ReportStatus.REJECTED;
 import static com.project.mainproject.review.enums.ReportStatus.SUCCESS;
 import static com.project.mainproject.review.enums.ReviewStatus.DELETED;
 import static com.project.mainproject.review.enums.ReviewStatus.POSTED;
+import static com.project.mainproject.review.exception.ReviewExceptionCode.RATING_NOT_VALID;
 import static com.project.mainproject.review.exception.ReviewExceptionCode.REVIEW_NOT_EXIST;
 
 @Service
@@ -40,6 +41,8 @@ public class ReviewService {
 
     @Transactional
     public Review saveReview(Review review, MultipartFile image) {
+        if (review.getRating() < 1 || review.getRating() > 5)
+            throw new BusinessLogicException(RATING_NOT_VALID);
         Review createdReview = reviewRepository.save(review);
         if (image != null) saveReviewImage(image, createdReview);
 
