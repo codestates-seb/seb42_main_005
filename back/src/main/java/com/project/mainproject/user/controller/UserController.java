@@ -73,8 +73,11 @@ public class UserController {
 //        Page<PharmacyInfoDto> pharmacyInfoDtoPage = pharmacyPage.map(PharmacyInfoDto::new);
 
         PageInfo pageInfo = PageInfo.builder()
-                .size(pageable.getPageSize()).page(pageable.getPageNumber())
-                .totalPage((int) pharmacyPage.getTotalElements()).totalPage(pharmacyPage.getTotalPages()).build();
+                .size(pageable.getPageSize())
+                .page(pageable.getPageNumber())
+                .totalElement(pharmacyPage.getTotalElements())
+                .totalPage(pharmacyPage.getTotalPages())
+                .build();
 
         PageResponseDto<Object> response = PageResponseDto.builder()
                 .response(pharmacyPage).pageInfo(pageInfo)
@@ -113,13 +116,16 @@ public class UserController {
         전체 회원 목록 조회
      */
     @GetMapping
-    public ResponseEntity getUsers(@PageableDefault(sort = "createdAt",direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity getUsers(
+            @PageableDefault(size = 20, sort = "createdAt",direction = Sort.Direction.DESC) Pageable pageable) {
         Page<UserInfoDto> userPage = userService.findUsers(pageable);
-//        Page<UserInfoDto> userInfoDtoPage = userPage.map(UserInfoDto::new);
 
         PageInfo pageInfo = PageInfo.builder()
-                .size(pageable.getPageSize()).page(pageable.getPageNumber())
-                .totalPage((int) userPage.getTotalElements()).totalPage(userPage.getTotalPages()).build();
+                .size(pageable.getPageSize())
+                .page(pageable.getPageNumber())
+                .totalElement(userPage.getTotalElements())
+                .totalPage(userPage.getTotalPages())
+                .build();
 
         PageResponseDto<Object> response = PageResponseDto.builder()
                 .response(userPage.getContent()).pageInfo(pageInfo)
