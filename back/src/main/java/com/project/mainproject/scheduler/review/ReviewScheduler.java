@@ -18,7 +18,7 @@ public class ReviewScheduler {
     private final ReviewRepository reviewRepository;
     private final ReviewReportRepository reviewReportRepository;
 
-    @Scheduled(cron = "0 25 * * * *")
+    @Scheduled(cron = "0 0 * * * *")
     @Transactional
     public void blindReview() {
         long reportCount = 10;
