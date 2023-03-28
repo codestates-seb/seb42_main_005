@@ -23,7 +23,7 @@ export default function Header() {
       <div className="logo_container">
         <LogoContainer to="/">
           <img className="logo_img" alt="logo" src="Images/Logo.png" />
-          <span className="logo_text">Medi-Map</span>
+          <span className="logo_text">우리동네 약국지도</span>
         </LogoContainer>
       </div>
       <EmptyContainer>
@@ -100,8 +100,8 @@ const LogoContainer = styled(Link)`
     margin-right: 12px;
   }
   .logo_text {
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.3rem;
+    font-weight: 900;
     color: var(--white);
     letter-spacing: 1px;
   }
