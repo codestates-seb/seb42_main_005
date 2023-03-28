@@ -6,7 +6,7 @@ import Button from "../Ul/Button";
 import { useAppSelector } from "../../Redux/hooks";
 import { BsArrowReturnRight } from "react-icons/bs";
 import { HiXMark } from "react-icons/hi2";
-import { TYPE_Detail, TYPE_reviewList, TYPE_setReviewList } from "../../Api/TYPES";
+import { TYPE_Detail, TYPE_reviewList } from "../../Api/TYPES";
 
 interface Props {
   reviewIdx: number;
@@ -62,7 +62,7 @@ export default function ReplyOfReview({ reviewIdx, reply, Pharm, setReviewList }
           <Created>{new Date(reply.createdAt).toLocaleDateString()}</Created>
         </UserInfo>
         <ButtonContainer>
-          {user?.userRole === "약국회원" && Pharm?.storeIdx === user?.storeIdx ? (
+          {user?.userType === "약국회원" && Pharm?.storeIdx === user?.storeIdx ? (
             <>
               <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsPatchFormShown(true)} />
               <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReplyAndRefresh()} />

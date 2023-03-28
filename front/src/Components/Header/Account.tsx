@@ -37,7 +37,7 @@ export default function Account({ userInfo }: Props) {
         <ButtonLink to="/sign_up">회원가입</ButtonLink>
       </ContainerAccount>
     );
-  } else if (user?.userRole === "약국회원") {
+  } else if (user?.userType === "약국회원") {
     return (
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">
@@ -68,7 +68,7 @@ export default function Account({ userInfo }: Props) {
         ) : null}
       </ContainerAccount>
     );
-  } else if (user?.userRole === "관리자") {
+  } else if (user?.userType === "관리자") {
     return (
       <ContainerAccount>
         <Link to="/user-my_info" className="profile">

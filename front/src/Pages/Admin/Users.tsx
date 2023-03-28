@@ -48,7 +48,7 @@ export default function Users() {
       <Wrapper>
         <AdminTabs current="users" />
         <Page>
-          {user?.userRole === "관리자" ? (
+          {user?.userType === "관리자" ? (
             <>
               <Header>
                 <span>전체회원관리</span>

@@ -40,7 +40,7 @@ export default function Certify() {
       <Wrapper>
         <AdminTabs current="certify" />
         <Page>
-          {user?.userRole === "관리자" ? (
+          {user?.userType === "관리자" ? (
             <>
               <Header>
                 <span>약사인증관리</span>
