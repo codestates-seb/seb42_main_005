@@ -1,13 +1,12 @@
 import styled from "styled-components";
 import { useState } from "react";
-import axios from "axios";
 import { validators } from "../Components/SignUpForm/Validation";
 import SignUpInput from "../Components/SignUpForm/SignUpInput";
 import ErrorAlert from "../Components/SignUpForm/ErrorAlert";
 import Button from "../Components/Ul/Button";
-import { APIS } from "../Api/APIs";
-import { useAppSelector } from "../Redux/hooks";
+import { useNavigate } from "react-router-dom";
 import { BsPersonCircle } from "react-icons/bs";
+import { findPW } from "../Api/AxiosInstance";
 
 export default function FindPW() {
   const [findPassword, setFindPassword] = useState<string>("");
@@ -23,10 +22,7 @@ export default function FindPW() {
     setError(errors);
   };
 
-  const user = useAppSelector((state: any) => {
-    return state.userInfo.response;
-  });
-
+  const navigate = useNavigate();
   //! PATCH (?) 비밀번호 찾기
   const onSubmit: any = async (e: { preventDefault: () => void; target: HTMLFormElement | undefined }) => {
     e.preventDefault();
@@ -37,11 +33,11 @@ export default function FindPW() {
     }
     if (error === true) {
       return alert("항목을 다시 확인해주세요");
-    } else
-      await axios.patch(APIS.PATCH_FINDPW, { email }).catch((error) => {
-        console.log("비밀번호 찾기 요청 보내던 중 에러 발생");
-        console.log(error);
-      });
+    } else {
+      navigate("/login");
+      alert("작성하신 이메일로 임시비밀번호가 전송되었습니다.");
+      findPW(findPassword);
+    }
   };
 
   return (

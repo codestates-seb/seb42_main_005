@@ -1,9 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { SELECT_OPTIONS_TAP } from "../Api/TYPES";
 import PharmSignForms from "../Components/SignUpForm/PharmSignForms";
 import SignUpFormTab from "../Components/SignUpForm/SignUpFormTab";
 import UserSignUpForms from "../Components/SignUpForm/UserSignUpForms";
-import { SELECT_OPTIONS_TAP } from "../Util/type";
 
 export interface Form {
   email: string;

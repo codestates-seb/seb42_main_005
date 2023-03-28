@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import KakaoMap from "../Components/Map/KakaoMap";
 import PharmLists from "../Components/PharmList/PharmLists";
-import { SELECT_HIDDEN, SELECT_OPTION_MAP, SELECT_SORT_LIST } from "../Util/type";
 import useGeolocation from "../hooks/useGeolocation";
 import { useViewMap, useSearch } from "../hooks/useMapMarker";
 import { useAppSelector } from "../Redux/hooks";
 import "../hooks/PharmacyOverlay.css";
+import { SELECT_HIDDEN, SELECT_OPTION_MAP, SELECT_SORT_LIST } from "../Api/TYPES";
 
 const { kakao } = window;
 
@@ -18,7 +18,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const location: any = useGeolocation();
 
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 

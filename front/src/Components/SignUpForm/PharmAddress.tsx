@@ -1,11 +1,11 @@
 import React from "react";
-import { Form } from "../../Pages/SignUp";
+import { Form, TYPE_setpSignForms } from "../../Api/TYPES";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import Button from "../Ul/Button";
 
 interface Props {
   scriptUrl?: string;
-  setpSignForms: React.Dispatch<React.SetStateAction<Form>>;
+  setpSignForms: TYPE_setpSignForms;
 }
 
 export default function PharmAddress({ scriptUrl, setpSignForms }: Props) {

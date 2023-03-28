@@ -1,52 +1,37 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { likePharmacy } from "../../Api/AxiosInstance";
 import styled from "styled-components";
 import { useAppSelector } from "../../Redux/hooks";
 import PharmRank from "../Ul/PharmRank";
 import AnyDropDown from "./AnyDropDown";
-import { APIS } from "../../Api/APIs";
-import { TYPE_setLike, TYPE_like } from "../../Api/TYPES";
+import { TYPE_setLike, TYPE_Detail, TYPE_boolean } from "../../Api/TYPES";
 import { getLocalStorage } from "../../Api/localStorage";
 
 interface Props {
-  like: TYPE_like;
+  like: TYPE_boolean;
   setLike: TYPE_setLike;
-  pharmDetail: any;
+  pharmDetail: TYPE_Detail | undefined;
 }
 
 export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
   const [isDropDownDown, setIsDropDownDown] = useState<boolean>(false);
-  const user = useAppSelector((state: any) => {
+
+  const nagigate = useNavigate();
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
-  //! POST : 찜하기/찜취소
-  const likeThisPharmacy = async () => {
-    await axios
-      .post(`${APIS.POST_LIKE}/${pharmDetail.storeIdx}/pick?userIdx=${user.userIdx}`)
-      .then(() => setLike(!like))
-      .catch((error) => {
-        console.log("찜하기 또는 찜 취소 하던 중 에러 발생");
-        console.log(error);
-      });
-  };
-
-  const nagigate = useNavigate();
-
-  const leadToLogin = () => {
-    nagigate("/login");
-    alert("약국 찜하기를 하시려면 로그인을 해주세요!");
-  };
-
-  const likeButton = () => {
+  const likeThisPharmacy = () => {
     const accessToken = getLocalStorage("access_token");
     if (!accessToken) {
-      return leadToLogin();
+      nagigate("/login");
+      alert("약국 찜하기를 하시려면 로그인을 해주세요!");
     } else if (user.storeIdx) {
-      return alert("약사회원은 찜하기를 이용하실수 없습니다.");
+      alert("약사회원은 찜하기를 이용하실수 없습니다.");
     } else if (user.userIdx && accessToken) {
-      return likeThisPharmacy();
+      const storeidx: any = pharmDetail?.storeIdx;
+      likePharmacy(storeidx, like, setLike);
     }
   };
 
@@ -68,9 +53,7 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." />
         )}
-        {/* like 의 상태가 아니라 약국 정보에 내가 이 약국을 찜했는지 여부의 boolean 으로 바꿔야 함 */}
-        <LikeButton onClick={likeButton}>
-          {/* like 의 상태가 아니라 약국 정보에 내가 이 약국을 찜했는지 여부의 boolean 으로 바꿔야 함 */}
+        <LikeButton onClick={() => likeThisPharmacy()}>
           {like ? (
             <img src="./Images/Heart.png" alt="좋아요가 선택된 상태의 꽉 찬 하트모양입니다." />
           ) : (
@@ -94,7 +77,7 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
               </More>
             ) : null}
             {isDropDownDown ? (
-              <AnyDropDown setIsDropDownDown={setIsDropDownDown} workingHours={pharmDetail.operatingTime} />
+              <AnyDropDown setIsDropDownDown={setIsDropDownDown} workingHours={pharmDetail?.operatingTime} />
             ) : null}
           </InfoInfoContent>
         </InfoUnit>

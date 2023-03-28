@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
-import PharmDetail from "../../Components/Modal/PharmDetail";
-import { APIS } from "../../Api/APIs";
+import { UserInstance, getDetailsAndReviews, deleteReview } from "../../Api/AxiosInstance";
 import { useAppSelector } from "../../Redux/hooks";
+import PharmDetail from "../../Components/Modal/PharmDetail";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { TYPE_boolean, TYPE_Detail, TYPE_reviewList } from "../../Api/TYPES";
 
 interface Props {
   review: any;
@@ -15,52 +15,25 @@ interface Props {
 }
 
 export default function MyReview({ review, storeIdx, reviewIdx, idx, setMyReviewList }: Props) {
-  const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
-  const [pharmDetail, setPharmDetail] = useState<React.SetStateAction<any>>();
-  const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
-  const [like, setLike] = useState<React.SetStateAction<boolean>>(false);
+  const [isModalUp, setIsModalUp] = useState<TYPE_boolean>(false);
+  const [pharmDetail, setPharmDetail] = useState<TYPE_Detail>();
+  const [reviewList, setReviewList] = useState<TYPE_reviewList[]>([]);
+  const [like, setLike] = useState<TYPE_boolean>(false);
 
-  //! GET : 약국상세정보 + 리뷰리스트
-  const onModalUp = () => {
-    const getPharmDetail = async () => {
-      await axios
-        .get(`${APIS.GET_PHARMDETAILS}/${storeIdx}`)
-        .then((response) => setPharmDetail(response.data.response))
-        .catch((error) => {
-          console.log("약국 상세정보 받아오던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    const getReviewList = async () => {
-      await axios
-        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
-        .then((response) => setReviewList(response.data.response.storeReviews))
-        .catch((error) => {
-          console.log("약국 리뷰 받아오던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    axios.all([getPharmDetail(), getReviewList()]);
-    setIsModalUp(true);
-  };
-
-  const user = useAppSelector((state: any) => {
+  const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
+  //! GET : 약국상세정보 + 리뷰리스트
+  const onModalUp = () => {
+    getDetailsAndReviews(setPharmDetail, setReviewList, storeIdx);
+    setIsModalUp(true);
+  };
+
   //! DELETE : 리뷰삭제
-  const deleteReview = async () => {
-    await axios.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`).catch((error) => {
-      console.log("리뷰 삭제하던 중 에러 발생");
-      console.log(error);
-    });
-    await axios
-      .get(`${APIS.GET_MYREVIEWS}/${user.userIdx}`)
-      .then((response) => setMyReviewList(response.data.response.reviews))
-      .catch((error) => {
-        console.log("내가 작성한 리뷰리스트 받아오던 중 에러 발생");
-        console.log(error);
-      });
+  const deleteReviewAndRefresh = async () => {
+    await deleteReview(storeIdx, reviewIdx);
+    await UserInstance.getMyReviews(user.userIdx, setMyReviewList);
   };
 
   return (
@@ -85,7 +58,7 @@ export default function MyReview({ review, storeIdx, reviewIdx, idx, setMyReview
       <Text className="review">{review.content}</Text>
       <Text className="number">{new Date(review.modifiedAt).toLocaleDateString()}</Text>
       <Text className="single icon">
-        <RiDeleteBin6Line aria-hidden="true" onClick={() => deleteReview()} />
+        <RiDeleteBin6Line aria-hidden="true" onClick={() => deleteReviewAndRefresh()} />
       </Text>
     </TableBody>
   );

@@ -1,15 +1,15 @@
 import styled from "styled-components";
 import { useState } from "react";
 import ImageUp from "./ImageUp";
-import { TYPE_Cert } from "../../Api/TYPES";
+import { TYPE_boolean, TYPE_UserInfo } from "../../Api/TYPES";
 
 interface Props {
-  cert: TYPE_Cert;
+  cert: TYPE_UserInfo;
 }
 
 export default function Cert({ cert }: Props) {
-  const [isImgUp, setIsImgUp] = useState<React.SetStateAction<boolean>>(false);
-  const [imgUrl, setImgUrl] = useState<React.SetStateAction<string|any>>("");
+  const [isImgUp, setIsImgUp] = useState<TYPE_boolean>(false);
+  const [imgUrl, setImgUrl] = useState<React.SetStateAction<string | any>>("");
   return (
     <Contaniner>
       {isImgUp ? <ImageUp isImgUp={isImgUp} setIsImgUp={setIsImgUp} imgUrl={imgUrl} /> : null}

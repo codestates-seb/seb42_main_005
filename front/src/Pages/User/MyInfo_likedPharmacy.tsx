@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import PharmDetail from "../../Components/Modal/PharmDetail";
-import { APIS } from "../../Api/APIs";
+import { UserInstance, getDetailsAndReviews, likePharmacy } from "../../Api/AxiosInstance";
 import { useAppSelector } from "../../Redux/hooks";
 import { IoIosArrowDropright } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { TYPE_boolean, TYPE_reviewList, TYPE_Detail } from "../../Api/TYPES";
 
 interface Props {
   likedPharmacy: any;
@@ -13,52 +13,25 @@ interface Props {
 }
 
 export default function LikedPharmacyUnit({ likedPharmacy, setLikedPharmacies }: Props) {
-  const [isModalUp, setIsModalUp] = useState<React.SetStateAction<boolean>>(false);
-  const [pharmDetail, setPharmDetail] = useState<React.SetStateAction<any>>();
-  const [reviewList, setReviewList] = useState<React.SetStateAction<[]>>([]);
+  const [isModalUp, setIsModalUp] = useState<TYPE_boolean>(false);
+  const [pharmDetail, setPharmDetail] = useState<TYPE_Detail>();
+  const [reviewList, setReviewList] = useState<TYPE_reviewList[]>([]);
   const [like, setLike] = useState(true);
-
-  //! GET : 약국상세정보 + 리뷰리스트
-  const onModalUp = () => {
-    const getPharmDetail = async () => {
-      await axios
-        .get(`${APIS.GET_PHARMDETAILS}/${likedPharmacy.storeIdx}`)
-        .then((response) => setPharmDetail(response.data.response))
-        .catch((error) => {
-          console.log("약국 상세정보 받아오던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    const getReviewList = async () => {
-      await axios
-        .get(`${APIS.GET_REVIEWS}/${likedPharmacy.storeIdx}/review`)
-        .then((response) => setReviewList(response.data.response.storeReviews))
-        .catch((error) => {
-          console.log("약국 리뷰 받아오던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    axios.all([getPharmDetail(), getReviewList()]);
-    setIsModalUp(true);
-  };
 
   const user = useAppSelector((state: any) => {
     return state.userInfo.response;
   });
 
-  //! POST : 찜취소
-  const unLikePharmacy = async () => {
-    await axios.post(`${APIS.POST_LIKE}/${likedPharmacy.storeIdx}/pick?userIdx=${user.userIdx}`).catch((error) => {
-      console.log("찜취소 하던 중 에러 발생");
-      console.log(error);
-    })
-    await axios
-    .get(`${APIS.GET_MY_LIKES}/${user.userIdx}/pick`)
-    .then((response) => setLikedPharmacies(response.data.response))
-    .catch((error) => {
-      console.log("내가 찜한 약국리스트 받아오던 중 에러 발생");
-      console.log(error);
-    });
+  //! GET : 약국상세정보 + 리뷰리스트
+  const onModalUp = () => {
+    getDetailsAndReviews(setPharmDetail, setReviewList, likedPharmacy.storeIdx);
+    setIsModalUp(true);
+  };
+
+  //! POST : 찜하기/찜취소
+  const likePharmacyAndRefresh = async () => {
+    await likePharmacy(likedPharmacy.storeIdx, like, setLike);
+    await UserInstance.getLikedPharmList(user.userIdx, setLikedPharmacies);
   };
 
   return (
@@ -81,7 +54,7 @@ export default function LikedPharmacyUnit({ likedPharmacy, setLikedPharmacies }:
       <Text className="address">{likedPharmacy.address}</Text>
       <Text className="number">{likedPharmacy.tel}</Text>
       <Text className="single icon">
-        <RiDeleteBin6Line aria-hidden="true" onClick={() => unLikePharmacy()} />
+        <RiDeleteBin6Line aria-hidden="true" onClick={() => likePharmacyAndRefresh()} />
       </Text>
     </TableBody>
   );

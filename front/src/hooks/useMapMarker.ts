@@ -1,6 +1,10 @@
 import React from "react";
 import axios from "axios";
 import { APIS } from "../Api/APIs";
+import { SELECT_SORT_LIST, SELECT_OPTION_MAP } from "../Api/TYPES";
+
+import { getLocalStorage } from "../Api/localStorage";
+let token = getLocalStorage("access_token");
 
 const { kakao } = window;
 
@@ -8,8 +12,8 @@ let markers: any[] = [];
 let clusterer: any = null;
 
 export async function useViewMap(
-  sorted: any,
-  selected: any,
+  sorted: SELECT_SORT_LIST,
+  selected: SELECT_OPTION_MAP,
   totalPharmList: never[],
   setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>,
   makeMap: any,
@@ -136,7 +140,7 @@ export async function useSearch(
       const response = await axios({
         url: `${APIS.GET_Search}${keyword}`,
         method: "get",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: token  },
       });
       const pharmacies = response.data.response;
       setTotalPharmList(pharmacies);

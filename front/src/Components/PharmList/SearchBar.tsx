@@ -6,7 +6,7 @@ interface Props {
   keyword: any;
   setKeyword: any;
   totalPharmList: object[];
-  setTotalPharmList: any;
+  setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>;
   makeMap: any;
   useSearch: any;
 }

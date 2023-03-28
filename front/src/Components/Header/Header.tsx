@@ -1,9 +1,23 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useAppSelector } from "../../Redux/hooks";
 import { zIndex_Header } from "../../Util/z-index";
+import { getUser } from "../../Api/AxiosInstance";
 import Account from "./Account";
+import { TYPE_UserInfo } from "../../Api/TYPES";
 
 export default function Header() {
+  const [userInfo, setUserInfo] = useState<TYPE_UserInfo>();
+
+  const user = useAppSelector((state) => {
+    return state.userInfo.response;
+  });
+
+  useEffect(() => {
+    if (user) getUser(user.userIdx, setUserInfo);
+  }, [user]);
+
   return (
     <HeaderContainer>
       <div className="logo_container">
@@ -17,7 +31,7 @@ export default function Header() {
         <span className="partition" />
       </EmptyContainer>
       <div className="account_container">
-        <Account />
+        <Account userInfo={userInfo} />
       </div>
     </HeaderContainer>
   );

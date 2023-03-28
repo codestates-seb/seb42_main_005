@@ -1,31 +1,34 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
+import { patchReview, getReview, deleteReview, reportReview, postReply } from "../../Api/AxiosInstance";
+import { TYPE_Review, TYPE_reviewList, TYPE_Detail } from "../../Api/TYPES";
+import { getLocalStorage } from "../../Api/localStorage";
+import { useAppSelector } from "../../Redux/hooks";
 import ReplyOfReview from "./ReplyOfReview";
 import Textarea from "../Ul/Textarea";
 import Button from "../Ul/Button";
 import Input from "../Ul/Input";
-import { APIS } from "../../Api/APIs";
-import { TYPE_setReviewList, TYPE_reviewList } from "../../Api/TYPES";
-import { useAppSelector } from "../../Redux/hooks";
-import { getLocalStorage } from "../../Api/localStorage";
 import { HiXMark } from "react-icons/hi2";
 import { BsFillStarFill } from "react-icons/bs";
 
 interface Props {
-  review: any;
+  review: TYPE_Review | any;
   reviewIdx: number;
-  storeIdx: number;
-  reviewList: TYPE_reviewList;
-  setReviewList: TYPE_setReviewList;
+  Pharm: TYPE_Detail | undefined;
+  reviewList: TYPE_reviewList[] | TYPE_reviewList;
+  setReviewList: React.Dispatch<React.SetStateAction<TYPE_reviewList[]>>;
   reviewUserName: string;
 }
 
-export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, setReviewList, reviewUserName }: Props) {
+export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, reviewUserName }: Props) {
   const [isReplyFormShown, setIsReplyFormShown] = useState<React.SetStateAction<boolean>>(false);
   const [isOnEdit, setIsOnEdit] = useState<React.SetStateAction<boolean>>(false);
   const [reviewContent, setReviewContent] = useState<React.SetStateAction<any>>(review.content);
   const [replyContent, setReplyContent] = useState<React.SetStateAction<any>>("");
+  const user = useAppSelector((state) => {
+    return state.userInfo.response;
+  });
+
   const handleReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReviewContent(e.target.value);
   };
@@ -33,12 +36,8 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
     setReplyContent(e.target.value);
   };
 
-  const user = useAppSelector((state: any) => {
-    return state.userInfo.response;
-  });
-
   //! PATCH : 리뷰수정
-  const editReview = async (e: any) => {
+  const patchReviewAndRefresh = async (e: any) => {
     if (e.key === " " && e.getModifierState("Shift") === false) {
       e.stopPropagation();
     } else if (e.key === " " && e.target.value.slice(-1) === " ") {
@@ -50,82 +49,40 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
         content: reviewContent,
         rating: review.rating,
       };
-      await axios.patch(`${APIS.PATCH_REVIEWS}/${storeIdx}/review/${reviewIdx}`, data).catch((error) => {
-        console.log("리뷰를 수정하던 중 에러 발생");
-        console.log(error);
-      });
-      await axios
-        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
-        .then((response) => {
-          setReviewList(response.data.response.storeReviews);
-        })
-        .then(() => setIsOnEdit(false))
-        .catch((error) => {
-          console.log("리뷰리스트를 다시 불러오던 중 에러 발생");
-          console.log(error);
-        });
+      await patchReview(Pharm?.storeIdx, reviewIdx, data, setIsOnEdit);
+      await getReview(Pharm?.storeIdx, setReviewList);
     }
   };
 
   // ! DELETE : 리뷰삭제
-  const deleteReview = async () => {
-    await axios.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`).catch((error) => {
-      console.log("리뷰 삭제하던 중 에러 발생");
-      console.log(error);
-    });
-    await axios
-      .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
-      .then((response) => {
-        setReviewList(response.data.response.storeReviews);
-      })
-      .catch((error) => {
-        console.log("리뷰를 삭제하던 중 에러 발생");
-        console.log(error);
-      });
+  const storeidx: any = Pharm?.storeIdx;
+  const deleteReviewAndRefresh = async () => {
+    await deleteReview(storeidx, reviewIdx);
+    await getReview(storeidx, setReviewList);
   };
 
   //! POST : 리뷰신고
-  const reportReview = async () => {
-    await axios
-      .post(`${APIS.POST_REPORT_REVIEW}/${storeIdx}/review/${reviewIdx}/report`, {
-        userIdx: user.userIdx,
-        content: reviewContent,
-      })
-      .catch((error) => {
-        console.log("리뷰를 신고하던 중 에러 발생");
-        console.log(error);
-      });
+  // reportReview(storeIdx, reviewIdx, report)
+  const report = {
+    userIdx: user?.userIdx,
+    content: reviewContent,
   };
 
   //! POST : 리뷰의 댓글작성
-  const postReply = async (e: any) => {
+  const postReplyAndRefresh = async (e: any) => {
     if (e.key === " " && e.getModifierState("Shift") === false) {
       e.stopPropagation();
     } else if (e.key === " " && e.target.value.slice(-1) === " ") {
       e.stopPropagation();
     } else if (e.key === "Enter") {
       e.preventDefault();
-      await axios
-        .post(`${APIS.POST_REPLY}/${reviewIdx}/reply`, {
-          storeIdx,
-          userIdx: user.userIdx,
-          content: replyContent,
-        })
-        .then(() => setReplyContent(""))
-        .then(() => setIsReplyFormShown(false))
-        .catch((error) => {
-          console.log("리뷰의 댓글을 작성하던 중 에러 발생");
-          console.log(error);
-        });
-      await axios
-        .get(`${APIS.GET_REVIEWS}/${storeIdx}/review`)
-        .then((response) => {
-          setReviewList(response.data.response.storeReviews);
-        })
-        .catch((error) => {
-          console.log("리뷰리스트를 다시 불러오던 중 에러 발생");
-          console.log(error);
-        });
+      const reply = {
+        storeIdx: storeidx,
+        userIdx: user.userIdx,
+        content: replyContent,
+      };
+      await postReply(reviewIdx, reply, setReplyContent, setIsReplyFormShown);
+      await getReview(storeidx, setReviewList);
     }
   };
 
@@ -152,14 +109,19 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
             {user?.userRole === "일반회원" && user?.name === reviewUserName ? (
               <>
                 <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsOnEdit(true)} />
-                <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReview()} />
+                <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReviewAndRefresh} />
               </>
             ) : null}
-            {user?.userRole === "약국회원" && user?.storeidx === storeIdx ? (
+            {user?.userRole === "약국회원" && storeidx === user?.storeIdx ? (
               <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsReplyFormShown(true)} />
             ) : null}
             {token && user?.name !== reviewUserName ? (
-              <Button color="l_black" size="sm" text="신 고" onClick={() => reportReview()} />
+              <Button
+                color="l_black"
+                size="sm"
+                text="신 고"
+                onClick={() => reportReview(storeidx, reviewIdx, report)}
+              />
             ) : null}
           </ButtonContainer>
         </Upper>
@@ -175,7 +137,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
                 icon={false}
                 value={reviewContent}
                 onChange={handleReview}
-                onKeyPress={editReview}
+                onKeyPress={(e: any) => patchReviewAndRefresh(e)}
               />
             </EditRest>
           ) : (
@@ -198,7 +160,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
             icon={true}
             value={replyContent}
             onChange={handleReply}
-            onKeyPress={postReply}
+            onKeyPress={(e: any) => postReplyAndRefresh(e)}
           />
         </WriteCommentForm>
       ) : null}
@@ -207,9 +169,7 @@ export default function ReviewUnit({ review, reviewIdx, storeIdx, reviewList, se
           key={reply.replyIdx}
           reviewIdx={reviewIdx}
           reply={reply}
-          review={review}
-          storeIdx={storeIdx}
-          reviewList={reviewList}
+          Pharm={Pharm}
           setReviewList={setReviewList}
         />
       ))}
@@ -249,7 +209,7 @@ const Rest = styled.section`
   flex-direction: column;
   justify-content: space-between;
   margin-bottom: 0.6rem;
-  height: 80px;
+  min-height: 80px;
   width: 280px;
   white-space: normal;
   word-break: break-all;

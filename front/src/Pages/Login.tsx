@@ -11,6 +11,7 @@ import { APIS } from "../Api/APIs";
 import { setLocalStorage } from "../Api/localStorage";
 import { useAppDispatch, useAppSelector } from "../Redux/hooks";
 import { getUserInfo } from "../Redux/slice/userSlice";
+import { getLocalStorage } from "../Api/localStorage";
 
 export default function Login() {
   const [loginForm, setLoginForms] = useState({
@@ -90,7 +91,8 @@ export default function Login() {
           let refreshToken = res.headers.refresh;
           setLocalStorage("access_token", accessToken);
           setLocalStorage("refresh_token", refreshToken);
-          axios.defaults.headers.common["Authorization"] = `${accessToken}`;
+          let token = getLocalStorage("access_token");
+          axios.defaults.headers.common.Authorization = token;
           dispatch(getUserInfo(res.data));
           return res;
         })

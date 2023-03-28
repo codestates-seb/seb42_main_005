@@ -1,53 +1,30 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
-import { APIS } from "../../Api/APIs";
+import { PharmInstance, postUserImg } from "../../Api/AxiosInstance";
+import { onUpload } from "../../Api/onUpload";
 import { useAppSelector } from "../../Redux/hooks";
 import { MdOutlineAddAPhoto } from "react-icons/md";
+import { TYPE_UserInfo } from "../../Api/TYPES";
 
-interface Props {
-  scriptUrl?: string;
-}
-
-export default function PharmacistInformation({ scriptUrl }: Props) {
-  const [myInfo, setMyInfo]: any = useState({
+export default function PharmacistInformation() {
+  const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
+  const [imgFile, setImgFlie] = useState<File | Blob | string>("");
+  const [myInfo, setMyInfo] = useState<TYPE_UserInfo>({
     createdAt: "",
     name: "",
     email: "",
     address: "",
   });
-  const [imgFile, setImgFlie]: any = useState(null);
+
   const user = useAppSelector((state: any) => {
     return state.userInfo.response;
   });
 
   //! GET : 유저 정보
   useEffect(() => {
-    const getUserInfo = async () => {
-      await axios
-        .get(`${APIS.GET_USER_INFO}/${user.userIdx}`)
-        .then((response) => setMyInfo(response.data.response))
-        .catch((error) => {
-          console.log("내 정보 다시 가져오던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    getUserInfo();
+    PharmInstance.getPharmacistInfo(user.userIdx, setMyInfo);
   }, []);
-
-  const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
-  const onUpload = (e: any) => {
-    const file = e.target.files[0];
-    setImgFlie(file);
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    return new Promise<void>((resolve) => {
-      reader.onload = () => {
-        setImageSrc(reader.result || null);
-        resolve();
-      };
-    });
-  };
+  console.log(user.storeIdx);
 
   //! POST : 유저 이미지 업로드
   const submitUserImg = (e: any) => {
@@ -55,22 +32,18 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
     const formDataImgsubmit = new FormData();
     formDataImgsubmit.append("profileImage", imgFile);
     formDataImgsubmit.append("userIdx", new Blob([JSON.stringify(user.userIdx)], { type: "application/json" }));
-    const submitNewImg: any = async () => {
-      await axios
-        .post(APIS.POST_USER_IMG, formDataImgsubmit)
-        .then(() => location.reload())
-        .catch((error) => {
-          console.log("이미지 업로드 하던 중 에러 발생");
-          console.log(error);
-        });
-    };
-    submitNewImg();
+    postUserImg(formDataImgsubmit);
   };
 
   return (
     <Wrapper>
       <ImgContainer>
-        <ReviewImgInput id="img" type="file" onChange={(e) => onUpload(e)} accept="image/*"></ReviewImgInput>
+        <ReviewImgInput
+          id="img"
+          type="file"
+          onChange={(e) => onUpload(e, setImgFlie, setImageSrc)}
+          accept="image/*"
+        ></ReviewImgInput>
         {imageSrc ? (
           <ReviewImg src={`${imageSrc}`} />
         ) : myInfo.imagePath ? (
@@ -79,7 +52,7 @@ export default function PharmacistInformation({ scriptUrl }: Props) {
           <ReviewImg src="Images/Pharm.png" />
         )}
         {imageSrc ? (
-          <Label onClick={submitUserImg}>
+          <Label onClick={(e: any) => submitUserImg(e)} className="mint">
             <MdOutlineAddAPhoto aria-hidden="true" />
             사진수정완료
           </Label>
@@ -172,6 +145,18 @@ const Label = styled.label`
   :active {
     background-color: var(--black-025);
     box-shadow: var(--bs-btn-click);
+  }
+  :hover {
+    border: 1.2px solid var(--black-400);
+    color: var(--black-400);
+  }
+  &.mint {
+    border: 1.2px solid var(--l_button-mint);
+    color: var(--l_button-mint);
+    :hover {
+      border: 1.2px solid var(--l_button-mint-hover);
+      color: var(--l_button-mint-hover);
+    }
   }
 `;
 const Content = styled.section`

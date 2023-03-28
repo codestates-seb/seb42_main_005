@@ -1,11 +1,11 @@
-import React from "react";
 import styled from "styled-components";
-import { TYPE_isImgUp, TYPE_setIsImgUp } from "../../Api/TYPES";
+import React from "react";
+import { TYPE_boolean, TYPE_setBoolean } from "../../Api/TYPES";
 import { zIndex_AdminPage } from "../../Util/z-index";
 
 interface Props {
-  isImgUp: TYPE_isImgUp;
-  setIsImgUp: TYPE_setIsImgUp;
+  isImgUp: TYPE_boolean;
+  setIsImgUp: TYPE_setBoolean;
   imgUrl: string;
 }
 
