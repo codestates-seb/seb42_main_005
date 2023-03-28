@@ -7,7 +7,6 @@ import Button from "../../Components/Ul/Button";
 import CheckBox from "../../Components/Ul/CheckBox";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { Check, TYPE_AllUserInfo } from "../../Api/TYPES";
-import { APIS } from "../../Api/APIs";
 
 export default function Users() {
   const [users, setUsers] = useState<TYPE_AllUserInfo[]>([]);
@@ -39,7 +38,6 @@ export default function Users() {
     [checkedList],
   );
   const data = { userIdxs: checkedList };
-
   const returnAccountState = (accountState: any) => {
     if (accountState === "ACTIVE") return "활동회원";
     if (accountState === "TEMPORARY") return "승인대기";
@@ -49,10 +47,14 @@ export default function Users() {
   };
 
   const getList = useCallback(async () => {
-    await AdminInstance.getUsers(setUsers, pageIndexRef.current);
-    setUsers((prevList) => [...prevList, ...users]);
-    pageIndexRef.current++;
-    setIsPageEnd(users.length < 20 ? true : false);
+    try {
+      await AdminInstance.getUsers(setUsers, pageIndexRef.current);
+      setUsers((prevList) => [...prevList, ...users]);
+      pageIndexRef.current++;
+      setIsPageEnd(users.length < 20);
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
 
   const handleObserver = useCallback(
@@ -67,17 +69,19 @@ export default function Users() {
   );
 
   useEffect(() => {
-    if (!loadMoreRef.current) return;
+    if (!loadMoreRef.current || !isPageEnd) return;
     const option = {
       root: root.current,
-      rootMargin: "1px",
-      threshold: 1,
+      rootMargin: "0px",
+      threshold: 0,
     };
-      const observer = new IntersectionObserver(handleObserver, option);
-      loadMoreRef.current && observer.observe(loadMoreRef.current);
-    return () => observer && observer.disconnect();
+    const observer = new IntersectionObserver(handleObserver, option);
+    observer.observe(loadMoreRef.current);
+    return () => observer.disconnect();
   }, [handleObserver, isPageEnd]);
-  console.log(users);
+
+  // console.log(users);
+
   return (
     <WholePage>
       <Wrapper>
@@ -137,7 +141,7 @@ export default function Users() {
                         <Values className="reportCount">{user.reportCount}</Values>
                       </Content>
                     ))}
-                    {!isPageEnd && <div ref={loadMoreRef}></div>}
+                    {!isPageEnd && <div ref={loadMoreRef}>내가 마지막</div>}
                   </BelowLable>
                 ) : (
                   <Instead>

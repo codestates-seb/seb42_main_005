@@ -194,6 +194,7 @@ const Title = styled.header`
   justify-content: center;
   align-items: center;
   gap: 10px;
+  padding-right: 30px;
   padding-bottom: 3rem;
   img {
     width: 3.5rem;

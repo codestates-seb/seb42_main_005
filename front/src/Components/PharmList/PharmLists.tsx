@@ -1,9 +1,11 @@
 //홈화면 옆에 약국 리스트
 import { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import PharmItem from "./PharmItem";
 import SearchBar from "./SearchBar";
 import SortButtons from "./SortButtons";
+import { APIS } from "../../Api/APIs";
 import { zIndex_PharmList } from "../../Util/z-index";
 import { VscTriangleLeft } from "react-icons/vsc";
 import { RiHomeLine } from "react-icons/ri";
@@ -41,11 +43,27 @@ export default function PharmLists({
 }: Props) {
   const [keyword, setKeyword] = useState("");
   const [displayedList, setDisplayedList] = useState(totalPharmList.slice(0, 10));
+  const [myAdress, setMyAdress] = useState("");
   const listRef = useRef<HTMLDivElement>(null);
 
   const user = useAppSelector((state: any) => {
     return state.userInfo.response;
   });
+
+  const API = import.meta.env.VITE_APP_API_URL;
+  useEffect(() => {
+    const userNewInfo = async () => {
+      try {
+        const response = await axios.get(`${API}${APIS.GET_USER_INFO}/${user?.userIdx}`, {
+          headers: { Authorization: token },
+        });
+        setMyAdress(response.data.response.address);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    userNewInfo();
+  }, []);
 
   const token = getLocalStorage("access_token");
   const navigate = useNavigate();
@@ -77,7 +95,7 @@ export default function PharmLists({
 
   //* 우리집,우리약국 클릭 시
   const MoveToMyPlace = () => {
-    const address = user.address;
+    const address = myAdress;
     const geocoder = new kakao.maps.services.Geocoder();
 
     geocoder.addressSearch(address, function (result: any, status: any) {
@@ -122,21 +140,21 @@ export default function PharmLists({
                 {token && user?.userRole === "약국회원" ? (
                   <>
                     <RiHomeLine className="logo" />
-                    <span className="my_place" onClick={MoveToMyPlace}>
+                    <span className="my_place" onClick={()=>MoveToMyPlace()}>
                       우리 약국
                     </span>
                   </>
                 ) : token && user?.userRole === "일반회원" ? (
                   <>
                     <RiHomeLine className="logo" />
-                    <span className="my_place" onClick={MoveToMyPlace}>
+                    <span className="my_place" onClick={()=>MoveToMyPlace()}>
                       우리 집
                     </span>
                   </>
                 ) : (
                   <>
                     <RiHomeLine className="logo" />
-                    <span className="my_place" onClick={gologin}>
+                    <span className="my_place" onClick={()=>gologin()}>
                       우리 집
                     </span>
                   </>

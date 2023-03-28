@@ -284,8 +284,9 @@ const restoreReview = async (data: object) => {
 const getUsers = async (state: any, page: any) => {
   return (
     BaseInstance.get(APIS.GET_ADMIN_USERS, { params: { page, size: 20 } })
-      // .then((response) => console.log(response.data))
-      .then((response) => state(response.data.response))
+      .then((response) =>{
+        state(response.data.response) 
+        })
       .catch((error) => {
         console.log("전체회원리스트 불러오던 중 에러 발생");
         console.log(error);

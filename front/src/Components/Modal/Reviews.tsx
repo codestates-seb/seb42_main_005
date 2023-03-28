@@ -15,7 +15,7 @@ interface Props {
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }
-// export const API = import.meta.env.VITE_APP_API_URL;
+
 export default function ReviewList({
   reviewList,
   setReviewList,
@@ -25,30 +25,7 @@ export default function ReviewList({
   page,
   setPage,
 }: Props) {
-  // const [displayedList, setDisplayedList] = useState(reviewList);
-  // const [isFinish, setIsFinish] = useState<boolean>(false);
-  // const listRef = useRef<HTMLDivElement>(null);
-  // // useEffect(() => {
-  // //   getFinish(`${APIS.GET_REVIEWS}/${storeIdx}/review`, setIsFinish);
-  // // }, []);
-  // useEffect(() => {
-  //   // getReview(storeIdx, setReviewList, page);
-  //   // getFinish(`${APIS.GET_REVIEWS}/${storeIdx}/review`, setIsFinish);
-  //   if (listRef.current) {
-  //     listRef.current.scrollTop = 0;
-  //   }
-  // }, [reviewList]);
-  // const handleScroll = (e: any) => {
-  //   const { scrollTop, scrollHeight, clientHeight } = e.target;
-  //   // getFinish(`${APIS.GET_REVIEWS}/${storeIdx}/review`, setIsFinish);
-  //   if (scrollTop + clientHeight >= scrollHeight) {
-  //     setPage(page + 1);
-  //     // if (isFinish){
-  //     getReview(storeIdx, setReviewList, page);
-  //     // }
-  //     setReviewList((prevList: any) => [...prevList, reviewList]);
-  //   }
-  // };
+
   //! 되는거
   const listRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -58,9 +35,6 @@ export default function ReviewList({
   }, [reviewList]);
   const handleScroll = (e: any) => {
     const { scrollTop, scrollHeight, clientHeight } = e.target; // 3479, 448, 
-    console.log(clientHeight)
-    console.log()
-    console.log()
     if (scrollTop + clientHeight >= scrollHeight) {
       setPage(page + 1);
       getReview(storeIdx, setReviewList, page);
