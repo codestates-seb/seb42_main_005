@@ -91,6 +91,11 @@ public class StoreGetService {
         responseName.addAll(responseAddress);
         List<DBStoreSearchDto> response = responseName.stream().distinct().collect(Collectors.toList());
 
+        for (DBStoreSearchDto dbStoreSearchDto : response) {
+            log.info("### responseIdx = {}",dbStoreSearchDto.getStoreIdx());
+            log.info("### responseName = {}",dbStoreSearchDto.getName());
+        }
+
         return SingleResponseDto.<List<DBStoreSearchDto>>builder()
                 .response(response)
                 .message(ResultStatus.PROCESS_COMPLETED.getMessage())
