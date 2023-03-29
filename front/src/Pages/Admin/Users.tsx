@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import styled from "styled-components";
-import { AdminInstance, getFinish } from "../../Api/AxiosInstance";
+import { AdminInstance } from "../../Api/AxiosInstance";
 import { useAppSelector } from "../../Redux/hooks";
 import AdminTabs from "./AdminTabs";
 import Button from "../../Components/Ul/Button";
@@ -12,18 +12,17 @@ export default function Users() {
   const [users, setUsers] = useState<TYPE_AllUserInfo[]>([]);
   const [time, setTime] = useState<number>(0);
   const [checkedList, setCheckedList] = useState<Check[]>([]);
-  const pageIndexRef = useRef<number>(0);
-  const root = useRef<HTMLDivElement>(null);
-  const loadMoreRef = useRef<HTMLDivElement>(null);
+  const [page, setPage] = useState<number>(2);
   const [isPageEnd, setIsPageEnd] = useState<boolean>(false);
-  console.log(pageIndexRef.current);
+  const listRef = useRef<HTMLDivElement>(null);
+
   const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
 
   //! GET : 전체 회원 리스트 불러오기
   useEffect(() => {
-    AdminInstance.getUsers(setUsers, pageIndexRef.current);
+    AdminInstance.getUsers(setUsers,0);
   }, []);
 
   //* 체크된 항목을 하나씩 담아주는 부분
@@ -46,41 +45,20 @@ export default function Users() {
     if (accountState === "KICKEDOUT") return "강퇴회원";
   };
 
-  const getList = useCallback(async () => {
-    try {
-      await AdminInstance.getUsers(setUsers, pageIndexRef.current);
-      setUsers((prevList) => [...prevList, ...users]);
-      pageIndexRef.current++;
-      setIsPageEnd(users.length < 20);
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
-
-  const handleObserver = useCallback(
-    async ([entry]: IntersectionObserverEntry[], observer: IntersectionObserver) => {
-      if (entry.isIntersecting) {
-        observer.unobserve(entry.target);
-        await getList();
-        observer.observe(entry.target);
-      }
-    },
-    [getList],
-  );
-
   useEffect(() => {
-    if (!loadMoreRef.current || !isPageEnd) return;
-    const option = {
-      root: root.current,
-      rootMargin: "0px",
-      threshold: 0,
-    };
-    const observer = new IntersectionObserver(handleObserver, option);
-    observer.observe(loadMoreRef.current);
-    return () => observer.disconnect();
-  }, [handleObserver, isPageEnd]);
-
-  // console.log(users);
+    if (listRef.current) {
+      listRef.current.scrollTop = 0;
+    }
+  }, [page]);
+  const handleScroll = (e: any) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.target; 
+    if (scrollTop + clientHeight >= scrollHeight && !isPageEnd) {
+      setPage(page + 1);
+      AdminInstance.getUsers(setUsers, page)
+      setIsPageEnd(users.length % 20!==0);
+      setUsers((prevList: any) => [...prevList, users])
+    }
+  };
 
   return (
     <WholePage>
@@ -118,7 +96,7 @@ export default function Users() {
                   <Values className="reportCount">신고 수</Values>
                 </Label>
                 {users?.length ? (
-                  <BelowLable ref={root}>
+                  <BelowLable ref={listRef} onScroll={handleScroll}>
                     {users.map((user: any, i) => (
                       <Content key={i} className={user.userStatus === "ACTIVE" ? "" : "suspended"}>
                         <Values className="checkBox">
@@ -141,7 +119,6 @@ export default function Users() {
                         <Values className="reportCount">{user.reportCount}</Values>
                       </Content>
                     ))}
-                    {!isPageEnd && <div ref={loadMoreRef}>내가 마지막</div>}
                   </BelowLable>
                 ) : (
                   <Instead>

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import styled from "styled-components";
 import { AdminInstance } from "../../Api/AxiosInstance";
 import { useAppSelector } from "../../Redux/hooks";
@@ -8,8 +8,11 @@ import CheckBox from "../../Components/Ul/CheckBox";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Reports() {
-  const [reports, setReports] = useState([]);
+  const [reports, setReports] = useState<Array<any>>([]);
   const [checkedList, setCheckedList] = useState<Array<any>>([]);
+  const [page, setPage] = useState<number>(2);
+  const [isPageEnd, setIsPageEnd] = useState<boolean>(false);
+  const listRef = useRef<HTMLDivElement>(null);
 
   const user = useAppSelector((state) => {
     return state.userInfo.response;
@@ -17,7 +20,7 @@ export default function Reports() {
 
   //! GET : 신고리뷰 리스트 불러오기
   useEffect(() => {
-    AdminInstance.getReports(setReports);
+    AdminInstance.getReports(setReports,0);
   }, []);
 
   //* 체크된 항목을 하나씩 담아주는 부분
@@ -32,6 +35,21 @@ export default function Reports() {
     [checkedList],
   );
   const data = { userIdxs: checkedList };
+
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.scrollTop = 0;
+    }
+  }, [reports]);
+  const handleScroll = (e: any) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.target; 
+    if (scrollTop + clientHeight >= scrollHeight && !isPageEnd) {
+      setPage(page + 1);
+      AdminInstance.getUsers(setReports, page)
+      setIsPageEnd(reports.length % 20!==0);
+      setReports((prevList: any) => [...prevList, reports])
+    }
+  };
 
   return (
     <WholePage>
@@ -67,7 +85,7 @@ export default function Reports() {
                   <Values className="reports">신고 수</Values>
                 </Label>
                 {reports.length ? (
-                  <BelowLable>
+                  <BelowLable ref={listRef} onScroll={handleScroll}>
                     {reports.map((report: any, i: number) => (
                       <Content key={i}>
                         <Values className="checkBox">

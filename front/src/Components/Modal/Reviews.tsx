@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import { useRef, useEffect, useState } from "react";
-import { TYPE_reviewList, TYPE_setBoolean, TYPE_Detail, TYPE_setReviewList } from "../../Api/TYPES";
-import { patchReview, getReview, deleteReview, reportReview, getFinish } from "../../Api/AxiosInstance";
+import { TYPE_reviewList, TYPE_setBoolean, TYPE_Detail } from "../../Api/TYPES";
+import { getReview } from "../../Api/AxiosInstance";
 import ReviewUnit from "./ReviewUnit";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
-import { APIS } from "../../Api/APIs";
 
 interface Props {
   reviewList: TYPE_reviewList[];
@@ -25,8 +24,7 @@ export default function ReviewList({
   page,
   setPage,
 }: Props) {
-
-  //! 되는거
+  const [isPageEnd, setIsPageEnd] = useState<boolean>(false);
   const listRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (listRef.current) {
@@ -34,14 +32,14 @@ export default function ReviewList({
     }
   }, [reviewList]);
   const handleScroll = (e: any) => {
-    const { scrollTop, scrollHeight, clientHeight } = e.target; // 3479, 448, 
-    if (scrollTop + clientHeight >= scrollHeight) {
+    const { scrollTop, scrollHeight, clientHeight } = e.target; 
+    if (scrollTop + clientHeight >= scrollHeight && !isPageEnd) {
       setPage(page + 1);
       getReview(storeIdx, setReviewList, page);
+      setIsPageEnd(reviewList.length % 20!==0);
       setReviewList((prevList: any) => [...prevList, reviewList]);
     }
   };
-  //! 되는거
 
   return (
     <ReviewContainer>
@@ -115,7 +113,7 @@ const Reviews = styled.section`
     visibility: visible;
   }
   @media (max-width: 768px) {
-    flex-grow: 0;
+    flex-grow: 1;
     overflow: visible;
   }
 `;

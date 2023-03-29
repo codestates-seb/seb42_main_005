@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import styled from "styled-components";
 import { AdminInstance } from "../../Api/AxiosInstance";
 import { useAppSelector } from "../../Redux/hooks";
@@ -10,8 +10,11 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { Check } from "../../Api/TYPES";
 
 export default function Certify() {
-  const [certificates, setCertificates] = useState([]);
+  const [certificates, setCertificates] = useState<any>([]);
   const [checkedList, setCheckedList] = useState<Check[]>([]);
+  const [page, setPage] = useState<number>(2);
+  const [isPageEnd, setIsPageEnd] = useState<boolean>(false);
+  const listRef = useRef<HTMLDivElement>(null);
 
   const user = useAppSelector((state) => {
     return state.userInfo.response;
@@ -19,7 +22,7 @@ export default function Certify() {
 
   //! GET : 약사인증신청 리스트 불러오기
   useEffect(() => {
-    AdminInstance.getCertificates(setCertificates);
+    AdminInstance.getCertificates(setCertificates, 0);
   }, []);
 
   //* 체크된 항목을 하나씩 담아주는 부분
@@ -34,6 +37,21 @@ export default function Certify() {
     [checkedList],
   );
   const data = { userIdxs: checkedList };
+
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.scrollTop = 0;
+    }
+  }, [page]);
+  const handleScroll = (e: any) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.target; 
+    if (scrollTop + clientHeight >= scrollHeight && !isPageEnd) {
+      setPage(page + 1);
+      AdminInstance.getCertificates(setCertificates, page);
+      setIsPageEnd(certificates.length % 20!==0);
+      setCertificates((prevList: any) => [...prevList, certificates]);
+    }
+  };
 
   return (
     <WholePage>
@@ -63,8 +81,8 @@ export default function Certify() {
                   </Contaniner>
                 </Label>
                 {certificates.length ? (
-                  <BelowLable>
-                    {certificates.map((cert: any, i) => (
+                  <BelowLable ref={listRef} onScroll={handleScroll}>
+                    {certificates.map((cert: any, i: number) => (
                       <Content key={i}>
                         <Values className="checkBox">
                           <CheckBox
@@ -169,7 +187,7 @@ const Label = styled.header`
   background-color: var(--black-050);
 `;
 const BelowLable = styled.section`
-/* border: 1px solid red; //! */
+  /* border: 1px solid red; //! */
   display: flex;
   flex-direction: column;
   height: 26rem;
