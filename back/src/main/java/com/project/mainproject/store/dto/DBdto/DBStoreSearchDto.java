@@ -3,11 +3,13 @@ package com.project.mainproject.store.dto.DBdto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
 @EqualsAndHashCode
+@ToString
 public class DBStoreSearchDto {
     private Long storeIdx;
     private String name;
