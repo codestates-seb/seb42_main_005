@@ -55,8 +55,8 @@ public class StoreGetService {
         double minLat = Math.min(request.getSwLat(), request.getNeLat());
         double maxLng = Math.max(request.getSwLng(), request.getNeLng());
         double minLng = Math.min(request.getSwLng(), request.getNeLng());
-
-        List<DBStoreListDto> findStores = storeQueryRepository.getStoreList(maxLat,minLat,maxLng,minLng, request.getLat(), request.getLng(),request.getSortCondition(),request.getFilterCondition(),isHoliday,userIdx);
+        String[] orderByList = getOrderByList(request.getSortCondition());
+        List<DBStoreListDto> findStores = storeQueryRepository.getStoreList(maxLat,minLat,maxLng,minLng, request.getLat(), request.getLng(),orderByList,request.getFilterCondition(),isHoliday,userIdx);
 
 
         return SingleResponseDto
@@ -104,6 +104,17 @@ public class StoreGetService {
             isHoliday = true;
         }
         return isHoliday;
+    }
+
+    private String[] getOrderByList(String orderCond) {
+        switch (orderCond) {
+            case "rating" :
+                return new String[]{"rating","reviewCount","distance"};
+            case "reviewCount":
+                return new String[]{"reviewCount","rating","distance"};
+            default:
+                return new String[]{"distance","rating","reviewCount"};
+        }
     }
 
 }

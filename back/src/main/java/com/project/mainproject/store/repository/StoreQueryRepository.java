@@ -88,7 +88,7 @@ public class StoreQueryRepository {
      * neLat : 3시
      * neLng : 12시
      * */
-    public List<DBStoreListDto> getStoreList(double maxLat, double minLat, double maxLng, double minLng, double lat, double lng, String sortCondition, String operatingFilterCond, boolean isHoliday,long userIdx) {
+    public List<DBStoreListDto> getStoreList(double maxLat, double minLat, double maxLng, double minLng, double lat, double lng, String[] sortCondition, String operatingFilterCond, boolean isHoliday,long userIdx) {
         Expression<Double> maxLatitude = Expressions.constant(maxLat);   //9
         Expression<Double> maxLongitude = Expressions.constant(maxLng);   //6
         Expression<Double> minLatitude = Expressions.constant(minLat);    //3
@@ -124,7 +124,7 @@ public class StoreQueryRepository {
                 .leftJoin(store.storeImages, storeImage)
                 .leftJoin(pickedStore.normal,normal)
                 .where(store.longitude.goe(minLongitude), store.longitude.loe(maxLongitude), store.latitude.goe(minLatitude),store.latitude.loe(maxLatitude), getOperatingCondition(isHoliday, operatingFilterCond,userIdx))
-                .orderBy(orderByCondition(sortCondition))
+                .orderBy(orderByCondition(sortCondition[0]),orderByCondition(sortCondition[1]),orderByCondition(sortCondition[2]))
                 .groupBy(store.storeIdx, storeImage.imagePath,normal.userIdx)
                 .fetch();
     }
