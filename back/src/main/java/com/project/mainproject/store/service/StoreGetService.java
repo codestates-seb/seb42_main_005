@@ -22,6 +22,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Service
@@ -87,9 +89,10 @@ public class StoreGetService {
         List<DBStoreSearchDto> responseAddress = storeQueryRepository.searchStoreByAddress(keyword, userIdx);
 
         responseName.addAll(responseAddress);
+        List<DBStoreSearchDto> response = responseName.stream().distinct().collect(Collectors.toList());
 
-        return SingleResponseDto.<Set<DBStoreSearchDto>>builder()
-                .response(new HashSet<>(responseName))
+        return SingleResponseDto.<List<DBStoreSearchDto>>builder()
+                .response(response)
                 .message(ResultStatus.PROCESS_COMPLETED.getMessage())
                 .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
                 .build();
