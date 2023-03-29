@@ -22,6 +22,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Service
@@ -55,8 +57,8 @@ public class StoreGetService {
         double minLat = Math.min(request.getSwLat(), request.getNeLat());
         double maxLng = Math.max(request.getSwLng(), request.getNeLng());
         double minLng = Math.min(request.getSwLng(), request.getNeLng());
-
-        List<DBStoreListDto> findStores = storeQueryRepository.getStoreList(maxLat,minLat,maxLng,minLng, request.getLat(), request.getLng(),request.getSortCondition(),request.getFilterCondition(),isHoliday,userIdx);
+        String[] orderByList = getOrderByList(request.getSortCondition());
+        List<DBStoreListDto> findStores = storeQueryRepository.getStoreList(maxLat,minLat,maxLng,minLng, request.getLat(), request.getLng(),orderByList,request.getFilterCondition(),isHoliday,userIdx);
 
 
         return SingleResponseDto
@@ -87,9 +89,10 @@ public class StoreGetService {
         List<DBStoreSearchDto> responseAddress = storeQueryRepository.searchStoreByAddress(keyword, userIdx);
 
         responseName.addAll(responseAddress);
+        List<DBStoreSearchDto> response = responseName.stream().distinct().collect(Collectors.toList());
 
-        return SingleResponseDto.<Set<DBStoreSearchDto>>builder()
-                .response(new HashSet<>(responseName))
+        return SingleResponseDto.<List<DBStoreSearchDto>>builder()
+                .response(response)
                 .message(ResultStatus.PROCESS_COMPLETED.getMessage())
                 .httpCode(ResultStatus.PROCESS_COMPLETED.getHttpCode())
                 .build();
@@ -104,6 +107,17 @@ public class StoreGetService {
             isHoliday = true;
         }
         return isHoliday;
+    }
+
+    private String[] getOrderByList(String orderCond) {
+        switch (orderCond) {
+            case "rating" :
+                return new String[]{"rating","reviewCount","distance"};
+            case "reviewCount":
+                return new String[]{"reviewCount","rating","distance"};
+            default:
+                return new String[]{"distance","rating","reviewCount"};
+        }
     }
 
 }
