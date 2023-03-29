@@ -123,7 +123,7 @@ public class StoreQueryRepository {
                 .leftJoin(store.pickedStores, pickedStore)
                 .leftJoin(store.storeImages, storeImage)
                 .leftJoin(pickedStore.normal,normal)
-                .where(store.longitude.goe(minLongitude), store.longitude.loe(maxLongitude), store.latitude.goe(minLatitude),store.latitude.loe(maxLatitude), getOperatingCondition(isHoliday, operatingFilterCond))
+                .where(store.longitude.goe(minLongitude), store.longitude.loe(maxLongitude), store.latitude.goe(minLatitude),store.latitude.loe(maxLatitude), getOperatingCondition(isHoliday, operatingFilterCond,userIdx))
                 .orderBy(orderByCondition(sortCondition))
                 .groupBy(store.storeIdx, storeImage.imagePath,normal.userIdx)
                 .fetch();
@@ -161,7 +161,7 @@ public class StoreQueryRepository {
                 .leftJoin(store.pickedStores, pickedStore)
                 .leftJoin(store.storeImages, storeImage)
                 .leftJoin(pickedStore.normal,normal)
-                .where(getDistanceCondition(latitude, longitude, distanceCond), getOperatingCondition(isHoliday, operatingFilterCond))
+                .where(getDistanceCondition(latitude, longitude, distanceCond), getOperatingCondition(isHoliday, operatingFilterCond,userIdx))
                 .orderBy(orderByCondition(sortCondition))
                 .groupBy(store.storeIdx, storeImage.imagePath,normal.userIdx)
                 .fetch();
@@ -261,16 +261,18 @@ public class StoreQueryRepository {
     }
 
 
-    private BooleanExpression getOperatingCondition(boolean isHoliday, String filterCond) {     //operating
-        //holliday인가 ? null ->  정렬하지 않는다.
+    private BooleanExpression getOperatingCondition(boolean isHoliday, String filterCond, Long userIdx) {     //operating
+        //holliday인가 ? null ->  필터링 로직
         if (filterCond.equals("not") ) {
             return null;
+        } else if (filterCond.equals("bookmark")) {
+            return getPickedStoreOperating(userIdx);
         }
 
         //holiday 일 경우
-        if (!isHoliday && filterCond.equals("operating")) {
+        if (!isHoliday && filterCond.equals("operatingTime")) {
             return getNormalOperatingCondition();
-        } else if (isHoliday && filterCond.equals("operating")) {
+        } else if (isHoliday && filterCond.equals("operatingTime")) {
             return getHolidayOperatingCondition();
         } else if (!isHoliday && filterCond.equals("nightOperating")) {
             return getNormalNightOperating();
@@ -302,6 +304,10 @@ public class StoreQueryRepository {
 
     private BooleanExpression getHolidayOperating() {
         return store.holidayOperating.endTime.after(LocalTime.of(22,0,0));
+    }
+
+    private BooleanExpression getPickedStoreOperating(Long userIdx) {
+        return pickedStore.normal.userIdx.eq(userIdx);
     }
 
 
