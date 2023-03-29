@@ -4,6 +4,7 @@ import com.project.mainproject.exception.BusinessLogicException;
 import com.project.mainproject.review.dto.ReviewIdxDto;
 import com.project.mainproject.review.entity.Review;
 import com.project.mainproject.review.repository.ReviewRepository;
+import com.project.mainproject.store.service.StoreValidService;
 import com.project.mainproject.utils.FileUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,9 +19,8 @@ import java.util.stream.Collectors;
 
 import static com.project.mainproject.review.enums.ReportStatus.REJECTED;
 import static com.project.mainproject.review.enums.ReportStatus.SUCCESS;
-import static com.project.mainproject.review.enums.ReviewStatus.DELETED;
-import static com.project.mainproject.review.enums.ReviewStatus.POSTED;
-import static com.project.mainproject.review.exception.ReviewExceptionCode.REVIEW_NOT_EXIST;
+import static com.project.mainproject.review.enums.ReviewStatus.*;
+import static com.project.mainproject.review.exception.ReviewExceptionCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,16 +28,19 @@ import static com.project.mainproject.review.exception.ReviewExceptionCode.REVIE
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final StoreValidService storeService;
     private final FileUploader fileUploader;
 
     public Page<Review> getReviews(Long storeIdx, Pageable pageable) {
-        // TODO: 존재하는 약국 검증 추가 (StoreService)
-        return reviewRepository.findAllByStoreStoreIdxAndReviewStatusOrderByCreatedAtDesc(
-                storeIdx, POSTED, pageable);
+        storeService.storeValidation(storeIdx);
+        return reviewRepository.findAllByStoreStoreIdxAndReviewStatusNotOrderByCreatedAtDesc(
+                storeIdx, DELETED, pageable);
     }
 
     @Transactional
     public Review saveReview(Review review, MultipartFile image) {
+        if (review.getRating() < 1 || review.getRating() > 5)
+            throw new BusinessLogicException(RATING_NOT_VALID);
         Review createdReview = reviewRepository.save(review);
         if (image != null) saveReviewImage(image, createdReview);
 
@@ -127,11 +130,11 @@ public class ReviewService {
         2. 리뷰 상태 -> DELETED
     */
     @Transactional
-    public void deleteReportedReviews(ReviewIdxDto deleteReviewIdxs) {
+    public void deleteReportedReviews(ReviewIdxDto deleteReviewsIdx) {
         List<Long> idxs =
-                deleteReviewIdxs.getReviews().stream().map(el -> el.getReviewIdx()).collect(Collectors.toList());
+                deleteReviewsIdx.getReviews().stream().map(el -> el.getReviewIdx()).collect(Collectors.toList());
         List<Review> reviews = reviewRepository.findAllById(idxs);
-        if (reviews.size() != deleteReviewIdxs.getReviews().size())
+        if (reviews.size() != deleteReviewsIdx.getReviews().size())
             throw new BusinessLogicException(REVIEW_NOT_EXIST);
 
         reviews.stream().forEach(review -> review.changeReportStatus(SUCCESS));
@@ -139,17 +142,18 @@ public class ReviewService {
     }
 
     /*
-        신고 누적 리뷰(블라인드) 복원
+        신고 누적 리뷰(블라인드: 신고 열 개 이상) 복원
         1. 신고 내역의 상태 -> REJECTED
         2. 리뷰 상태 -> POSTED
      */
     @Transactional
-    public void recoverReportedReviews(ReviewIdxDto recoverReviewIdxs) {
-        List<Long> idxs =
-                recoverReviewIdxs.getReviews().stream().map(el -> el.getReviewIdx()).collect(Collectors.toList());
-        List<Review> reviews = reviewRepository.findAllByIdAndReviewStatus(idxs, POSTED); // TODO: BLINDED로 바꾸기
-        if (reviews.size() != recoverReviewIdxs.getReviews().size())
-            throw new BusinessLogicException(REVIEW_NOT_EXIST);
+    public void recoverReportedReviews(ReviewIdxDto recoverReviewsIdx) {
+        List<Long> reviewsIdx = recoverReviewsIdx.getReviews().stream()
+                                            .map(el -> el.getReviewIdx())
+                                            .collect(Collectors.toList());
+        List<Review> reviews = reviewRepository.findAllByIdAndReviewStatus(reviewsIdx, BLINDED);
+        if (reviews.size() != recoverReviewsIdx.getReviews().size())
+            throw new BusinessLogicException(REVIEW_NOT_BLINDED);
 
         reviews.stream().forEach(review -> review.changeReportStatus(REJECTED));
         reviews.stream().forEach(review -> review.setReviewStatus(POSTED));

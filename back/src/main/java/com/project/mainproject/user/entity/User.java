@@ -81,11 +81,10 @@ public class User extends Auditable{
 
     //### 간단한 동작메서드 ###//
     public String getRole() {
-        String role = "";
-        if (role.contains("ADMIN")) role = "관리자";
-        else if (role.contains("PHARMACY")) role = "약국회원";
-        else role = "일반회원";
-        return role;
+        String userRole = "일반회원";
+        if (this.role.contains("ADMIN")) userRole = "관리자";
+        else if (this.role.contains("PHARMACY")) userRole = "약국회원";
+        return userRole;
     }
 
     public Integer getReportCount() {

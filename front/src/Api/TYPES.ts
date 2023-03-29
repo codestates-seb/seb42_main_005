@@ -115,6 +115,7 @@ export interface User {
   name?: string | null;
   storeIdx?: number | null;
   userIdx?: number | null;
+  userType?: string | null;
   userRole?: string | null;
   [prop: string]: any;
 }

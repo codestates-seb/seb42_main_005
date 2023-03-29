@@ -19,9 +19,12 @@ export default function PharmacyInformation() {
   const [isDropDownDown, setIsDropDownDown] = useState<TYPE_boolean>(false);
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const [imgFile, setImgFlie] = useState<File | Blob | string>("");
+
   const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
+
+  console.log(user);
 
   //! GET : 약국 정보
   useEffect(() => {
@@ -68,7 +71,7 @@ export default function PharmacyInformation() {
 
         {imageSrc ? (
           <Label onClick={(e: any) => submitPharmImg(e)} className="mint">
-            <MdOutlineAddAPhoto aria-hidden="true"/>
+            <MdOutlineAddAPhoto aria-hidden="true" />
             우리약국 사진 수정완료
           </Label>
         ) : (

@@ -70,8 +70,23 @@ export const findPW = async (findPassword: string) => {
   });
 };
 //! 약국 상세 모달 CRUD ---------------------------------------------------------------
-//* GET : 리뷰리스트 불러오기
+//* GET : 리뷰리스트 불러오기 -> 작성시
 export const getReview = async (
+  storeIdx: number | undefined,
+  state: React.SetStateAction<React.SetStateAction<any>>,
+  page: any,
+) => {
+  return BaseInstance.get(`${APIS.GET_REVIEWS}/${storeIdx}/review`, { params: { page, size: 20 } })
+    .then((response) => {
+      state(response.data.response.storeReviews);
+    })
+    .catch((error) => {
+      console.log("리뷰 불러오던 중 중 에러 발생");
+      console.log(error);
+    });
+};
+//TODO GET : 리뷰리스트 불러오기 -> 스크롤 시
+export const getReviewForScroll = async (
   storeIdx: number | undefined,
   state: React.SetStateAction<React.SetStateAction<any>>,
   page: any,
@@ -175,6 +190,7 @@ const getUserInfo = async (
 const patchUserInfo = async (userIdx: number, data: object, state: React.Dispatch<React.SetStateAction<boolean>>) => {
   return BaseInstance.patch(`${APIS.PATCH_USER_INFO}/${userIdx}`, data)
     .then(() => state(false))
+    .then(() => location.reload())
     .catch((error) => {
       console.log("내 정보 수정하던 중 에러 발생");
       console.log(error);

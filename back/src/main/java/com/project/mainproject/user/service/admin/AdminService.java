@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -77,7 +78,10 @@ public class AdminService {
     }
 
     private Duration selectDuration(int period) {
-        return Duration.builder().startDate(LocalDateTime.now())
-                .endDate(LocalDateTime.now().plusDays(period)).build();
+        LocalDate endDate = LocalDate.now().plusDays(period + 1);
+        return Duration.builder()
+                .startDate(LocalDateTime.now())
+                .endDate(endDate.atStartOfDay())
+                .build();
     }
 }

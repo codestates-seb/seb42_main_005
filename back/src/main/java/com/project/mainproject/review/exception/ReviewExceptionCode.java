@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ReviewExceptionCode implements ExceptionCode {
     REVIEW_NOT_EXIST(HttpStatus.NOT_FOUND, "리뷰를 찾을 수 없습니다."),
+    RATING_NOT_VALID(HttpStatus.BAD_REQUEST, "별점은 1점에서 5점 사이여야 합니다."),
+    REVIEW_NOT_BLINDED(HttpStatus.BAD_REQUEST, "블라인드 처리된 리뷰가 아닙니다."),
 
     ;
 

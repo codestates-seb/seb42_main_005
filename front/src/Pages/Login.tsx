@@ -97,7 +97,7 @@ export default function Login() {
           return res;
         })
         .then((res) => {
-          if (res.data.userRole == "관리자") {
+          if (res.data.userType == "관리자") {
             return navigate("/admin-reports");
           }
           navigate("/");

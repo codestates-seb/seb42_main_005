@@ -56,10 +56,9 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
   };
 
   // ! DELETE : 리뷰삭제
-  const storeidx: any = Pharm?.storeIdx;
   const deleteReviewAndRefresh = async () => {
-    await deleteReview(storeidx, reviewIdx);
-    await getReview(storeidx, setReviewList, page);
+    await deleteReview(Pharm?.storeIdx, reviewIdx);
+    await getReview(Pharm?.storeIdx, setReviewList, page);
   };
 
   //! POST : 리뷰신고
@@ -78,12 +77,12 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
     } else if (e.key === "Enter") {
       e.preventDefault();
       const reply = {
-        storeIdx: storeidx,
+        storeIdx: Pharm?.storeIdx,
         userIdx: user.userIdx,
         content: replyContent,
       };
       await postReply(reviewIdx, reply, setReplyContent, setIsReplyFormShown);
-      await getReview(storeidx, setReviewList, page);
+      await getReview(Pharm?.storeIdx, setReviewList, page);
     }
   };
 
@@ -107,13 +106,13 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
             </StarContainer>
           </UserInfo>
           <ButtonContainer>
-            {user?.userRole === "일반회원" && user?.name === reviewUserName ? (
+            {user?.userType === "일반회원" && user?.name === reviewUserName ? (
               <>
                 <Button color="l_blue" size="sm" text="수 정" onClick={() => setIsOnEdit(true)} />
                 <Button color="l_red" size="sm" text="삭 제" onClick={() => deleteReviewAndRefresh()} />
               </>
             ) : null}
-            {user?.userRole === "약국회원" && storeidx === user?.storeIdx ? (
+            {user?.userType === "약국회원" && Pharm?.storeIdx === user?.storeIdx ? (
               <Button color="l_mint" size="sm" text="댓 글" onClick={() => setIsReplyFormShown(true)} />
             ) : null}
             {token && user?.name !== reviewUserName ? (
@@ -121,7 +120,7 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
                 color="l_black"
                 size="sm"
                 text="신 고"
-                onClick={() => reportReview(storeidx, reviewIdx, report)}
+                onClick={() => reportReview(Pharm?.storeIdx, reviewIdx, report)}
               />
             ) : null}
           </ButtonContainer>

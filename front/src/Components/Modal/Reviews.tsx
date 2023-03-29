@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useRef, useEffect, useState } from "react";
 import { TYPE_reviewList, TYPE_setBoolean, TYPE_Detail } from "../../Api/TYPES";
-import { getReview } from "../../Api/AxiosInstance";
+import { getReview, getReviewForScroll } from "../../Api/AxiosInstance";
 import ReviewUnit from "./ReviewUnit";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
@@ -36,6 +36,8 @@ export default function ReviewList({
     if (scrollTop + clientHeight >= scrollHeight && !isPageEnd) {
       setPage(page + 1);
       getReview(storeIdx, setReviewList, page);
+      //TODO scroll bug 해결 필요
+      // getReviewForScroll(storeIdx, setReviewList, page); 
       setIsPageEnd(reviewList.length % 20!==0);
       setReviewList((prevList: any) => [...prevList, reviewList]);
     }
