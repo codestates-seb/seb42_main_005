@@ -248,6 +248,9 @@ public class StoreQueryRepository {
 
     //내부 동작 쿼리 orderBy
     private OrderSpecifier orderByCondition(String sortCondition) {
+        if (sortCondition.equals("distance")) {
+            return Expressions.stringPath("distance").asc();
+        }
         return Expressions.stringPath(sortCondition).desc();
     }
 
