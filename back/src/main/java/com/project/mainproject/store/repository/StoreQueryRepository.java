@@ -1,5 +1,6 @@
 package com.project.mainproject.store.repository;
 
+import com.project.mainproject.review.enums.ReviewStatus;
 import com.project.mainproject.store.dto.DBdto.*;
 import com.project.mainproject.store.entity.Store;
 import com.project.mainproject.user.entity.PickedStore;
@@ -119,7 +120,7 @@ public class StoreQueryRepository {
                                 .as("picked")
                 )).distinct()
                 .from(store)
-                .leftJoin(store.reviews, review)
+                .leftJoin(store.reviews, review).on(review.reviewStatus.ne(ReviewStatus.DELETED))
                 .leftJoin(store.pickedStores, pickedStore)
                 .leftJoin(store.storeImages, storeImage)
                 .leftJoin(pickedStore.normal,normal)
