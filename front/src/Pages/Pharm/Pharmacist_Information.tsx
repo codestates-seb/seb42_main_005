@@ -24,8 +24,6 @@ export default function PharmacistInformation() {
     return state.userInfo.response;
   });
 
-  console.log(user);
-
   // //! GET : 유저 정보
   useEffect(() => {
     PharmInstance.getPharmacistInfo(user.userIdx, setMyInfo);

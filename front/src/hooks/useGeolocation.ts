@@ -20,7 +20,6 @@ export default function useGeolocation() {
         latitude: 37.33370506366528,
         longitude: 127.09738924623072,
       });
-      console.log("위치 받기 실패");
     }
   }, [navigator.geolocation.getCurrentPosition]);
 
