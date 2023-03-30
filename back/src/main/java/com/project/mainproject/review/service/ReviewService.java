@@ -39,12 +39,16 @@ public class ReviewService {
 
     @Transactional
     public Review saveReview(Review review, MultipartFile image) {
-        if (review.getRating() < 1 || review.getRating() > 5)
+        if (isValidRating(review.getRating()))
             throw new BusinessLogicException(RATING_NOT_VALID);
         Review createdReview = reviewRepository.save(review);
         if (image != null) saveReviewImage(image, createdReview);
 
         return createdReview;
+    }
+
+    private boolean isValidRating(int rating) {
+        return rating < 0 || rating > 5;
     }
 
     @Transactional
