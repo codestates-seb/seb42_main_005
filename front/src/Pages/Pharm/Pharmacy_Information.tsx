@@ -24,8 +24,6 @@ export default function PharmacyInformation() {
     return state.userInfo.response;
   });
 
-  console.log(user);
-
   //! GET : 약국 정보
   useEffect(() => {
     PharmInstance.getPharmInfo(user.storeIdx, setPharmDetail);

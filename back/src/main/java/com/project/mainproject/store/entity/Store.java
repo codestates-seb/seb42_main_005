@@ -3,6 +3,7 @@ package com.project.mainproject.store.entity;
 import com.project.mainproject.VO.OperatingTime;
 import com.project.mainproject.audit.Auditable;
 import com.project.mainproject.review.entity.Review;
+import com.project.mainproject.review.enums.ReviewStatus;
 import com.project.mainproject.user.entity.PickedStore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +14,7 @@ import javax.persistence.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.FetchType.LAZY;
@@ -116,10 +118,15 @@ public class Store extends Auditable {
     }
 
     public long getPickedStoreCount() {
-        return  this.getPickedStores().size();
+        return this.getPickedStores().stream().distinct().count();
     }
 
     public long getReviewCount() {
+        if (reviews.size() == 0) {
+            return 0;
+        }
+        reviews = this.reviews.stream().distinct().collect(Collectors.toList());
+        reviews.removeIf(review -> review.getReviewStatus().equals(ReviewStatus.DELETED));
         return this.reviews.size();
     }
 

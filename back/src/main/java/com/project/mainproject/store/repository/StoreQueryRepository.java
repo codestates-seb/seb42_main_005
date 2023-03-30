@@ -1,14 +1,17 @@
 package com.project.mainproject.store.repository;
 
+import com.project.mainproject.review.enums.ReviewStatus;
 import com.project.mainproject.store.dto.DBdto.*;
 import com.project.mainproject.store.entity.Store;
 import com.project.mainproject.user.entity.PickedStore;
+import com.project.mainproject.user.entity.QPickedStore;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
@@ -34,7 +37,7 @@ public class StoreQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public DBStoreDetailDto findData(Long storeIdx,Long userIdx) {
+    public DBStoreDetailDto findData(Long storeIdx, Long userIdx) {
         List<DBStoreDetailDto> dbStoreDetailDto = queryFactory
                 .select(new QDBStoreDetailDto(
                         store.storeIdx, store.name, store.address, store.longitude, store.latitude, store.tel, store.etc,
@@ -60,9 +63,9 @@ public class StoreQueryRepository {
                 .leftJoin(store.reviews, review)
                 .leftJoin(store.pickedStores, pickedStore)
                 .leftJoin(store.storeImages, storeImage)
-                .leftJoin(pickedStore.normal,normal)
+                .leftJoin(pickedStore.normal, normal)
                 .where(store.storeIdx.eq(storeIdx))
-                .groupBy(store.storeIdx, storeImage.imagePath,normal.userIdx)
+                .groupBy(store.storeIdx, storeImage.imagePath, normal.userIdx)
                 .fetch();
         if (dbStoreDetailDto == null) {
             return null;
@@ -70,12 +73,12 @@ public class StoreQueryRepository {
         return dbStoreDetailDto.get(0);
     }
 
-    public Store findData(Long storeIdx){
+    public Store findData(Long storeIdx) {
         return queryFactory
                 .selectFrom(store)
-                .leftJoin(store.pickedStores,pickedStore)
-                .leftJoin(store.storeImages,storeImage)
-                .leftJoin(store.reviews,review)
+                .leftJoin(store.pickedStores, pickedStore)
+                .leftJoin(store.storeImages, storeImage)
+                .leftJoin(store.reviews, review)
                 .fetchJoin()
                 .where(store.storeIdx.eq(storeIdx))
                 .fetchOne();
@@ -88,19 +91,19 @@ public class StoreQueryRepository {
      * neLat : 3시
      * neLng : 12시
      * */
-    public List<DBStoreListDto> getStoreList(double maxLat, double minLat, double maxLng, double minLng, double lat, double lng, String sortCondition, String operatingFilterCond, boolean isHoliday,long userIdx) {
+    public List<DBStoreListDto> getStoreList(double maxLat, double minLat, double maxLng, double minLng, double lat, double lng, String[] sortCondition, String operatingFilterCond, boolean isHoliday, long userIdx) {
         Expression<Double> maxLatitude = Expressions.constant(maxLat);   //9
         Expression<Double> maxLongitude = Expressions.constant(maxLng);   //6
         Expression<Double> minLatitude = Expressions.constant(minLat);    //3
         Expression<Double> minLongitude = Expressions.constant(minLng);   //12
         Expression<Double> latitude = Expressions.constant(lat);
         Expression<Double> longitude = Expressions.constant(lng);
-
+        QPickedStore q = new QPickedStore("q");
 
         return queryFactory
                 .select(new QDBStoreListDto(
                         store.storeIdx, store.name, store.address, store.latitude, store.longitude,
-                        round(review.rating.avg(),2).as("rating"),
+                        round(review.rating.avg(), 2).as("rating"),
                         ExpressionUtils.as((
                                 acos(sin(radians(store.latitude))
                                         .multiply(sin(radians(latitude)))
@@ -109,7 +112,11 @@ public class StoreQueryRepository {
                                                 .multiply(cos(radians(store.longitude.subtract(longitude)))))
                                 ).multiply(RADIUS_EARTH_KM)
                         ), "distance"),
-                        pickedStore.storeId.count().as("pickedStoreCount"),
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(q.count())
+                                        .from(q)
+                                        .where(q.store.storeIdx.eq(store.storeIdx)), "pickedStoreCount"),
                         review.reviewIdx.count().as("reviewCount"),
                         store.storeImages.imagePath,
                         store._super.modifiedAt,
@@ -119,13 +126,13 @@ public class StoreQueryRepository {
                                 .as("picked")
                 )).distinct()
                 .from(store)
-                .leftJoin(store.reviews, review)
+                .leftJoin(store.reviews, review).on(review.reviewStatus.ne(ReviewStatus.DELETED))
                 .leftJoin(store.pickedStores, pickedStore)
                 .leftJoin(store.storeImages, storeImage)
-                .leftJoin(pickedStore.normal,normal)
-                .where(store.longitude.goe(minLongitude), store.longitude.loe(maxLongitude), store.latitude.goe(minLatitude),store.latitude.loe(maxLatitude), getOperatingCondition(isHoliday, operatingFilterCond))
-                .orderBy(orderByCondition(sortCondition))
-                .groupBy(store.storeIdx, storeImage.imagePath,normal.userIdx)
+                .leftJoin(pickedStore.normal, normal)
+                .where(store.longitude.goe(minLongitude), store.longitude.loe(maxLongitude), store.latitude.goe(minLatitude), store.latitude.loe(maxLatitude), getOperatingCondition(isHoliday, operatingFilterCond, userIdx))
+                .orderBy(orderByCondition(sortCondition[0]), orderByCondition(sortCondition[1]), orderByCondition(sortCondition[2]))
+                .groupBy(store.storeIdx, storeImage.imagePath, normal.userIdx)
                 .fetch();
     }
 
@@ -134,6 +141,7 @@ public class StoreQueryRepository {
         Expression<Double> latitude = Expressions.constant(lat);
         Expression<Double> longitude = Expressions.constant(lng);
         Expression<Double> distanceCond = Expressions.constant(distanceCondition);
+        QPickedStore q = new QPickedStore("q");
 
         return queryFactory
                 .select(new QDBStoreListDto(
@@ -147,7 +155,11 @@ public class StoreQueryRepository {
                                                 .multiply(cos(radians(store.longitude.subtract(longitude)))))
                                 ).multiply(RADIUS_EARTH_KM)
                         ), "distance"),
-                        pickedStore.storeId.count().as("pickedStoreCount"),
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(q.count())
+                                        .from(q)
+                                        .where(q.store.storeIdx.eq(store.storeIdx)), "pickedStoreCount"),
                         review.reviewIdx.count().as("reviewCount"),
                         store.storeImages.imagePath,
                         store._super.modifiedAt,
@@ -160,10 +172,10 @@ public class StoreQueryRepository {
                 .leftJoin(store.reviews, review)
                 .leftJoin(store.pickedStores, pickedStore)
                 .leftJoin(store.storeImages, storeImage)
-                .leftJoin(pickedStore.normal,normal)
-                .where(getDistanceCondition(latitude, longitude, distanceCond), getOperatingCondition(isHoliday, operatingFilterCond))
+                .leftJoin(pickedStore.normal, normal)
+                .where(getDistanceCondition(latitude, longitude, distanceCond), getOperatingCondition(isHoliday, operatingFilterCond, userIdx))
                 .orderBy(orderByCondition(sortCondition))
-                .groupBy(store.storeIdx, storeImage.imagePath,normal.userIdx)
+                .groupBy(store.storeIdx, storeImage.imagePath, normal.userIdx)
                 .fetch();
     }
 
@@ -192,11 +204,18 @@ public class StoreQueryRepository {
     }
 
     public List<DBStoreSearchDto> searchStoreByName(String keyword, Long userIdx) {
+        QPickedStore q = new QPickedStore("q");
+
         return queryFactory
                 .select(new QDBStoreSearchDto(
                         store.storeIdx, store.name, store.address, store.latitude, store.longitude,
                         review.rating.avg(),
-                        pickedStore.storeId.count(),
+//                        pickedStore.storeId.count(),
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(q.count())
+                                        .from(q)
+                                        .where(q.store.storeIdx.eq(store.storeIdx)), "pickedStoreCount"),
                         review.reviewIdx.count(),
                         storeImage.imagePath,
                         store._super.modifiedAt,
@@ -204,16 +223,17 @@ public class StoreQueryRepository {
                                 .when(normal.userIdx.eq(userIdx)).then(true)
                                 .otherwise(false)
                                 .as("picked")
-                ))
+                )).distinct()
                 .from(store)
-                .leftJoin(store.reviews, review)
+                .leftJoin(store.reviews, review).on(review.reviewStatus.ne(ReviewStatus.DELETED))
                 .leftJoin(store.pickedStores, pickedStore)
-                .leftJoin(pickedStore.normal,normal)
+                .leftJoin(pickedStore.normal, normal)
                 .leftJoin(store.storeImages, storeImage)
                 .where(store.name.contains(keyword))
-                .groupBy(store.storeIdx,storeImage.imagePath, normal.userIdx)
+                .groupBy(store.storeIdx, storeImage.imagePath, normal.userIdx)
                 .fetch();
     }
+
     public List<DBStoreSearchDto> searchStoreByAddress(String keyword, Long userIdx) {
         return queryFactory
                 .select(new QDBStoreSearchDto(
@@ -227,14 +247,14 @@ public class StoreQueryRepository {
                                 .when(normal.userIdx.eq(userIdx)).then(true)
                                 .otherwise(false)
                                 .as("picked")
-                ))
+                )).distinct()
                 .from(store)
                 .leftJoin(store.reviews, review)
                 .leftJoin(store.pickedStores, pickedStore)
-                .leftJoin(pickedStore.normal,normal)
+                .leftJoin(pickedStore.normal, normal)
                 .leftJoin(store.storeImages, storeImage)
                 .where(store.address.contains(keyword))
-                .groupBy(store.storeIdx,storeImage.imagePath, normal.userIdx)
+                .groupBy(store.storeIdx, storeImage.imagePath, normal.userIdx)
                 .fetch();
     }
 
@@ -248,6 +268,9 @@ public class StoreQueryRepository {
 
     //내부 동작 쿼리 orderBy
     private OrderSpecifier orderByCondition(String sortCondition) {
+        if (sortCondition.equals("distance")) {
+            return Expressions.stringPath("distance").asc();
+        }
         return Expressions.stringPath(sortCondition).desc();
     }
 
@@ -261,16 +284,18 @@ public class StoreQueryRepository {
     }
 
 
-    private BooleanExpression getOperatingCondition(boolean isHoliday, String filterCond) {     //operating
-        //holliday인가 ? null ->  정렬하지 않는다.
-        if (filterCond.equals("not") ) {
+    private BooleanExpression getOperatingCondition(boolean isHoliday, String filterCond, Long userIdx) {     //operating
+        //holliday인가 ? null ->  필터링 로직
+        if (filterCond.equals("not")) {
             return null;
+        } else if (filterCond.equals("bookmark")) {
+            return getPickedStoreOperating(userIdx);
         }
 
         //holiday 일 경우
-        if (!isHoliday && filterCond.equals("operating")) {
+        if (!isHoliday && filterCond.equals("operatingTime")) {
             return getNormalOperatingCondition();
-        } else if (isHoliday && filterCond.equals("operating")) {
+        } else if (isHoliday && filterCond.equals("operatingTime")) {
             return getHolidayOperatingCondition();
         } else if (!isHoliday && filterCond.equals("nightOperating")) {
             return getNormalNightOperating();
@@ -284,24 +309,28 @@ public class StoreQueryRepository {
         DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();
         switch (dayOfWeek) {
             case MONDAY:
-                return store.mondayOperating.endTime.after(LocalTime.of(22,0,0));
+                return store.mondayOperating.endTime.after(LocalTime.of(22, 0, 0));
             case THURSDAY:
-                return store.thursdayOperating.endTime.after(LocalTime.of(22,0,0));
+                return store.thursdayOperating.endTime.after(LocalTime.of(22, 0, 0));
             case WEDNESDAY:
-                return store.wednesdayOperating.endTime.after(LocalTime.of(22,0,0));
+                return store.wednesdayOperating.endTime.after(LocalTime.of(22, 0, 0));
             case TUESDAY:
-                return store.tuesdayOperating.endTime.after(LocalTime.of(22,0,0));
+                return store.tuesdayOperating.endTime.after(LocalTime.of(22, 0, 0));
             case FRIDAY:
-                return store.fridayOperating.endTime.after(LocalTime.of(22,0,0));
+                return store.fridayOperating.endTime.after(LocalTime.of(22, 0, 0));
             case SATURDAY:
-                return store.saturdayOperating.endTime.after(LocalTime.of(22,0,0));
+                return store.saturdayOperating.endTime.after(LocalTime.of(22, 0, 0));
             default:
-                return store.sundayOperating.endTime.after(LocalTime.of(22,0,0));
+                return store.sundayOperating.endTime.after(LocalTime.of(22, 0, 0));
         }
     }
 
     private BooleanExpression getHolidayOperating() {
-        return store.holidayOperating.endTime.after(LocalTime.of(22,0,0));
+        return store.holidayOperating.endTime.after(LocalTime.of(22, 0, 0));
+    }
+
+    private BooleanExpression getPickedStoreOperating(Long userIdx) {
+        return pickedStore.normal.userIdx.eq(userIdx);
     }
 
 
