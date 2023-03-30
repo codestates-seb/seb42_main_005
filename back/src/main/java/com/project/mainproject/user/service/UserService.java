@@ -64,7 +64,8 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println(username);
-        User user = userRepository.findByEmail(username).get();
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new BusinessLogicException(USER_NOT_FOUND));
         List<GrantedAuthority> authority = new ArrayList<>();
         authority.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
         String userId = user.getUserIdx().toString();

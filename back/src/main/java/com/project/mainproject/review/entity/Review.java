@@ -84,10 +84,21 @@ public class Review extends Auditable {
 
 
     public void addReport(ReviewReport reviewReport) {
+        addStoreUserReport(reviewReport);
         reviewReports.add(ReviewReport.builder()
-                        .user(this.user)
                         .review(this)
                         .build());
+    }
+
+    public void addStoreUserReport(ReviewReport reviewReport) { // 개선...필요
+        if (reviewReport.getUser().getRole().equals("약국회원")) { // 하드코딩 개선 필요!
+            reviewReports.add(ReviewReport.builder()
+                    .review(this)
+                    .build());
+            reviewReports.add(ReviewReport.builder()
+                    .review(this)
+                    .build());
+        }
     }
 
     public void changeReportStatus(ReportStatus reportStatus) {
