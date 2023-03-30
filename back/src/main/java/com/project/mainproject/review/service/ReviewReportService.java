@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.project.mainproject.review.enums.ReportStatus.REGISTERED;
-
 @Service
 @RequiredArgsConstructor
 public class ReviewReportService {
@@ -17,11 +15,11 @@ public class ReviewReportService {
 
     @Transactional
     public void createReport(Long storeIdx, ReviewReport reviewReport) {
-        reviewReport.setReportStatus(REGISTERED);
         Review review = reviewService.findVerifiedReview(storeIdx, reviewReport.getReview().getReviewIdx());
         review.addReport(reviewReport);
 
         if (review.getReportCnt() >= 9) // Transaction 종료 전 -> 9부터 검사
             review.setReviewStatus(ReviewStatus.BLINDED);
     }
+
 }

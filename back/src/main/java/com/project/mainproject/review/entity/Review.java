@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.project.mainproject.review.enums.ReportStatus.REGISTERED;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
@@ -84,10 +85,24 @@ public class Review extends Auditable {
 
 
     public void addReport(ReviewReport reviewReport) {
+        if (isStoreUser(reviewReport.getUser())) { // 더 좋은 방법이 없을까요 (약사는 신고 +3)
+            reviewReports.add(ReviewReport.builder()
+                    .reportStatus(REGISTERED)
+                    .review(this)
+                    .build());
+            reviewReports.add(ReviewReport.builder()
+                    .reportStatus(REGISTERED)
+                    .review(this)
+                    .build());
+        }
         reviewReports.add(ReviewReport.builder()
-                        .user(this.user)
-                        .review(this)
-                        .build());
+                .reportStatus(REGISTERED)
+                .review(this)
+                .build());
+    }
+
+    private boolean isStoreUser(User user) {
+        return user.getRole().equals("약국회원"); // 하드코딩 개선 필요!
     }
 
     public void changeReportStatus(ReportStatus reportStatus) {
