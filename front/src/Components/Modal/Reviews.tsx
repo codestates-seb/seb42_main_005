@@ -24,30 +24,12 @@ export default function ReviewList({
   page,
   setPage,
 }: Props) {
-  const [isPageEnd, setIsPageEnd] = useState<boolean>(false);
-  const listRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (listRef.current) {
-      listRef.current.scrollTop = 0;
-    }
-  }, [reviewList]);
-  const handleScroll = (e: any) => {
-    const { scrollTop, scrollHeight, clientHeight } = e.target; 
-    if (scrollTop + clientHeight >= scrollHeight && !isPageEnd) {
-      setPage(page + 1);
-      getReview(storeIdx, setReviewList, page);
-      //TODO scroll bug 해결 필요
-      // getReviewForScroll(storeIdx, setReviewList, page); 
-      setIsPageEnd(reviewList.length % 20!==0);
-      setReviewList((prevList: any) => [...prevList, reviewList]);
-    }
-  };
 
   return (
     <ReviewContainer>
       <ReviewTitle>리뷰</ReviewTitle>
       {reviewList.length ? (
-        <Reviews ref={listRef} onScroll={handleScroll}>
+        <Reviews>
           {reviewList.map((review: any, i: number) => (
             <ReviewUnit
               key={i}

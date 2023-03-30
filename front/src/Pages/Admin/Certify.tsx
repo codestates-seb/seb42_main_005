@@ -12,18 +12,15 @@ import { Check } from "../../Api/TYPES";
 export default function Certify() {
   const [certificates, setCertificates] = useState<any>([]);
   const [checkedList, setCheckedList] = useState<Check[]>([]);
-  const [page, setPage] = useState<number>(2);
-  const [isPageEnd, setIsPageEnd] = useState<boolean>(false);
-  const listRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef(null);
+  const preventRef = useRef(true);
+  const obsRef = useRef(null);
+  const [isLast, setIsLast] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(0);
 
   const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
-
-  //! GET : 약사인증신청 리스트 불러오기
-  useEffect(() => {
-    AdminInstance.getCertificates(setCertificates, 0);
-  }, []);
 
   //* 체크된 항목을 하나씩 담아주는 부분
   const onCheckedItem = useCallback(
@@ -38,20 +35,26 @@ export default function Certify() {
   );
   const data = { userIdxs: checkedList };
 
-  useEffect(() => {
-    if (listRef.current) {
-      listRef.current.scrollTop = 0;
-    }
-  }, [page]);
-  const handleScroll = (e: any) => {
-    const { scrollTop, scrollHeight, clientHeight } = e.target; 
-    if (scrollTop + clientHeight >= scrollHeight && !isPageEnd) {
-      setPage(page + 1);
-      AdminInstance.getCertificates(setCertificates, page);
-      setIsPageEnd(certificates.length % 20!==0);
-      setCertificates((prevList: any) => [...prevList, certificates]);
+  const obsHandler = (entries: IntersectionObserverEntry[]) => {
+    const target = entries[0];
+    if (!isLast && target.isIntersecting && preventRef.current) {
+      preventRef.current = false;
+      setPage((prev) => prev + 1);
     }
   };
+  useEffect(() => {
+    if (page === 0) {
+      setIsLast(false);
+    }
+    AdminInstance.getCertificates(setCertificates, page, setIsLast, preventRef.current);
+  }, [page]);
+  useEffect(() => {
+    const observer = new IntersectionObserver(obsHandler, { root: listRef.current, threshold: 0.1 });
+    if (obsRef.current) observer.observe(obsRef.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, [isLast, certificates.length !== 0]);
 
   return (
     <WholePage>
@@ -80,8 +83,8 @@ export default function Certify() {
                     <Values className="licenceCert">약사면허증</Values>
                   </Contaniner>
                 </Label>
-                {certificates.length ? (
-                  <BelowLable ref={listRef} onScroll={handleScroll}>
+                {certificates?.length ? (
+                  <BelowLable ref={listRef}>
                     {certificates.map((cert: any, i: number) => (
                       <Content key={i}>
                         <Values className="checkBox">
@@ -93,6 +96,7 @@ export default function Certify() {
                         <Cert key={i} cert={cert} />
                       </Content>
                     ))}
+                    {<div ref={obsRef} />}
                   </BelowLable>
                 ) : (
                   <Instead>

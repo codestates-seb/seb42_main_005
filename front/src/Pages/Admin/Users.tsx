@@ -12,18 +12,15 @@ export default function Users() {
   const [users, setUsers] = useState<TYPE_AllUserInfo[]>([]);
   const [time, setTime] = useState<number>(0);
   const [checkedList, setCheckedList] = useState<Check[]>([]);
-  const [page, setPage] = useState<number>(2);
-  const [isPageEnd, setIsPageEnd] = useState<boolean>(false);
-  const listRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef(null);
+  const preventRef = useRef(true);
+  const obsRef = useRef(null);
+  const [isLast, setIsLast] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(0);
 
   const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
-
-  //! GET : 전체 회원 리스트 불러오기
-  useEffect(() => {
-    AdminInstance.getUsers(setUsers,0);
-  }, []);
 
   //* 체크된 항목을 하나씩 담아주는 부분
   const onCheckedItem = useCallback(
@@ -44,21 +41,26 @@ export default function Users() {
     if (accountState === "WITHDRAWN") return "탈퇴회원";
     if (accountState === "KICKEDOUT") return "강퇴회원";
   };
-
-  useEffect(() => {
-    if (listRef.current) {
-      listRef.current.scrollTop = 0;
-    }
-  }, [page]);
-  const handleScroll = (e: any) => {
-    const { scrollTop, scrollHeight, clientHeight } = e.target; 
-    if (scrollTop + clientHeight >= scrollHeight && !isPageEnd) {
-      setPage(page + 1);
-      AdminInstance.getUsers(setUsers, page)
-      setIsPageEnd(users.length % 20!==0);
-      setUsers((prevList: any) => [...prevList, users])
+  const obsHandler = (entries: IntersectionObserverEntry[]) => {
+    const target = entries[0];
+    if (!isLast && target.isIntersecting && preventRef.current) {
+      preventRef.current = false;
+      setPage((prev) => prev + 1);
     }
   };
+  useEffect(() => {
+    if (page === 0) {
+      setIsLast(false);
+    }
+    AdminInstance.getUsers( setUsers, page, setIsLast, preventRef.current);
+  }, [page]);
+  useEffect(() => {
+    const observer = new IntersectionObserver(obsHandler, { root: listRef.current, threshold: 0.1 });
+    if (obsRef.current) observer.observe(obsRef.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, [isLast, users.length !== 0]);
 
   return (
     <WholePage>
@@ -96,7 +98,7 @@ export default function Users() {
                   <Values className="reportCount">신고 수</Values>
                 </Label>
                 {users?.length ? (
-                  <BelowLable ref={listRef} onScroll={handleScroll}>
+                  <BelowLable ref={listRef}>
                     {users.map((user: any, i) => (
                       <Content key={i} className={user.userStatus === "ACTIVE" ? "" : "suspended"}>
                         <Values className="checkBox">
@@ -119,6 +121,7 @@ export default function Users() {
                         <Values className="reportCount">{user.reportCount}</Values>
                       </Content>
                     ))}
+                    {<div ref={obsRef}/>}
                   </BelowLable>
                 ) : (
                   <Instead>

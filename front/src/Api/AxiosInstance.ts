@@ -93,7 +93,7 @@ export const getReviewForScroll = async (
 ) => {
   return BaseInstance.get(`${APIS.GET_REVIEWS}/${storeIdx}/review`, { params: { page, size: 20 } })
     .then((response) => {
-      state((prev:any)=>[...prev, ...response.data.response.storeReviews]);
+      state((prev: any) => [...prev, ...response.data.response.storeReviews]);
     })
     .catch((error) => {
       console.log("리뷰 불러오던 중 중 에러 발생");
@@ -255,16 +255,18 @@ export const PharmInstance = {
 };
 //! 관리자 계정 ------------------------------------------------------------------------
 //* GET : 신고리뷰 리스트 불러오기
-const getReports = async (state: any, page: any) => {
-  return (
-    BaseInstance.get(APIS.GET_ADMIN_REPORTED, { params: { page, size: 20 } })
-      .then((response) => state((prev:any)=>[...prev,...response.data.response.reportedReviews]))
-      // .then((response) => console.log(response.data.response.reportedReviews))
-      .catch((error) => {
-        console.log("신고리뷰리스트 불러오던 중 에러 발생");
-        console.log(error);
-      })
-  );
+const getReports = async (stateList: any, page: number, stateLast: any, preventRef: any) => {
+  return BaseInstance.get(APIS.GET_ADMIN_REPORTED, { params: { page, size: 20 } })
+    .then((response) => {
+      stateList((prev: any) => [...prev, ...response.data.response.reportedReviews]);
+      preventRef = true;
+      if (!response.data.pageInfo.isFinish || response.data.pageInfo.totalPage === response.data.pageInfo.page + 1)
+        stateLast(true);
+    })
+    .catch((error) => {
+      console.log("신고리뷰리스트 불러오던 중 에러 발생");
+      console.log(error);
+    });
 };
 //* DELETE : 신고누적리뷰 삭제
 const deleteReportedReview = async (data: object) => {
@@ -285,10 +287,13 @@ const restoreReview = async (data: object) => {
     });
 };
 //* GET : 전체 회원 리스트 불러오기
-const getUsers = async (state: any, page: any) => {
+const getUsers = async (stateList: any, page: number, stateLast: any, preventRef: any) => {
   return BaseInstance.get(APIS.GET_ADMIN_USERS, { params: { page, size: 20 } })
     .then((response) => {
-      state((prev:any)=>[...prev,...response.data.response]);
+      stateList((prev: any) => [...prev, ...response.data.response]);
+      preventRef = true;
+      if (!response.data.pageInfo.totalPage || response.data.pageInfo.totalPage === response.data.pageInfo.page + 1)
+        stateLast(true);
     })
     .catch((error) => {
       console.log("전체회원리스트 불러오던 중 에러 발생");
@@ -324,9 +329,14 @@ const restoreUsers = async (data: object) => {
     });
 };
 //* GET : 약사인증신청 리스트 불러오기
-const getCertificates = async (state: any, page: any) => {
+const getCertificates = async (stateList: any, page: number, stateLast: any, preventRef: any) => {
   return BaseInstance.get(APIS.GET_ADMIN_CERTS, { params: { page, size: 20 } })
-    .then((response) => state((prev:any)=>[...prev, ...response.data.response.content]))
+    .then((response) => {
+      stateList((prev: any) => [...prev, ...response.data.response.content]);
+      preventRef = true;
+      if (!response.data.pageInfo.totalPage || response.data.pageInfo.totalPage === response.data.pageInfo.page + 1)
+        stateLast(true);
+    })
     .catch((error) => {
       console.log("약사인증신청 리스트 불러오던 중 에러 발생");
       console.log(error);

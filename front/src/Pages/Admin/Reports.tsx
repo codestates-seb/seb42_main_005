@@ -10,18 +10,15 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 export default function Reports() {
   const [reports, setReports] = useState<Array<any>>([]);
   const [checkedList, setCheckedList] = useState<Array<any>>([]);
-  const [page, setPage] = useState<number>(2);
-  const [isPageEnd, setIsPageEnd] = useState<boolean>(false);
-  const listRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef(null);
+  const preventRef = useRef(true);
+  const obsRef = useRef(null);
+  const [isLast, setIsLast] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(0);
 
   const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
-
-  //! GET : 신고리뷰 리스트 불러오기
-  useEffect(() => {
-    AdminInstance.getReports(setReports,0);
-  }, []);
 
   //* 체크된 항목을 하나씩 담아주는 부분
   const onCheckedItem = useCallback(
@@ -36,20 +33,26 @@ export default function Reports() {
   );
   const data = { userIdxs: checkedList };
 
-  useEffect(() => {
-    if (listRef.current) {
-      listRef.current.scrollTop = 0;
-    }
-  }, [reports]);
-  const handleScroll = (e: any) => {
-    const { scrollTop, scrollHeight, clientHeight } = e.target; 
-    if (scrollTop + clientHeight >= scrollHeight && !isPageEnd) {
-      setPage(page + 1);
-      AdminInstance.getUsers(setReports, page)
-      setIsPageEnd(reports.length % 20!==0);
-      setReports((prevList: any) => [...prevList, reports])
+  const obsHandler = (entries: IntersectionObserverEntry[]) => {
+    const target = entries[0];
+    if (!isLast && target.isIntersecting && preventRef.current) {
+      preventRef.current = false;
+      setPage((prev) => prev + 1);
     }
   };
+  useEffect(() => {
+    if (page === 0) {
+      setIsLast(false);
+    }
+    AdminInstance.getReports(setReports, page, setIsLast, preventRef.current);
+  }, [page]);
+  useEffect(() => {
+    const observer = new IntersectionObserver(obsHandler, { root: listRef.current, threshold: 0.1 });
+    if (obsRef.current) observer.observe(obsRef.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, [isLast, reports.length !== 0]);
 
   return (
     <WholePage>
@@ -85,7 +88,7 @@ export default function Reports() {
                   <Values className="reports">신고 수</Values>
                 </Label>
                 {reports.length ? (
-                  <BelowLable ref={listRef} onScroll={handleScroll}>
+                  <BelowLable ref={listRef}>
                     {reports.map((report: any, i: number) => (
                       <Content key={i}>
                         <Values className="checkBox">
@@ -100,6 +103,7 @@ export default function Reports() {
                         <Values className="reports">{report.reportCnt}</Values>
                       </Content>
                     ))}
+                    {<div ref={obsRef} />}
                   </BelowLable>
                 ) : (
                   <Instead>
