@@ -69,7 +69,6 @@ public class ReviewController {
 
         Review createdReview = reviewService.saveReview(review, image);
 
-        // 이하 데이터 변환 부분 -> 어디에서?
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
 
         SimpleReviewDto responseData = reviewMapper.reviewToSimpleReviewDto(createdReview);
@@ -86,7 +85,6 @@ public class ReviewController {
     public ResponseEntity<SingleResponseDto<SimpleReviewDto>> updateReview(
             @PathVariable Long storeIdx, @PathVariable Long reviewIdx,
             @RequestBody PostUpdateReviewDto patchDto
-//            @RequestPart(required = false) MultipartFile image
     ) {
         patchDto.setStoreIdx(storeIdx);
         Review targetReview = reviewService.findVerifiedReview(storeIdx, reviewIdx);

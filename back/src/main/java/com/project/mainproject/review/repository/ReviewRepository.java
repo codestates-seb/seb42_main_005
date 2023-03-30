@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     Optional<Review> findByStoreStoreIdxAndReviewIdx(Long storeIdx, Long reviewIdx);
-    Page<Review> findAllByStoreStoreIdxAndReviewStatusOrderByCreatedAtDesc(Long storeIdx,
+    Page<Review> findAllByStoreStoreIdxAndReviewStatusNotOrderByCreatedAtDesc(Long storeIdx,
                                                                            ReviewStatus reviewStatus,
                                                                            Pageable pageable);
     List<Review> findAllByUserUserIdxAndReviewStatusOrderByCreatedAtDesc(Long userIdx,
