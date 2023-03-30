@@ -9,12 +9,14 @@ import com.project.mainproject.review.mapper.ReviewMapper;
 import com.project.mainproject.review.mapper.ReviewReportMapper;
 import com.project.mainproject.review.service.ReviewReportService;
 import com.project.mainproject.review.service.ReviewService;
+import com.project.mainproject.utils.CheckLoginUser;
 import com.project.mainproject.utils.ResponseBuilder;
 import com.project.mainproject.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -105,8 +107,11 @@ public class ReviewController {
      *  리뷰 삭제
      * */
     @DeleteMapping("/store/{storeIdx}/review/{reviewIdx}")
-    public ResponseEntity<URI> deleteReview(@PathVariable Long storeIdx, @PathVariable Long reviewIdx) {
-        reviewService.deleteReview(storeIdx, reviewIdx);
+    public ResponseEntity<URI> deleteReview(@PathVariable Long storeIdx,
+                                            @PathVariable Long reviewIdx,
+                                            @AuthenticationPrincipal Object principal) {
+        Long userIdx = CheckLoginUser.getContextIdx(principal);
+        reviewService.deleteReview(storeIdx, reviewIdx, userIdx);
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
 
         return ResponseEntity.noContent().header("Location", location.toString()).build();

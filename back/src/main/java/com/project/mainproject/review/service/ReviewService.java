@@ -58,35 +58,10 @@ public class ReviewService {
         return updatedReview;
     }
 
-//    리뷰 수정 기존 로직
-//    @Transactional
-//    public Review updateReview(Review review, MultipartFile image) {
-//        Review updatedReview = reviewRepository.save(review);
-//        updateReviewImage(image, updatedReview);
-//
-//        return updatedReview;
-//    }
-//
-//    private void updateReviewImage(MultipartFile image, Review review) {
-//        deleteExistReviewImages(review);
-//        String uploadImagePath = "";
-//        if (image != null) {
-//            uploadImagePath = uploadImage(image);
-//        }
-//        review.updateReviewImage(uploadImagePath);
-//    }
-//
-//    private void deleteExistReviewImages(Review review) {
-//        List<String> existImages = new ArrayList<>();
-//        for (ReviewImage existReviewImage : review.getReviewImages()){
-//            existImages.add(existReviewImage.getImagePath());
-//        }
-//        if (existImages.size() != 0) FileUploader.deleteImages(existImages);
-//    }
-
     @Transactional
-    public void deleteReview(Long storeIdx, Long reviewIdx) {
+    public void deleteReview(Long storeIdx, Long reviewIdx, Long userIdx) {
         Review review = findVerifiedReview(storeIdx, reviewIdx);
+        validWriter(userIdx, review);
         review.setReviewStatus(DELETED);
 
         if (review.getReviewImages().size() != 0)
@@ -161,6 +136,11 @@ public class ReviewService {
 
         reviews.stream().forEach(review -> review.changeReportStatus(REJECTED));
         reviews.stream().forEach(review -> review.setReviewStatus(POSTED));
+    }
+
+    private void validWriter(Long userIdx, Review review) {
+        if (userIdx != review.getUser().getUserIdx())
+            throw new BusinessLogicException(WRITER_MISS_MATCH);
     }
 
 }
