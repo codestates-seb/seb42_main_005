@@ -265,4 +265,13 @@ public class UserService implements UserDetailsService {
             throw new BusinessLogicException(UserExceptionCode.CONFLICT_PASSWORD_RULE);
         }
     }
+
+    /*
+    * 회원 여부 검증 로직
+    * */
+    public void checkPassword(Long userIdx, Long contextIdx) {
+        if (!userIdx.equals(contextIdx)) {
+            throw new BusinessLogicException(UserExceptionCode.USER_MISS_MATCH);
+        }
+    }
 }
