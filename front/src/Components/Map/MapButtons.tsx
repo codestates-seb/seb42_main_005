@@ -61,17 +61,23 @@ export default function MapButtons({
     );
     makeMap.setLevel(3);
   };
-  //* 현지도재검색 클릭 시
-  const reMap = () => {
-    if (makeMap) {
-      useViewMap(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
-    }
-  };
+  //* 현지도재검색 클릭 시 => 온클릭 안으로 가지고 들어감 ..구글링 해보니까 이러면 더블클릭 안해도 된다했는데...
+  // const reMap = () => {
+  //   if (makeMap) {
+  //     useViewMap(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
+  //   }
+  // };
 
   return (
     <ContainerButtons>
       <ControllerReMap>
-        <ButtonReMap onClick={reMap}>
+        <ButtonReMap
+          onClick={() => {
+            if (makeMap) {
+              useViewMap(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
+            }
+          }}
+        >
           <MdReplayCircleFilled className="icon" />
           <div className="label">
             현 지도로
@@ -81,16 +87,16 @@ export default function MapButtons({
         </ButtonReMap>
       </ControllerReMap>
       <ControllerLocation>
-        <ButtonLocation onClick={CurrentLocation}>
+        <ButtonLocation onClick={() => CurrentLocation()}>
           <BiTargetLock className="icon" />
         </ButtonLocation>
       </ControllerLocation>
       <ControllerZoom>
-        <ButtonZoom onClick={zoomIn}>
+        <ButtonZoom onClick={() => zoomIn()}>
           <AiOutlinePlus className="icon plus" />
         </ButtonZoom>
         <span className="partition" />
-        <ButtonZoom onClick={zoomOut}>
+        <ButtonZoom onClick={() => zoomOut()}>
           <AiOutlineMinus className="icon minus" />
         </ButtonZoom>
       </ControllerZoom>
