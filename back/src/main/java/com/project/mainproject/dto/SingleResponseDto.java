@@ -3,10 +3,8 @@ package com.project.mainproject.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
-@ToString
 public class SingleResponseDto<T> {
     @Setter
     private T response;
