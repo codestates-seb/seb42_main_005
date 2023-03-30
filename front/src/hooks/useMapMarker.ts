@@ -159,12 +159,6 @@ export async function useSearch(
         MarkerPharmacy.setMap(makeMap);
         const searchResultPos = new window.kakao.maps.LatLng(pharmacies[0].latitude, pharmacies[0].longitude);
         makeMap.panTo(searchResultPos);
-
-        // Add event listener to marker
-        kakao.maps.event.addListener(MarkerPharmacy, "click", () => {
-          // Call onModalUp function here
-          onModalUp();
-        });
         return MarkerPharmacy;
       });
     } catch (error) {

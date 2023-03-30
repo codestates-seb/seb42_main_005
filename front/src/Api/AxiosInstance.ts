@@ -18,7 +18,7 @@ export const getDetailsAndReviews = (stateD: React.Dispatch<any>, stateR: React.
     return BaseInstance.get(`${APIS.GET_PHARMDETAILS}/${storeIdx}`)
       .then((response) => stateD(response.data.response))
       .catch((error) => {
-        console.log("약국 상세정보 받아오던 중 에러 발생");
+        // console.log("약국 상세정보 받아오던 중 에러 발생");
         console.log(error);
       });
   };
@@ -37,7 +37,7 @@ export const likePharmacy = async (storeidx: number | undefined, value: TYPE_boo
   return BaseInstance.post(`${APIS.POST_LIKE}/${storeidx}/pick`)
     .then(() => state(!value))
     .catch((error) => {
-      console.log("찜하기 또는 찜 취소 하던 중 에러 발생");
+      // console.log("찜하기 또는 찜 취소 하던 중 에러 발생");
       console.log(error);
     });
 };
@@ -49,7 +49,7 @@ export const getUser = async (
   return BaseInstance.get(`${APIS.GET_USER_INFO}/${userIdx}`)
     .then((response) => state(response.data.response))
     .catch((error) => {
-      console.log("내 정보 다시 가져오던 중 에러 발생");
+      // console.log("내 정보 다시 가져오던 중 에러 발생");
       console.log(error);
     });
 };
@@ -58,14 +58,14 @@ export const postUserImg = async (data: object) => {
   return BaseInstance.post(APIS.POST_USER_IMG, data)
     .then(() => location.reload())
     .catch((error) => {
-      console.log("이미지 업로드 하던 중 에러 발생");
+      // console.log("이미지 업로드 하던 중 에러 발생");
       console.log(error);
     });
 };
 //* PATCH : 비밀번호 찾기
 export const findPW = async (findPassword: string) => {
   return BaseInstance.patch(APIS.PATCH_FINDPW, { email: findPassword }).catch((error) => {
-    console.log("비밀번호 찾기 요청 보내던 중 에러 발생");
+    // console.log("비밀번호 찾기 요청 보내던 중 에러 발생");
     console.log(error);
   });
 };
@@ -109,7 +109,7 @@ export const postReview = async (
   return BaseInstance.post(`${APIS.POST_REVIEWS}/${storeIdx}/review`, data)
     .then(() => state(false))
     .catch((error) => {
-      console.log("리뷰를 작성하던 중 에러 발생");
+      // console.log("리뷰를 작성하던 중 에러 발생");
       console.log(error);
     });
 };
@@ -123,21 +123,21 @@ export const patchReview = async (
   return BaseInstance.patch(`${APIS.POST_REVIEWS}/${storeIdx}/review/${reviewIdx}`, data)
     .then(() => state(false))
     .catch((error) => {
-      console.log("리뷰를 수정하던 중 에러 발생");
+      // console.log("리뷰를 수정하던 중 에러 발생");
       console.log(error);
     });
 };
 //* DELETE : 리뷰삭제
 export const deleteReview = async (storeIdx: number | undefined, reviewIdx: number) => {
   return BaseInstance.delete(`${APIS.DELETE_REVIEWS}/${storeIdx}/review/${reviewIdx}`).catch((error) => {
-    console.log("리뷰 삭제하던 중 에러 발생");
+    // console.log("리뷰 삭제하던 중 에러 발생");
     console.log(error);
   });
 };
 //* POST : 리뷰신고
 export const reportReview = async (storeIdx: number | undefined, reviewIdx: number, data: object) => {
   return BaseInstance.post(`${APIS.POST_REPORT_REVIEW}/${storeIdx}/review/${reviewIdx}/report`, data).catch((error) => {
-    console.log("리뷰 신고하던 중 에러 발생");
+    // console.log("리뷰 신고하던 중 에러 발생");
     console.log(error);
   });
 };
@@ -147,7 +147,7 @@ export const postReply = async (reviewIdx: number, data: object, stateC: any, st
     .then(() => stateC(""))
     .then(() => stateF(false))
     .catch((error) => {
-      console.log("리뷰의 댓글을 작성하던 중 에러 발생");
+      // console.log("리뷰의 댓글을 작성하던 중 에러 발생");
       console.log(error);
     });
 };
@@ -156,14 +156,14 @@ export const patchReply = async (reviewIdx: number, replyIdx: number, data: any,
   return BaseInstance.patch(`${APIS.PATCH_REPLY}/${reviewIdx}/reply/${replyIdx}`, data)
     .then(() => stateF(false))
     .catch((error) => {
-      console.log("리뷰의 댓글을 수정하던 중 에러 발생");
+      // console.log("리뷰의 댓글을 수정하던 중 에러 발생");
       console.log(error);
     });
 };
 //* POST : 리뷰의 댓글삭제
 export const deleteReply = async (reviewIdx: number, replyIdx: number) => {
   return BaseInstance.delete(`${APIS.DELETE_REPLY}/${reviewIdx}/reply/${replyIdx}`).catch((error) => {
-    console.log("리뷰의 댓글을 삭제하던 중 에러 발생");
+    // console.log("리뷰의 댓글을 삭제하던 중 에러 발생");
     console.log(error);
   });
 };
@@ -182,7 +182,7 @@ const getUserInfo = async (
       stateA(response.data.response.address);
     })
     .catch((error) => {
-      console.log("내 정보 가져오던 중 에러 발생");
+      // console.log("내 정보 가져오던 중 에러 발생");
       console.log(error);
     });
 };
@@ -192,7 +192,7 @@ const patchUserInfo = async (userIdx: number, data: object, state: React.Dispatc
     .then(() => state(false))
     .then(() => location.reload())
     .catch((error) => {
-      console.log("내 정보 수정하던 중 에러 발생");
+      // console.log("내 정보 수정하던 중 에러 발생");
       console.log(error);
     });
 };
@@ -201,7 +201,7 @@ const getLikedPharmList = async (userIdx: number, state: React.Dispatch<React.Se
   return BaseInstance.get(`${APIS.GET_MY_LIKES}/${userIdx}/pick`)
     .then((response) => state(response.data.response))
     .catch((error) => {
-      console.log("내가 찜한 약국리스트 받아오던 중 에러 발생");
+      // console.log("내가 찜한 약국리스트 받아오던 중 에러 발생");
       console.log(error);
     });
 };
@@ -210,7 +210,7 @@ const getMyReviews = async (userIdx: number, state: React.Dispatch<React.SetStat
   return BaseInstance.get(`${APIS.GET_MYREVIEWS}/${userIdx}`)
     .then((response) => state(response.data.response.reviews))
     .catch((error) => {
-      console.log("내가 작성한 리뷰리스트 받아오던 중 에러 발생");
+      // console.log("내가 작성한 리뷰리스트 받아오던 중 에러 발생");
       console.log(error);
     });
 };
@@ -226,7 +226,7 @@ const getPharmInfo = async (storeIdx: number, state: React.Dispatch<any>) => {
   return BaseInstance.get(`${APIS.GET_PHARMDETAILS}/${storeIdx}`)
     .then((response) => state(response.data.response))
     .catch((error) => {
-      console.log("약국 상세정보 받아오던 중 에러 발생");
+      // console.log("약국 상세정보 받아오던 중 에러 발생");
       console.log(error);
     });
 };
@@ -235,7 +235,7 @@ const getPharmacistInfo = async (userIdx: number, state: any) => {
   return BaseInstance.get(`${APIS.GET_USER_INFO}/${userIdx}`)
     .then((response) => state(response.data.response))
     .catch((error) => {
-      console.log("내 정보 다시 가져오던 중 에러 발생");
+      // console.log("내 정보 다시 가져오던 중 에러 발생");
       console.log(error);
     });
 };
@@ -244,7 +244,7 @@ const postPharmImg = async (data: object) => {
   return BaseInstance.post(APIS.POST_PHARM_IMG, data)
     .then(() => location.reload())
     .catch((error) => {
-      console.log("약국 사진 보내던 중 에러 발생");
+      // console.log("약국 사진 보내던 중 에러 발생");
       console.log(error);
     });
 };
@@ -264,7 +264,7 @@ const getReports = async (stateList: any, page: number, stateLast: any, preventR
         stateLast(true);
     })
     .catch((error) => {
-      console.log("신고리뷰리스트 불러오던 중 에러 발생");
+      // console.log("신고리뷰리스트 불러오던 중 에러 발생");
       console.log(error);
     });
 };
@@ -273,7 +273,7 @@ const deleteReportedReview = async (data: object) => {
   return BaseInstance.delete(APIS.DELETE_ADMIN_REVIEW_DELETE, data)
     .then(() => location.reload())
     .catch((error) => {
-      console.log("신고누적리뷰 삭제하던 중 에러 발생");
+      // console.log("신고누적리뷰 삭제하던 중 에러 발생");
       console.log(error);
     });
 };
@@ -282,7 +282,7 @@ const restoreReview = async (data: object) => {
   return BaseInstance.post(APIS.POST_ADMIN_REVIEW_RESTORE, data)
     .then(() => location.reload())
     .catch((error) => {
-      console.log("신고누적리뷰 복구하던 중 에러 발생");
+      // console.log("신고누적리뷰 복구하던 중 에러 발생");
       console.log(error);
     });
 };
@@ -296,7 +296,7 @@ const getUsers = async (stateList: any, page: number, stateLast: any, preventRef
         stateLast(true);
     })
     .catch((error) => {
-      console.log("전체회원리스트 불러오던 중 에러 발생");
+      // console.log("전체회원리스트 불러오던 중 에러 발생");
       console.log(error);
     });
 };
@@ -306,7 +306,7 @@ const blockUsers = async (time: number, data: object) => {
   return BaseInstance.post(APIS.POST_ADMIN_BLOCK, data, { params: { period: time } })
     .then(() => location.reload())
     .catch((error) => {
-      console.log("계정 정지하던 중 에러 발생");
+      // console.log("계정 정지하던 중 에러 발생");
       console.log(error);
     });
 };
@@ -315,7 +315,7 @@ const fireUsers = async (data: object) => {
   return BaseInstance.post(APIS.POST_ADMIN_FIRE, data)
     .then(() => location.reload())
     .catch((error) => {
-      console.log("계정 강퇴하던 중 에러 발생");
+      // console.log("계정 강퇴하던 중 에러 발생");
       console.log(error);
     });
 };
@@ -324,7 +324,7 @@ const restoreUsers = async (data: object) => {
   return BaseInstance.post(APIS.POST_ADMIN_RESTORE, data)
     .then(() => location.reload())
     .catch((error) => {
-      console.log("계정 복구하던 중 에러 발생");
+      // console.log("계정 복구하던 중 에러 발생");
       console.log(error);
     });
 };
@@ -338,7 +338,7 @@ const getCertificates = async (stateList: any, page: number, stateLast: any, pre
         stateLast(true);
     })
     .catch((error) => {
-      console.log("약사인증신청 리스트 불러오던 중 에러 발생");
+      // console.log("약사인증신청 리스트 불러오던 중 에러 발생");
       console.log(error);
     });
 };
@@ -347,7 +347,7 @@ const successCertify = async (data: object) => {
   return BaseInstance.post(APIS.POST_ADMIN_CERTIFY, data)
     .then(() => location.reload())
     .catch((error) => {
-      console.log("약사인증 승인하던 중 에러 발생");
+      // console.log("약사인증 승인하던 중 에러 발생");
       console.log(error);
     });
 };
@@ -356,7 +356,7 @@ const deniedCertify = async (data: object) => {
   return BaseInstance.post(APIS.POST_ADMIN_DENY, data)
     .then(() => location.reload())
     .catch((error) => {
-      console.log("약사인증 반려하던 중 에러 발생");
+      // console.log("약사인증 반려하던 중 에러 발생");
       console.log(error);
     });
 };

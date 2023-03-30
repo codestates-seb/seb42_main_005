@@ -132,7 +132,7 @@ public class ReviewController {
     }
 
     /*
-    회원 정보 조회_작성 리뷰
+        회원 정보 조회_작성 리뷰
     */
     @GetMapping("review/users/{userIdx}")
     public ResponseEntity<SingleResponseDto<ListGetUserReviewDto>> getUserReviews(

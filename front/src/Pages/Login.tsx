@@ -106,7 +106,7 @@ export default function Login() {
           if (error?.response?.status === 401) {
             alert("ID 또는 비밀번호가 일치하지 않습니다.");
           }
-          console.log("ID/PW 일치여부가 아닌 다른 에러 발생");
+          // console.log("ID/PW 일치여부가 아닌 다른 에러 발생");
           console.log(error);
         });
     };
@@ -117,7 +117,7 @@ export default function Login() {
   const postAuthSignUp = async () => {
     const provider = ""; //! 여기 수정 필요
     await axios.post(`${APIS.POST_LOGIN_AUTH}/${provider}`).catch((error) => {
-      console.log("Auth 로그인하던 중 에러 발생");
+      // console.log("Auth 로그인하던 중 에러 발생");
       console.log(error);
     });
   };

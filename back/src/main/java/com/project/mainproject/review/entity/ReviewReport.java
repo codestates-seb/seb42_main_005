@@ -34,6 +34,7 @@ public class ReviewReport extends AuditableWithBy {
     private ReportStatus reportStatus = REGISTERED;
 
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "USER_IDX")
     private User user;
 
     @ManyToOne(fetch = LAZY)
