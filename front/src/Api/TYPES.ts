@@ -127,6 +127,6 @@ export type TYPE_setReviewList = React.Dispatch<React.SetStateAction<TYPE_review
 export type TYPE_setpSignForms = React.Dispatch<React.SetStateAction<Form>>;
 
 export type SELECT_OPTIONS_TAP = "user" | "pharm";
-export type SELECT_OPTION_MAP = "not" | "operatingTime" | "nightOperating" | "pickedStore";
+export type SELECT_OPTION_MAP = "not" | "operatingTime" | "nightOperating" | "bookmarks";
 export type SELECT_SORT_LIST = "distance" | "reviewCount" | "rating";
 export type SELECT_HIDDEN = true | false;

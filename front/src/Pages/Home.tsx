@@ -70,6 +70,9 @@ export default function Home() {
   useEffect(() => {
     if (makeMap) {
       useViewMap(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
+      kakao.maps.event.addListener(makeMap, "bounds_changed", function () {
+        makeMap.relayout();
+      });
     }
   }, [makeMap]);
 
