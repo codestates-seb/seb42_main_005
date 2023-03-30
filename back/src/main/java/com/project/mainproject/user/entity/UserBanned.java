@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -24,7 +23,7 @@ public class UserBanned {
     private Duration duration;
 
     @OneToOne(fetch = EAGER)
-    @JoinColumn(name = "user_idx")
+    @JoinColumn(name = "USER_IDX")
     private User user;
 
     @Builder

@@ -24,9 +24,11 @@ public class PickedStore {
 
     //연관관계 매핑
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "USER_IDX")
     private Normal normal;
 
     @ManyToOne(fetch =LAZY)
+    @JoinColumn(name = "STORE_IDX")
     private Store store;
 
     @Builder

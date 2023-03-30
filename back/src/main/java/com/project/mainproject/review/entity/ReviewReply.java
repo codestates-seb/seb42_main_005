@@ -27,6 +27,7 @@ public class ReviewReply extends Auditable {
     private String content;
 
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "USER_IDX")
     private User user;
 
     @ManyToOne(fetch = LAZY)
