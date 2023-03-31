@@ -52,16 +52,17 @@ public class ReviewService {
     }
 
     @Transactional
-    public Review updateReview(Review review) {
+    public Review updateReview(Review review, Long loginUserIdx) {
+        validWriter(loginUserIdx, review);
         Review updatedReview = reviewRepository.save(review);
 
         return updatedReview;
     }
 
     @Transactional
-    public void deleteReview(Long storeIdx, Long reviewIdx, Long userIdx) {
+    public void deleteReview(Long storeIdx, Long reviewIdx, Long loginUserIdx) {
         Review review = findVerifiedReview(storeIdx, reviewIdx);
-        validWriter(userIdx, review);
+        validWriter(loginUserIdx, review);
         review.setReviewStatus(DELETED);
 
         if (review.getReviewImages().size() != 0)
@@ -89,7 +90,6 @@ public class ReviewService {
     }
 
     public List<Review> getUserReviews(Long userIdx) {
-        // TODO: 유저 검증 추가 (StoreService)
         return reviewRepository.findAllByUserUserIdxAndReviewStatusOrderByCreatedAtDesc(
                 userIdx, POSTED);
     }
@@ -138,8 +138,8 @@ public class ReviewService {
         reviews.stream().forEach(review -> review.setReviewStatus(POSTED));
     }
 
-    private void validWriter(Long userIdx, Review review) {
-        if (userIdx != review.getUser().getUserIdx())
+    private void validWriter(Long loginUserIdx, Review review) {
+        if (loginUserIdx != review.getUser().getUserIdx())
             throw new BusinessLogicException(WRITER_MISS_MATCH);
     }
 

@@ -85,14 +85,18 @@ public class ReviewController {
      * */
     @PatchMapping("/store/{storeIdx}/review/{reviewIdx}")
     public ResponseEntity<SingleResponseDto<SimpleReviewDto>> updateReview(
-            @PathVariable Long storeIdx, @PathVariable Long reviewIdx,
-            @RequestBody PostUpdateReviewDto patchDto
+            @PathVariable Long storeIdx,
+            @PathVariable Long reviewIdx,
+            @RequestBody PostUpdateReviewDto patchDto,
+            @AuthenticationPrincipal Object principal
     ) {
+        Long userIdx = CheckLoginUser.getContextIdx(principal);
         patchDto.setStoreIdx(storeIdx);
+
         Review targetReview = reviewService.findVerifiedReview(storeIdx, reviewIdx);
         Review review = reviewMapper.reviewDtoToReview(patchDto, targetReview);
 
-        Review updatedReview = reviewService.updateReview(review);
+        Review updatedReview = reviewService.updateReview(review, userIdx);
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
 
