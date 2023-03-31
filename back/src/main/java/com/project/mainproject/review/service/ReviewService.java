@@ -31,10 +31,10 @@ public class ReviewService {
     private final StoreValidService storeService;
     private final FileUploader fileUploader;
 
-    public Page<Review> getReviews(Long storeIdx, Pageable pageable) {
+    public List<Review> getReviews(Long storeIdx) {
         storeService.storeValidation(storeIdx);
         return reviewRepository.findAllByStoreStoreIdxAndReviewStatusNotOrderByCreatedAtDesc(
-                storeIdx, DELETED, pageable);
+                storeIdx, DELETED);
     }
 
     @Transactional
