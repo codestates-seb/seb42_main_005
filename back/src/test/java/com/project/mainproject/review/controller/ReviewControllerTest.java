@@ -224,29 +224,13 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
         PostUpdateReviewDto build = ReviewStub.getPostUpdateReviewStub();
         String content = toJsonContent(build);
 
-        String rawPassword = "passwor12qwe!@#!d";
-        String password = passwordEncoder.encode(rawPassword);
-
-        User user = new User();
-        user.setUserIdx(1L);
-        user.setPassword(password);
-        user.setName("tester");
-        user.setEmail("test@email.com");
-
-        UserContext userContext = new UserContext(user.getUserIdx().toString(), user.getEmail(), user.getPassword(), List.of(new SimpleGrantedAuthority("USER")));
-
-        // JWT토큰 발행을 위한 Mocking
-        given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
-        given(userService.loadUserByUsername(anyString())).willReturn(userContext);
-        String accessToken = jwtHelper.createAccessToken(user.getEmail());
-
         // 실제 서비스 로직 Mocking
         given(reviewService.findVerifiedReview(anyLong(), anyLong())).willReturn(ReviewStub.getReviewStub());
         given(reviewMapper.reviewDtoToReview(any(PostUpdateReviewDto.class), any(Review.class))).willReturn(ReviewStub.getReviewStub2());
         given(reviewService.updateReview(any(Review.class), anyLong())).willReturn(ReviewStub.getReviewStub2());
         given(reviewMapper.reviewToSimpleReviewDto(any(Review.class))).willReturn(ReviewStub.getSimpleReviewStub());
 
-        ResultActions actions = mockMvc.perform(patchRequestBuilder(getTowPathParam(), storeIdx, reviewIdx, content, accessToken));
+        ResultActions actions = mockMvc.perform(patchAuthorizedRequestBuilder(getTowPathParam(), storeIdx, reviewIdx, content, accessToken));
 
         actions
                 .andExpect(status().isOk())
@@ -285,26 +269,9 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
     @Test
     @DisplayName("리뷰 삭제 : 성공")
     void deleteReview() throws Exception {
-        String rawPassword = "passwor12qwe!@#!d";
-        String password = passwordEncoder.encode(rawPassword);
-
-        User user = new User();
-        user.setUserIdx(1L);
-        user.setPassword(password);
-        user.setName("tester");
-        user.setEmail("test@email.com");
-
-        UserContext userContext = new UserContext(user.getUserIdx().toString(), user.getEmail(), user.getPassword(), List.of(new SimpleGrantedAuthority("USER")));
-
-        // JWT토큰 발행을 위한 Mocking
-        given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
-        given(userService.loadUserByUsername(anyString())).willReturn(userContext);
-        String accessToken = jwtHelper.createAccessToken(user.getEmail());
-
-        // 실제 서비스 로직 Mocking
         doNothing().when(reviewService).deleteReview(Mockito.anyLong(), Mockito.anyLong(), anyLong());
 
-        ResultActions actions = mockMvc.perform(deleteRequestBuilder(getTowPathParam(), storeIdx, reviewIdx));
+        ResultActions actions = mockMvc.perform(deleteRequestBuilder(getTowPathParam(), storeIdx, reviewIdx, accessToken));
 
         actions
                 .andExpect(status().isNoContent())
@@ -313,6 +280,9 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
                         "delete-review",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("ACCESS 토큰").optional()
+                        ),
                         pathParameters(
                                 getStoreReviewPathParameterDescriptor()
                         ),
