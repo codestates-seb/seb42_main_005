@@ -1,6 +1,5 @@
 package com.project.mainproject.review.controller;
 
-import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.review.dto.*;
 import com.project.mainproject.review.entity.Review;
@@ -13,8 +12,6 @@ import com.project.mainproject.utils.CheckLoginUser;
 import com.project.mainproject.utils.ResponseBuilder;
 import com.project.mainproject.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -41,18 +38,17 @@ public class ReviewController {
      *  약국 리뷰 페이징
      * */
     @GetMapping("/store/{storeIdx}/review")
-    public ResponseEntity<PageResponseDto<ListGetStoreReviewDto>> getStoreReview(
-            @PathVariable Long storeIdx,
-            Pageable pageable
+    public ResponseEntity<SingleResponseDto<ListGetStoreReviewDto>> getStoreReview(
+            @PathVariable Long storeIdx
     ) {
-        Page<Review> reviews = reviewService.getReviews(storeIdx, pageable);
+        List<Review> reviews = reviewService.getReviews(storeIdx);
 
         ListGetStoreReviewDto responseData = ListGetStoreReviewDto.builder()
-                .storeReviews(reviewMapper.reviewsToReviewsDto(reviews.getContent()))
+                .storeReviews(reviewMapper.reviewsToReviewsDto(reviews))
                 .build();
 
-        PageResponseDto<ListGetStoreReviewDto> response =
-                responseBuilder.buildPageResponse(reviews, responseData);
+        SingleResponseDto<ListGetStoreReviewDto> response =
+                responseBuilder.buildSingleOkResponse(responseData);
 
         return ResponseEntity.ok().body(response);
     }
