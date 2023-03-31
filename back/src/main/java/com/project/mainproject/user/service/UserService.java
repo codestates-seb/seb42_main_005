@@ -64,7 +64,8 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println(username);
-        User user = userRepository.findByEmail(username).get();
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new BusinessLogicException(USER_NOT_FOUND));
         List<GrantedAuthority> authority = new ArrayList<>();
         authority.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
         String userId = user.getUserIdx().toString();
@@ -263,6 +264,15 @@ public class UserService implements UserDetailsService {
         Matcher matcher = pattern.matcher(password);
         if (!matcher.find()) {
             throw new BusinessLogicException(UserExceptionCode.CONFLICT_PASSWORD_RULE);
+        }
+    }
+
+    /*
+    * 회원 여부 검증 로직
+    * */
+    public void checkPassword(Long userIdx, Long contextIdx) {
+        if (!userIdx.equals(contextIdx)) {
+            throw new BusinessLogicException(UserExceptionCode.USER_MISS_MATCH);
         }
     }
 }

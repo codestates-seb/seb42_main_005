@@ -288,7 +288,7 @@ public class StoreQueryRepository {
         //holliday인가 ? null ->  필터링 로직
         if (filterCond.equals("not")) {
             return null;
-        } else if (filterCond.equals("bookmark")) {
+        } else if (filterCond.equals("bookmarks")) {
             return getPickedStoreOperating(userIdx);
         }
 

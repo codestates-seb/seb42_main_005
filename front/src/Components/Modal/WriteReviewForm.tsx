@@ -56,6 +56,9 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
       content: review.content,
       rating: review.rating,
     };
+    if (!data.content || !data.rating) {
+      return alert("리뷰내용과 별점을 작성해주세요!");
+    }
     const formData = new FormData();
     formData.append("postDto", new Blob([JSON.stringify(data)], { type: "application/json" }));
     formData.append("image", imgFile);

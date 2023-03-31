@@ -37,24 +37,6 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
     setReplyContent(e.target.value);
   };
 
-  //! PATCH : 리뷰수정
-  const patchReviewAndRefresh = async (e: any) => {
-    if (e.key === " " && e.getModifierState("Shift") === false) {
-      e.stopPropagation();
-    } else if (e.key === " " && e.target.value.slice(-1) === " ") {
-      e.stopPropagation();
-    } else if (e.key === "Enter") {
-      e.preventDefault();
-      const data: any = {
-        userIdx: user.userIdx,
-        content: reviewContent,
-        rating: review.rating,
-      };
-      await patchReview(Pharm?.storeIdx, reviewIdx, data, setIsOnEdit);
-      await getReview(Pharm?.storeIdx, setReviewList, page);
-    }
-  };
-
   // ! DELETE : 리뷰삭제
   const deleteReviewAndRefresh = async () => {
     await deleteReview(Pharm?.storeIdx, reviewIdx);
@@ -83,6 +65,24 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
       };
       await postReply(reviewIdx, reply, setReplyContent, setIsReplyFormShown);
       await getReview(Pharm?.storeIdx, setReviewList, page);
+    }
+  };
+
+  //! PATCH : 리뷰수정
+  const patchReviewAndRefresh = async (e: any) => {
+    if (e.key === " " && e.getModifierState("Shift") === false) {
+      e.stopPropagation();
+    } else if (e.key === " " && e.target.value.slice(-1) === " ") {
+      e.stopPropagation();
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const data: any = {
+        userIdx: user.userIdx,
+        content: reviewContent,
+        rating: review.rating,
+      };
+      await patchReview(Pharm?.storeIdx, reviewIdx, data, setIsOnEdit);
+      await getReview(Pharm?.storeIdx, setReviewList);
     }
   };
 
@@ -126,24 +126,47 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
           </ButtonContainer>
         </Upper>
         <Lower>
-          {isOnEdit ? (
-            <EditRest>
-              <p>리뷰를 수정해주세요. 작성 완료 시 'Enter'를 눌러주세요.</p>
-              <label htmlFor="editReview" id="hide" />
-              <Textarea
-                id="editReview"
-                rows={2}
-                isValid={true}
-                icon={false}
-                value={reviewContent}
-                onChange={handleReview}
-                onKeyPress={(e: any) => patchReviewAndRefresh(e)}
-              />
-            </EditRest>
+          {isOnEdit && !review.reviewImage ? (
+            <>
+              <EditRestNoImg>
+                <p className="edit_noImg">리뷰를 수정해주세요.작성 완료 시 'Enter'를 눌러주세요.</p>
+                <label htmlFor="editReview_noImg" id="hide" />
+                <Textarea
+                  id="editReview_noImg"
+                  rows={2}
+                  isValid={true}
+                  icon={false}
+                  value={reviewContent}
+                  onChange={handleReview}
+                  onKeyPress={(e: any) => patchReviewAndRefresh(e)}
+                />
+              </EditRestNoImg>
+            </>
+          ) : isOnEdit && review.reviewImage ? (
+            <>
+              <EditRest>
+                <p className="edit_img">리뷰를 수정해주세요. 작성 완료 시 'Enter'를 눌러주세요.</p>
+                <label htmlFor="editReview" id="hide" />
+                <Textarea
+                  id="editReview"
+                  rows={2}
+                  isValid={true}
+                  icon={false}
+                  value={reviewContent}
+                  onChange={handleReview}
+                  onKeyPress={(e: any) => patchReviewAndRefresh(e)}
+                />
+              </EditRest>
+              <ReviewImg src={review.reviewImage} />
+            </>
+          ) : !isOnEdit && review.reviewImage ? (
+            <>
+              <Rest>{review.content}</Rest>
+              <ReviewImg src={review.reviewImage} />
+            </>
           ) : (
-            <Rest>{review.content}</Rest>
+            <RestNoImg>{review.content}</RestNoImg>
           )}
-          <ReviewImg src={review.reviewImage} />
         </Lower>
       </section>
       {isReplyFormShown ? (
@@ -226,20 +249,56 @@ const EditRest = styled.section`
   flex-direction: column;
   justify-content: flex-end;
   width: 280px;
-  p {
+  .edit_img {
     position: absolute;
     top: 5px;
     margin-left: 5px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
     color: var(--blue-300);
   }
+  #editReview {
+    font-size: 14px;
+  }
 `;
+const EditRestNoImg = styled.section`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 280px;
+  .edit_noImg {
+    position: absolute;
+    top: 0.1px;
+    margin-left: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--blue-300);
+  }
+  #editReview_noImg {
+    margin-top: 4px;
+    font-size: 14px;
+  }
+`;
+
 const ReviewImg = styled.img`
   object-fit: cover;
   margin-bottom: 0.6rem;
   height: 80px;
   width: 100px;
+  border-radius: 5px;
+  border: 1px solid var(--black-100);
+`;
+const RestNoImg = styled.section`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.6rem;
+  width: 400px;
+  white-space: normal;
+  word-break: break-all;
+  padding: 10px;
+  font-size: 14px;
+  line-height: 20px;
   border-radius: 5px;
   border: 1px solid var(--black-100);
 `;
