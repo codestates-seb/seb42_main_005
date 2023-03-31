@@ -45,6 +45,7 @@ export default function PharmLists({
   const [displayedList, setDisplayedList] = useState(totalPharmList.slice(0, 10));
   const listRef = useRef<HTMLDivElement>(null);
   const [myAdress, setMyAdress] = useState("");
+
   const user = useAppSelector((state: any) => {
     return state.userInfo.response;
   });
@@ -137,26 +138,20 @@ export default function PharmLists({
             <ButtonContainer>
               <ButtonMyPlace>
                 {token && user?.userType === "약국회원" ? (
-                  <>
+                  <div onClick={() => MoveToMyPlace()}>
                     <RiHomeLine className="logo" />
-                    <span className="my_place" onClick={MoveToMyPlace}>
-                      우리 약국
-                    </span>
-                  </>
+                    <span className="my_place">우리 약국</span>
+                  </div>
                 ) : token && user?.userType === "일반회원" ? (
-                  <>
+                  <div onClick={() => MoveToMyPlace()}>
                     <RiHomeLine className="logo" />
-                    <span className="my_place" onClick={MoveToMyPlace}>
-                      우리 집
-                    </span>
-                  </>
+                    <span className="my_place">우리 집</span>
+                  </div>
                 ) : (
-                  <>
+                  <div onClick={() => gologin()}>
                     <RiHomeLine className="logo" />
-                    <span className="my_place" onClick={gologin}>
-                      우리 집
-                    </span>
-                  </>
+                    <span className="my_place">우리 집</span>
+                  </div>
                 )}
               </ButtonMyPlace>
               <SortButtons

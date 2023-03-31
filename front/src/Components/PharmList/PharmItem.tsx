@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getDetailsAndReviews, likePharmacy } from "../../Api/AxiosInstance";
+import { getDetailsAndReviews, likePharmacy, UserInstance } from "../../Api/AxiosInstance";
 import { getLocalStorage } from "../../Api/localStorage";
 import { useAppSelector } from "../../Redux/hooks";
 import PharmDetail from "../Modal/PharmDetail";
@@ -24,12 +24,6 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
     return state.userInfo.response;
   });
 
-  //! GET : 약국상세정보 + 리뷰리스트
-  const onModalUp = () => {
-    getDetailsAndReviews(setPharmDetail, setReviewList, storeIdx);
-    setIsModalUp(true);
-  };
-
   const likeThisPharmacy = () => {
     const accessToken = getLocalStorage("access_token");
     if (!accessToken) {
@@ -41,6 +35,16 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
       likePharmacy(storeIdx, like, setLike);
     }
   };
+
+  // console.log(likepharm.storeIdx);
+
+  //! GET : 약국상세정보 + 리뷰리스트
+  const onModalUp = () => {
+    getDetailsAndReviews(setPharmDetail, setReviewList, storeIdx);
+    setIsModalUp(true);
+  };
+
+  // console.log(Pharm);
 
   return (
     <PharmCard>
@@ -61,7 +65,7 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." onClick={onModalUp} />
         )}
-        <LikeButton onClick={likeThisPharmacy}>
+        <LikeButton onClick={() => likeThisPharmacy()}>
           {like ? (
             <img src="./Images/Heart.png" alt="좋아요가 선택된 상태의 꽉 찬 하트모양입니다." />
           ) : (

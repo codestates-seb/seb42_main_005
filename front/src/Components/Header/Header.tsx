@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAppSelector } from "../../Redux/hooks";
 import { zIndex_Header } from "../../Util/z-index";
@@ -8,7 +8,7 @@ import Account from "./Account";
 import { TYPE_UserInfo } from "../../Api/TYPES";
 
 export default function Header() {
-  const [userInfo, setUserInfo] = useState<TYPE_UserInfo>();
+  const [userInfo, setUserInfo] = useState<TYPE_UserInfo | undefined>();
 
   const user = useAppSelector((state) => {
     return state.userInfo.response;
@@ -18,10 +18,17 @@ export default function Header() {
     if (user) getUser(user.userIdx, setUserInfo);
   }, [user]);
 
+  const navigate = useNavigate();
+  const goHome = () => {
+    if (user?.name === "관리자") {
+      return alert("관리자는 지도홈을 이용하실수 없습니다.");
+    }
+    navigate("/");
+  };
   return (
     <HeaderContainer>
       <div className="logo_container">
-        <LogoContainer to="/">
+        <LogoContainer onClick={() => goHome()}>
           <img className="logo_img" alt="logo" src="Images/Logo.png" />
           <span className="logo_text">
             우리<span className="logo_text2">동네</span>약국<span className="logo_text2">지도</span>
@@ -88,7 +95,7 @@ const EmptyContainer = styled.div`
   }
 `;
 
-const LogoContainer = styled(Link)`
+const LogoContainer = styled.div`
   display: flex;
   align-items: center;
   height: 100%;

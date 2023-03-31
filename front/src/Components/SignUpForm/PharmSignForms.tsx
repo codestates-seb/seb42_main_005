@@ -135,12 +135,18 @@ export default function PharmSignForms() {
           method: "post",
           data: formDataForsubmit,
         });
-      } catch (error) {
+      } catch (error: any) {
+        if (error?.response?.status === 404) {
+          return alert("현재 약국의 주소와 동일한지 확인해주세요.");
+        }
+        if (error?.response?.status === 409) {
+          return alert("이미 가입된 아이디입니다.");
+        }
         console.log(error);
       }
+      navigate("/login");
     };
     postSignUp();
-    navigate("/login");
   };
 
   const BusinessImg = useRef<HTMLInputElement>(null);
