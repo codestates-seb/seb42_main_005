@@ -25,7 +25,7 @@ public class OperatingTime {
     //편의 메서드
     public boolean checkOperating() {
         if (endTime != null) {
-            return LocalTime.now().isBefore(endTime);
+            return LocalTime.now().isAfter(endTime);
         }
         return false;
     }
