@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import styled from "styled-components";
 import { AdminInstance } from "../../Api/AxiosInstance";
 import { useAppSelector } from "../../Redux/hooks";
@@ -8,17 +8,17 @@ import CheckBox from "../../Components/Ul/CheckBox";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Reports() {
-  const [reports, setReports] = useState([]);
+  const [reports, setReports] = useState<Array<any>>([]);
   const [checkedList, setCheckedList] = useState<Array<any>>([]);
+  const listRef = useRef(null);
+  const preventRef = useRef(true);
+  const obsRef = useRef(null);
+  const [isLast, setIsLast] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(0);
 
   const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
-
-  //! GET : 신고리뷰 리스트 불러오기
-  useEffect(() => {
-    AdminInstance.getReports(setReports);
-  }, []);
 
   //* 체크된 항목을 하나씩 담아주는 부분
   const onCheckedItem = useCallback(
@@ -32,6 +32,27 @@ export default function Reports() {
     [checkedList],
   );
   const data = { userIdxs: checkedList };
+
+  const obsHandler = (entries: IntersectionObserverEntry[]) => {
+    const target = entries[0];
+    if (!isLast && target.isIntersecting && preventRef.current) {
+      preventRef.current = false;
+      setPage((prev) => prev + 1);
+    }
+  };
+  useEffect(() => {
+    if (page === 0) {
+      setIsLast(false);
+    }
+    AdminInstance.getReports(setReports, page, setIsLast, preventRef.current);
+  }, [page]);
+  useEffect(() => {
+    const observer = new IntersectionObserver(obsHandler, { root: listRef.current, threshold: 0.1 });
+    if (obsRef.current) observer.observe(obsRef.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, [isLast, reports.length !== 0]);
 
   return (
     <WholePage>
@@ -67,7 +88,7 @@ export default function Reports() {
                   <Values className="reports">신고 수</Values>
                 </Label>
                 {reports.length ? (
-                  <BelowLable>
+                  <BelowLable ref={listRef}>
                     {reports.map((report: any, i: number) => (
                       <Content key={i}>
                         <Values className="checkBox">
@@ -82,6 +103,7 @@ export default function Reports() {
                         <Values className="reports">{report.reportCnt}</Values>
                       </Content>
                     ))}
+                    {<div ref={obsRef} />}
                   </BelowLable>
                 ) : (
                   <Instead>

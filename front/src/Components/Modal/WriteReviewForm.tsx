@@ -16,9 +16,10 @@ interface Props {
   setIsReviewFormShown: TYPE_setBoolean;
   storeIdx: number | undefined;
   setReviewList: React.Dispatch<React.SetStateAction<TYPE_reviewList[]>>;
+  page: number
 }
 
-export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx, setReviewList }: Props) {
+export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx, setReviewList, page }: Props) {
   const [imageSrc, setImageSrc]: any = useState(null);
   const [imgFile, setImgFile]: any = useState(null);
   const [review, setReview] = useState({
@@ -55,11 +56,14 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
       content: review.content,
       rating: review.rating,
     };
+    if (!data.content || !data.rating) {
+      return alert("리뷰내용과 별점을 작성해주세요!");
+    }
     const formData = new FormData();
     formData.append("postDto", new Blob([JSON.stringify(data)], { type: "application/json" }));
     formData.append("image", imgFile);
     await postReview(storeIdx, formData, setIsReviewFormShown);
-    await getReview(storeIdx, setReviewList);
+    await getReview(storeIdx, setReviewList, page);
   };
 
   return (

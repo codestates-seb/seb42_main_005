@@ -52,14 +52,6 @@ export default function Login() {
       ...loginForm,
       [name]: value,
     });
-    let errors;
-    if (name === FORM_FIELD_NAMES.PASSWORD) {
-      errors = validators.validatePassword(value);
-    }
-    setError({
-      ...error,
-      [name]: errors,
-    });
   };
 
   const navigate = useNavigate();
