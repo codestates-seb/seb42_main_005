@@ -2,6 +2,7 @@ package com.project.mainproject.store.service;
 
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.enums.ResultStatus;
+import com.project.mainproject.exception.BusinessLogicException;
 import com.project.mainproject.openApi.entity.HolidayData;
 import com.project.mainproject.redis.repository.RedisRepository;
 import com.project.mainproject.store.dto.DBdto.DBPickedStoredListDto;
@@ -18,12 +19,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static com.project.mainproject.user.exception.UserExceptionCode.USER_MISS_MATCH;
 
 
 @Service
@@ -52,6 +52,8 @@ public class StoreGetService {
     * 거리기준 랭킹기준 찜 기준 stub o
     * */
     public SingleResponseDto getStoreListDto(GetStoreListRequestDto request, Long userIdx) {
+        if (request.getFilterCondition().equals("bookmarks") && userIdx == -1)
+            throw new BusinessLogicException(USER_MISS_MATCH);
         Boolean isHoliday = getIsHoliday();
         double maxLat = Math.max(request.getSwLat(), request.getNeLat());
         double minLat = Math.min(request.getSwLat(), request.getNeLat());
