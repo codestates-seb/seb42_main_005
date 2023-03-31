@@ -43,7 +43,7 @@ export default function SearchBar({
         onChange={handleInputChange}
         onKeyPress={handleKeyPress}
       />
-      <ButtonSearch onClick={searchPharm}>
+      <ButtonSearch onClick={()=>searchPharm()}>
         <BsSearch className="searchIcon" aria-hidden="true" />
       </ButtonSearch>
     </WrapperSearch>

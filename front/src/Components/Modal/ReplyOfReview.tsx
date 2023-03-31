@@ -13,8 +13,9 @@ interface Props {
   reply: any;
   Pharm: TYPE_Detail | undefined;
   setReviewList: React.Dispatch<React.SetStateAction<TYPE_reviewList[]>>;
+  page: number
 }
-export default function ReplyOfReview({ reviewIdx, reply, Pharm, setReviewList }: Props) {
+export default function ReplyOfReview({ reviewIdx, reply, Pharm, setReviewList, page }: Props) {
   const [isPatchFormShown, setIsPatchFormShown] = useState(false);
   const [content, setContent] = useState(reply.content);
 
@@ -40,14 +41,14 @@ export default function ReplyOfReview({ reviewIdx, reply, Pharm, setReviewList }
         content,
       };
       await patchReply(reviewIdx, reply.replyIdx, patchData, setIsPatchFormShown);
-      await getReview(Pharm?.storeIdx, setReviewList);
+      await getReview(Pharm?.storeIdx, setReviewList, page);
     }
   };
 
   // ! DELETE : 리뷰의 댓글삭제
   const deleteReplyAndRefresh = async () => {
     await deleteReply(reviewIdx, reply.replyIdx);
-    await getReview(Pharm?.storeIdx, setReviewList);
+    await getReview(Pharm?.storeIdx, setReviewList, page);
   };
 
   return (

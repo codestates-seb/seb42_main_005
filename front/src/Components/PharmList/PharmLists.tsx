@@ -1,9 +1,11 @@
 //홈화면 옆에 약국 리스트
 import { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import PharmItem from "./PharmItem";
 import SearchBar from "./SearchBar";
 import SortButtons from "./SortButtons";
+import { APIS } from "../../Api/APIs";
 import { zIndex_PharmList } from "../../Util/z-index";
 import { VscTriangleLeft } from "react-icons/vsc";
 import { RiHomeLine } from "react-icons/ri";
@@ -11,8 +13,6 @@ import { useAppSelector } from "../../Redux/hooks";
 import { getLocalStorage } from "../../Api/localStorage";
 import { useNavigate } from "react-router-dom";
 import { SELECT_HIDDEN, SELECT_SORT_LIST, SELECT_OPTION_MAP } from "../../Api/TYPES";
-import axios from "axios";
-import { APIS } from "../../Api/APIs";
 
 interface Props {
   hidden: SELECT_HIDDEN;
@@ -43,14 +43,12 @@ export default function PharmLists({
 }: Props) {
   const [keyword, setKeyword] = useState("");
   const [displayedList, setDisplayedList] = useState(totalPharmList.slice(0, 10));
-  const listRef = useRef<HTMLDivElement>(null);
   const [myAdress, setMyAdress] = useState("");
-
+  const listRef = useRef<HTMLDivElement>(null);
   const user = useAppSelector((state: any) => {
     return state.userInfo.response;
   });
 
-  let token = getLocalStorage("access_token");
   const API = import.meta.env.VITE_APP_API_URL;
   useEffect(() => {
     const userNewInfo = async () => {
@@ -66,6 +64,7 @@ export default function PharmLists({
     userNewInfo();
   }, []);
 
+  const token = getLocalStorage("access_token");
   const navigate = useNavigate();
 
   const gologin = () => {

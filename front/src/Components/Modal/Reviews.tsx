@@ -1,17 +1,30 @@
 import styled from "styled-components";
-import { TYPE_reviewList, TYPE_setBoolean, TYPE_Detail, TYPE_setReviewList } from "../../Api/TYPES";
+import { useRef, useEffect, useState } from "react";
+import { TYPE_reviewList, TYPE_setBoolean, TYPE_Detail } from "../../Api/TYPES";
+import { getReview, getReviewForScroll } from "../../Api/AxiosInstance";
 import ReviewUnit from "./ReviewUnit";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 interface Props {
   reviewList: TYPE_reviewList[];
-  setReviewList: TYPE_setReviewList;
+  setReviewList: any;
   setIsReviewFormShown: TYPE_setBoolean;
   storeIdx: number;
   Pharm: TYPE_Detail | undefined;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function ReviewList({ reviewList, setReviewList, setIsReviewFormShown, Pharm }: Props) {
+export default function ReviewList({
+  reviewList,
+  setReviewList,
+  setIsReviewFormShown,
+  storeIdx,
+  Pharm,
+  page,
+  setPage,
+}: Props) {
+
   return (
     <ReviewContainer>
       <ReviewTitle>리뷰</ReviewTitle>
@@ -26,6 +39,7 @@ export default function ReviewList({ reviewList, setReviewList, setIsReviewFormS
               Pharm={Pharm}
               setReviewList={setReviewList}
               reviewList={reviewList}
+              page={page}
             />
           ))}
         </Reviews>
@@ -83,7 +97,7 @@ const Reviews = styled.section`
     visibility: visible;
   }
   @media (max-width: 768px) {
-    flex-grow: 0;
+    flex-grow: 1;
     overflow: visible;
   }
 `;

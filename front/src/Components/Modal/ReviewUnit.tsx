@@ -18,9 +18,10 @@ interface Props {
   reviewList: TYPE_reviewList[] | TYPE_reviewList;
   setReviewList: React.Dispatch<React.SetStateAction<TYPE_reviewList[]>>;
   reviewUserName: string;
+  page: number
 }
 
-export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, reviewUserName }: Props) {
+export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, reviewUserName,page }: Props) {
   const [isReplyFormShown, setIsReplyFormShown] = useState<React.SetStateAction<boolean>>(false);
   const [isOnEdit, setIsOnEdit] = useState<React.SetStateAction<boolean>>(false);
   const [reviewContent, setReviewContent] = useState<React.SetStateAction<any>>(review.content);
@@ -39,7 +40,7 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
   // ! DELETE : 리뷰삭제
   const deleteReviewAndRefresh = async () => {
     await deleteReview(Pharm?.storeIdx, reviewIdx);
-    await getReview(Pharm?.storeIdx, setReviewList);
+    await getReview(Pharm?.storeIdx, setReviewList, page);
   };
 
   //! POST : 리뷰신고
@@ -63,7 +64,7 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
         content: replyContent,
       };
       await postReply(reviewIdx, reply, setReplyContent, setIsReplyFormShown);
-      await getReview(Pharm?.storeIdx, setReviewList);
+      await getReview(Pharm?.storeIdx, setReviewList, page);
     }
   };
 
@@ -193,6 +194,7 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
           reply={reply}
           Pharm={Pharm}
           setReviewList={setReviewList}
+          page={page}
         />
       ))}
     </ReviewUnitContainer>

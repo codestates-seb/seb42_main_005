@@ -35,6 +35,7 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
       likePharmacy(storeIdx, like, setLike);
     }
   };
+  // console.log(Pharm)
 
   // console.log(likepharm.storeIdx);
 
@@ -43,8 +44,6 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
     getDetailsAndReviews(setPharmDetail, setReviewList, storeIdx);
     setIsModalUp(true);
   };
-
-  // console.log(Pharm);
 
   return (
     <PharmCard>
@@ -61,9 +60,9 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
       ) : null}
       <InfoImgContainer>
         {Pharm.imagePath ? (
-          <PharmImg src={Pharm.imagePath} onClick={onModalUp} />
+          <PharmImg src={Pharm.imagePath} onClick={()=>onModalUp()} />
         ) : (
-          <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." onClick={onModalUp} />
+          <PharmImg src="Images/ImgPreparing.png" alt="이미지 준비중입니다." onClick={()=>onModalUp()} />
         )}
         <LikeButton onClick={() => likeThisPharmacy()}>
           {like ? (
@@ -74,7 +73,7 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
         </LikeButton>
       </InfoImgContainer>
       <PharmTitleBox>
-        <PharmName onClick={onModalUp}>{Pharm && Pharm.name}</PharmName>
+        <PharmName onClick={()=>onModalUp()}>{Pharm && Pharm.name}</PharmName>
         {Pharm && <PharmRank rating={Pharm.rating} likes={Pharm.pickedStoreCount} reviewCount={Pharm.reviewCount} />}
       </PharmTitleBox>
     </PharmCard>
