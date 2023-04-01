@@ -60,7 +60,7 @@ export default function MapButtons({
         marker.setMap(makeMap);
       },
       () => {
-        console.log("위치 정보를 가져오는데 실패하여, 내 주소로 이동합니다.");
+        console.log("위치 정보를 가져오는데 실패하여, 회원님의 주소로 이동합니다.");
         const address = myAdress;
         const geocoder = new kakao.maps.services.Geocoder();
 
