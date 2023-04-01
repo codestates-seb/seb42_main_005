@@ -6,9 +6,21 @@ import { TYPE_Working, TYPE_setLike } from "../../Api/TYPES";
 
 interface Props {
   setIsDropDownDown: TYPE_setLike;
-  workingHours: TYPE_Working | Array<any> | undefined;
+  workingHours?: TYPE_Working;
 }
-export default function AnyDropDown({ setIsDropDownDown, workingHours }: Props) {
+export default function AnyDropDown({
+  setIsDropDownDown,
+  workingHours = {
+    monday: null,
+    tuesday: null,
+    wednesday: null,
+    thursday: null,
+    friday: null,
+    saturday: null,
+    sunday: null,
+    holiday: null,
+  },
+}: Props) {
   const translate = (day: string) => {
     if (day === "monday") return "월요일";
     if (day === "tuesday") return "화요일";
