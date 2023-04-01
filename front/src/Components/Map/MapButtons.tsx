@@ -1,6 +1,8 @@
 import styled from "styled-components";
-import { MdReplayCircleFilled } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 import { SELECT_SORT_LIST, SELECT_OPTION_MAP } from "../../Api/TYPES";
+import { getLocalStorage } from "../../Api/localStorage";
+import { MdReplayCircleFilled } from "react-icons/md";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { BiTargetLock } from "react-icons/bi";
 
@@ -33,47 +35,54 @@ export default function MapButtons({
     makeMap.setLevel(makeMap.getLevel() + 1);
   };
 
+  const token = getLocalStorage("access_token");
+  const navigate = useNavigate();
   //* 현재 위치 버튼 클릭 시
   const CurrentLocation = () => {
-    navigator.geolocation.getCurrentPosition(
-      (pos: any) => {
-        const latitude = pos.coords.latitude;
-        const longitude = pos.coords.longitude;
-        const currentPos = new window.kakao.maps.LatLng(latitude, longitude);
+    if (token) {
+      navigator.geolocation.getCurrentPosition(
+        (pos: any) => {
+          const latitude = pos.coords.latitude;
+          const longitude = pos.coords.longitude;
+          const currentPos = new window.kakao.maps.LatLng(latitude, longitude);
 
-        makeMap.panTo(currentPos); // 지도 이동(기존 위치와 가깝다면 부드럽게 이동)
+          makeMap.panTo(currentPos); // 지도 이동(기존 위치와 가깝다면 부드럽게 이동)
 
-        const currentImageSrc = "./Images/currentPos.png";
-        const currentImageSize = new window.kakao.maps.Size(24, 35);
-        const currentMarkerImage = new window.kakao.maps.MarkerImage(currentImageSrc, currentImageSize);
+          const currentImageSrc = "./Images/currentPos.png";
+          const currentImageSize = new window.kakao.maps.Size(24, 35);
+          const currentMarkerImage = new window.kakao.maps.MarkerImage(currentImageSrc, currentImageSize);
 
-        // 기존 marker 삭제
-        const markers = makeMap.getMarkers();
-        markers.setMap(null);
+          // 기존 marker 삭제
+          const markers = makeMap.getMarkers();
+          markers.setMap(null);
 
-        // 새로운 marker 추가
-        const marker = new window.kakao.maps.Marker({
-          position: currentPos,
-          title: "현 위치",
-          image: currentMarkerImage,
-        });
-        marker.setMap(makeMap);
-      },
-      () => {
-        console.log("위치 정보를 가져오는데 실패하여, 회원님의 주소로 이동합니다.");
-        const address = myAdress;
-        const geocoder = new kakao.maps.services.Geocoder();
+          // 새로운 marker 추가
+          const marker = new window.kakao.maps.Marker({
+            position: currentPos,
+            title: "현 위치",
+            image: currentMarkerImage,
+          });
+          marker.setMap(makeMap);
+        },
+        () => {
+          console.log("위치 정보를 가져오는데 실패하여, 회원님의 주소로 이동합니다.");
+          const address = myAdress;
+          const geocoder = new kakao.maps.services.Geocoder();
 
-        geocoder.addressSearch(address, function (result: any, status: any) {
-          if (status === kakao.maps.services.Status.OK) {
-            const myPlacePos = new kakao.maps.LatLng(result[0].y, result[0].x);
-            makeMap.panTo(myPlacePos);
-            makeMap.setLevel(3);
-          }
-        });
-        makeMap.setLevel(3);
-      },
-    );
+          geocoder.addressSearch(address, function (result: any, status: any) {
+            if (status === kakao.maps.services.Status.OK) {
+              const myPlacePos = new kakao.maps.LatLng(result[0].y, result[0].x);
+              makeMap.panTo(myPlacePos);
+              makeMap.setLevel(3);
+            }
+          });
+          makeMap.setLevel(3);
+        },
+      );
+    } else {
+      navigate("/login");
+      alert("로그인 후 이용해주세요!");
+    }
   };
   return (
     <ContainerButtons>

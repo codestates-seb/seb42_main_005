@@ -72,7 +72,7 @@ export default function PharmLists({
 
   const gologin = () => {
     navigate("/login");
-    alert("로그인을 먼저 해주세요!");
+    alert("로그인 후 이용해주세요!");
   };
 
   const handleScroll = (e: any) => {
