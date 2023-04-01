@@ -86,6 +86,7 @@ export default function Login() {
           let token = getLocalStorage("access_token");
           axios.defaults.headers.common.Authorization = token;
           dispatch(get(res.data));
+
           return res;
         })
         .then((res) => {
@@ -105,15 +106,6 @@ export default function Login() {
     postLogin();
   };
 
-  //! POST : 로그인 - Auth
-  const postAuthSignUp = async () => {
-    const provider = ""; //! 여기 수정 필요
-    await axios.post(`${APIS.POST_LOGIN_AUTH}/${provider}`).catch((error) => {
-      // console.log("Auth 로그인하던 중 에러 발생");
-      console.log(error);
-    });
-  };
-
   return (
     <Total>
       <Container>
@@ -122,14 +114,6 @@ export default function Login() {
           <h1>로그인</h1>
         </Title>
         <ContentContainer>
-          <Google>
-            <button className="google_button" onClick={() => postAuthSignUp()}>
-              <GoogleButton>
-                <img className="google_img" alt="google" src="Images/google.png" />
-                <span className="google">Sign up with Google</span>
-              </GoogleButton>
-            </button>
-          </Google>
           <LoginForm onSubmit={onSubmit}>
             <InputContainer className={`${error.email ? "red" : null}`}>
               <BsPersonCircle className="inputimage" aria-hidden="true" />

@@ -2,12 +2,13 @@ import React from "react";
 import axios from "axios";
 import { APIS } from "../Api/APIs";
 import { SELECT_SORT_LIST, SELECT_OPTION_MAP } from "../Api/TYPES";
+import { getLocalStorage } from "../Api/localStorage";
 
 const { kakao } = window;
 
 let markers: any[] = [];
 let clusterer: any = null;
-
+let token = getLocalStorage("access_token");
 export async function useViewMap(
   sorted: SELECT_SORT_LIST,
   selected: SELECT_OPTION_MAP,
@@ -38,7 +39,7 @@ export async function useViewMap(
           sortCondition: sorted,
           filterCondition: selected,
         },
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: token },
       });
 
       const pharmacies = response.data.response;
@@ -137,7 +138,7 @@ export async function useSearch(
       const response = await axios({
         url: `${APIS.GET_Search}${keyword}`,
         method: "get",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: token },
       });
       const pharmacies = response.data.response;
       setTotalPharmList(pharmacies);
