@@ -6,11 +6,6 @@ import MapButtons from "./MapButtons";
 import { zIndex_KakaoMap } from "../../Util/z-index";
 import { SELECT_HIDDEN, SELECT_SORT_LIST, SELECT_OPTION_MAP } from "../../Api/TYPES";
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
 interface Props {
   loading: boolean;
   sorted: SELECT_SORT_LIST;
@@ -21,6 +16,8 @@ interface Props {
   setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>;
   makeMap: any;
   useViewMap: any;
+  myAdress: any;
+  kakao: any;
 }
 
 export default function KakaoMap({
@@ -33,6 +30,8 @@ export default function KakaoMap({
   setTotalPharmList,
   makeMap,
   useViewMap,
+  myAdress,
+  kakao,
 }: Props) {
   //* 필터버튼 클릭 시
   const ClickedFilter = () => {
@@ -66,6 +65,8 @@ export default function KakaoMap({
                 setTotalPharmList={setTotalPharmList}
                 makeMap={makeMap}
                 useViewMap={useViewMap}
+                myAdress={myAdress}
+                kakao={kakao}
               />
             </ControllerBottom>
           </>

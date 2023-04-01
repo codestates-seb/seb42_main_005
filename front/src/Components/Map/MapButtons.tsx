@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
-import { BiTargetLock } from "react-icons/bi";
 import { MdReplayCircleFilled } from "react-icons/md";
 import { SELECT_SORT_LIST, SELECT_OPTION_MAP } from "../../Api/TYPES";
+import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
+import { BiTargetLock } from "react-icons/bi";
 
 interface ButtonProps {
   sorted: SELECT_SORT_LIST;
@@ -11,6 +11,8 @@ interface ButtonProps {
   setTotalPharmList: React.Dispatch<React.SetStateAction<never[]>>;
   makeMap: any;
   useViewMap: any;
+  myAdress: any;
+  kakao: any;
 }
 
 export default function MapButtons({
@@ -20,6 +22,8 @@ export default function MapButtons({
   setTotalPharmList,
   makeMap,
   useViewMap,
+  myAdress,
+  kakao,
 }: ButtonProps) {
   //* 줌 인/아웃 버튼 클릭 시
   const zoomIn = () => {
@@ -55,19 +59,22 @@ export default function MapButtons({
         });
         marker.setMap(makeMap);
       },
-      (error: any) => {
-        alert("위치 정보를 가져오는데 실패했습니다.");
+      () => {
+        console.log("위치 정보를 가져오는데 실패하여, 회원님의 주소로 이동합니다.");
+        const address = myAdress;
+        const geocoder = new kakao.maps.services.Geocoder();
+
+        geocoder.addressSearch(address, function (result: any, status: any) {
+          if (status === kakao.maps.services.Status.OK) {
+            const myPlacePos = new kakao.maps.LatLng(result[0].y, result[0].x);
+            makeMap.panTo(myPlacePos);
+            makeMap.setLevel(3);
+          }
+        });
+        makeMap.setLevel(3);
       },
     );
-    makeMap.setLevel(3);
   };
-  //* 현지도재검색 클릭 시 => 온클릭 안으로 가지고 들어감 ..구글링 해보니까 이러면 더블클릭 안해도 된다했는데...
-  // const reMap = () => {
-  //   if (makeMap) {
-  //     useViewMap(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
-  //   }
-  // };
-
   return (
     <ContainerButtons>
       <ControllerReMap>

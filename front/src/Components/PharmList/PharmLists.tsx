@@ -26,6 +26,8 @@ interface Props {
   useViewMap: any;
   useSearch: any;
   kakao: any;
+  myAdress: any;
+  setMyAdress: any;
 }
 
 export default function PharmLists({
@@ -40,10 +42,11 @@ export default function PharmLists({
   useViewMap,
   useSearch,
   kakao,
+  myAdress,
+  setMyAdress,
 }: Props) {
   const [keyword, setKeyword] = useState("");
   const [displayedList, setDisplayedList] = useState(totalPharmList.slice(0, 10));
-  const [myAdress, setMyAdress] = useState("");
   const listRef = useRef<HTMLDivElement>(null);
   const user = useAppSelector((state: any) => {
     return state.userInfo.response;

@@ -7,6 +7,11 @@ import { useAppSelector } from "../Redux/hooks";
 import "../hooks/PharmacyOverlay.css";
 import { SELECT_HIDDEN, SELECT_OPTION_MAP, SELECT_SORT_LIST } from "../Api/TYPES";
 
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
 const { kakao } = window;
 
 export default function Home() {
@@ -16,6 +21,7 @@ export default function Home() {
   const [selected, setSelected] = useState<SELECT_OPTION_MAP>("not");
   const [sorted, setSorted] = useState<SELECT_SORT_LIST>("distance");
   const [loading, setLoading] = useState(true);
+  const [myAdress, setMyAdress] = useState("");
   const location: any = useGeolocation();
 
   const user = useAppSelector((state) => {
@@ -53,7 +59,7 @@ export default function Home() {
           const MarkerImageMy = new kakao.maps.MarkerImage(ImageSrcMy, ImageSizeMy);
           const MarkerMy = new kakao.maps.Marker({
             position: PositionMyPlace,
-            title: "우리 집",
+            title: "내 주소",
             image: MarkerImageMy,
           });
           MarkerMy.setMap(map);
@@ -88,6 +94,8 @@ export default function Home() {
         setTotalPharmList={setTotalPharmList}
         makeMap={makeMap}
         useViewMap={useViewMap}
+        kakao={kakao}
+        myAdress={myAdress}
       />
       <PharmLists
         hidden={hidden}
@@ -101,6 +109,8 @@ export default function Home() {
         useViewMap={useViewMap}
         useSearch={useSearch}
         kakao={kakao}
+        myAdress={myAdress}
+        setMyAdress={setMyAdress}
       />
     </>
   );
