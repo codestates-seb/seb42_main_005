@@ -80,7 +80,7 @@ public class UserController {
                 .build();
 
         PageResponseDto<Object> response = PageResponseDto.builder()
-                .response(pharmacyPage).pageInfo(pageInfo)
+                .response(pharmacyPage.getContent()).pageInfo(pageInfo)
                 .message(PROCESS_COMPLETED.getMessage()).httpCode(PROCESS_COMPLETED.getHttpCode())
                 .build();
         return ResponseEntity.ok().body(response);

@@ -1,6 +1,5 @@
 package com.project.mainproject.review.controller;
 
-import com.project.mainproject.dto.PageResponseDto;
 import com.project.mainproject.dto.SingleResponseDto;
 import com.project.mainproject.review.dto.*;
 import com.project.mainproject.review.entity.Review;
@@ -9,12 +8,12 @@ import com.project.mainproject.review.mapper.ReviewMapper;
 import com.project.mainproject.review.mapper.ReviewReportMapper;
 import com.project.mainproject.review.service.ReviewReportService;
 import com.project.mainproject.review.service.ReviewService;
+import com.project.mainproject.utils.CheckLoginUser;
 import com.project.mainproject.utils.ResponseBuilder;
 import com.project.mainproject.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,18 +38,17 @@ public class ReviewController {
      *  약국 리뷰 페이징
      * */
     @GetMapping("/store/{storeIdx}/review")
-    public ResponseEntity<PageResponseDto<ListGetStoreReviewDto>> getStoreReview(
-            @PathVariable Long storeIdx,
-            Pageable pageable
+    public ResponseEntity<SingleResponseDto<ListGetStoreReviewDto>> getStoreReview(
+            @PathVariable Long storeIdx
     ) {
-        Page<Review> reviews = reviewService.getReviews(storeIdx, pageable);
+        List<Review> reviews = reviewService.getReviews(storeIdx);
 
         ListGetStoreReviewDto responseData = ListGetStoreReviewDto.builder()
-                .storeReviews(reviewMapper.reviewsToReviewsDto(reviews.getContent()))
+                .storeReviews(reviewMapper.reviewsToReviewsDto(reviews))
                 .build();
 
-        PageResponseDto<ListGetStoreReviewDto> response =
-                responseBuilder.buildPageResponse(reviews, responseData);
+        SingleResponseDto<ListGetStoreReviewDto> response =
+                responseBuilder.buildSingleOkResponse(responseData);
 
         return ResponseEntity.ok().body(response);
     }
@@ -83,14 +81,18 @@ public class ReviewController {
      * */
     @PatchMapping("/store/{storeIdx}/review/{reviewIdx}")
     public ResponseEntity<SingleResponseDto<SimpleReviewDto>> updateReview(
-            @PathVariable Long storeIdx, @PathVariable Long reviewIdx,
-            @RequestBody PostUpdateReviewDto patchDto
+            @PathVariable Long storeIdx,
+            @PathVariable Long reviewIdx,
+            @RequestBody PostUpdateReviewDto patchDto,
+            @AuthenticationPrincipal Object principal
     ) {
+        Long userIdx = CheckLoginUser.getContextIdx(principal);
         patchDto.setStoreIdx(storeIdx);
+
         Review targetReview = reviewService.findVerifiedReview(storeIdx, reviewIdx);
         Review review = reviewMapper.reviewDtoToReview(patchDto, targetReview);
 
-        Review updatedReview = reviewService.updateReview(review);
+        Review updatedReview = reviewService.updateReview(review, userIdx);
 
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
 
@@ -105,8 +107,11 @@ public class ReviewController {
      *  리뷰 삭제
      * */
     @DeleteMapping("/store/{storeIdx}/review/{reviewIdx}")
-    public ResponseEntity<URI> deleteReview(@PathVariable Long storeIdx, @PathVariable Long reviewIdx) {
-        reviewService.deleteReview(storeIdx, reviewIdx);
+    public ResponseEntity<URI> deleteReview(@PathVariable Long storeIdx,
+                                            @PathVariable Long reviewIdx,
+                                            @AuthenticationPrincipal Object principal) {
+        Long userIdx = CheckLoginUser.getContextIdx(principal);
+        reviewService.deleteReview(storeIdx, reviewIdx, userIdx);
         URI location = UriCreator.createUri("/api/store/" + storeIdx + "/review");
 
         return ResponseEntity.noContent().header("Location", location.toString()).build();

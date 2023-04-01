@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.project.mainproject.review.exception.ReviewExceptionCode.REVIEW_NOT_EXIST;
+import static com.project.mainproject.review.exception.ReviewExceptionCode.WRITER_MISS_MATCH;
 
 @Service
 @RequiredArgsConstructor
@@ -29,16 +30,22 @@ public class ReviewReplyService {
     }
 
     @Transactional
-    public ReviewReply updateReply(ReviewReply reviewReply) {
-        // TODO: 유저 검증
+    public ReviewReply updateReply(ReviewReply reviewReply, Long loginUserIdx) {
+        validWriter(loginUserIdx, reviewReply);
         return reviewReplyRepository.save(reviewReply);
     }
     
     @Transactional
-    public void deleteReply(Long reviewIdx, Long replyIdx) {
-        // TODO: 유저 검증
-        ReviewReply reply = findVerifiedReply(reviewIdx, replyIdx);
-        reviewReplyRepository.delete(reply);
+    public void deleteReply(Long reviewIdx, Long replyIdx, Long loginUserIdx) {
+        ReviewReply reviewReply = findVerifiedReply(reviewIdx, replyIdx);
+        validWriter(loginUserIdx, reviewReply);
+
+        reviewReplyRepository.delete(reviewReply);
+    }
+
+    private void validWriter(Long loginUserIdx, ReviewReply reviewReply) {
+        if (loginUserIdx != reviewReply.getUser().getUserIdx())
+            throw new BusinessLogicException(WRITER_MISS_MATCH);
     }
 
 }

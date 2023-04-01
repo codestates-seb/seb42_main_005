@@ -2,13 +2,9 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { PharmInstance, postUserImg } from "../../Api/AxiosInstance";
 import { onUpload } from "../../Api/onUpload";
-import { useAppSelector, useAppDispatch } from "../../Redux/hooks";
+import { useAppSelector } from "../../Redux/hooks";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { TYPE_UserInfo } from "../../Api/TYPES";
-import { getLocalStorage } from "../../Api/localStorage";
-import axios from "axios";
-import { APIS } from "../../Api/APIs";
-import { get } from "../../Redux/slice/userSlice";
 
 export default function PharmacistInformation() {
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);

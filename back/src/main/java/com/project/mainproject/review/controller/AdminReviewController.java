@@ -12,6 +12,8 @@ import com.project.mainproject.utils.ResponseBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +31,9 @@ public class AdminReviewController {
      *  신고된 리뷰들 조회
      * */
     @GetMapping("/reports")
-    public ResponseEntity getReportedReview(Pageable pageable) {
+    public ResponseEntity getReportedReview(
+            @PageableDefault(size = 20, sort = "createdAt",direction = Sort.Direction.DESC) Pageable pageable
+    ) {
         Page<Review> reviews = reviewService.getReportedReviews(pageable);
 
         ListReportedReviewDto responseData = ListReportedReviewDto.builder()

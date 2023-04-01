@@ -1,6 +1,6 @@
 //package com.project.mainproject.review.controller;
 //
-//import com.project.mainproject.dto.PageResponseDto;
+//import com.project.mainproject.dto.SingleResponseDto;
 //import com.project.mainproject.enums.ResultStatus;
 //import com.project.mainproject.helper.review.ReviewControllerTestHelper;
 //import com.project.mainproject.review.dto.ListGetStoreReviewDto;
@@ -29,8 +29,6 @@
 //import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 //import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.boot.test.mock.mockito.MockBean;
-//import org.springframework.data.domain.Page;
-//import org.springframework.data.domain.Pageable;
 //import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 //import org.springframework.http.HttpHeaders;
 //import org.springframework.mock.web.MockMultipartFile;
@@ -40,8 +38,6 @@
 //import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.test.web.servlet.MockMvc;
 //import org.springframework.test.web.servlet.ResultActions;
-//import org.springframework.util.LinkedMultiValueMap;
-//import org.springframework.util.MultiValueMap;
 //import org.springframework.web.multipart.MultipartFile;
 //
 //import java.util.List;
@@ -113,20 +109,16 @@
 //    @Test
 //    @DisplayName("약국 리뷰 가져오기 : 성공")
 //    void getStoreReviewTest() throws Exception {
-//        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-//        queryParams.add("page", "1");
-//        queryParams.add("size", "10");
-//
 //        ListGetStoreReviewDto data = ReviewStub.getStoreReviewStub();
-//        PageResponseDto responseDto = CommonStub.getPageResponseStub(ResultStatus.PROCESS_COMPLETED);
+//        SingleResponseDto responseDto = CommonStub.getSingleResponseStub(ResultStatus.PROCESS_COMPLETED);
 //        responseDto.setResponse(data);
-//        Page<Review> serviceResult = ReviewStub.getPageReviewStub();
+//        List<Review> serviceResult = ReviewStub.getListReviewStub();
 //
-//        given(reviewService.getReviews(anyLong(), any(Pageable.class))).willReturn(serviceResult);
+//        given(reviewService.getReviews(anyLong())).willReturn(serviceResult);
 //        given(reviewMapper.reviewsToReviewsDto(any(List.class))).willReturn(ReviewStub.getStoreReviewListStub());
 //
 //
-//        ResultActions actions = mockMvc.perform(getRequestBuilder(getOneURI(), queryParams, storeIdx, accessToken));
+//        ResultActions actions = mockMvc.perform(getRequestBuilder(getOneURI(), storeIdx, accessToken));
 //
 //
 //        actions
@@ -156,6 +148,7 @@
 //                                        fieldWithPath("response.storeReviews[].userIdx").type(JsonFieldType.NUMBER).description("사용자 식별자 ID"),
 //                                        fieldWithPath("response.storeReviews[].userName").type(JsonFieldType.STRING).description("사용자 이름"),
 //                                        fieldWithPath("response.storeReviews[].profileImage").type(JsonFieldType.STRING).description("사용자 프로필 사진"),
+//                                        fieldWithPath("response.storeReviews[].reportCount").type(JsonFieldType.NUMBER).description("리뷰 신고 수"),
 //                                        fieldWithPath("response.storeReviews[].createdAt").type(JsonFieldType.STRING).description("리뷰 생성일"),
 //                                        fieldWithPath("response.storeReviews[].modifiedAt").type(JsonFieldType.STRING).description("리뷰 수정일"),
 //                                        fieldWithPath("response.storeReviews[].replies").type(JsonFieldType.ARRAY).description("대 댓글"),
@@ -165,13 +158,6 @@
 //                                        fieldWithPath("response.storeReviews[].replies[].userName").type(JsonFieldType.STRING).description("대댓글 작성자 이름"),
 //                                        fieldWithPath("response.storeReviews[].replies[].profileImage").type(JsonFieldType.STRING).description("대댓글 작성자 프로필사진"),
 //                                        fieldWithPath("response.storeReviews[].replies[].createdAt").type(JsonFieldType.STRING).description("대댓글 작성일"),
-//                                        fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),
-//                                        fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("한 페이지당 데이터 수"),
-//                                        fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지 \n 첫 페이지는 0"),
-//                                        fieldWithPath("pageInfo.totalElement").type(JsonFieldType.NUMBER).description("전체 데이터 수"),
-//                                        fieldWithPath("pageInfo.totalPage").type(JsonFieldType.NUMBER).description("전체 페이지 수"),
-//                                        fieldWithPath("pageInfo.isFirst").type(JsonFieldType.BOOLEAN).description("첫번째 페이지 인지 여부"),
-//                                        fieldWithPath("pageInfo.isFinish").type(JsonFieldType.BOOLEAN).description("마지막 페이지 인지 여부"),
 //                                        fieldWithPath("message").type(JsonFieldType.STRING).description("처리 상태 코드 작성"),
 //                                        fieldWithPath("httpCode").type(JsonFieldType.NUMBER).description("처리 완료 메시지")
 //                                )
@@ -238,12 +224,13 @@
 //        PostUpdateReviewDto build = ReviewStub.getPostUpdateReviewStub();
 //        String content = toJsonContent(build);
 //
+//        // 실제 서비스 로직 Mocking
 //        given(reviewService.findVerifiedReview(anyLong(), anyLong())).willReturn(ReviewStub.getReviewStub());
 //        given(reviewMapper.reviewDtoToReview(any(PostUpdateReviewDto.class), any(Review.class))).willReturn(ReviewStub.getReviewStub2());
-//        given(reviewService.updateReview(any(Review.class))).willReturn(ReviewStub.getReviewStub2());
+//        given(reviewService.updateReview(any(Review.class), anyLong())).willReturn(ReviewStub.getReviewStub2());
 //        given(reviewMapper.reviewToSimpleReviewDto(any(Review.class))).willReturn(ReviewStub.getSimpleReviewStub());
 //
-//        ResultActions actions = mockMvc.perform(patchRequestBuilder(getTowPathParam(), storeIdx, reviewIdx, content, accessToken));
+//        ResultActions actions = mockMvc.perform(patchAuthorizedRequestBuilder(getTowPathParam(), storeIdx, reviewIdx, content, accessToken));
 //
 //        actions
 //                .andExpect(status().isOk())
@@ -282,10 +269,9 @@
 //    @Test
 //    @DisplayName("리뷰 삭제 : 성공")
 //    void deleteReview() throws Exception {
+//        doNothing().when(reviewService).deleteReview(Mockito.anyLong(), Mockito.anyLong(), anyLong());
 //
-//        doNothing().when(reviewService).deleteReview(Mockito.anyLong(), Mockito.anyLong());
-//
-//        ResultActions actions = mockMvc.perform(deleteRequestBuilder(getTowPathParam(), storeIdx, reviewIdx));
+//        ResultActions actions = mockMvc.perform(deleteRequestBuilder(getTowPathParam(), storeIdx, reviewIdx, accessToken));
 //
 //        actions
 //                .andExpect(status().isNoContent())
@@ -294,6 +280,9 @@
 //                        "delete-review",
 //                        getRequestPreProcessor(),
 //                        getResponsePreProcessor(),
+//                        requestHeaders(
+//                                headerWithName("Authorization").description("ACCESS 토큰").optional()
+//                        ),
 //                        pathParameters(
 //                                getStoreReviewPathParameterDescriptor()
 //                        ),

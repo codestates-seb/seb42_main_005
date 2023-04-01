@@ -137,14 +137,6 @@ export default function UserSignUpForms() {
 
   return (
     <Container>
-      <Google>
-        <button className="google_button">
-          <GoogleButton>
-            <img className="google_img" alt="google" src="Images/google.png" />
-            <span className="google">Sign up with Google</span>
-          </GoogleButton>
-        </button>
-      </Google>
       <SignUpForm onSubmit={onSubmit}>
         <InputContainer className={`${error.email ? "red" : null}`}>
           <BsPersonCircle className="inputImage" aria-hidden="true" />
@@ -221,34 +213,7 @@ const Container = styled.section`
   box-shadow: 0 1px 4px -3px hsla(0, 0%, 0%, 0.09), 0 3px 8px -3px hsla(0, 0%, 0%, 0.1),
     0 4px 13px -3px hsla(0, 0%, 0%, 0.13);
 `;
-const Google = styled.article`
-  padding-bottom: 1rem;
-  .google_button {
-    height: 3.3rem;
-    width: 31rem;
-    border: 1px solid var(--black-200);
-    border-radius: 10px;
-    background-color: transparent;
-    cursor: pointer;
-    box-shadow: var(--bs-md);
-    &:hover {
-      background-color: var(--black-050);
-    }
-  }
-`;
-const GoogleButton = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .google_img {
-    width: 2.6rem;
-  }
-  .google {
-    padding-left: 0.3rem;
-    font-size: 1.1rem;
-    color: var(--black-500);
-  }
-`;
+
 const SignUpForm = styled.form`
   display: flex;
   flex-direction: column;

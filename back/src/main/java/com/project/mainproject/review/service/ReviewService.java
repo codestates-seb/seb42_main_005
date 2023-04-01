@@ -31,10 +31,10 @@ public class ReviewService {
     private final StoreValidService storeService;
     private final FileUploader fileUploader;
 
-    public Page<Review> getReviews(Long storeIdx, Pageable pageable) {
+    public List<Review> getReviews(Long storeIdx) {
         storeService.storeValidation(storeIdx);
         return reviewRepository.findAllByStoreStoreIdxAndReviewStatusNotOrderByCreatedAtDesc(
-                storeIdx, DELETED, pageable);
+                storeIdx, DELETED);
     }
 
     @Transactional
@@ -52,41 +52,17 @@ public class ReviewService {
     }
 
     @Transactional
-    public Review updateReview(Review review) {
+    public Review updateReview(Review review, Long loginUserIdx) {
+        validWriter(loginUserIdx, review);
         Review updatedReview = reviewRepository.save(review);
 
         return updatedReview;
     }
 
-//    리뷰 수정 기존 로직
-//    @Transactional
-//    public Review updateReview(Review review, MultipartFile image) {
-//        Review updatedReview = reviewRepository.save(review);
-//        updateReviewImage(image, updatedReview);
-//
-//        return updatedReview;
-//    }
-//
-//    private void updateReviewImage(MultipartFile image, Review review) {
-//        deleteExistReviewImages(review);
-//        String uploadImagePath = "";
-//        if (image != null) {
-//            uploadImagePath = uploadImage(image);
-//        }
-//        review.updateReviewImage(uploadImagePath);
-//    }
-//
-//    private void deleteExistReviewImages(Review review) {
-//        List<String> existImages = new ArrayList<>();
-//        for (ReviewImage existReviewImage : review.getReviewImages()){
-//            existImages.add(existReviewImage.getImagePath());
-//        }
-//        if (existImages.size() != 0) FileUploader.deleteImages(existImages);
-//    }
-
     @Transactional
-    public void deleteReview(Long storeIdx, Long reviewIdx) {
+    public void deleteReview(Long storeIdx, Long reviewIdx, Long loginUserIdx) {
         Review review = findVerifiedReview(storeIdx, reviewIdx);
+        validWriter(loginUserIdx, review);
         review.setReviewStatus(DELETED);
 
         if (review.getReviewImages().size() != 0)
@@ -114,7 +90,6 @@ public class ReviewService {
     }
 
     public List<Review> getUserReviews(Long userIdx) {
-        // TODO: 유저 검증 추가 (StoreService)
         return reviewRepository.findAllByUserUserIdxAndReviewStatusOrderByCreatedAtDesc(
                 userIdx, POSTED);
     }
@@ -161,6 +136,11 @@ public class ReviewService {
 
         reviews.stream().forEach(review -> review.changeReportStatus(REJECTED));
         reviews.stream().forEach(review -> review.setReviewStatus(POSTED));
+    }
+
+    private void validWriter(Long loginUserIdx, Review review) {
+        if (loginUserIdx != review.getUser().getUserIdx())
+            throw new BusinessLogicException(WRITER_MISS_MATCH);
     }
 
 }

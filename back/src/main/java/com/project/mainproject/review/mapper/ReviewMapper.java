@@ -37,6 +37,7 @@ public interface ReviewMapper {
     @Mapping(target = "userIdx", source = "user.userIdx")
     @Mapping(target = "userName", source = "user.name")
     @Mapping(target = "profileImage", source = "user.imagePath")
+    @Mapping(target = "reportCount", source = "reportCnt")
     StoreReviewDto reviewToReviewDto(Review review);
 
     @Mapping(target = "userIdx", source = "user.userIdx")

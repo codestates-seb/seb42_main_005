@@ -18,10 +18,9 @@ interface Props {
   reviewList: TYPE_reviewList[] | TYPE_reviewList;
   setReviewList: React.Dispatch<React.SetStateAction<TYPE_reviewList[]>>;
   reviewUserName: string;
-  page: number
 }
 
-export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, reviewUserName,page }: Props) {
+export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, reviewUserName }: Props) {
   const [isReplyFormShown, setIsReplyFormShown] = useState<React.SetStateAction<boolean>>(false);
   const [isOnEdit, setIsOnEdit] = useState<React.SetStateAction<boolean>>(false);
   const [reviewContent, setReviewContent] = useState<React.SetStateAction<any>>(review.content);
@@ -40,7 +39,7 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
   // ! DELETE : 리뷰삭제
   const deleteReviewAndRefresh = async () => {
     await deleteReview(Pharm?.storeIdx, reviewIdx);
-    await getReview(Pharm?.storeIdx, setReviewList, page);
+    await getReview(Pharm?.storeIdx, setReviewList);
   };
 
   //! POST : 리뷰신고
@@ -64,7 +63,7 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
         content: replyContent,
       };
       await postReply(reviewIdx, reply, setReplyContent, setIsReplyFormShown);
-      await getReview(Pharm?.storeIdx, setReviewList, page);
+      await getReview(Pharm?.storeIdx, setReviewList);
     }
   };
 
@@ -194,7 +193,6 @@ export default function ReviewUnit({ review, reviewIdx, Pharm, setReviewList, re
           reply={reply}
           Pharm={Pharm}
           setReviewList={setReviewList}
-          page={page}
         />
       ))}
     </ReviewUnitContainer>
@@ -205,7 +203,7 @@ const ReviewUnitContainer = styled.article`
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 15px 10px;
+  padding: 15px 10px 0px 10px;
   margin-bottom: 20px;
   border: 1px solid var(--black-100);
   border-radius: 5px;
@@ -266,7 +264,7 @@ const EditRestNoImg = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  width: 280px;
+  width: 100%;
   .edit_noImg {
     position: absolute;
     top: 0.1px;
@@ -341,6 +339,7 @@ const WriteCommentForm = styled.form`
   display: flex;
   flex-direction: column;
   padding: 10px;
+  margin-bottom: 10px;
   gap: 5px;
   height: 85px;
   border-radius: 10px;

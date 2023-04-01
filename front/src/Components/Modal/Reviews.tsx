@@ -1,7 +1,5 @@
 import styled from "styled-components";
-import { useRef, useEffect, useState } from "react";
 import { TYPE_reviewList, TYPE_setBoolean, TYPE_Detail } from "../../Api/TYPES";
-import { getReview, getReviewForScroll } from "../../Api/AxiosInstance";
 import ReviewUnit from "./ReviewUnit";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
@@ -11,8 +9,6 @@ interface Props {
   setIsReviewFormShown: TYPE_setBoolean;
   storeIdx: number;
   Pharm: TYPE_Detail | undefined;
-  page: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function ReviewList({
@@ -21,8 +17,6 @@ export default function ReviewList({
   setIsReviewFormShown,
   storeIdx,
   Pharm,
-  page,
-  setPage,
 }: Props) {
 
   return (
@@ -39,7 +33,6 @@ export default function ReviewList({
               Pharm={Pharm}
               setReviewList={setReviewList}
               reviewList={reviewList}
-              page={page}
             />
           ))}
         </Reviews>

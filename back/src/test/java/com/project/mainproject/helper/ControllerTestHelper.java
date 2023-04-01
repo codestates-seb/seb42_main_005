@@ -83,6 +83,13 @@ public interface ControllerTestHelper<T> {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
     }
+    default RequestBuilder patchAuthorizedRequestBuilder(String url, long resourceId, long resourceId2, String content,String accessToken) {
+        return patch(url, resourceId,resourceId2)
+                .header("Authorization", "Bearer " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+    }
     default RequestBuilder patchRequestBuilder(String url, long resourceId, long resourceId2,String accessToken) {
         return patch(url, resourceId,resourceId2)
                 .accept(MediaType.APPLICATION_JSON)

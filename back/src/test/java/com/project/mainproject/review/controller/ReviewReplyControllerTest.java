@@ -147,10 +147,11 @@
 //
 //        given(replyService.findVerifiedReply(anyLong(), anyLong())).willReturn(ReviewStub.getReviewReply());
 //        given(replyMapper.reviewDtoToReviewReply(any(PatchReplyDto.class), any(ReviewReply.class))).willReturn(ReviewStub.getReviewReply2());
-//        given(replyService.updateReply(any(ReviewReply.class))).willReturn(ReviewStub.getReviewReply());
+//        given(replyService.updateReply(any(ReviewReply.class), anyLong())).willReturn(ReviewStub.getReviewReply());
 //        given(replyMapper.reviewReplyToSimpleReplyDto(any(ReviewReply.class))).willReturn(ReviewStub.getSimpleReplyStub());
 //
-//        ResultActions actions = mockMvc.perform(patchRequestBuilder("/api/review/{reviewIdx}/reply/{replyIdx}", reviewIdx, relpyIdx, content, accessToken));
+//        ResultActions actions = mockMvc.perform(patchAuthorizedRequestBuilder(
+//                "/api/review/{reviewIdx}/reply/{replyIdx}", reviewIdx, relpyIdx, content, accessToken));
 //
 //        actions
 //                .andDo(print())
@@ -192,9 +193,10 @@
 //    void deleteReviewReplyTest() throws Exception {
 //
 //
-//        willDoNothing().given(replyService).deleteReply(anyLong(), anyLong());
+//        willDoNothing().given(replyService).deleteReply(anyLong(), anyLong(), anyLong());
 //
-//        ResultActions actions = mockMvc.perform(deleteRequestBuilder("/api/review/{reviewIdx}/reply/{replyIdx}", reviewIdx, relpyIdx, accessToken));
+//        ResultActions actions = mockMvc.perform(deleteRequestBuilder(
+//                "/api/review/{reviewIdx}/reply/{replyIdx}", reviewIdx, relpyIdx, accessToken));
 //
 //        actions
 //                .andExpect(status().isNoContent())
@@ -204,6 +206,9 @@
 //                                "update-review-reply",
 //                                getRequestPreProcessor(),
 //                                getResponsePreProcessor(),
+//                                requestHeaders(
+//                                        headerWithName("Authorization").description("ACCESS 토큰").optional()
+//                                ),
 //                                pathParameters(
 //                                        parameterWithName("reviewIdx").description("리뷰 식별자 ID"),
 //                                        parameterWithName("replyIdx").description("대댓글 식별자 ID")

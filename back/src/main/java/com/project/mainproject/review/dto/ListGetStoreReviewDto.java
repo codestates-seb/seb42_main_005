@@ -21,6 +21,7 @@ public class ListGetStoreReviewDto {
         private Long userIdx;
         private String userName;
         private String profileImage;
+        private int reportCount;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
         private List<ReplyDto> replies;

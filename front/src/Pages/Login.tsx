@@ -86,6 +86,7 @@ export default function Login() {
           let token = getLocalStorage("access_token");
           axios.defaults.headers.common.Authorization = token;
           dispatch(get(res.data));
+
           return res;
         })
         .then((res) => {
@@ -105,15 +106,6 @@ export default function Login() {
     postLogin();
   };
 
-  //! POST : 로그인 - Auth
-  const postAuthSignUp = async () => {
-    const provider = ""; //! 여기 수정 필요
-    await axios.post(`${APIS.POST_LOGIN_AUTH}/${provider}`).catch((error) => {
-      // console.log("Auth 로그인하던 중 에러 발생");
-      console.log(error);
-    });
-  };
-
   return (
     <Total>
       <Container>
@@ -122,14 +114,6 @@ export default function Login() {
           <h1>로그인</h1>
         </Title>
         <ContentContainer>
-          <Google>
-            <button className="google_button" onClick={() => postAuthSignUp()}>
-              <GoogleButton>
-                <img className="google_img" alt="google" src="Images/google.png" />
-                <span className="google">Sign up with Google</span>
-              </GoogleButton>
-            </button>
-          </Google>
           <LoginForm onSubmit={onSubmit}>
             <InputContainer className={`${error.email ? "red" : null}`}>
               <BsPersonCircle className="inputimage" aria-hidden="true" />
@@ -163,6 +147,10 @@ export default function Login() {
         <SearchContainer>
           <Link to="/find_pw">
             <Search>비밀번호 찾기</Search>
+          </Link>
+          <Partition />
+          <Link to="/sign_up">
+            <Search>회원가입</Search>
           </Link>
         </SearchContainer>
       </Container>
@@ -202,35 +190,6 @@ const ContentContainer = styled.div`
   border: 1px solid var(--black-200);
   border-radius: 18px;
   box-shadow: var(--bs-lg);
-`;
-
-const Google = styled.article`
-  padding-bottom: 1rem;
-  .google_button {
-    height: 3.3rem;
-    width: 31rem;
-    border: 1px solid var(--black-200);
-    border-radius: 10px;
-    background-color: transparent;
-    cursor: pointer;
-    box-shadow: var(--bs-md);
-    &:hover {
-      background-color: var(--black-050);
-    }
-  }
-`;
-const GoogleButton = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .google_img {
-    width: 2.6rem;
-  }
-  .google {
-    padding-left: 0.3rem;
-    font-size: 1.1rem;
-    color: var(--black-500);
-  }
 `;
 const LoginForm = styled.form`
   display: flex;
@@ -280,15 +239,20 @@ const InputContainer = styled.article`
 `;
 const SearchContainer = styled.article`
   display: flex;
+  align-items: center;
   justify-content: center;
+    margin-top: 3rem;
 `;
 const Search = styled.button`
   color: var(--black-500);
   height: 3.3rem;
-  width: 10rem;
   font-size: 18px;
-  margin-top: 3rem;
   cursor: pointer;
   background-color: transparent;
   border: none;
+`;
+const Partition = styled.span`
+  height: 20px;
+  border: 1px solid var(--black-200);
+  margin: 0px 50px;
 `;
