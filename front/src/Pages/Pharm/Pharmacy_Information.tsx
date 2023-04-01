@@ -62,7 +62,11 @@ export default function PharmacyInformation() {
         {imageSrc ? (
           <PharmImg src={`${imageSrc}`} />
         ) : pharmDetail?.imagePath ? (
-          <PharmImg src={`${pharmDetail.imagePath}`} alt={`${pharmDetail?.name}사진입니다.`}  onClick={() => onModalUp()}/>
+          <PharmImg
+            src={`${pharmDetail.imagePath}`}
+            alt={`${pharmDetail?.name}사진입니다.`}
+            onClick={() => onModalUp()}
+          />
         ) : (
           <PharmImg src="Images/ImgPreparing.png" alt="image preparing" />
         )}

@@ -6,7 +6,7 @@ import { TYPE_Working, TYPE_setLike } from "../../Api/TYPES";
 
 interface Props {
   setIsDropDownDown: TYPE_setLike;
-  workingHours?: TYPE_Working;
+  workingHours: TYPE_Working | undefined;
 }
 export default function AnyDropDown({
   setIsDropDownDown,
