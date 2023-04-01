@@ -148,6 +148,10 @@ export default function Login() {
           <Link to="/find_pw">
             <Search>비밀번호 찾기</Search>
           </Link>
+          <Partition />
+          <Link to="/sign_up">
+            <Search>회원가입</Search>
+          </Link>
         </SearchContainer>
       </Container>
     </Total>
@@ -186,35 +190,6 @@ const ContentContainer = styled.div`
   border: 1px solid var(--black-200);
   border-radius: 18px;
   box-shadow: var(--bs-lg);
-`;
-
-const Google = styled.article`
-  padding-bottom: 1rem;
-  .google_button {
-    height: 3.3rem;
-    width: 31rem;
-    border: 1px solid var(--black-200);
-    border-radius: 10px;
-    background-color: transparent;
-    cursor: pointer;
-    box-shadow: var(--bs-md);
-    &:hover {
-      background-color: var(--black-050);
-    }
-  }
-`;
-const GoogleButton = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .google_img {
-    width: 2.6rem;
-  }
-  .google {
-    padding-left: 0.3rem;
-    font-size: 1.1rem;
-    color: var(--black-500);
-  }
 `;
 const LoginForm = styled.form`
   display: flex;
@@ -264,15 +239,20 @@ const InputContainer = styled.article`
 `;
 const SearchContainer = styled.article`
   display: flex;
+  align-items: center;
   justify-content: center;
+    margin-top: 3rem;
 `;
 const Search = styled.button`
   color: var(--black-500);
   height: 3.3rem;
-  width: 10rem;
   font-size: 18px;
-  margin-top: 3rem;
   cursor: pointer;
   background-color: transparent;
   border: none;
+`;
+const Partition = styled.span`
+  height: 20px;
+  border: 1px solid var(--black-200);
+  margin: 0px 50px;
 `;

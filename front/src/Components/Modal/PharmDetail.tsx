@@ -31,7 +31,6 @@ export default function PharmDetail({
   setReviewList,
 }: Props) {
   const [isReviewFormShown, setIsReviewFormShown] = useState<TYPE_boolean>(false);
-  const [page, setPage] = useState<number>(0)
 
   const token = getLocalStorage("access_token");
   const navigate = useNavigate();
@@ -62,8 +61,6 @@ export default function PharmDetail({
             setIsReviewFormShown={setIsReviewFormShown}
             storeIdx={storeIdx}
             Pharm={pharmDetail}
-            page={page}
-            setPage={setPage}
           />
         </Constant>
         {token && isReviewFormShown ? (
@@ -72,7 +69,6 @@ export default function PharmDetail({
             setIsReviewFormShown={setIsReviewFormShown}
             storeIdx={pharmDetail?.storeIdx}
             setReviewList={setReviewList}
-            page={page}
           />
         ) : null}
         {token ? (
@@ -155,9 +151,8 @@ const WriteReviewBtnContainer = styled.footer`
   display: flex;
   justify-content: flex-end;
   right: 20px;
-  bottom: 25px;
+  bottom: 20px;
   width: 400px;
-  padding-top: 10px;
   background-color: var(--white);
   @media (max-width: 768px) {
     position: static;

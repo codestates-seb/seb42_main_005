@@ -47,12 +47,12 @@ export default function LikedPharmacyUnit({ likedPharmacy, setLikedPharmacies }:
           setReviewList={setReviewList}
         />
       ) : null}
-      <Text className="single icon">
-        <IoIosArrowDropright onClick={() => onModalUp()} aria-hidden="true" />
+      <Text className="single icon" onClick={() => onModalUp()} >
+        <IoIosArrowDropright aria-hidden="true" />
       </Text>
-      <Text className="pharm">{likedPharmacy.name}</Text>
-      <Text className="address">{likedPharmacy.address}</Text>
-      <Text className="number">{likedPharmacy.tel}</Text>
+      <Text className="pharm" onClick={() => onModalUp()}>{likedPharmacy.name}</Text>
+      <Text className="address" onClick={() => onModalUp()}>{likedPharmacy.address}</Text>
+      <Text className="number" onClick={() => onModalUp()}>{likedPharmacy.tel}</Text>
       <Text className="single icon">
         <RiDeleteBin6Line aria-hidden="true" onClick={() => likePharmacyAndRefresh()} />
       </Text>

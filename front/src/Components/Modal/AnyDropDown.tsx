@@ -6,94 +6,34 @@ import { TYPE_Working, TYPE_setLike } from "../../Api/TYPES";
 
 interface Props {
   setIsDropDownDown: TYPE_setLike;
-  workingHours: TYPE_Working | undefined;
+  workingHours: TYPE_Working | Array<any> | undefined;
 }
-
 export default function AnyDropDown({ setIsDropDownDown, workingHours }: Props) {
+  const translate = (day: string) => {
+    if (day === "monday") return "월요일";
+    if (day === "tuesday") return "화요일";
+    if (day === "wednesday") return "수요일";
+    if (day === "thursday") return "목요일";
+    if (day === "friday") return "금요일";
+    if (day === "saturday") return "토요일";
+    if (day === "sunday") return "일요일";
+    if (day === "holiday") return "공휴일";
+  };
   return (
     <DropDownContainer onClick={() => setIsDropDownDown(false)}>
       <CloseBtnContainer>
         <HiXMark id="close" onClick={() => setIsDropDownDown(false)} aria-hidden="true" />
       </CloseBtnContainer>
-      <Unit>
-        <Key>월요일</Key>
-        {workingHours?.monday ? (
-          <Value>{`${workingHours.monday.startTime.slice(0, -3)} - ${workingHours.monday.endTime.slice(0, -3)}`}</Value>
-        ) : (
-          <Value>휴무</Value>
-        )}
-      </Unit>
-      <Unit>
-        <Key>화요일</Key>
-        {workingHours?.tuesday ? (
-          <Value>{`${workingHours.tuesday.startTime.slice(0, -3)} - ${workingHours.tuesday.endTime.slice(
-            0,
-            -3,
-          )}`}</Value>
-        ) : (
-          <Value>휴무</Value>
-        )}
-      </Unit>
-      <Unit>
-        <Key>수요일</Key>
-        {workingHours?.wednesday ? (
-          <Value>{`${workingHours.wednesday.startTime.slice(0, -3)} - ${workingHours.wednesday.endTime.slice(
-            0,
-            -3,
-          )}`}</Value>
-        ) : (
-          <Value>휴무</Value>
-        )}
-      </Unit>
-      <Unit>
-        <Key>목요일</Key>
-        {workingHours?.thursday ? (
-          <Value>{`${workingHours.thursday.startTime.slice(0, -3)} - ${workingHours.thursday.endTime.slice(
-            0,
-            -3,
-          )}`}</Value>
-        ) : (
-          <Value>휴무</Value>
-        )}
-      </Unit>
-      <Unit>
-        <Key>금요일</Key>
-        {workingHours?.friday ? (
-          <Value>{`${workingHours.friday.startTime.slice(0, -3)} - ${workingHours.friday.endTime.slice(0, -3)}`}</Value>
-        ) : (
-          <Value>휴무</Value>
-        )}
-      </Unit>
-      <Unit>
-        <Key>토요일</Key>
-        {workingHours?.saturday ? (
-          <Value>{`${workingHours.saturday.startTime.slice(0, -3)} - ${workingHours.saturday.endTime.slice(
-            0,
-            -3,
-          )}`}</Value>
-        ) : (
-          <Value>휴무</Value>
-        )}
-      </Unit>
-      <Unit>
-        <Key>일요일</Key>
-        {workingHours?.sunday ? (
-          <Value>{`${workingHours.sunday.startTime.slice(0, -3)} - ${workingHours.sunday.endTime.slice(0, -3)}`}</Value>
-        ) : (
-          <Value>휴무</Value>
-        )}
-      </Unit>
-      <Unit>
-        <Key>공휴일</Key>
-        {workingHours?.holiday ? (
-          <Value>{`${workingHours.holiday.startTime.slice(0, -3)} - ${workingHours.holiday.endTime.slice(
-            0,
-            -3,
-          )}`}</Value>
-        ) : (
-          <Value>휴무</Value>
-        )}
-      </Unit>
+      {Object.entries(workingHours).map((day, i) => (
+        <Unit key={i}>
+          <Key>{translate(day[0])}</Key>
+          {day[1] ? (
+            <Value>{`${day[1].startTime.slice(0, -3)} - ${day[1].endTime.slice(0, -3)}`}</Value>
+          ) : (
+            <Value>휴무</Value>
+          )}
+        </Unit>
+      ))}
     </DropDownContainer>
   );
 }

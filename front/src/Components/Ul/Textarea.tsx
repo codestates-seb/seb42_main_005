@@ -38,7 +38,7 @@ export default function Textarea({ id, name, placeholder, value, rows, icon, isV
 const StyledInput = styled.div`
   position: relative;
   height: 80px;
-  width: 280px;
+  width: 100%;
   display: flex;
   align-items: center;
   .icon {

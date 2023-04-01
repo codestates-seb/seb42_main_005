@@ -19,9 +19,9 @@ export default function MyPharmacy() {
           <PharmacyInformation />
         </Information>
         <QuitBtnWrapper>
-          <Link to="/sign_out">
+          <SignOutLink to="/sign_out">
             <Button text="탈퇴하기" color="red" size="lg" />
-          </Link>
+          </SignOutLink>
         </QuitBtnWrapper>
       </ContentsWrapper>
     </WholePage>
@@ -78,4 +78,7 @@ const Title = styled.h2`
     width: 600px;
     margin-bottom: 20px;
   }
+`;
+const SignOutLink = styled(Link)`
+  text-decoration-line: none;
 `;
