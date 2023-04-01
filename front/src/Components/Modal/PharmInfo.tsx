@@ -63,9 +63,13 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
       </InfoImgContainer>
       <InfoInfo>
         <InfoUnit>
-          <InfoInfoTitle className={pharmDetail?.isOperating? "open" : ""}>{pharmDetail?.isOperating? "영업중" : "영업종료"}</InfoInfoTitle>
+          <InfoInfoTitle className={pharmDetail?.isOperating ? "open" : ""}>
+            {pharmDetail?.isOperating ? "영업중" : "영업종료"}
+          </InfoInfoTitle>
           <InfoInfoContent>
-              {pharmDetail?.isOperating? `${pharmDetail?.todayOperatingTime?.operatingTime?.endTime?.slice(0, -3)}에 영업종료` : pharmDetail?.todayOperatingTime?.operatingTime?.startTime
+            {pharmDetail?.isOperating
+              ? `${pharmDetail?.todayOperatingTime?.operatingTime?.endTime?.slice(0, -3)}에 영업종료`
+              : pharmDetail?.todayOperatingTime?.operatingTime?.startTime
               ? `${pharmDetail?.todayOperatingTime?.operatingTime?.startTime?.slice(
                   0,
                   -3,
@@ -83,7 +87,10 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>전화번호</InfoInfoTitle>
-          <InfoInfoContent id="number">{pharmDetail?.tel}<Span>고객님의 귀한 시간을 위해 약국 방문 전 연락 바랍니다.</Span></InfoInfoContent>
+          <InfoInfoContent id="number">
+            {pharmDetail?.tel}
+            <Span>고객님의 귀한 시간을 위해 약국 방문 전 연락 바랍니다.</Span>
+          </InfoInfoContent>
         </InfoUnit>
         <InfoUnit>
           <InfoInfoTitle>주소</InfoInfoTitle>
@@ -189,12 +196,12 @@ const InfoInfoContent = styled.span`
     white-space: normal;
     word-break: normal;
   }
-  &#number{
+  &#number {
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
   }
-  #today{
+  #today {
     display: flex;
     align-items: center;
     padding: 1px 3px 0px 0px;
@@ -229,4 +236,4 @@ const Span = styled.span`
   font-size: 12px;
   font-weight: 350;
   color: var(--l_button-mint-hover);
-`
+`;

@@ -6,7 +6,7 @@ import { TYPE_Working, TYPE_setLike } from "../../Api/TYPES";
 
 interface Props {
   setIsDropDownDown: TYPE_setLike;
-  workingHours: TYPE_Working | Array<any>|undefined;
+  workingHours?: TYPE_Working;
 }
 
 export default function DropDown({ setIsDropDownDown, workingHours }: Props) {
@@ -25,7 +25,7 @@ export default function DropDown({ setIsDropDownDown, workingHours }: Props) {
       <CloseBtnContainer>
         <HiXMark id="close" onClick={() => setIsDropDownDown(false)} aria-hidden="true" />
       </CloseBtnContainer>
-      {Object.entries(workingHours).map((day, i) => (
+      {Object.entries(workingHours || {}).map((day, i) => (
         <Unit key={i}>
           <Key>{translate(day[0])}</Key>
           {day[1] ? (
