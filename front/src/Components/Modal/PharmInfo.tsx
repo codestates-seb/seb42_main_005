@@ -63,9 +63,9 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
       </InfoImgContainer>
       <InfoInfo>
         <InfoUnit>
-          <InfoInfoTitle>영업시간</InfoInfoTitle>
+          <InfoInfoTitle className={pharmDetail?.isOperating? "open" : ""}>{pharmDetail?.isOperating? "영업중" : "영업종료"}</InfoInfoTitle>
           <InfoInfoContent>
-            {pharmDetail?.todayOperatingTime?.operatingTime?.startTime
+              {pharmDetail?.isOperating? `${pharmDetail?.todayOperatingTime?.operatingTime?.endTime?.slice(0, -3)}에 영업종료` : pharmDetail?.todayOperatingTime?.operatingTime?.startTime
               ? `${pharmDetail?.todayOperatingTime?.operatingTime?.startTime?.slice(
                   0,
                   -3,
@@ -82,12 +82,12 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
           </InfoInfoContent>
         </InfoUnit>
         <InfoUnit>
-          <InfoInfoTitle>주소</InfoInfoTitle>
-          <InfoInfoContent className="address">{pharmDetail?.address}</InfoInfoContent>
+          <InfoInfoTitle>전화번호</InfoInfoTitle>
+          <InfoInfoContent id="number">{pharmDetail?.tel}<Span>고객님의 귀한 시간을 위해 약국 방문 전 연락 바랍니다.</Span></InfoInfoContent>
         </InfoUnit>
         <InfoUnit>
-          <InfoInfoTitle>전화번호</InfoInfoTitle>
-          <InfoInfoContent>{pharmDetail?.tel}</InfoInfoContent>
+          <InfoInfoTitle>주소</InfoInfoTitle>
+          <InfoInfoContent className="address">{pharmDetail?.address}</InfoInfoContent>
         </InfoUnit>
       </InfoInfo>
     </InfoContainer>
@@ -100,7 +100,7 @@ const InfoContainer = styled.aside`
   flex-direction: column;
   justify-content: center;
   width: 450px;
-  padding: 10px 20px 20px 0px;
+  padding-right: 20px;
   border-right: 1px solid var(--black-100);
   @media (max-width: 768px) {
     height: auto;
@@ -152,7 +152,7 @@ const InfoInfo = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 20px 20px 10px 20px;
+  padding: 20px 0px 10px 20px;
   gap: 10px;
   @media (max-width: 768px) {
     padding: 20px;
@@ -172,6 +172,9 @@ const InfoInfoTitle = styled.h2`
   color: var(--black-350);
   font-size: 17px;
   font-weight: bold;
+  &.open {
+    color: var(--mint-hover);
+  }
 `;
 const InfoInfoContent = styled.span`
   position: relative;
@@ -185,6 +188,19 @@ const InfoInfoContent = styled.span`
     height: 60px;
     white-space: normal;
     word-break: normal;
+  }
+  &#number{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+  #today{
+    display: flex;
+    align-items: center;
+    padding: 1px 3px 0px 0px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--blue-400);
   }
 `;
 const More = styled.button`
@@ -209,3 +225,8 @@ const PharmImg = styled.img`
   border-radius: 5px;
   border: 2px solid var(--black-100);
 `;
+const Span = styled.span`
+  font-size: 12px;
+  font-weight: 350;
+  color: var(--l_button-mint-hover);
+`

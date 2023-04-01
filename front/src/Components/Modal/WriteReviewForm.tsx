@@ -16,10 +16,9 @@ interface Props {
   setIsReviewFormShown: TYPE_setBoolean;
   storeIdx: number | undefined;
   setReviewList: React.Dispatch<React.SetStateAction<TYPE_reviewList[]>>;
-  page: number
 }
 
-export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx, setReviewList, page }: Props) {
+export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx, setReviewList }: Props) {
   const [imageSrc, setImageSrc]: any = useState(null);
   const [imgFile, setImgFile]: any = useState(null);
   const [review, setReview] = useState({
@@ -63,7 +62,7 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
     formData.append("postDto", new Blob([JSON.stringify(data)], { type: "application/json" }));
     formData.append("image", imgFile);
     await postReview(storeIdx, formData, setIsReviewFormShown);
-    await getReview(storeIdx, setReviewList, page);
+    await getReview(storeIdx, setReviewList);
   };
 
   return (
@@ -158,6 +157,7 @@ const InputTop = styled.section`
   flex-direction: row;
   justify-content: space-between;
   padding-right: 4px;
+  gap: 15px;
   span {
     padding-left: 2px;
     &#instruction {

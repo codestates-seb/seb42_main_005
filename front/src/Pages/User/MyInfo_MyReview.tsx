@@ -51,12 +51,18 @@ export default function MyReview({ review, storeIdx, reviewIdx, idx, setMyReview
           />
         </>
       ) : null}
-      <Text className="single">{idx + 1}</Text>
+      <Text className="single" onClick={() => onModalUp()}>
+        {idx + 1}
+      </Text>
       <Text className="pharm" onClick={() => onModalUp()}>
         {review.storeName}
       </Text>
-      <Text className="review">{review.content}</Text>
-      <Text className="number">{new Date(review.modifiedAt).toLocaleDateString()}</Text>
+      <Text className="review" onClick={() => onModalUp()}>
+        {review.content}
+      </Text>
+      <Text className="number" onClick={() => onModalUp()}>
+        {new Date(review.modifiedAt).toLocaleDateString()}
+      </Text>
       <Text className="single icon">
         <RiDeleteBin6Line aria-hidden="true" onClick={() => deleteReviewAndRefresh()} />
       </Text>
