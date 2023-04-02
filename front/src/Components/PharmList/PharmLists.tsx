@@ -89,11 +89,11 @@ export default function PharmLists({
   }, [totalPharmList]);
 
   //* 정렬기준 클릭 시
-  const ClickedSort = () => {
+  useEffect(() => {
     if (makeMap) {
       useViewMap(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
     }
-  };
+  }, [sorted]);
 
   //* 우리집,우리약국 클릭 시
   const MoveToMyPlace = () => {
@@ -158,9 +158,9 @@ export default function PharmLists({
               </ButtonMyPlace>
               <SortButtons
                 sorted={sorted}
-                onClickDistance={() => [setSorted("distance"), ClickedSort()]}
-                onClickReviewCount={() => [setSorted("reviewCount"), ClickedSort()]}
-                onClickRating={() => [setSorted("rating"), ClickedSort()]}
+                onClickDistance={() => setSorted("distance")}
+                onClickReviewCount={() => setSorted("reviewCount")}
+                onClickRating={() => setSorted("rating")}
               />
             </ButtonContainer>
           </ListHead>

@@ -38,7 +38,7 @@ export default function KakaoMap({
     if (makeMap) {
       useViewMap(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
     }
-  }, [selected]);
+  }, [sorted, selected, totalPharmList, setTotalPharmList, makeMap, useViewMap]);
   return (
     <>
       <ContainerMap id="map" className={hidden ? "close" : ""}>
