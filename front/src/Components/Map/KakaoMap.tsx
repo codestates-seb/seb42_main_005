@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import styled from "styled-components";
 import Loading from "../Ul/Loading";
 import MapFilter from "./MapFilter";
@@ -34,11 +34,11 @@ export default function KakaoMap({
   kakao,
 }: Props) {
   //* 필터버튼 클릭 시
-  const ClickedFilter = () => {
+  useEffect(() => {
     if (makeMap) {
       useViewMap(sorted, selected, totalPharmList, setTotalPharmList, makeMap);
     }
-  };
+  }, [selected]);
   return (
     <>
       <ContainerMap id="map" className={hidden ? "close" : ""}>
@@ -51,10 +51,10 @@ export default function KakaoMap({
             <ControllerTop className={hidden ? "close" : ""}>
               <MapFilter
                 selected={selected}
-                onClickNot={() => [setSelected("not"), ClickedFilter()]}
-                onClickOperatingTime={() => [setSelected("operatingTime"), ClickedFilter()]}
-                onClickNightOperating={() => [setSelected("nightOperating"), ClickedFilter()]}
-                onClickBookmarks={() => [setSelected("bookmarks"), ClickedFilter()]}
+                onClickNot={() => setSelected("not")}
+                onClickOperatingTime={() => setSelected("operatingTime")}
+                onClickNightOperating={() => setSelected("nightOperating")}
+                onClickBookmarks={() => setSelected("bookmarks")}
               />
             </ControllerTop>
             <ControllerBottom>
