@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ReviewIdxDto {
 
-    private List<ReviewIdxs> reviews;
+    private List<ReviewIdxs> reviewIdxs;
 
     @Getter
     @NoArgsConstructor
