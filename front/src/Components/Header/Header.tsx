@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAppSelector } from "../../Redux/hooks";
 import { zIndex_Header } from "../../Util/z-index";
 import { getUser } from "../../Api/AxiosInstance";
 import Account from "./Account";
 import { TYPE_UserInfo } from "../../Api/TYPES";
+import { toast } from "react-toastify";
 
 export default function Header() {
   const [userInfo, setUserInfo] = useState<TYPE_UserInfo | undefined>();
@@ -21,7 +22,16 @@ export default function Header() {
   const navigate = useNavigate();
   const goHome = () => {
     if (user?.name === "관리자") {
-      return alert("관리자는 지도홈을 이용하실수 없습니다.");
+      return toast.info("관리자는 지도를 이용하실수 없습니다.",{
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     }
     navigate("/");
   };

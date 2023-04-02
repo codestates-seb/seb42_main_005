@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 import { BsPersonCircle } from "react-icons/bs";
 import SignUpInput from "../Components/SignUpForm/SignUpInput";
 import { AiOutlineLock } from "react-icons/ai";
@@ -67,10 +68,28 @@ export default function Login() {
     const password = formData.get(FORM_FIELD_NAMES.PASSWORD);
 
     if (!email || !password) {
-      return alert("모든 항목을 입력해주세요");
+      return toast.error("모든 항목을 입력해주세요", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
     if (error.email === true || error.password === true) {
-      return alert("항목을 다시 확인해주세요");
+      return toast.error("항목을 다시 확인해주세요", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
 
     // { withCredentials: true }
@@ -97,7 +116,16 @@ export default function Login() {
         })
         .catch((error) => {
           if (error?.response?.status === 401) {
-            alert("ID 또는 비밀번호가 일치하지 않습니다.");
+            toast.error("ID 또는 비밀번호가 일치하지 않습니다.", {
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
           }
           // console.log("ID/PW 일치여부가 아닌 다른 에러 발생");
           console.log(error);

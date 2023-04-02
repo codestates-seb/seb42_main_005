@@ -10,6 +10,7 @@ import Button from "../Ul/Button";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BiPhotoAlbum } from "react-icons/bi";
 import { HiXMark } from "react-icons/hi2";
+import { toast } from "react-toastify";
 
 interface Props {
   Pharm: TYPE_Detail | undefined;
@@ -56,7 +57,16 @@ export default function WriteReviewForm({ Pharm, setIsReviewFormShown, storeIdx,
       rating: review.rating,
     };
     if (!data.content || !data.rating) {
-      return alert("리뷰내용과 별점을 작성해주세요!");
+      return toast.warning("리뷰내용과 별점을 작성해주세요!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
     const formData = new FormData();
     formData.append("postDto", new Blob([JSON.stringify(data)], { type: "application/json" }));

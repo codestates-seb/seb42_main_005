@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import styled from "styled-components";
 import Layout from "./Components/Header/Layout";
 import Home from "./Pages/Home";
 import SignUp from "./Pages/SignUp";
@@ -10,6 +11,8 @@ import Users from "./Pages/Admin/Users";
 import FindPW from "./Pages/FindPW";
 import Certify from "./Pages/Admin/Certify";
 import SignOut from "./Pages/SignOut";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -30,7 +33,16 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      <CustomToastContainer />
     </>
   );
 }
 export default App;
+
+export const CustomToastContainer = styled(ToastContainer)`
+  .Toastify__toast {
+    font-size: 15px;
+    width: 400px;
+    border-radius: 5px;
+  }
+`

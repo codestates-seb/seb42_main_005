@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { SELECT_SORT_LIST, SELECT_OPTION_MAP } from "../../Api/TYPES";
 import { getLocalStorage } from "../../Api/localStorage";
@@ -80,8 +81,17 @@ export default function MapButtons({
         },
       );
     } else {
-      navigate("/login");
-      alert("로그인 후 이용해주세요!");
+      toast.error("해당 버튼을 이용하시려면 로그인을 해주세요!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setTimeout(() => navigate("/login"), 1000);
     }
   };
   return (
