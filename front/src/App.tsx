@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import styled from "styled-components";
 import Layout from "./Components/Header/Layout";
 import Home from "./Pages/Home";
 import SignUp from "./Pages/SignUp";
@@ -32,8 +33,13 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-      <ToastContainer />
+      <CustomToastContainer />
     </>
   );
 }
 export default App;
+
+export const CustomToastContainer = styled(ToastContainer)`
+  font-size: 15px;
+  width: 400px;
+`

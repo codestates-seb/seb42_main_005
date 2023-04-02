@@ -404,7 +404,7 @@ const getCertificates = async (stateList: any, page: number, stateLast: any, pre
 const successCertify = async (data: object) => {
   return BaseInstance.post(APIS.POST_ADMIN_CERTIFY, data)
     .then(() =>
-      toast.warning("선택한 약사인증을 승인합니다.", {
+      toast.success("선택한 약사인증신청을 승인합니다.", {
         position: "top-center",
         autoClose: 2000,
         hideProgressBar: false,
@@ -425,7 +425,7 @@ const successCertify = async (data: object) => {
 const deniedCertify = async (data: object) => {
   return BaseInstance.post(APIS.POST_ADMIN_DENY, data)
     .then(() =>
-      toast.warning("선택한 약사인증을 반려합니다.", {
+      toast.error("선택한 약사인증신청을 반려합니다.", {
         position: "top-center",
         autoClose: 2000,
         hideProgressBar: false,

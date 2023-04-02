@@ -28,9 +28,9 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
   const likeThisPharmacy = () => {
     const accessToken = getLocalStorage("access_token");
     if (!accessToken) {
-      toast.warning("약국 찜하기를 하시려면 로그인을 해주세요!", {
+      toast.error("약국 찜하기를 하시려면 로그인을 해주세요!", {
         position: "top-center",
-        autoClose: 1500,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -42,7 +42,7 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
     } else if (user.storeIdx) {
       toast.info("약사회원은 찜하기를 이용하실수 없습니다.", {
         position: "top-center",
-        autoClose: 1500,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,

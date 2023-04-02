@@ -19,9 +19,9 @@ export default function ReviewList({ reviewList, setReviewList, setIsReviewFormS
   const navigate = useNavigate();
   const WriteReview = () => {
     if (!token) {
-      toast.error("로그인을 해주세요!", {
+      toast.error("리뷰를 작성하시려면 로그인을 해주세요!", {
         position: "top-center",
-        autoClose: 1500,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,

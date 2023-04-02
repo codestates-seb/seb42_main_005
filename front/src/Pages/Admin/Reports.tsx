@@ -31,7 +31,7 @@ export default function Reports() {
     },
     [checkedList],
   );
-  const data = { userIdxs: checkedList };
+  const data = { reviewIdxs: checkedList };
 
   const obsHandler = (entries: IntersectionObserverEntry[]) => {
     const target = entries[0];

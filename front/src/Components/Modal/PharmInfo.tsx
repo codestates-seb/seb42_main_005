@@ -26,9 +26,9 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
   const likeThisPharmacy = () => {
     const accessToken = getLocalStorage("access_token");
     if (!accessToken) {
-      toast.error("로그인을 해주세요!", {
+      toast.error("약국 찜하기를 하시려면 로그인을 해주세요!", {
         position: "top-center",
-        autoClose: 1500,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,

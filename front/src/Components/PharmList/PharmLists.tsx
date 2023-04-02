@@ -74,7 +74,7 @@ export default function PharmLists({
   const gologin = () => {
     toast.error("로그인을 해주세요!", {
       position: "top-center",
-      autoClose: 1500,
+      autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
