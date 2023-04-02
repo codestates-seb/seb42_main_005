@@ -38,4 +38,7 @@ const SignUpInInput = styled.input`
   color: var(--black-500);
   display: flex;
   flex-grow: 1;
+  ::placeholder{
+    color: var(--black-300);
+  }
 `;

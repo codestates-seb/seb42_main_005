@@ -171,6 +171,8 @@ export default function PharmLists({
               ))
             ) : (
               <NoPharm>
+                <span className="notify">{new Date().toLocaleString()} 현재 기준</span>
+                <span className="notify">서울지역만 이용이 가능합니다.</span>
                 <img className="img" alt="지도를 보고있는 사람" src="Images/map.png" />
                 <span className="content">주변에 약국이 없습니다!</span>
                 <span className="content">다른 곳에서 검색을 시도해 보세요.</span>
@@ -267,11 +269,16 @@ const NoPharm = styled.div`
   .img {
     width: 200px;
     height: 200px;
-    margin-bottom: 20px;
+    margin: 20px 0;
     opacity: 0.7;
   }
   .content {
     margin-top: 8px;
+    font-size: 1.1rem;
+    color: var(--black-300);
+  }
+  .notify {
+    margin-bottom: 8px;
     font-size: 1.1rem;
     color: var(--black-300);
   }

@@ -220,7 +220,7 @@ export default function PharmSignForms() {
         <InputContainer>
           <AiOutlineCamera className="inputImage" aria-hidden="true" />
           <label htmlFor="business-img"></label>
-          <ImgInput readOnly value={businessImgName} placeholder="사업자 등록증을 올려주세요" />
+          <ImgInput readOnly value={businessImgName} placeholder="사업자등록증 사진을 첨부해 주세요." />
           <div className="photo_upload">
             <Button color="l_blue" size="sm" text="사진업로드" onClick={onClickBusinessImg} />
           </div>
@@ -237,7 +237,7 @@ export default function PharmSignForms() {
         <InputContainer>
           <AiOutlineCamera className="inputImage" aria-hidden="true" />
           <label htmlFor="pharm-img"></label>
-          <ImgInput readOnly value={pharmImgName} placeholder="약사면허증 사진을 올려주세요" />
+          <ImgInput readOnly value={pharmImgName} placeholder="약사면허증 사진을 첨부해 주세요." />
           <div className="photo_upload">
             <Button color="l_blue" size="sm" text="사진업로드" onClick={onClickPharmImg} />
           </div>
@@ -252,10 +252,16 @@ export default function PharmSignForms() {
           />
         </InputContainer>
         <CheckContainer>
-          <Check type="checkbox" onChange={checkHandler} checked={checks} />
-          <span className="checkbox_content">
-            회원가입시, 사용자의 현재 위치를 사용하는 것에 동의하는 것으로 간주됩니다.
-          </span>
+          <div className="holder">
+            <Check type="checkbox" onChange={checkHandler} checked={checks} />
+            <span className="checkbox_content">입력하신 사업자등록증과 약사면허증은 수정이 불가합니다.</span>
+          </div>
+          <div className="holder">
+            <Check type="checkbox" onChange={checkHandler} checked={checks} />
+            <span className="checkbox_content">
+              회원가입시, 사용자의 현재 위치를 사용하는 것에 동의하는 것으로 간주됩니다.
+            </span>
+          </div>
         </CheckContainer>
         <button className="signup_button" type="submit">
           회원가입
@@ -346,15 +352,24 @@ const ImgInput = styled.input`
   color: var(--black-500);
   display: flex;
   flex-grow: 1;
+  ::placeholder {
+    color: var(--black-300);
+  }
 `;
 const CheckContainer = styled.article`
   display: flex;
-  align-items: center;
-  margin: 20px 0;
+  flex-direction: column;
+  justify-content: center;
+  margin: 15px 0;
+  gap: 10px;
   .checkbox_content {
     font-size: 15px;
     font-size: 15px;
-    color: var(--black-500);
+    color: var(--black-400);
+  }
+  .holder {
+    display: flex;
+    align-items: center;
   }
 `;
 
