@@ -72,7 +72,7 @@ export default function PharmLists({
   const navigate = useNavigate();
 
   const gologin = () => {
-    toast.error("로그인을 해주세요!", {
+    toast.error("우리 집을 확인하시려면 로그인을 해주세요!", {
       position: "top-center",
       autoClose: 2000,
       hideProgressBar: false,

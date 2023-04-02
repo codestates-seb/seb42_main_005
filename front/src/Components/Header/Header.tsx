@@ -22,7 +22,7 @@ export default function Header() {
   const navigate = useNavigate();
   const goHome = () => {
     if (user?.name === "관리자") {
-      toast.info("관리자는 지도를 이용하실수 없습니다.",{
+      return toast.info("관리자는 지도를 이용하실수 없습니다.",{
         position: "top-center",
         autoClose: 2000,
         hideProgressBar: false,

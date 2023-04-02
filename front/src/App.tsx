@@ -40,6 +40,9 @@ function App() {
 export default App;
 
 export const CustomToastContainer = styled(ToastContainer)`
-  font-size: 15px;
-  width: 400px;
+  .Toastify__toast {
+    font-size: 15px;
+    width: 400px;
+    border-radius: 5px;
+  }
 `
