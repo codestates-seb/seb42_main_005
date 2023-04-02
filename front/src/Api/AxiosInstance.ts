@@ -268,24 +268,26 @@ const getReports = async (stateList: any, page: number, stateLast: any, preventR
 };
 //* DELETE : 신고누적리뷰 삭제
 const deleteReportedReview = async (data: object) => {
-  return BaseInstance.delete(APIS.DELETE_ADMIN_REVIEW_DELETE, data)
-    .then(() =>
-      toast.warning("선택한 리뷰들을 삭제합니다.", {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      }),
-    )
-    .then(() => setTimeout(() => location.reload(), 2000))
-    .catch((error) => {
-      // console.log("신고누적리뷰 삭제하던 중 에러 발생");
-      console.log(error);
-    });
+  return (
+    BaseInstance.delete(APIS.DELETE_ADMIN_REVIEW_DELETE, {data})
+      .then(() =>
+        toast.warning("선택한 리뷰들을 삭제합니다.", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        }),
+      )
+      .then(() => setTimeout(() => location.reload(), 2000))
+      .catch((error) => {
+        // console.log("신고누적리뷰 삭제하던 중 에러 발생");
+        console.log(error);
+      })
+  );
 };
 //* POST : 신고누적리뷰 복구
 const restoreReview = async (data: object) => {
