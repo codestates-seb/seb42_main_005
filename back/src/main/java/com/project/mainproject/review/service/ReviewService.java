@@ -127,11 +127,11 @@ public class ReviewService {
      */
     @Transactional
     public void recoverReportedReviews(ReviewIdxDto recoverReviewsIdx) {
-        List<Long> reviewsIdx = recoverReviewsIdx.getReviews().stream()
+        List<Long> reviewsIdx = recoverReviewsIdx.getReviewIdxs().stream()
                                             .map(el -> el.getReviewIdx())
                                             .collect(Collectors.toList());
         List<Review> reviews = reviewRepository.findAllByIdAndReviewStatus(reviewsIdx, BLINDED);
-        if (reviews.size() != recoverReviewsIdx.getReviews().size())
+        if (reviews.size() != recoverReviewsIdx.getReviewIdxs().size())
             throw new BusinessLogicException(REVIEW_NOT_BLINDED);
 
         reviews.stream().forEach(review -> review.changeReportStatus(REJECTED));
