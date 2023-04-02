@@ -1,6 +1,9 @@
 import styled from "styled-components";
+import { toast } from "react-toastify";
 import { TYPE_reviewList, TYPE_setBoolean, TYPE_Detail } from "../../Api/TYPES";
 import ReviewUnit from "./ReviewUnit";
+import { getLocalStorage } from "../../Api/localStorage";
+import { useNavigate } from "react-router-dom";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 interface Props {
@@ -11,13 +14,24 @@ interface Props {
   Pharm: TYPE_Detail | undefined;
 }
 
-export default function ReviewList({
-  reviewList,
-  setReviewList,
-  setIsReviewFormShown,
-  storeIdx,
-  Pharm,
-}: Props) {
+export default function ReviewList({ reviewList, setReviewList, setIsReviewFormShown, storeIdx, Pharm }: Props) {
+  const token = getLocalStorage("access_token");
+  const navigate = useNavigate();
+  const WriteReview = () => {
+    if (!token) {
+      toast.error("로그인을 해주세요!", {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setTimeout(() => navigate("/login"), 1000);
+    } else setIsReviewFormShown(true)
+  };
 
   return (
     <ReviewContainer>
@@ -38,7 +52,7 @@ export default function ReviewList({
         </Reviews>
       ) : (
         <Instead>
-          <AiOutlineExclamationCircle className="bigger" onClick={() => setIsReviewFormShown(true)} />
+          <AiOutlineExclamationCircle className="bigger" onClick={() => WriteReview()} />
           <p>작성된 리뷰가 없습니다.</p>
           <p>지금 리뷰를 작성해 보세요!</p>
         </Instead>

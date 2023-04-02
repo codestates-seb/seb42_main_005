@@ -10,6 +10,7 @@ import { zIndex_Modal } from "../../Util/z-index";
 import { getLocalStorage } from "../../Api/localStorage";
 import { TYPE_setBoolean, TYPE_boolean, TYPE_reviewList, TYPE_Detail, TYPE_setLike } from "../../Api/TYPES";
 import { HiXMark } from "react-icons/hi2";
+import { toast } from "react-toastify";
 
 interface Props {
   setIsModalUp: TYPE_setBoolean;
@@ -35,8 +36,17 @@ export default function PharmDetail({
   const token = getLocalStorage("access_token");
   const navigate = useNavigate();
   const returnLogin = () => {
-    alert("로그인을 해주세요!");
-    navigate("/login");
+    toast.error("로그인을 해주세요!", {
+      position: "top-center",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    setTimeout(()=>navigate("/login"), 1000);
   };
 
   return (

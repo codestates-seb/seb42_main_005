@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { toast } from "react-toastify";
 import PharmItem from "./PharmItem";
 import SearchBar from "./SearchBar";
 import SortButtons from "./SortButtons";
@@ -71,8 +72,17 @@ export default function PharmLists({
   const navigate = useNavigate();
 
   const gologin = () => {
-    navigate("/login");
-    alert("로그인 후 이용해주세요!");
+    toast.error("로그인을 해주세요!", {
+      position: "top-center",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    setTimeout(()=>navigate("/login"), 1000);
   };
 
   const handleScroll = (e: any) => {

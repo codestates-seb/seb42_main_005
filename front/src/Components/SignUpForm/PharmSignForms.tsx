@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 import Button from "../Ul/Button";
 import PharmAddress from "./PharmAddress";
 import SignUpInput from "./SignUpInput";
@@ -137,10 +138,28 @@ export default function PharmSignForms() {
         });
       } catch (error: any) {
         if (error?.response?.status === 404) {
-          return alert("현재 약국의 주소와 동일한지 확인해주세요.");
+          return toast.error("현재 약국의 주소와 동일한지 확인해주세요.", {
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
         if (error?.response?.status === 409) {
-          return alert("이미 가입된 아이디입니다.");
+          return toast.error("이미 가입된 아이디입니다.", {
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
         console.log(error);
       }

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import styled from "styled-components";
 import Button from "../Components/Ul/Button";
 import { APIS } from "../Api/APIs";
@@ -33,9 +34,18 @@ export default function SignOut() {
           console.log(err);
         });
     };
-    alert("그동안 저희 사이트를 이용해주셔서 감사합니다.");
-    navigate("/");
     signOutDelete();
+    toast.success("그동안 저희 사이트를 이용해주셔서 감사합니다.", {
+      position: "top-center",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    setTimeout(()=>navigate("/"), 1000);
   };
 
   return (

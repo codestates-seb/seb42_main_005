@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import axios from "axios";
 import styled from "styled-components";
 import UserAdress from "./UserAdress";
@@ -103,13 +104,40 @@ export default function UserSignUpForms() {
     const address = formData.get(FORM_FIELD_NAMES.ADDRESS);
 
     if (!email || !password || !name || !address) {
-      return alert("모든 항목을 입력해주세요");
+      return toast.error("모든 항목을 입력해주세요", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
     if (error.email === true || error.password === true || error.name === true) {
-      return alert("항목을 다시 확인해주세요");
+      return toast.error("항목을 다시 확인해주세요", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
     if (checks === false) {
-      return alert("회원가입시, 사용자의 현재 위치를 사용하는 것에 동의해주세요");
+      return toast.error("위치정보 사용에 동의해주세요", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
 
     const data = {
