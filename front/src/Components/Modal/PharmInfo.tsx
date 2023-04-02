@@ -7,6 +7,7 @@ import PharmRank from "../Ul/PharmRank";
 import AnyDropDown from "./AnyDropDown";
 import { TYPE_setLike, TYPE_Detail, TYPE_boolean } from "../../Api/TYPES";
 import { getLocalStorage } from "../../Api/localStorage";
+import { toast } from "react-toastify";
 
 interface Props {
   like: TYPE_boolean;
@@ -17,7 +18,7 @@ interface Props {
 export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
   const [isDropDownDown, setIsDropDownDown] = useState<boolean>(false);
 
-  const nagigate = useNavigate();
+  const navigate = useNavigate();
   const user = useAppSelector((state) => {
     return state.userInfo.response;
   });
@@ -25,10 +26,28 @@ export default function PharmInfo({ like, setLike, pharmDetail }: Props) {
   const likeThisPharmacy = () => {
     const accessToken = getLocalStorage("access_token");
     if (!accessToken) {
-      nagigate("/login");
-      alert("약국 찜하기를 하시려면 로그인을 해주세요!");
+      toast.error("약국 찜하기를 하시려면 로그인을 해주세요!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setTimeout(()=>navigate("/login"), 1000);
     } else if (user.storeIdx) {
-      alert("약사회원은 찜하기를 이용하실수 없습니다.");
+      toast.info("약사회원은 찜하기를 이용하실수 없습니다.", {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     } else if (user.userIdx && accessToken) {
       const storeidx: any = pharmDetail?.storeIdx;
       likePharmacy(storeidx, like, setLike);

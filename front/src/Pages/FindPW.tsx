@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { validators } from "../Components/SignUpForm/Validation";
 import SignUpInput from "../Components/SignUpForm/SignUpInput";
 import ErrorAlert from "../Components/SignUpForm/ErrorAlert";
@@ -29,14 +30,41 @@ export default function FindPW() {
     const formData = new FormData(e.target);
     const email = formData.get("email");
     if (!email) {
-      return alert("항목을 입력해주세요");
+      return toast.error("항목을 입력해주세요", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
     if (error === true) {
-      return alert("항목을 다시 확인해주세요");
+      return toast.error("항목을 다시 확인해주세요", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     } else {
-      navigate("/login");
-      alert("작성하신 이메일로 임시비밀번호가 전송되었습니다.");
       findPW(findPassword);
+      toast.success("작성하신 이메일로 임시비밀번호가 전송되었습니다.", {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setTimeout(()=>navigate("/login"), 1000);
     }
   };
 

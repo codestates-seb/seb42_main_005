@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 import { getDetailsAndReviews, likePharmacy, UserInstance } from "../../Api/AxiosInstance";
 import { getLocalStorage } from "../../Api/localStorage";
 import { useAppSelector } from "../../Redux/hooks";
@@ -27,17 +28,32 @@ export default function PharmItem({ Pharm, storeIdx }: Props) {
   const likeThisPharmacy = () => {
     const accessToken = getLocalStorage("access_token");
     if (!accessToken) {
-      navigate("/login");
-      alert("약국 찜하기를 하시려면 로그인을 해주세요!");
+      toast.error("약국 찜하기를 하시려면 로그인을 해주세요!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setTimeout(() => navigate("/login"), 1000);
     } else if (user.storeIdx) {
-      alert("약사회원은 찜하기를 이용하실수 없습니다.");
+      toast.info("약사회원은 찜하기를 이용하실수 없습니다.", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     } else if (user.userIdx && accessToken) {
       likePharmacy(storeIdx, like, setLike);
     }
   };
-  // console.log(Pharm)
-
-  // console.log(likepharm.storeIdx);
 
   //! GET : 약국상세정보 + 리뷰리스트
   const onModalUp = () => {

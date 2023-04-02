@@ -10,6 +10,3 @@ export const onUpload = (e: any, stateF: any, stateS: React.Dispatch<React.SetSt
     };
   });
 };
-
-// import { onUpload } from "../../Api/onUpload";
-// onChange={(e) => onUpload(e, setImgFlie, setImageSrc)}

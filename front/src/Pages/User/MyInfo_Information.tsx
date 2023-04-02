@@ -1,5 +1,6 @@
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import styled from "styled-components";
 import { UserInstance, postUserImg, BaseInstance } from "../../Api/AxiosInstance";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
@@ -171,7 +172,16 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
     const newPassword = formData.get(FORM_FIELD_NAMES.NEWPASSWORD);
     const confirmNewPassword = formData.get(FORM_FIELD_NAMES.CONFIRMNEWPASSWORD);
     if (!password || !name || !address) {
-      return alert("필수값을 입력해주세요");
+      return       toast.error("필수값을 입력해주세요", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
     if (
       error.password === true ||
@@ -179,10 +189,28 @@ export default function MyInfoInformation({ scriptUrl }: Props) {
       error.newPassword === true ||
       error.confirmNewPassword === true
     ) {
-      return alert("항목을 다시 확인해주세요");
+      return  toast.error("항목을 다시 확인해주세요", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
     if (newPassword !== confirmNewPassword) {
-      return alert("새 비밀번호를 한번 더 입력해주세요");
+      return   toast.error("새 비밀번호를 한번 더 입력해주세요", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
     const newUserData = {
       name: name,
