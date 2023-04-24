@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 
 export default function Header() {
   const [userInfo, setUserInfo] = useState<TYPE_UserInfo | undefined>();
+  const [alertUp, setAlertUp] = useState<Boolean>(true);
 
   const user = useAppSelector((state) => {
     return state.userInfo.response;
@@ -22,7 +23,7 @@ export default function Header() {
   const navigate = useNavigate();
   const goHome = () => {
     if (user?.name === "관리자") {
-      return toast.info("관리자는 지도를 이용하실수 없습니다.",{
+      return toast.info("관리자는 지도를 이용하실수 없습니다.", {
         position: "top-center",
         autoClose: 2000,
         hideProgressBar: false,
@@ -31,28 +32,39 @@ export default function Header() {
         draggable: true,
         progress: undefined,
         theme: "light",
-        });
+      });
     }
     navigate("/");
   };
   return (
-    <HeaderContainer>
-      <div className="logo_container">
-        <LogoContainer onClick={() => goHome()}>
-          <img className="logo_img" alt="logo" src="Images/Logo.png" />
-          <span className="logo_text">
-            우리<span className="logo_text2">동네</span>약국<span className="logo_text2">지도</span>
-          </span>
-        </LogoContainer>
-      </div>
-      <EmptyContainer>
-        <span className="partition" />
-        <span className="partition" />
-      </EmptyContainer>
-      <div className="account_container">
-        <Account userInfo={userInfo} />
-      </div>
-    </HeaderContainer>
+    <>
+      <HeaderContainer>
+        <div className="logo_container">
+          <LogoContainer onClick={() => goHome()}>
+            <img className="logo_img" alt="logo" src="Images/Logo.png" />
+            <span className="logo_text">
+              우리<span className="logo_text2">동네</span>약국<span className="logo_text2">지도</span>
+            </span>
+          </LogoContainer>
+        </div>
+        <EmptyContainer>
+          <span className="partition" />
+          <span className="partition" />
+        </EmptyContainer>
+        <div className="account_container">
+          <Account userInfo={userInfo} />
+        </div>
+      </HeaderContainer>
+      {alertUp ? (
+        <Alert onClick={() => setAlertUp(false)}>
+          <span className="space" />
+          현재 전국단위 서비스 준비중으로
+          <span className="space" />
+          <span className="emph">서울지역</span>만 이용이 가능합니다.
+          <span className="close">눌러서 닫기</span>
+        </Alert>
+      ) : null}
+    </>
   );
 }
 
@@ -135,5 +147,31 @@ const LogoContainer = styled.div`
   :hover {
     background-color: var(--blue-700);
     transition: 0.2s;
+  }
+`;
+
+const Alert = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 52px;
+  width: 100%;
+  height: 30px;
+  font-weight: normal;
+  background-color: var(--kakao);
+  z-index: ${zIndex_Header.Header};
+  .emph {
+    margin: 0;
+    padding: 0;
+    font-weight: 700;
+    color: var(--google);
+  }
+  .space {
+    width: 5px;
+  }
+  .close {
+    font-size: 10px;
+    padding: 4px 0 0 5px;
   }
 `;

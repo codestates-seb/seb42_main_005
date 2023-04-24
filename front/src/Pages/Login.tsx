@@ -13,6 +13,7 @@ import { setLocalStorage } from "../Api/localStorage";
 import { useAppDispatch, useAppSelector } from "../Redux/hooks";
 import { get } from "../Redux/slice/userSlice";
 import { getLocalStorage } from "../Api/localStorage";
+import ShortCuts from "../Components/SignUpForm/ShortCuts";
 
 export default function Login() {
   const [loginForm, setLoginForms] = useState({
@@ -171,6 +172,7 @@ export default function Login() {
               로그인
             </button>
           </LoginForm>
+          <ShortCuts />
         </ContentContainer>
         <SearchContainer>
           <Link to="/find_pw">
@@ -213,7 +215,9 @@ const Title = styled.header`
   }
 `;
 const ContentContainer = styled.div`
-  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  padding: 1.5rem;
   width: 35rem;
   border: 1px solid var(--black-200);
   border-radius: 18px;
@@ -224,15 +228,16 @@ const LoginForm = styled.form`
   flex-direction: column;
   justify-content: center;
   gap: 5px;
+  width: 17rem;
   .login_button {
     background-color: var(--blue-500);
     border: none;
-    width: 15rem;
+    width: 17rem;
     height: 2.8rem;
     font-size: 1.1rem;
     color: var(--white);
     margin: auto;
-    margin-top: 3rem;
+    margin-top: 2rem;
     border-radius: 7px;
     box-shadow: var(--bs-md);
     &:hover {
@@ -269,7 +274,7 @@ const SearchContainer = styled.article`
   display: flex;
   align-items: center;
   justify-content: center;
-    margin-top: 3rem;
+  margin-top: 3rem;
 `;
 const Search = styled.button`
   color: var(--black-500);
