@@ -23,6 +23,7 @@ export const zIndex_AdminPage = {
 export const zIndex_Header = {
   Header: 100,
   Dropdown: 110,
+  Alert: 50,
 };
 export const zIndex_Loading = {
   Loading: 999,

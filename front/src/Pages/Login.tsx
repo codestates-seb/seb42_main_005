@@ -93,7 +93,6 @@ export default function Login() {
       });
     }
 
-    // { withCredentials: true }
     //! POST : 로그인 - JWT
     const postLogin = async () => {
       await axios
@@ -106,14 +105,13 @@ export default function Login() {
           let token = getLocalStorage("access_token");
           axios.defaults.headers.common.Authorization = token;
           dispatch(get(res.data));
-
           return res;
         })
         .then((res) => {
           if (res.data.userType == "관리자") {
             return navigate("/admin-reports");
           }
-          navigate("/");
+          window.location.replace("/");
         })
         .catch((error) => {
           if (error?.response?.status === 401) {
@@ -128,7 +126,6 @@ export default function Login() {
               theme: "light",
             });
           }
-          // console.log("ID/PW 일치여부가 아닌 다른 에러 발생");
           console.log(error);
         });
     };

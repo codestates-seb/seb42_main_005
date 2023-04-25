@@ -158,9 +158,10 @@ const Alert = styled.div`
   top: 52px;
   width: 100%;
   height: 30px;
-  font-weight: normal;
+  /* font-weight: normal; */
+  font-weight: 450;
   background-color: var(--kakao);
-  z-index: ${zIndex_Header.Header};
+  z-index: ${zIndex_Header.Alert};
   .emph {
     margin: 0;
     padding: 0;

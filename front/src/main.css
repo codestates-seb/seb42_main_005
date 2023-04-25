@@ -42,7 +42,8 @@
 
   --naver: #03cf5c;
   --naver-hover: #00bc51;
-  --kakao: #fee500;
+  /* --kakao: #fee500; */
+  --kakao: rgb(254, 219, 66);
   --kakao-hover: #ffd900;
   --google: #f03f31;
   --google-hover: #d43327;
