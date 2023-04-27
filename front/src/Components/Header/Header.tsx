@@ -57,10 +57,10 @@ export default function Header() {
       </HeaderContainer>
       {alertUp ? (
         <Alert onClick={() => setAlertUp(false)}>
-          <span className="space" />
-          현재 전국단위 서비스 준비중으로
-          <span className="space" />
-          <span className="emph">서울지역</span>만 이용이 가능합니다.
+          <p className="notice">
+            전국단위 서비스는 아직 준비중으로, 현재
+            <span className="emph">서울지역</span>만 이용이 가능합니다.
+          </p>
           <span className="close">눌러서 닫기</span>
         </Alert>
       ) : null}
@@ -103,7 +103,7 @@ const EmptyContainer = styled.div`
     width: 3px;
     height: 30px;
     border-radius: 1px;
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 4px, rgba(0, 0, 0, 0.2) 0px 7px 13px -3px,
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px, rgba(0, 0, 0, 0.2) 0px 5px 8px -3px,
       rgba(0, 0, 0, 0.1) 0px -3px 0px inset, hsl(0, 0%, 100%, 0.3) 0 1px 0 0 inset;
     @media (max-width: 768px) {
       width: 2px;
@@ -161,18 +161,34 @@ const Alert = styled.div`
   /* font-weight: normal; */
   font-weight: 450;
   background-color: var(--kakao);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px, rgba(0, 0, 0, 0.2) 0px 7px 13px -3px,
+    rgba(0, 0, 0, 0.1) 0px -1px 0px inset;
   z-index: ${zIndex_Header.Alert};
   .emph {
-    margin: 0;
+    margin-left: 5px;
     padding: 0;
     font-weight: 700;
     color: var(--google);
   }
-  .space {
-    width: 5px;
+  .notice {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .close {
-    font-size: 10px;
-    padding: 4px 0 0 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 3px 7px 2px 7px;
+    border-radius: 6px;
+    font-size: 12px;
+    box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.06), 0 2px 8px hsla(0, 0%, 0%, 0.2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: 0.2s;
+    &:hover {
+      font-weight: 700;
+      transition: 0.2s;
+    }
   }
 `;
