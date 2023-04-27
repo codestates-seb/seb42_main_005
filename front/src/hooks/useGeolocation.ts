@@ -17,8 +17,8 @@ export default function useGeolocation() {
 
     function error() {
       setLocation({
-        latitude: 37.33370506366528,
-        longitude: 127.09738924623072,
+        latitude: 37.56676391118459,
+        longitude: 126.97778196704319,
       });
     }
   }, [navigator.geolocation.getCurrentPosition]);

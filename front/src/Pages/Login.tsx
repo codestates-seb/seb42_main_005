@@ -140,35 +140,37 @@ export default function Login() {
           <h1>로그인</h1>
         </Title>
         <ContentContainer>
-          <LoginForm onSubmit={onSubmit}>
-            <InputContainer className={`${error.email ? "red" : null}`}>
-              <BsPersonCircle className="inputimage" aria-hidden="true" />
-              <label htmlFor="email-input"></label>
-              <SignUpInput
-                type={"email"}
-                name={FORM_FIELD_NAMES.EMAIL}
-                placeholder={"이메일을 입력하세요."}
-                value={loginForm.email}
-                onChange={changeEmailHandler}
-              />
-            </InputContainer>
-            <ErrorAlert Error={error.email} ErrorText={"이메일 형식이 올바르지 않습니다."} />
-            <InputContainer className={`${error.email ? "red" : null}`}>
-              <AiOutlineLock className="inputimage" aria-hidden="true" />
-              <label htmlFor="password-input"></label>
-              <SignUpInput
-                type={"password"}
-                name={FORM_FIELD_NAMES.PASSWORD}
-                placeholder={"비밀번호를 입력하세요."}
-                value={loginForm.password}
-                onChange={changePasswordHandler}
-              />
-            </InputContainer>
-            <ErrorAlert Error={error.password} ErrorText={"문자 숫자 특수문자 조합 8자 이상으로 조합해주세요."} />
-            <button className="login_button" type="submit">
-              로그인
-            </button>
-          </LoginForm>
+          <LoginContainer>
+            <LoginForm onSubmit={onSubmit}>
+              <InputContainer className={`${error.email ? "red" : null}`}>
+                <BsPersonCircle className="inputimage" aria-hidden="true" />
+                <label htmlFor="email-input"></label>
+                <SignUpInput
+                  type={"email"}
+                  name={FORM_FIELD_NAMES.EMAIL}
+                  placeholder={"이메일을 입력하세요."}
+                  value={loginForm.email}
+                  onChange={changeEmailHandler}
+                />
+              </InputContainer>
+              <ErrorAlert Error={error.email} ErrorText={"이메일 형식이 올바르지 않습니다."} />
+              <InputContainer className={`${error.email ? "red" : null}`}>
+                <AiOutlineLock className="inputimage" aria-hidden="true" />
+                <label htmlFor="password-input"></label>
+                <SignUpInput
+                  type={"password"}
+                  name={FORM_FIELD_NAMES.PASSWORD}
+                  placeholder={"비밀번호를 입력하세요."}
+                  value={loginForm.password}
+                  onChange={changePasswordHandler}
+                />
+              </InputContainer>
+              <ErrorAlert Error={error.password} ErrorText={"문자 숫자 특수문자 조합 8자 이상으로 조합해주세요."} />
+              <button className="login_button" type="submit">
+                로그인
+              </button>
+            </LoginForm>
+          </LoginContainer>
           <ShortCuts />
         </ContentContainer>
         <SearchContainer>
@@ -194,7 +196,6 @@ const Container = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 35rem;
 `;
 const Title = styled.header`
   display: flex;
@@ -212,10 +213,15 @@ const Title = styled.header`
   }
 `;
 const ContentContainer = styled.div`
+  position: relative;
+  left: 18%;
+  display: flex;
+`;
+const LoginContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 1.5rem;
-  width: 35rem;
+  margin-right: 10px;
+  padding: 2.2rem 1.5rem;
   border: 1px solid var(--black-200);
   border-radius: 18px;
   box-shadow: var(--bs-lg);
@@ -234,7 +240,7 @@ const LoginForm = styled.form`
     font-size: 1.1rem;
     color: var(--white);
     margin: auto;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     border-radius: 7px;
     box-shadow: var(--bs-md);
     &:hover {
