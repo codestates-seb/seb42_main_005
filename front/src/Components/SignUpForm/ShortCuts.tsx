@@ -29,6 +29,7 @@ export default function ShortCuts({}) {
         if (res.data.userType == "관리자") {
           return navigate("/admin-reports");
         }
+
         window.location.replace("/");
       })
       .catch((error) => {

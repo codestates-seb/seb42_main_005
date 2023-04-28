@@ -20,6 +20,9 @@ export default function Header() {
     if (user) getUser(user.userIdx, setUserInfo);
   }, [user]);
 
+  useEffect(() => {
+    if (user?.userType === "관리자" || user?.userRole === "관리자") setAlertUp(false);
+  });
   const navigate = useNavigate();
   const goHome = () => {
     if (user?.name === "관리자") {

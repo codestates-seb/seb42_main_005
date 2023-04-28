@@ -19,6 +19,7 @@ export default function Account({ userInfo }: Props) {
     removeLocalStorage("access_token");
     removeLocalStorage("refresh_token");
     dispatch(DeleteUserInfo());
+    window.location.replace("/login");
   };
 
   const user = useAppSelector((state) => {
