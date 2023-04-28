@@ -35,7 +35,6 @@
 ## 약국 상세 페이지
 <p>
  <img width="1909" alt="image" src="<img width="1512" alt="image" src="https://user-images.githubusercontent.com/115776596/235055243-f1f45afb-7846-4757-82e9-6a5d4e8fa077.png">
-"/>
 </p>
 약국 리스트의 약국 카드를 클릭하면 약국의 상세페이지가 팝업됩니다. 
 약국의 상세페이지에서는 해당 약국의 주소와 전화번호 및 실시간 영업여부를 포함한 영업시간과 고객 리뷰를 확인하실 수 있습니다. 
